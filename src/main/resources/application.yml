@@ -1,3 +1,6 @@
+server:
+  port: 80
+
 spring:
   application:
     name: zouk-albums
@@ -15,3 +18,4 @@ spring:
   threads:
     virtual:
       enabled: true
+
