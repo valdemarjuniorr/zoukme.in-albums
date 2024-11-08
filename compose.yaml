@@ -1,0 +1,9 @@
+services:
+  postgres:
+    image: postgres
+    environment:
+      - 'POSTGRES_DB=zouk-albums'
+      - 'POSTGRES_PASSWORD=s3cr3t'
+      - 'POSTGRES_USER=zoukme.in'
+    ports:
+      - '5432:5432'

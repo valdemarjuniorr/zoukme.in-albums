@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: zouk-albums
+  datasource:
+    url: jdbc:postgresql://localhost:5432/zouk-albums
+    username: zoukme.in
+    password: s3cr3t
+  docker:
+    compose:
+      lifecycle-management: start_and_stop
+  sql:
+    init:
+      mode: always
+
+  threads:
+    virtual:
+      enabled: true
