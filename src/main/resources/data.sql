@@ -35,37 +35,37 @@ INSERT INTO albums(id, title, city, event_date, thumb_url, url)
 VALUES (12, 'Zouk Lovers 2024', 'Curitiba/PR', '2024-08-23', '/12_zouk_lovers2024.jpg', 'https://1drv.ms/f/s!AnITpg7s5sZ_k7pSPEefPrvgxx9kwg');
 
 INSERT INTO counters(id, album_id, count)
-VALUES (1, 1, 1);
+VALUES (1, 1, 0);
 
 INSERT INTO counters(id, album_id, count)
-VALUES (2, 2, 1);
+VALUES (2, 2, 0);
 
 INSERT INTO counters(id, album_id, count)
-VALUES (3, 3, 1);
+VALUES (3, 3, 0);
 
 INSERT INTO counters(id, album_id, count)
-VALUES (4, 4, 1);
+VALUES (4, 4, 0);
 
 INSERT INTO counters(id, album_id, count)
-VALUES (5, 5, 1);
+VALUES (5, 5, 0);
 
 INSERT INTO counters(id, album_id, count)
-VALUES (6, 6, 1);
+VALUES (6, 6, 0);
 
 INSERT INTO counters(id, album_id, count)
-VALUES (7, 7, 1);
+VALUES (7, 7, 0);
 
 INSERT INTO counters(id, album_id, count)
-VALUES (8, 8, 1);
+VALUES (8, 8, 0);
 
 INSERT INTO counters(id, album_id, count)
-VALUES (9, 9, 1);
+VALUES (9, 9, 0);
 
 INSERT INTO counters(id, album_id, count)
-VALUES (10, 10, 1);
+VALUES (10, 10, 0);
 
 INSERT INTO counters(id, album_id, count)
-VALUES (11, 11, 1);
+VALUES (11, 11, 0);
 
 INSERT INTO counters(id, album_id, count)
-VALUES (12, 12, 1);
+VALUES (12, 12, 0);
