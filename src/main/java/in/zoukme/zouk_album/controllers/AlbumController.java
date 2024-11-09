@@ -9,10 +9,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping
 class AlbumController {
 
   private Logger log = LoggerFactory.getLogger(AlbumController.class);
@@ -22,7 +20,7 @@ class AlbumController {
     this.service = service;
   }
 
-  @GetMapping
+  @GetMapping("")
   String findAll(Model model) {
     var albums = this.service.findAll();
     model.addAttribute("albums", albums);
