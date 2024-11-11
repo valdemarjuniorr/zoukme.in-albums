@@ -1,22 +1,8 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <title>Zouk Me In - Eventos</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/htmx.org@2.0.3/dist/htmx.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/b431e00b38.js" crossorigin="anonymous"></script>
+  <title>Zouk Me In - Albums</title>
 </head>
-<body class="bg-gray-100">
-<!-- Header -->
-<header th:fragment="header" class="bg-gray-800 text-white p-6">
-    <div class="container mx-auto">
-        <h1 class="text-4xl font-bold">Zouk Me In - Eventos</h1>
-        <nav class="mt-4">
-            <a th:href="@{/}" class="text-white hover:underline mr-4">Home</a>
-            <a hx-get="/metrics/visits" href="#" hx-target=".main" hx-swap="innerHTML" class="text-white hover:underline">Métricas</a>
-        </nav>
-    </div>
-</header>
-
-</body>
-</html>

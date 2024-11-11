@@ -1,0 +1,25 @@
+<header th:fragment="top" class="bg-gray-800 p-4">
+  <div class="bg-gray-800 p-4">
+    <div class="container mx-auto flex justify-between items-center">
+      <div class="flex-shrink-0">
+        <!-- Logo Image -->
+        <a th:href="@{/}">
+          <img src="/logo-light.png" alt="Zoukme In" class="h-16 w-auto">
+        </a>
+      </div>
+      <nav>
+        <ul class="flex space-x-4">
+          <li>
+            <a th:href="@{/}" class="text-white hover:text-gray-400">Home</a>
+          </li>
+          <li>
+            <a hx-get="/metrics/visits" href="#" hx-target=".main" hx-swap="innerHTML" class="text-white hover:text-gray-400">Métricas</a>
+          </li>
+          <li>
+            <a href="https://www.instagram.com/vjrfotografia" target="_blank" class="text-white hover:text-gray-400">Contato</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</header>

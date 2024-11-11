@@ -1,4 +1,4 @@
-package in.zoukme.zouk_album.security;
+package in.zoukme.zouk_album.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
