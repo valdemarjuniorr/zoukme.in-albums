@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>in.zoukme</groupId>
-	<artifactId>zouk-album</artifactId>
+	<artifactId>zoukme.in-albums</artifactId>
 	<version>0.0.1</version>
-	<name>zouk-album</name>
+	<name>zoukme.in-albums</name>
 	<properties>
 		<java.version>23</java.version>
 	</properties>
