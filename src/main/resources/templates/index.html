@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="https://www.thymeleaf.org">
 
-<head th:replace="~{fragments/header}"></head>
+<head th:insert="~{fragments/header}"></head>
 
 <body class="bg-gray-100">
 <!-- Header -->
-<div th:replace="~{fragments/top :: top}"></div>
+<div th:insert="~{fragments/top :: top}"></div>
 
 <!-- Content -->
 <main th:fragment="main" class="main container mx-auto p-4">
   <h2 class="text-3xl font-bold text-center mb-8">Onde estaremos!</h2>
-  <div th:include="~{fragments/carousel}"></div>
+  <div th:insert="~{fragments/carousel}"></div>
   <div class="mb-8">
     <p class="text-center text-gray-600 mt-2">Outros eventos</p>
   </div>

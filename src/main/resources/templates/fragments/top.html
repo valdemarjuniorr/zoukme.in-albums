@@ -12,6 +12,12 @@
           <li>
             <a th:href="@{/}" class="text-white hover:text-gray-400">Home</a>
           </li>
+          <li th:if="${authentication != null}">
+            <a hx-get="/admin/albums/create" href="#" hx-target=".main" hx-swap="innerHTML" class="text-white hover:text-gray-400">Novo</a>
+          </li>
+          <li th:if="${authentication != null}">
+            <a hx-get="/admin/metrics/albums/visits" href="#" hx-target=".main" hx-swap="innerHTML" class="text-white hover:text-gray-400">Métricas</a>
+          </li>
           <li>
             <a href="https://www.instagram.com/vjrfotografia" target="_blank" class="text-white hover:text-gray-400">Contato</a>
           </li>
