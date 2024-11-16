@@ -34,6 +34,10 @@ VALUES (11, 'Elite Samba Congress 2024', 'Balneário Camboriú/SC', '2024-08-16'
 INSERT INTO albums(id, title, city, event_date, thumb_url, url)
 VALUES (12, 'Zouk Lovers 2024', 'Curitiba/PR', '2024-08-23', '/12_zouk_lovers2024.jpg', 'https://1drv.ms/f/s!AnITpg7s5sZ_k7pSPEefPrvgxx9kwg');
 
+INSERT INTO albums(id, title, city, event_date, thumb_url, url)
+VALUES (13, 'Zouk in beach 2024', 'Balneário Camboriú/PR', '2024-11-14', '/zouk-in-beach-photo-album.jpg', 'https://1drv.ms/f/s!AnITpg7s5sZ_lK8sLYj9Dq6LG_QW0Q?e=gwmXiu');
+
+
 INSERT INTO counters(id, album_id, count)
 VALUES (1, 1, 0);
 
@@ -62,10 +66,13 @@ INSERT INTO counters(id, album_id, count)
 VALUES (9, 9, 0);
 
 INSERT INTO counters(id, album_id, count)
-VALUES (10, 10, 0);
+VALUES (10, 10, 1);
 
 INSERT INTO counters(id, album_id, count)
-VALUES (11, 11, 0);
+VALUES (11, 11, 7);
 
 INSERT INTO counters(id, album_id, count)
-VALUES (12, 12, 0);
+VALUES (12, 12, 30);
+
+INSERT INTO counters(id, album_id, count)
+VALUES (13, 13, 290);
