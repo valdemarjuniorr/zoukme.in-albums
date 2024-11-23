@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://unpkg.com/htmx.org@2.0.3/dist/htmx.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <title>Zouk Me In - Albums</title>
+</head>
+<body class="bg-gray-100">
+<!-- Content -->
+<main class="main content container mx-auto">
+    <h1 class="text-3xl font-bold mb-6">Atualizar evento</h1>
+    <div id="album-form" th:fragment="albums-form" class="album-form bg-white p-6 rounded-lg shadow-md space-y-4">
+        <div>
+            <label class="block text-gray-700">Título</label>
+            <input name="title" th:value="${album.title}" type="text" class="w-full mt-1 p-2 border border-gray-300 rounded-md" placeholder="Ex.: Elite Samba Congress 2024">
+        </div>
+        <div>
+            <label class="block text-gray-700">Cidade/Estado</label>
+            <input name="city" th:value="${album.city}" class="w-full mt-1 p-2 border border-gray-300 rounded-md"
+                      placeholder="Ex.: Balneário Camboriú/SC">
+        </div>
+        <div>
+            <label class="block text-gray-700">URL do álbum</label>
+            <input name="url" type="url" th:value="${album.url}" class="w-full mt-1 p-2 border border-gray-300 rounded-md" placeholder="Ex.: https://www.zoukme.in/album/esc2024">
+        </div>
+        <div>
+            <label class="block text-gray-700">Imagem da capa</label>
+            <input name="thumbUrl" type="url" th:value="${album.thumbUrl}" class="w-full mt-1 p-2 border border-gray-300 rounded-md" placeholder="https://www.zoukme.in/album/esc2024/image.jpg">
+        </div>
+        <div>
+            <label class="block text-gray-700">Data do evento</label>
+            <input name="eventDate" type="date" th:value="${album.eventDate}" class="w-full mt-1 p-2 border border-gray-300 rounded-md">
+        </div>
+        <div class="text-center">
+            <button hx-get="/admin/albums" hx-target="closest .main" type="submit"
+                    class="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700">Cancelar
+            </button>
+            <button th:hx-put="@{/admin/albums/{id}/update(id=${album.id})}" hx-include="#album-form" hx-target="closest .main" type="submit"
+                    class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">Atualizar
+            </button>
+        </div>
+    </div>
+</main>
+
+</body>
+</html>

@@ -4,9 +4,8 @@ import in.zoukme.zouk_album.domains.Album;
 import in.zoukme.zouk_album.domains.Counter;
 import in.zoukme.zouk_album.exceptions.AlbumNotFoundException;
 import in.zoukme.zouk_album.repositories.AlbumRepository;
-import java.util.List;
-
 import in.zoukme.zouk_album.repositories.CounterRepository;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -36,9 +35,17 @@ public class AlbumService {
 
   public String visit(Long albumId) {
     incrementVisitBy(albumId);
-    var album =
-        this.repository.findById(albumId).orElseThrow(() -> new AlbumNotFoundException(albumId));
+    var album = findBy(albumId);
     return album.url();
+  }
+
+  public Album findBy(Long id) {
+    return this.repository
+        .findById(id)
+        .orElseGet(
+            () -> {
+              throw new AlbumNotFoundException(id);
+            });
   }
 
   public void incrementVisitBy(Long albumId) {
@@ -47,5 +54,10 @@ public class AlbumService {
       throw new AlbumNotFoundException(albumId);
     }
     log.info("Album with id {} has been visited", albumId);
+  }
+
+  public void update(Album album) {
+    var updated = this.repository.save(album);
+    log.info("Album with id {} has been updated", updated.id());
   }
 }

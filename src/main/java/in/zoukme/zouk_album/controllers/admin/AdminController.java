@@ -8,7 +8,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -27,7 +29,7 @@ public class AdminController {
 
   @GetMapping("/albums/create")
   String createAlbum() {
-    return "create-album";
+    return "admin/albums/create";
   }
 
   @PostMapping("/albums/create")
@@ -45,6 +47,32 @@ public class AdminController {
     log.info("Showing visits metrics");
     model.addAttribute("visits", this.service.findVisitAlbumMetric());
 
-    return "metric-visiters";
+    return "admin/metrics/metric-visiters";
+  }
+
+  @GetMapping("/albums")
+  String albumList(Model model) {
+    model.addAttribute("albums", this.albumService.findAll());
+
+    return "admin/albums/list";
+  }
+
+  @GetMapping("/albums/{id}/update")
+  String updateAlbum(@PathVariable Long id, Model model) {
+    var album = albumService.findBy(id);
+    model.addAttribute("album", album);
+
+    return "admin/albums/update";
+  }
+
+  @PutMapping("/albums/{id}/update")
+  String updateAlbum(Album album, Model model) {
+    albumService.update(album);
+    var albums = this.albumService.findAll();
+
+    model.addAttribute("albums", albums);
+    model.addAttribute("message", "Album atualizado");
+
+    return albumList(model);
   }
 }

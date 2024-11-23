@@ -17,9 +17,6 @@ INSERT INTO albums(id, title, city, event_date, thumb_url, url)
 VALUES (6, 'Elite Samba Congress 2023', 'Balneário Camboriú/SC', '2023-08-18', '/6_elite_2023.jpg', 'https://1drv.ms/f/s!AnITpg7s5sZ_lK5slwF5cTHiZ6U_hQ');
 
 INSERT INTO albums(id, title, city, event_date, thumb_url, url)
-VALUES (7, 'ConecDansa 2023', 'Curitiba/PR', '2023-11-11', 'https://via.placeholder.com/150', 'https://via.placeholder.com/600');
-
-INSERT INTO albums(id, title, city, event_date, thumb_url, url)
 VALUES (8, 'Zouk na Praça', 'Curitiba/PR', '2023-11-26', '/8_zouk_praca.jpg', 'https://1drv.ms/f/s!AnITpg7s5sZ_jPAcpsq2294gPGdAjA');
 
 INSERT INTO albums(id, title, city, event_date, thumb_url, url)
@@ -35,44 +32,40 @@ INSERT INTO albums(id, title, city, event_date, thumb_url, url)
 VALUES (12, 'Zouk Lovers 2024', 'Curitiba/PR', '2024-08-23', '/12_zouk_lovers2024.jpg', 'https://1drv.ms/f/s!AnITpg7s5sZ_k7pSPEefPrvgxx9kwg');
 
 INSERT INTO albums(id, title, city, event_date, thumb_url, url)
-VALUES (13, 'Zouk in beach 2024', 'Balneário Camboriú/PR', '2024-11-14', '/zouk-in-beach-photo-album.jpg', 'https://1drv.ms/f/s!AnITpg7s5sZ_lK8sLYj9Dq6LG_QW0Q?e=gwmXiu');
-
+VALUES (13, 'Zouk`n beach 2024', 'Balneário Camboriú/SC', '2024-11-14', '/zouk-in-beach-photo-album.jpg', 'https://1drv.ms/f/s!AnITpg7s5sZ_lK8sLYj9Dq6LG_QW0Q?e=gwmXiu');
 
 INSERT INTO counters(id, album_id, count)
-VALUES (1, 1, 0);
+VALUES (1, 1, 5);
 
 INSERT INTO counters(id, album_id, count)
 VALUES (2, 2, 0);
 
 INSERT INTO counters(id, album_id, count)
-VALUES (3, 3, 0);
+VALUES (3, 3, 3);
 
 INSERT INTO counters(id, album_id, count)
-VALUES (4, 4, 0);
+VALUES (4, 4, 4);
 
 INSERT INTO counters(id, album_id, count)
-VALUES (5, 5, 0);
+VALUES (5, 5, 3);
 
 INSERT INTO counters(id, album_id, count)
 VALUES (6, 6, 0);
 
 INSERT INTO counters(id, album_id, count)
-VALUES (7, 7, 0);
+VALUES (8, 8, 4);
 
 INSERT INTO counters(id, album_id, count)
-VALUES (8, 8, 0);
+VALUES (9, 9, 2);
 
 INSERT INTO counters(id, album_id, count)
-VALUES (9, 9, 0);
+VALUES (10, 10, 7);
 
 INSERT INTO counters(id, album_id, count)
-VALUES (10, 10, 1);
+VALUES (11, 11, 14);
 
 INSERT INTO counters(id, album_id, count)
-VALUES (11, 11, 7);
+VALUES (12, 12, 45);
 
 INSERT INTO counters(id, album_id, count)
-VALUES (12, 12, 30);
-
-INSERT INTO counters(id, album_id, count)
-VALUES (13, 13, 290);
+VALUES (13, 13, 1265);
