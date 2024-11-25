@@ -42,7 +42,7 @@ public class AdminController {
     this.albumService.save(album);
     var albums = this.albumService.findAll();
 
-    model.addAttribute(π"albums", albums);
+    model.addAttribute("albums", albums);
 
     return "index";
   }
