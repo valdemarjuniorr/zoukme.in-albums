@@ -27,6 +27,11 @@ public class AdminController {
     this.albumService = albumService;
   }
 
+  @GetMapping
+  public String home() {
+    return "admin/home";
+  }
+
   @GetMapping("/albums/create")
   String createAlbum() {
     return "admin/albums/create";
@@ -37,7 +42,7 @@ public class AdminController {
     this.albumService.save(album);
     var albums = this.albumService.findAll();
 
-    model.addAttribute("albums", albums);
+    model.addAttribute(π"albums", albums);
 
     return "index";
   }
