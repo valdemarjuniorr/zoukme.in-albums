@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://unpkg.com/htmx.org@2.0.3/dist/htmx.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <title>Zouk Me In - Albums</title>
+</head>
+<body class="bg-gray-100">
+<!-- Content -->
+<main class="main content container mx-auto">
+  <h1 class="text-3xl font-bold mb-6">Evento</h1>
+  <div id="album-form" th:fragment="albums-form" class="album-form bg-white p-6 rounded-lg shadow-md space-y-4">
+    <div>
+      <label class="block text-gray-700">Título</label>
+      <input name="title" type="text" class="w-full mt-1 p-2 border border-gray-300 rounded-md" placeholder="Ex.: Elite Samba Congress 2024">
+    </div>
+    <div>
+      <label class="block text-gray-700">Descrição</label>
+      <input name="description" type="text" class="w-full mt-1 p-2 border border-gray-300 rounded-md" placeholder="Ex.: Um dos maiores eventos de samba de Santa Catarina">
+    </div>
+    <div>
+      <label class="block text-gray-700">Cidade/Estado</label>
+      <input name="location" class="w-full mt-1 p-2 border border-gray-300 rounded-md"
+             placeholder="Ex.: Balneário Camboriú/SC">
+    </div>
+    <div>
+      <label class="block text-gray-700">Data do evento</label>
+      <input name="date" type="date" class="w-full mt-1 p-2 border border-gray-300 rounded-md">
+    </div>
+    <div>
+      <label class="block text-gray-700">Instagram</label>
+      <input name="socialMedia.instagram" type="text" class="w-full mt-1 p-2 border border-gray-300 rounded-md" placeholder="Ex.: @elitesamba_congress_bc">
+    </div>
+    <div>
+      <label class="block text-gray-700">WhatsApp</label>
+      <input name="socialMedia.phoneNumber" type="text" class="w-full mt-1 p-2 border border-gray-300 rounded-md" placeholder="Ex.: (47) 9-9999-9999">
+    </div>
+    <div class="text-center">
+      <button hx-get="/admin/events" hx-target="closest .main" type="submit"
+              class="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700">Cancelar
+      </button>
+      <button hx-post="/admin/events/create" hx-include="#album-form" hx-target="closest .main" type="submit"
+              class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">Criar
+      </button>
+    </div>
+  </div>
+</main>
+
+</body>
+</html>
