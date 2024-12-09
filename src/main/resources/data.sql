@@ -79,7 +79,6 @@ VALUES (13, 13, 1331);
 
 -- social media
 INSERT INTO social_media(id, instagram, phone_number) VALUES (1, 'conecdansa', '41984125046');
-
 INSERT INTO social_media(id, instagram, phone_number) VALUES (2, 'elitesamba_congress_bc', '4796610282');
 
 -- events
@@ -91,3 +90,6 @@ VALUES (2, 'ConecZouk 2025', 'ConecZouk - Gerações do zouk conectando o mundo'
 
 INSERT INTO events(id, title, description, date, location, cover_url, social_media_id)
 VALUES (3, 'Elite Samba Congress 2025', 'Elite Samba Congress - Nosso SAMBA é INFINITO!', '2025-08-15', 'Balneário Camboriú/SC', '/next-events/elitesambacongress2025.jpg', 2);
+
+-- photos
+INSERT INTO PHOTOS(id, event_id, image_path) VALUES (1, 1, 'whatever');

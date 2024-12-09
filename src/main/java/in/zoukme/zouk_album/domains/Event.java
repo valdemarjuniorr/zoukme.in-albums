@@ -1,16 +1,19 @@
 package in.zoukme.zouk_album.domains;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Table;
-
 import java.time.LocalDate;
+import java.util.Set;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.jdbc.core.mapping.AggregateReference;
+import org.springframework.data.relational.core.mapping.MappedCollection;
+import org.springframework.data.relational.core.mapping.Table;
 
 @Table("events")
 public record Event(
-	@Id Long id,
-	String title,
-	String description,
-	String location,
-	LocalDate date,
-	Long socialMediaId, String coverUrl) {
-}
+    @Id Long id,
+    String title,
+    String description,
+    String location,
+    LocalDate date,
+    AggregateReference<SocialMedia, Long> socialMediaId,
+    String coverUrl,
+    @MappedCollection(idColumn = "event_id") Set<Photo> photos) {}
