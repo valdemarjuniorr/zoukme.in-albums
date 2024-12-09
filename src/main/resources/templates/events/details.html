@@ -20,7 +20,7 @@
         <a th:href="'https://www.instagram.com/' + ${event.instagram}" target="_blank" class="text-pink-500 hover:text-pink-700">
           <i class="fab fa-instagram"></i> Instagram
         </a>
-        <a th:href="'https://wa.me/+55' + ${event.phoneNumber} + '?text=Olá, vim do zoukme.in e gostaria de saber mais informações sobre o *' + ${event.title} + '*'"
+        <a th:href="'https://wa.me/+55' + ${event.phoneNumber} + '?text=Olá, vim do zoukme.in e gostaria de saber mais informações sobre o *' + ${event.title} + '*. Consegue me ajudar?'"
            target="_blank" class="text-green-500 hover:text-green-700">
           <i class="fa-brands fa-whatsapp"></i> WhatsApp
         </a>
@@ -50,14 +50,7 @@
           <div class="bg-gray-800 py-4 px-2 rounded-lg overflow-hidden">
             <h3 id="minutes" class="countdown-element minutes font-Cormorant font-semibold text-2xl text-white text-center"/>
           </div>
-          <p class="text-lg font-Cormorant font-normal text-gray-900 mt-1 text-center w-full">Minutos</p>
-        </div>
-        <h3 class="font-manrope font-semibold text-2xl text-gray-900 py-4">:</h3>
-        <div class="timer w-16">
-          <div class="bg-gray-800 py-4 px-2 rounded-lg overflow-hidden ">
-            <h3 id="seconds" class="countdown-element seconds font-Cormorant font-semibold text-2xl text-white text-center animate-countinsecond" />
-          </div>
-          <p class="text-lg font-Cormorant font-normal text-gray-900 mt-1 text-center w-full">Segundos</p>
+          <p class="text-lg font-Cormorant font-normal text-gray-900 mt-1 text-center w-full">Min</p>
         </div>
       </div>
     </di>
@@ -84,9 +77,6 @@
         var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
         // Display the result in the element with id="countdown"
-        // document.getElementById("countdown").innerHTML = days + "d " + hours + "h "
-        //     + minutes + "m " + seconds + "s ";
-
         document.getElementById("days").innerHTML = days;
         document.getElementById("hours").innerHTML = hours;
         document.getElementById("minutes").innerHTML = minutes;
