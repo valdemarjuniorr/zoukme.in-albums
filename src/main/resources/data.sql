@@ -42,44 +42,52 @@ VALUES (13, 'Zouk`n beach 2024', 'Balneário Camboriú/SC', '2024-11-14', '/zouk
         'https://1drv.ms/f/s!AnITpg7s5sZ_lK8sLYj9Dq6LG_QW0Q?e=gwmXiu');
 
 INSERT INTO counters(id, album_id, count)
-VALUES (1, 1, 5);
+VALUES (1, 1, 15);
 
 INSERT INTO counters(id, album_id, count)
-VALUES (2, 2, 0);
+VALUES (2, 2, 7);
 
 INSERT INTO counters(id, album_id, count)
 VALUES (3, 3, 3);
 
 INSERT INTO counters(id, album_id, count)
-VALUES (4, 4, 4);
+VALUES (4, 4, 11);
 
 INSERT INTO counters(id, album_id, count)
-VALUES (5, 5, 3);
+VALUES (5, 5, 9);
 
 INSERT INTO counters(id, album_id, count)
-VALUES (6, 6, 0);
+VALUES (6, 6, 8);
 
 INSERT INTO counters(id, album_id, count)
-VALUES (8, 8, 4);
+VALUES (8, 8, 11);
 
 INSERT INTO counters(id, album_id, count)
-VALUES (9, 9, 2);
+VALUES (9, 9, 3);
 
 INSERT INTO counters(id, album_id, count)
-VALUES (10, 10, 7);
+VALUES (10, 10, 20);
 
 INSERT INTO counters(id, album_id, count)
-VALUES (11, 11, 14);
+VALUES (11, 11, 20);
 
 INSERT INTO counters(id, album_id, count)
-VALUES (12, 12, 45);
+VALUES (12, 12, 54);
 
 INSERT INTO counters(id, album_id, count)
-VALUES (13, 13, 1265);
+VALUES (13, 13, 1331);
 
 -- social media
-INSERT INTO social_media(id, instagram, phone_number) VALUES (1, '@conecdansa', '41984125046');
+INSERT INTO social_media(id, instagram, phone_number) VALUES (1, 'conecdansa', '41984125046');
+
+INSERT INTO social_media(id, instagram, phone_number) VALUES (2, 'elitesamba_congress_bc', '4796610282');
 
 -- events
-INSERT INTO events(id, title, description, date, location, social_media_id)
-VALUES (1, 'ConecSamba 2025', 'ConecSamba é um dos maiores congressos de samba do Paraná', '2025-04-11', 'Curitiba/PR', 1);
+INSERT INTO events(id, title, description, date, location, cover_url, social_media_id)
+VALUES (1, 'ConecSamba 2025', 'ConecSamba é um dos maiores congressos de samba do Paraná', '2025-04-11', 'Curitiba/PR', '/next-events/conecsamba2025.jpg', 1);
+
+INSERT INTO events(id, title, description, date, location, cover_url, social_media_id)
+VALUES (2, 'ConecZouk 2025', 'ConecZouk - Gerações do zouk conectando o mundo', '2025-09-12', 'Curitiba/PR', '/next-events/coneczouk2025.jpg', 1);
+
+INSERT INTO events(id, title, description, date, location, cover_url, social_media_id)
+VALUES (3, 'Elite Samba Congress 2025', 'Elite Samba Congress - Nosso SAMBA é INFINITO!', '2025-08-15', 'Balneário Camboriú/SC', '/next-events/elitesambacongress2025.jpg', 2);

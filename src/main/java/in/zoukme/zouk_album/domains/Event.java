@@ -12,9 +12,5 @@ public record Event(
 	String description,
 	String location,
 	LocalDate date,
-	SocialMedia socialMedia) {
-
-	public Event with(SocialMedia socialMedia) {
-		return new Event(this.id, this.title, this.description, this.location, this.date, socialMedia);
-	}
+	Long socialMediaId, String coverUrl) {
 }

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:insert="~{fragments/header}"></head>
+
+<body class="bg-gray-100">
+<div th:insert="~{fragments/top :: top}"></div>
+<div class="main p-4">
+  <div class="max-w-4xl p-6 bg-white shadow-md rounded-lg mt-10 card mx-auto">
+    <div class="bg-white flex">
+      <img th:src="${event.coverUrl}" th:alt="${event.title}"
+           class="w-32 h-32 object-cover rounded-lg mr-4">
+      <div>
+        <h2 th:text="${event.title}" class="text-2xl font-bold text-gray-800"></h2>
+        <p th:text="${event.description}" class="text-gray-600 mt-4"></p></div>
+    </div>
+
+    <div class="mt-6">
+      <h4 class="text-xl font-semibold text-gray-800">Para mais informações</h4>
+      <div class="flex space-x-4 mt-2">
+        <a th:href="'https://www.instagram.com/' + ${event.instagram}" target="_blank" class="text-pink-500 hover:text-pink-700">
+          <i class="fab fa-instagram"></i> Instagram
+        </a>
+        <a th:href="'https://wa.me/+55' + ${event.phoneNumber} + '?text=Olá, vim do zoukme.in e gostaria de saber mais informações sobre o *' + ${event.title} + '*'"
+           target="_blank" class="text-green-500 hover:text-green-700">
+          <i class="fa-brands fa-whatsapp"></i> WhatsApp
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg mt-10 card">
+    <h2 class="text-3xl font-bold text-gray-800 text-center">Contagem regressiva</h2>
+    <div class="countdown text-center mt-4"></div>
+    <di>
+      <div id="countdown" class="flex items-start justify-center w-full gap-4 count-down-main">
+        <div class="timer w-16">
+          <div class="bg-gray-800 py-4 px-2 rounded-lg overflow-hidden">
+            <h3 id="days" class="countdown-element days font-Cormorant font-semibold text-2xl text-white text-center" />
+          </div>
+          <p class="text-lg font-Cormorant font-medium text-gray-900 mt-1 text-center w-full">Dias</p>
+        </div>
+        <h3 class="font-manrope font-semibold text-2xl text-gray-900 py-4">:</h3>
+        <div class="timer w-16">
+          <div class="bg-gray-800 py-4 px-2 rounded-lg overflow-hidden">
+            <h3 id="hours" class="countdown-element hours font-Cormorant font-semibold text-2xl text-white text-center"/>
+          </div>
+          <p class="text-lg font-Cormorant font-normal text-gray-900 mt-1 text-center w-full">Horas</p>
+        </div>
+        <h3 class="font-manrope font-semibold text-2xl text-gray-900 py-4">:</h3>
+        <div class="timer w-16">
+          <div class="bg-gray-800 py-4 px-2 rounded-lg overflow-hidden">
+            <h3 id="minutes" class="countdown-element minutes font-Cormorant font-semibold text-2xl text-white text-center"/>
+          </div>
+          <p class="text-lg font-Cormorant font-normal text-gray-900 mt-1 text-center w-full">Minutos</p>
+        </div>
+        <h3 class="font-manrope font-semibold text-2xl text-gray-900 py-4">:</h3>
+        <div class="timer w-16">
+          <div class="bg-gray-800 py-4 px-2 rounded-lg overflow-hidden ">
+            <h3 id="seconds" class="countdown-element seconds font-Cormorant font-semibold text-2xl text-white text-center animate-countinsecond" />
+          </div>
+          <p class="text-lg font-Cormorant font-normal text-gray-900 mt-1 text-center w-full">Segundos</p>
+        </div>
+      </div>
+    </di>
+  </div>
+</div>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+
+    // Set the date we're counting down to
+    var countDownDate = new Date(/*[[${event.date}]]*/).getTime();
+
+    // Update the count down every 1 second
+    var x = setInterval(function () {
+        // Get today's date and time
+        var now = new Date().getTime();
+
+        // Find the distance between now and the count down date
+        var distance = countDownDate - now;
+
+        // Time calculations for days, hours, minutes and seconds
+        var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        // Display the result in the element with id="countdown"
+        // document.getElementById("countdown").innerHTML = days + "d " + hours + "h "
+        //     + minutes + "m " + seconds + "s ";
+
+        document.getElementById("days").innerHTML = days;
+        document.getElementById("hours").innerHTML = hours;
+        document.getElementById("minutes").innerHTML = minutes;
+        document.getElementById("seconds").innerHTML = seconds;
+
+        // If the count-down is over, write some text
+        if (distance < 0) {
+            clearInterval(x);
+            document.getElementById("countdown").innerHTML = "EXPIRED";
+        }
+    }, 1000);
+
+    /*]]>*/
+</script>
+<div th:insert="~{fragments/footer :: footer}"></div>
+</body>
+</html>

@@ -12,6 +12,9 @@
           <li>
             <a href="/" class="text-white hover:text-gray-400">Home</a>
           </li>
+          <li>
+            <a hx-get="/events" hx-target=".main" class="cursor-pointer text-white hover:text-gray-400">Eventos</a>
+          </li>
           <li th:if="${authentication != null}">
             <a href="#" hx-get="/admin" hx-target=".main" class="text-white hover:text-gray-400">Admin</a>
           </li>
