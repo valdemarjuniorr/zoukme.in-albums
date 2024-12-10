@@ -1,6 +1,7 @@
 package in.zoukme.zouk_album.services;
 
 import in.zoukme.zouk_album.domains.Event;
+import in.zoukme.zouk_album.repositories.events.EventDetails;
 import in.zoukme.zouk_album.repositories.events.EventWithSocialMedia;
 import in.zoukme.zouk_album.domains.SocialMedia;
 import in.zoukme.zouk_album.exceptions.EventNotFoundException;
@@ -22,16 +23,17 @@ public class EventService {
     this.socialMediaRepository = socialMediaRepository;
   }
 
-  public Event findBy(Long id) {
-    return repository.findById(id).orElseThrow(EventNotFoundException::new);
+  public EventDetails findBy(Long id) {
+    return repository.findBy(id).orElseThrow(EventNotFoundException::new);
   }
 
   public Long save(EventWithSocialMedia event) {
-    var socialMedia =
-        this.socialMediaRepository.save(
-            new SocialMedia(null, event.instagram(), event.phoneNumber()));
-    var eventSaved = this.repository.save(event.toDomain(AggregateReference.to(socialMedia.id())));
-    return eventSaved.id();
+    AggregateReference<Event, Long> eventSaved =
+        AggregateReference.to(this.repository.save(event.toDomain()).id());
+    this.socialMediaRepository.save(
+        new SocialMedia(null, eventSaved, event.instagram(), event.phoneNumber()));
+
+    return eventSaved.getId();
   }
 
   public List<Event> findAll() {

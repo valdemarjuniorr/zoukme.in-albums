@@ -77,19 +77,21 @@ VALUES (12, 12, 54);
 INSERT INTO counters(id, album_id, count)
 VALUES (13, 13, 1331);
 
--- social media
-INSERT INTO social_media(id, instagram, phone_number) VALUES (1, 'conecdansa', '41984125046');
-INSERT INTO social_media(id, instagram, phone_number) VALUES (2, 'elitesamba_congress_bc', '4796610282');
-
 -- events
-INSERT INTO events(id, title, description, date, location, cover_url, social_media_id)
-VALUES (1, 'ConecSamba 2025', 'ConecSamba é um dos maiores congressos de samba do Paraná', '2025-04-11', 'Curitiba/PR', '/next-events/conecsamba2025.jpg', 1);
+INSERT INTO events(id, title, description, date, location, cover_url)
+VALUES (1, 'ConecSamba 2025', 'ConecSamba é um dos maiores congressos de samba do Paraná', '2025-04-11', 'Curitiba/PR', '/next-events/conecsamba2025.jpg');
 
-INSERT INTO events(id, title, description, date, location, cover_url, social_media_id)
-VALUES (2, 'ConecZouk 2025', 'ConecZouk - Gerações do zouk conectando o mundo', '2025-09-12', 'Curitiba/PR', '/next-events/coneczouk2025.jpg', 1);
+INSERT INTO events(id, title, description, date, location, cover_url)
+VALUES (2, 'ConecZouk 2025', 'ConecZouk - Gerações do zouk conectando o mundo', '2025-09-12', 'Curitiba/PR', '/next-events/coneczouk2025.jpg');
 
-INSERT INTO events(id, title, description, date, location, cover_url, social_media_id)
-VALUES (3, 'Elite Samba Congress 2025', 'Elite Samba Congress - Nosso SAMBA é INFINITO!', '2025-08-15', 'Balneário Camboriú/SC', '/next-events/elitesambacongress2025.jpg', 2);
+INSERT INTO events(id, title, description, date, location, cover_url)
+VALUES (3, 'Elite Samba Congress 2025', 'Elite Samba Congress - Nosso SAMBA é INFINITO!', '2025-08-15', 'Balneário Camboriú/SC', '/next-events/elitesambacongress2025.jpg');
+
+-- social media
+INSERT INTO social_media(id, event_id, instagram, phone_number) VALUES (1, 1, 'conecdansa', '41984125046');
+INSERT INTO social_media(id, event_id, instagram, phone_number) VALUES (3, 2, 'conecdansa', '41984125046');
+INSERT INTO social_media(id, event_id, instagram, phone_number) VALUES (2, 3, 'elitesamba_congress_bc', '4796610282');
+
 
 -- photos
 INSERT INTO PHOTOS(id, event_id, image_path) VALUES (1, 1, 'whatever');

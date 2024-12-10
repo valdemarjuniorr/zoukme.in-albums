@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-<head th:insert="~{fragments/header}"></head>
+<head th:insert="~{fragments/header}">
+  <meta property="og:title" th:content="'Zoukme In - ' + ${event.title}" />
+  <meta name="description" th:content="${event.title}" />
+  <meta property="og:url" content="https://zoukme.in/" />
+  <meta property="og:description" th:content="${event.title}" />
+  <meta property="og:image" th:content="'//zoukme.in/' + ${event.coverUrl}" />
+</head>
 
 <body class="bg-gray-100">
 <div th:insert="~{fragments/top :: top}"></div>
