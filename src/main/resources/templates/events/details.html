@@ -1,10 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
-<head th:insert="~{fragments/header}">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZTLEWPD9HY"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-ZTLEWPD9HY');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/htmx.org@2.0.3/dist/htmx.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://kit.fontawesome.com/b431e00b38.js" crossorigin="anonymous"></script>
   <meta property="og:title" th:content="'Zoukme In - ' + ${event.title}" />
-  <meta name="description" th:content="${event.title}" />
+  <meta name="description" th:content="${event.description}" />
   <meta property="og:url" content="https://zoukme.in/" />
-  <meta property="og:description" th:content="${event.title}" />
+  <meta property="og:description" th:content="${event.description}" />
   <meta property="og:image" th:content="'//zoukme.in/' + ${event.coverUrl}" />
 </head>
 
