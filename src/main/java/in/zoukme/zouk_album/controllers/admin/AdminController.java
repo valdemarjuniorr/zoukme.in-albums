@@ -5,14 +5,15 @@ import in.zoukme.zouk_album.repositories.events.EventWithSocialMedia;
 import in.zoukme.zouk_album.services.AlbumService;
 import in.zoukme.zouk_album.services.EventService;
 import in.zoukme.zouk_album.services.MetricService;
+import in.zoukme.zouk_album.services.aws.BucketService;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 @Controller
 @RequestMapping("/admin")
@@ -23,16 +24,30 @@ public class AdminController {
   private final MetricService service;
   private final AlbumService albumService;
   private final EventService eventService;
+  private final BucketService bucketService;
 
   public AdminController(
-      MetricService service, AlbumService albumService, EventService eventService) {
+      MetricService service,
+      AlbumService albumService,
+      EventService eventService,
+      BucketService bucketService) {
     this.service = service;
     this.albumService = albumService;
     this.eventService = eventService;
+    this.bucketService = bucketService;
   }
 
   @GetMapping
-  public String home() {
+  public String home(Model model, Authentication authentication) {
+    var albums = this.albumService.findAll();
+    model.addAttribute("albums", albums);
+    model.addAttribute("authentication", authentication);
+
+    return "index";
+  }
+
+  @GetMapping("/home")
+  public String homeAdmin() {
     return "admin/home";
   }
 
@@ -91,15 +106,19 @@ public class AdminController {
   }
 
   @PostMapping("/events/create")
-  public String createEvent(EventWithSocialMedia event) {
-	  var newEventId = this.eventService.save(event);
+  public String createEvent(EventWithSocialMedia event, Model model) {
+    this.eventService.save(event);
+    log.info("Event created: {}", event);
 
-    return "redirect:/events/" + newEventId;
+    model.addAttribute("events", this.eventService.findAll());
+    return "/events/list";
   }
 
   @PostMapping("/events/upload")
-  public String uploadFiles(@RequestParam("files[]") List<MultipartFile> files, Model model) {
-    model.addAttribute("images", files.stream().map(MultipartFile::getOriginalFilename).toList());
+  public String uploadFiles(
+      @RequestParam("files[]") List<MultipartFile> files, String title, Model model) {
+    var imagesPath = bucketService.upload(title, files);
+    model.addAttribute("images", imagesPath);
     return "/admin/events/images-preview";
   }
 }

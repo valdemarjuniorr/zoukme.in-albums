@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS EVENTS
     cover_url   varchar(255) not null
 );
 
-CREATE SEQUENCE IF NOT EXISTS SOCIAL_MEDIA_ID_SEQ start 3 increment 1;
+CREATE SEQUENCE IF NOT EXISTS SOCIAL_MEDIA_ID_SEQ start 4 increment 1;
 CREATE TABLE IF NOT EXISTS SOCIAL_MEDIA
 (
     id           int primary key default nextval('SOCIAL_MEDIA_ID_SEQ'),
@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS SOCIAL_MEDIA
 
 );
 
-CREATE SEQUENCE IF NOT EXISTS PHOTO_ID_SEQ start 3 increment 1;
+CREATE SEQUENCE IF NOT EXISTS PHOTO_ID_SEQ start 7 increment 1;
 CREATE TABLE IF NOT EXISTS PHOTOS
 (
     id         int primary key default nextval('PHOTO_ID_SEQ'),

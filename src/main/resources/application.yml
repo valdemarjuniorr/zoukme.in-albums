@@ -8,6 +8,13 @@ server:
     key-store-type: PKCS12
 
 spring:
+  cloud:
+    aws:
+      region:
+        static: sa-east-1
+      credentials:
+        access-key: ${AWS_ACCESS_KEY}
+        secret-key: ${AWS_SECRET_KEY}
   application:
     name: zouk-albums
   datasource:

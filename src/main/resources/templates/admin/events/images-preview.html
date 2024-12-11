@@ -1,5 +1,7 @@
 <div th:fragment="image-preview" class="image-preview flex flex-wrap justify-center">
   <div th:each="image : ${images}" class="m-2 w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48">
-    <img th:src="${image}" alt="Image 1" class="w-full h-full object-cover rounded">
+    <input type="hidden" name="photos" th:attr="value=${image}" />
+    <img th:src="${image}" alt="Image 1" class="w-full h-full object-cover rounded" />
   </div>
+
 </div>

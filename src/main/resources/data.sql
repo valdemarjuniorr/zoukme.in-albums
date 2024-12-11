@@ -92,6 +92,12 @@ INSERT INTO social_media(id, event_id, instagram, phone_number) VALUES (1, 1, 'c
 INSERT INTO social_media(id, event_id, instagram, phone_number) VALUES (3, 2, 'conecdansa', '41984125046');
 INSERT INTO social_media(id, event_id, instagram, phone_number) VALUES (2, 3, 'elitesamba_congress_bc', '4796610282');
 
-
 -- photos
-INSERT INTO PHOTOS(id, event_id, image_path) VALUES (1, 1, 'whatever');
+INSERT INTO PHOTOS(id, event_id, image_path) VALUES (1, 1, '/next-events/conecdansa-2022/conecdansa-2022-1.jpg');
+INSERT INTO PHOTOS(id, event_id, image_path) VALUES (2, 1, '/next-events/conecdansa-2022/conecdansa-2022-2.jpg');
+INSERT INTO PHOTOS(id, event_id, image_path) VALUES (3, 1, '/next-events/conecdansa-2022/conecdansa-2022-3.jpg');
+
+-- Elite samba congress 2024
+INSERT INTO PHOTOS(id, event_id, image_path) VALUES (4, 3, '/next-events/elite-samba-congress-2024/elite_samba_congress2024-1.jpg');
+INSERT INTO PHOTOS(id, event_id, image_path) VALUES (5, 3, '/next-events/elite-samba-congress-2024/elite_samba_congress2024-2.jpg');
+INSERT INTO PHOTOS(id, event_id, image_path) VALUES (6, 3, '/next-events/elite-samba-congress-2024/elite_samba_congress2024-3.jpg');
