@@ -17,6 +17,7 @@
   <script src="https://unpkg.com/htmx.org@2.0.3/dist/htmx.min.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://kit.fontawesome.com/b431e00b38.js" crossorigin="anonymous"></script>
+  <meta name="keywords" th:content="'zouk,zouk brasileiro,samba,dança de salão,dançar,bailes,congressos de dança de salão,' + ${event.title}">
   <meta name="description" th:content="${event.description}"/>
   <meta property="og:description" th:content="${event.description}"/>
   <meta property="og:image" th:content="'https://zoukme.in' + ${event.coverUrl}"/>
@@ -78,7 +79,7 @@
     </div>
   </div>
   <div th:if="${event.imagePath().size() > 0}" class="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg mt-10">
-    <h2 class="text-xl font-semibold mb-2">Eventos anteriores</h2>
+    <h2 class="text-xl font-semibold mb-2">Edições anteriores</h2>
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
       <img th:each="path : ${event.imagePath}" th:src="${path}" class="w-full h-96 object-cover rounded-lg">
     </div>
@@ -101,13 +102,11 @@
         var days = Math.floor(distance / (1000 * 60 * 60 * 24));
         var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
         // Display the result in the element with id="countdown"
         document.getElementById("days").innerHTML = days;
         document.getElementById("hours").innerHTML = hours;
         document.getElementById("minutes").innerHTML = minutes;
-        document.getElementById("seconds").innerHTML = seconds;
 
         // If the count-down is over, write some text
         if (distance < 0) {

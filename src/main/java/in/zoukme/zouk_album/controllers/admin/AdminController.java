@@ -106,11 +106,21 @@ public class AdminController {
   }
 
   @PostMapping("/events/create")
-  public String createEvent(EventWithSocialMedia event, Model model) {
+  public String createEvent(EventWithSocialMedia event, Model model, Authentication authentication) {
     this.eventService.save(event);
     log.info("Event created: {}", event);
 
     model.addAttribute("events", this.eventService.findAll());
+    model.addAttribute("authentication", authentication);
+    return "/events/list";
+  }
+
+  @DeleteMapping("/events/{id}")
+  public String delete(@PathVariable Long id, Model model, Authentication authentication) {
+    this.eventService.delete(id);
+    model.addAttribute("events", this.eventService.findAll());
+    model.addAttribute("authentication", authentication);
+
     return "/events/list";
   }
 

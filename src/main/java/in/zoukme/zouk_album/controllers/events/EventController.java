@@ -1,6 +1,7 @@
 package in.zoukme.zouk_album.controllers.events;
 
 import in.zoukme.zouk_album.services.EventService;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,9 +19,10 @@ public class EventController {
   }
 
   @GetMapping
-  public String list(Model model) {
+  public String list(Model model, Authentication authentication) {
     var events = service.findAll();
     model.addAttribute("events", events);
+    model.addAttribute("authentication", authentication);
 
     return "events/list";
   }

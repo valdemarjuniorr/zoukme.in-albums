@@ -1,4 +1,7 @@
 server:
+  compression:
+    enabled: true
+    mime-types: text/html,text/xml,text/plain,text/css,text/javascript,application/javascript,application/json
   http2:
     enabled: true
   port: 443
@@ -15,6 +18,8 @@ spring:
       credentials:
         access-key: ${AWS_ACCESS_KEY}
         secret-key: ${AWS_SECRET_KEY}
+      endpoint: https://s3.sa-east-1.amazonaws.com/
+
   application:
     name: zouk-albums
   datasource:

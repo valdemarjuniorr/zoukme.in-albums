@@ -9,6 +9,7 @@ import in.zoukme.zouk_album.repositories.SocialMediaRepository;
 import in.zoukme.zouk_album.repositories.events.EventDetails;
 import in.zoukme.zouk_album.repositories.events.EventRepository;
 import in.zoukme.zouk_album.repositories.events.EventWithSocialMedia;
+import in.zoukme.zouk_album.services.aws.BucketService;
 import java.util.List;
 import org.springframework.data.jdbc.core.mapping.AggregateReference;
 import org.springframework.stereotype.Service;
@@ -20,14 +21,17 @@ public class EventService {
   private final EventRepository repository;
   private final SocialMediaRepository socialMediaRepository;
   private final PhotoRepository photoRepository;
+  private final BucketService bucketService;
 
   public EventService(
       EventRepository repository,
       SocialMediaRepository socialMediaRepository,
-      PhotoRepository photoRepository) {
+      PhotoRepository photoRepository,
+      BucketService bucketService) {
     this.repository = repository;
     this.socialMediaRepository = socialMediaRepository;
     this.photoRepository = photoRepository;
+    this.bucketService = bucketService;
   }
 
   public EventDetails findBy(Long id) {
@@ -44,6 +48,16 @@ public class EventService {
         new SocialMedia(null, eventSaved, event.instagram(), event.phoneNumber()));
     event.photos().forEach(photo -> this.photoRepository.save(new Photo(null, eventSaved, photo)));
     return eventSaved.getId();
+  }
+
+  @Transactional
+  public void delete(Long id) {
+    var event = findBy(id);
+    this.photoRepository.deleteAllByEventId(id);
+    this.socialMediaRepository.deleteSocialMediaByEventId(id);
+    this.repository.deleteById(id);
+    // delete folder from s3
+    this.bucketService.deleteFolder(event.title());
   }
 
   public List<Event> findAll() {

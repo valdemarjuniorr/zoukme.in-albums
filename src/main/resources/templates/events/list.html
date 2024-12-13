@@ -1,28 +1,33 @@
-<style>
-  .event {
-    transition: background-color 0.3s ease, transform 0.3s ease;
-  }
+<div id="events-list" th:fragment="events">
+  <style>
+      .event {
+          transition: background-color 0.3s ease, transform 0.3s ease;
+      }
 
-  .event:hover {
-    background-color: #f3f4f6; /* Tailwind's gray-100 */
-    transform: scale(1.02);
-  }
-</style>
-<div th:fragment="events" class="container mx-auto">
-  <h1 class="text-3xl font-bold mb-6">Próximos eventos</h1>
-  <div class="space-y-4">
-    <a th:each="event : ${events}" th:href="@{/events/{id}(id=${event.id})}">
-      <div class="event cursor-pointer bg-white p-4 m-4  rounded-lg shadow-md flex">
-        <img th:src="${event.coverUrl}" th:alt="${event.title}"
-             class="w-32 h-32 object-cover rounded-lg mr-4">
-        <div>
-          <h2 th:text="${event.title}" class="text-xl font-semibold"/>
-          <p th:text="${event.description}" class="text-gray-700"/>
-          <p th:text="${#temporals.format(event.date,'dd/MM/yyyy')}"
-             class="text-gray-500"/>
-          <p th:text="${event.location}" class="text-gray-500"/>
+      .event:hover {
+          background-color: #f3f4f6; /* Tailwind's gray-100 */
+          transform: scale(1.02);
+      }
+  </style>
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <h1 class="text-3xl font-bold mb-6">Próximos eventos</h1>
+    <div class="space-y-4">
+      <a th:each="event : ${events}" th:href="@{/events/{id}(id=${event.id})}"
+           class="event cursor-pointer bg-white p-4 m-4 rounded-lg shadow-md flex">
+        <img th:src="${event.coverUrl}" th:alt="${event.title}" class="w-32 h-32 object-cover rounded-lg mr-4">
+        <div class="event-details">
+          <h2 th:text="${event.title}" class="text-xl font-semibold"></h2>
+          <p th:text="${event.description}" class="text-gray-700"></p>
+          <p th:text="${#temporals.format(event.date,'dd/MM/yyyy')}" class="text-gray-500"></p>
+          <p th:text="${event.location}" class="text-gray-500"></p>
         </div>
+        <a type="button" th:if="${authentication != null}" hx-confirm="Você tem certeza?" th:hx-delete="@{/admin/events/{id}(id=${event.id})}"
+           hx-target=".main" class="cursor-pointer bg-red-500 text-white px-4 py-2 rounded-lg mt-4 hover:bg-red-700">Remover
+        </a>
+      </a>
+      <div th:if="${events.size() == 0}">
+        <h2>Não existem próximos eventos</h2>
       </div>
-    </a>
+    </div>
   </div>
 </div>
