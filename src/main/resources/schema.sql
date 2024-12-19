@@ -40,7 +40,8 @@ CREATE TABLE IF NOT EXISTS EVENTS
     description varchar(255) not null,
     date        date         not null,
     location    varchar(50)  not null,
-    cover_url   varchar(255) not null
+    cover_url   varchar(255) not null,
+    event_url   varchar(255) not null
 );
 
 CREATE SEQUENCE IF NOT EXISTS SOCIAL_MEDIA_ID_SEQ start 4 increment 1;

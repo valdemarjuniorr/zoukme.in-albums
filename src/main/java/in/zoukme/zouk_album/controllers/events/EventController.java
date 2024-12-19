@@ -27,9 +27,9 @@ public class EventController {
     return "events/list";
   }
 
-  @GetMapping("/{id}")
-  public String findBy(@PathVariable Long id, Model model) {
-    var event = service.findBy(id);
+  @GetMapping("/{title}")
+  public String findByEventUrl(@PathVariable String title, Model model) {
+    var event = service.findByEventUrl(title);
     model.addAttribute("event", event);
 
     return "events/details";

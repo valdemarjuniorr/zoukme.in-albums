@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.Set;
 
 public final class EventDetails {
+  private final Long id;
   private final String title;
   private final String description;
   private final String location;
@@ -14,6 +15,7 @@ public final class EventDetails {
   private Set<String> imagePath;
 
   public EventDetails(
+      Long id,
       String title,
       String description,
       String location,
@@ -21,6 +23,7 @@ public final class EventDetails {
       String instagram,
       String phoneNumber,
       String coverUrl) {
+    this.id = id;
     this.title = title;
     this.description = description;
     this.location = location;
@@ -60,6 +63,10 @@ public final class EventDetails {
 
   public Set<String> imagePath() {
     return imagePath;
+  }
+
+  public Long getId() {
+    return id;
   }
 
   public void setImagePath(Set<String> imagePath) {

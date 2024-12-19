@@ -21,6 +21,8 @@ public record EventWithSocialMedia(
       coverUrl = this.photos.stream().findFirst().get();
       this.photos.remove(coverUrl);
     }
-    return new Event(null, this.title, this.description, this.location, this.date, coverUrl, null);
+    var eventUrl = this.title.toLowerCase().replace(" ", "-");
+    return new Event(
+        null, this.title, this.description, this.location, this.date, coverUrl, null, eventUrl);
   }
 }

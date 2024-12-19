@@ -3,4 +3,4 @@ start:
 
 native-start:
 	mvn -Pnative native:compile -DskipTests
-	./target/zouk-album
+	./target/zoukme.in-albums

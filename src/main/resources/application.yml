@@ -16,8 +16,8 @@ spring:
       region:
         static: sa-east-1
       credentials:
-        access-key: ${AWS_ACCESS_KEY}
-        secret-key: ${AWS_SECRET_KEY}
+        access-key: ${ACCESS_KEY}
+        secret-key: ${SECRET_KEY}
       endpoint: https://s3.sa-east-1.amazonaws.com/
 
   application:

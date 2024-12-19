@@ -40,6 +40,12 @@ public class EventService {
     return event;
   }
 
+  public EventDetails findByEventUrl(String eventUrl) {
+    var event = repository.findEventByEventUrl(eventUrl).orElseThrow(EventNotFoundException::new);
+    event.setImagePath(this.photoRepository.findPhotoByEventId(event.getId()));
+    return event;
+  }
+
   @Transactional
   public Long save(EventWithSocialMedia event) {
     AggregateReference<Event, Long> eventSaved =
@@ -51,11 +57,11 @@ public class EventService {
   }
 
   @Transactional
-  public void delete(Long id) {
-    var event = findBy(id);
-    this.photoRepository.deleteAllByEventId(id);
-    this.socialMediaRepository.deleteSocialMediaByEventId(id);
-    this.repository.deleteById(id);
+  public void delete(String eventUrl) {
+    var event = findByEventUrl(eventUrl);
+    this.photoRepository.deleteAllByEventId(event.getId());
+    this.socialMediaRepository.deleteSocialMediaByEventId(event.getId());
+    this.repository.deleteById(event.getId());
     // delete folder from s3
     this.bucketService.deleteFolder(event.title());
   }

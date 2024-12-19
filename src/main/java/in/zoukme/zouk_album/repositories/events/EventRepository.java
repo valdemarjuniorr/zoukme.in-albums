@@ -10,12 +10,21 @@ public interface EventRepository extends ListCrudRepository<Event, Long> {
 
   @Query(
       """
-		SELECT e.title, e.description, e.location, e.date, sm.instagram, sm.phone_number, e.cover_url
-		FROM events e
-			INNER JOIN social_media sm ON e.id = sm.event_id
-		WHERE e.id = :id
-		""")
+        SELECT e.title, e.description, e.location, e.date, sm.instagram, sm.phone_number, e.cover_url, e.event_url
+        FROM events e
+            INNER JOIN social_media sm ON e.id = sm.event_id
+        WHERE e.id = :id
+    """)
   Optional<EventDetails> findBy(Long id);
+
+  @Query(
+      """
+    SELECT e.id, e.title, e.description, e.location, e.date, sm.instagram, sm.phone_number, e.cover_url, e.event_url
+    FROM events e
+       INNER JOIN social_media sm ON e.id = sm.event_id
+    WHERE e.event_url = :eventUrl
+    """)
+  Optional<EventDetails> findEventByEventUrl(String eventUrl);
 
   List<Event> findAllByOrderByDate();
 }
