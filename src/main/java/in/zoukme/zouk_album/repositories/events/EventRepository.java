@@ -10,7 +10,7 @@ public interface EventRepository extends ListCrudRepository<Event, Long> {
 
   @Query(
       """
-        SELECT e.title, e.description, e.location, e.date, sm.instagram, sm.phone_number, e.cover_url, e.event_url
+        SELECT e.title, e.description, e.location, e.date, sm.instagram, sm.phone_number, e.cover_url, e.event_url, e.details
         FROM events e
             INNER JOIN social_media sm ON e.id = sm.event_id
         WHERE e.id = :id
@@ -19,7 +19,7 @@ public interface EventRepository extends ListCrudRepository<Event, Long> {
 
   @Query(
       """
-    SELECT e.id, e.title, e.description, e.location, e.date, sm.instagram, sm.phone_number, e.cover_url, e.event_url
+    SELECT e.id, e.title, e.description, e.location, e.date, sm.instagram, sm.phone_number, e.cover_url, e.event_url, e.details
     FROM events e
        INNER JOIN social_media sm ON e.id = sm.event_id
     WHERE e.event_url = :eventUrl

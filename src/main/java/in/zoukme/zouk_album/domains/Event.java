@@ -14,6 +14,6 @@ public record Event(
     String location,
     LocalDate date,
     String coverUrl,
-    @MappedCollection(idColumn = "event_id") Set<Photo> photos, String eventUrl) {
-
-}
+    @MappedCollection(idColumn = "event_id") Set<Photo> photos,
+    String eventUrl,
+    String details) {}

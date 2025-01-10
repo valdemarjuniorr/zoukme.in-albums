@@ -13,6 +13,7 @@ public final class EventDetails {
   private final String phoneNumber;
   private final String coverUrl;
   private Set<String> imagePath;
+  private final String details;
 
   public EventDetails(
       Long id,
@@ -22,7 +23,8 @@ public final class EventDetails {
       LocalDate date,
       String instagram,
       String phoneNumber,
-      String coverUrl) {
+      String coverUrl,
+      String details) {
     this.id = id;
     this.title = title;
     this.description = description;
@@ -31,6 +33,7 @@ public final class EventDetails {
     this.instagram = instagram;
     this.phoneNumber = phoneNumber;
     this.coverUrl = coverUrl;
+    this.details = details;
   }
 
   public String title() {
@@ -71,5 +74,9 @@ public final class EventDetails {
 
   public void setImagePath(Set<String> imagePath) {
     this.imagePath = imagePath;
+  }
+
+  public String getDetails() {
+    return this.details;
   }
 }

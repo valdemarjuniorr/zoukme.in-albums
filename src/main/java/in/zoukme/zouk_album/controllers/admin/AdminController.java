@@ -12,7 +12,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 @Controller
@@ -38,7 +44,7 @@ public class AdminController {
   }
 
   @GetMapping
-  public String home(Model model, Authentication authentication) {
+  String home(Model model, Authentication authentication) {
     var albums = this.albumService.findAll();
     model.addAttribute("albums", albums);
     model.addAttribute("authentication", authentication);
@@ -47,7 +53,7 @@ public class AdminController {
   }
 
   @GetMapping("/home")
-  public String homeAdmin() {
+  String homeAdmin() {
     return "admin/home";
   }
 
@@ -67,7 +73,7 @@ public class AdminController {
   }
 
   @GetMapping("/metrics/albums/visits")
-  public String visits(Model model) {
+  String visits(Model model) {
     log.info("Showing visits metrics");
     model.addAttribute("visits", this.service.findVisitAlbumMetric());
 
@@ -101,12 +107,12 @@ public class AdminController {
   }
 
   @GetMapping("/events/create")
-  public String createEvent() {
+  String createEvent() {
     return "admin/events/create";
   }
 
   @PostMapping("/events/create")
-  public String createEvent(
+  String createEvent(
       EventWithSocialMedia event, Model model, Authentication authentication) {
     this.eventService.save(event);
     log.info("Event created: {}", event);
@@ -117,7 +123,7 @@ public class AdminController {
   }
 
   @DeleteMapping("/events/{eventUrl}")
-  public String delete(@PathVariable String eventUrl, Model model, Authentication authentication) {
+  String delete(@PathVariable String eventUrl, Model model, Authentication authentication) {
     this.eventService.delete(eventUrl);
     model.addAttribute("events", this.eventService.findAll());
     model.addAttribute("authentication", authentication);
@@ -126,7 +132,7 @@ public class AdminController {
   }
 
   @PostMapping("/events/upload")
-  public String uploadFiles(
+  String uploadFiles(
       @RequestParam("files[]") List<MultipartFile> files, String title, Model model) {
     var imagesPath = bucketService.upload(title, files);
     model.addAttribute("images", imagesPath);

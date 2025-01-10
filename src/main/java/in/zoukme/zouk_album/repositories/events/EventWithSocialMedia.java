@@ -13,7 +13,8 @@ public record EventWithSocialMedia(
     String instagram,
     String phoneNumber,
     String coverUrl,
-    Set<String> photos) {
+    Set<String> photos,
+    String details) {
 
   public Event toDomain() {
     var coverUrl = "";
@@ -23,6 +24,14 @@ public record EventWithSocialMedia(
     }
     var eventUrl = this.title.toLowerCase().replace(" ", "-");
     return new Event(
-        null, this.title, this.description, this.location, this.date, coverUrl, null, eventUrl);
+        null,
+        this.title,
+        this.description,
+        this.location,
+        this.date,
+        coverUrl,
+        null,
+        eventUrl,
+        this.details);
   }
 }

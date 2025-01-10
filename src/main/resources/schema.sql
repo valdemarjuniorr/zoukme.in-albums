@@ -37,7 +37,8 @@ CREATE TABLE IF NOT EXISTS EVENTS
 (
     id          int primary key default nextval('EVENTS_ID_SEQ'),
     title       varchar(50)  not null,
-    description varchar(255) not null,
+    description text         not null,
+    details     text,
     date        date         not null,
     location    varchar(50)  not null,
     cover_url   varchar(255) not null,

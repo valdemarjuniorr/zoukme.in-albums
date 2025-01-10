@@ -5,6 +5,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <title>Zouk Me In - Albums</title>
 </head>
+
 <body class="bg-gray-100">
 <!-- Content -->
 <main class="main content container mx-auto">
@@ -19,6 +20,11 @@
       <textarea name="description" class="w-full mt-1 p-2 border border-gray-300 rounded-md"
                 placeholder="Ex.: Um dos maiores eventos de samba de Santa Catarina" rows="4" cols="50">
       </textarea>
+    </div>
+    <div>
+      <label class="block text-gray-700">Detalhes</label>
+      <input id="details" type="hidden" name="details">
+      <div id="editor"></div>
     </div>
     <div>
       <label class="block text-gray-700">Cidade/Estado</label>
@@ -67,10 +73,21 @@
               class="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700">Cancelar
       </button>
       <button hx-post="/admin/events/create" hx-include="#album-form" hx-target=".main" type="submit"
-              class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">Criar
+              class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700" onSubmit="setHiddenFieldValue()">Criar
       </button>
     </div>
   </div>
+
+  <!-- Initialize Quill editor -->
+  <script>
+      const quill = new Quill("#editor", {
+          theme: "snow",
+          placeholder: "Ex.: Um dos maiores eventos de samba de Santa Catarina"
+      });
+      quill.root.addEventListener('focusout', function () {
+          setHiddenFieldValue();
+      });
+  </script>
 </main>
 <script>
     document.getElementById('addFileInput').addEventListener('click', function () {
@@ -79,6 +96,13 @@
         fileInputGroup.innerHTML = '<input type="file" name="files[]" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">';
         document.getElementById('uploadForm').insertBefore(fileInputGroup, document.getElementById('addFileInput'));
     });
+
+    function setHiddenFieldValue() {
+        var quillContent = quill.getContents();
+        // Convert the Delta object to a JSON string
+        var details = JSON.stringify(quillContent);
+        document.getElementById('details').value = details;
+    }
 </script>
 
 </body>
