@@ -24,7 +24,9 @@ public interface EventRepository extends ListCrudRepository<Event, Long> {
        INNER JOIN social_media sm ON e.id = sm.event_id
     WHERE e.event_url = :eventUrl
     """)
-  Optional<EventDetails> findEventByEventUrl(String eventUrl);
+  Optional<EventDetails> findEventDetailsByEventUrl(String eventUrl);
+
+  Optional<Event> findByEventUrl(String eventUrl);
 
   List<Event> findAllByOrderByDate();
 }

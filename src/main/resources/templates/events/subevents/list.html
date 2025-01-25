@@ -1,0 +1,26 @@
+<sDOCTYPE html>
+  <html xmlns:th="https://www.thymeleaf.org">
+
+  <head th:insert="~{fragments/header}"></head>
+
+  <body class="bg-gray-100">
+  <!-- Header -->
+  <div th:insert="~{fragments/top :: top}"></div>
+
+  <!-- Content -->
+  <main th:fragment="main" class="main container mx-auto p-4">
+    <h2 class="text-lg font-medium pb-4">ConecZouk 2025</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+      <div th:each="subEvent: ${subEvents}" class="bg-white p-2 rounded-lg shadow-md transform transition-transform duration-300 hover:scale-105 hover:text-gray-500 active:text-blue-500">
+        <a th:href="@{/events/{eventUrl}/albums/{subEventName}(eventUrl='coneczouk-2025', subEventName=${subEvent.name})}">
+          <i class="fa-regular fa-folder-open"></i>
+          <span th:text="${subEvent.name}" class="text-lg font-medium"></span>
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <!-- footer -->
+  <div th:replace="~{fragments/footer :: footer}"></div>
+  </body>
+  </html>

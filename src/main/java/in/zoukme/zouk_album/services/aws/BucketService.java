@@ -12,7 +12,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.CommonPrefix;
 import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
+import software.amazon.awssdk.services.s3.model.S3Object;
 
 @Service
 public class BucketService {
@@ -63,5 +65,32 @@ public class BucketService {
                     .bucket(EventUtils.BUCKET_NAME)
                     .key(object.key())
                     .build()));
+  }
+
+  /** Get the list of folders from a given path. For example, "events/zoukme-in/" */
+  public List<String> getFoldersNamesBy(String folderPath) {
+    return s3Client
+        .listObjectsV2(
+            b ->
+                b.bucket(EventUtils.BUCKET_NAME).prefix(folderPath + File.separator).delimiter("/"))
+        .commonPrefixes()
+        .stream()
+        .map(CommonPrefix::prefix)
+        .toList();
+  }
+
+  /** Get the list of files from a given path. For example, "events/zoukme-in/2021-09-25" */
+  public List<String> getFilesNamesBy(String folderPath) {
+    return s3Client
+        .listObjectsV2(b -> b.bucket(EventUtils.BUCKET_NAME).prefix(folderPath).delimiter("/"))
+        .contents()
+        .stream()
+        .map(S3Object::key)
+        .filter(key -> !key.endsWith("/"))
+        .toList();
+  }
+
+  public String getBucketUri() {
+    return awsEndpoint + EventUtils.BUCKET_NAME + "/";
   }
 }

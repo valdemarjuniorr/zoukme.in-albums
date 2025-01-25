@@ -112,8 +112,7 @@ public class AdminController {
   }
 
   @PostMapping("/events/create")
-  String createEvent(
-      EventWithSocialMedia event, Model model, Authentication authentication) {
+  String createEvent(EventWithSocialMedia event, Model model, Authentication authentication) {
     this.eventService.save(event);
     log.info("Event created: {}", event);
 
@@ -137,5 +136,12 @@ public class AdminController {
     var imagesPath = bucketService.upload(title, files);
     model.addAttribute("images", imagesPath);
     return "/admin/events/images-preview";
+  }
+
+  @GetMapping("events/{eventUrl}/process")
+  String processEvent(@PathVariable String eventUrl, Model model) {
+    model.addAttribute("message", "Album processado");
+    this.eventService.processAlbumBy(eventUrl);
+    return null;
   }
 }
