@@ -101,7 +101,7 @@ public class AdminController {
     var albums = this.albumService.findAll();
 
     model.addAttribute("albums", albums);
-    model.addAttribute("message", "Album atualizado");
+    model.addAttribute("message", "Album atualizado com sucesso");
 
     return albumList(model);
   }

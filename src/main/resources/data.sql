@@ -111,6 +111,14 @@ VALUES (3, 'Elite Samba Congress 2025',
         'Balneário Camboriú/SC', '/next-events/elitesambacongress2025.jpg',
         'elitesamba-congress-2025');
 
+INSERT INTO events(id, title, description, date, location, cover_url, event_url)
+VALUES (4, 'Zoukn Beach 2025',
+        'Zoukn Beach - 10 anos. O MAIOR Zoukn Beach de todos os tempos!',
+        '2025-11-14',
+        'Balneário Camboriú/SC',
+        '/next-events/zouknbeach-2025.jpg',
+        'zoukn-beach2025');
+
 -- social media
 INSERT INTO social_media(id, event_id, instagram, phone_number)
 VALUES (1, 1, 'conecdansa', '41984125046');
@@ -118,6 +126,8 @@ INSERT INTO social_media(id, event_id, instagram, phone_number)
 VALUES (3, 2, 'conecdansa', '41984125046');
 INSERT INTO social_media(id, event_id, instagram, phone_number)
 VALUES (2, 3, 'elitesamba_congress_bc', '4796610282');
+INSERT INTO social_media(id, event_id, instagram, phone_number)
+VALUES (4, 4, 'zouknbeach_bc', '4796610282');
 
 -- photos
 INSERT INTO PHOTOS(id, event_id, image_path)
@@ -137,6 +147,33 @@ VALUES (5, 3,
 INSERT INTO PHOTOS(id, event_id, image_path)
 VALUES (6, 3,
         '/next-events/elite-samba-congress-2024/elite_samba_congress2024-3.jpg');
+
+-- Zoukn Beach 2025
+INSERT INTO PHOTOS(id, event_id, image_path)
+VALUES (7, 4, '/next-events/zouknbeach-2025/zouknbeach-2025-1.jpg');
+INSERT INTO PHOTOS(id, event_id, image_path)
+VALUES (8, 4, '/next-events/zouknbeach-2025/zouknbeach-2025-2.jpg');
+INSERT INTO PHOTOS(id, event_id, image_path)
+VALUES (9, 4, '/next-events/zouknbeach-2025/zouknbeach-2025-3.jpg');
+INSERT INTO PHOTOS(id, event_id, image_path)
+VALUES (10, 4, '/next-events/zouknbeach-2025/zouknbeach-2025-4.jpg');
+INSERT INTO PHOTOS(id, event_id, image_path)
+VALUES (11, 4, '/next-events/zouknbeach-2025/zouknbeach-2025-5.jpg');
+INSERT INTO PHOTOS(id, event_id, image_path)
+VALUES (12, 4, '/next-events/zouknbeach-2025/zouknbeach-2025-6.jpg');
+INSERT INTO PHOTOS(id, event_id, image_path)
+VALUES (13, 4, '/next-events/zouknbeach-2025/zouknbeach-2025-7.jpg');
+INSERT INTO PHOTOS(id, event_id, image_path)
+VALUES (14, 4, '/next-events/zouknbeach-2025/zouknbeach-2025-8.jpg');
+INSERT INTO PHOTOS(id, event_id, image_path)
+VALUES (15, 4, '/next-events/zouknbeach-2025/zouknbeach-2025-9.jpg');
+INSERT INTO PHOTOS(id, event_id, image_path)
+VALUES (16, 4, '/next-events/zouknbeach-2025/zouknbeach-2025-10.jpg');
+INSERT INTO PHOTOS(id, event_id, image_path)
+VALUES (17, 4, '/next-events/zouknbeach-2025/zouknbeach-2025-11.jpg');
+INSERT INTO PHOTOS(id, event_id, image_path)
+VALUES (18, 4, '/next-events/zouknbeach-2025/zouknbeach-2025-12.jpg');
+
 
 -- event Album test
 INSERT INTO SUB_EVENTS(id, event_id, name)
