@@ -11,7 +11,7 @@ public interface SubEventRepository extends ListCrudRepository<SubEvent, Long> {
   @Query(
       """
 		SELECT se.id, se.name, se.event_id
-		FROM sub_events se
+	 	FROM sub_events se
 			INNER JOIN events e ON se.event_id = e.id
 		WHERE e.event_url = :eventUrl
 	""")

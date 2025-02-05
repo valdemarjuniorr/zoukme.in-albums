@@ -138,10 +138,9 @@ public class AdminController {
     return "/admin/events/images-preview";
   }
 
-  @GetMapping("events/{eventUrl}/process")
-  String processEvent(@PathVariable String eventUrl, Model model) {
-    model.addAttribute("message", "Album processado");
+  @PostMapping("/events/{eventUrl}/process")
+  void processEvent(@PathVariable String eventUrl, Model model) {
     this.eventService.processAlbumBy(eventUrl);
-    return null;
+    model.addAttribute("message", "Album processado");
   }
 }

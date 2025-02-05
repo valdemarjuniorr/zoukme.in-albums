@@ -6,6 +6,7 @@ import in.zoukme.zouk_album.domains.Page;
 import in.zoukme.zouk_album.domains.Photo;
 import in.zoukme.zouk_album.domains.SocialMedia;
 import in.zoukme.zouk_album.domains.SubEvent;
+import in.zoukme.zouk_album.domains.subevent.SubEventWithEvent;
 import in.zoukme.zouk_album.exceptions.EventNotFoundException;
 import in.zoukme.zouk_album.exceptions.SubEventNotFoundException;
 import in.zoukme.zouk_album.repositories.PhotoRepository;
@@ -84,8 +85,11 @@ public class EventService {
     return this.repository.findAllByOrderByDate();
   }
 
-  public List<SubEvent> getEventAlbumsBy(String eventUrl) {
-    return this.subEventRepository.findSubEventsBy(eventUrl);
+  public SubEventWithEvent getEventAlbumsBy(String eventUrl) {
+    var event = this.repository.findByEventUrl(eventUrl).orElseThrow(EventNotFoundException::new);
+    var subEvents = this.subEventRepository.findSubEventsBy(eventUrl);
+
+    return new SubEventWithEvent(event, subEvents);
   }
 
   public org.springframework.data.domain.Page<EventPhotos> getPhotosBy(
