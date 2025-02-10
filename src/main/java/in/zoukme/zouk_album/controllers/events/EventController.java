@@ -51,10 +51,11 @@ public class EventController {
       @PathVariable String eventUrl,
       @PathVariable String albumName,
       @RequestParam(defaultValue = "1") Integer page,
-      @RequestParam(defaultValue = "10") Integer size,
+      @RequestParam(defaultValue = "50") Integer size,
       Model model) {
     model.addAttribute("photos", service.getPhotosBy(eventUrl, albumName, new Page(page, size)));
     model.addAttribute("albumName", albumName);
+    model.addAttribute("eventUrl", eventUrl);
 
     return "events/albums/list";
   }

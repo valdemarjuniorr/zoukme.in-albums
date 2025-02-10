@@ -119,6 +119,22 @@ VALUES (4, 'Zoukn Beach 2025',
         '/next-events/zouknbeach-2025.jpg',
         'zoukn-beach2025');
 
+INSERT INTO events(id, title, description, date, location, cover_url, event_url)
+VALUES (5, 'Baile do Sorriso',
+        'Baile do Sorriso - O melhor baile de Joinville',
+        '2022-05-21',
+        'Balneário Camboriú/SC',
+        '/1_baile_sorriso_bc.jpg',
+        'baile-do-sorriso-2022');
+
+
+INSERT INTO events(id, title, description, date, location, cover_url, event_url)
+VALUES (6, 'Zoukn Beach 2024',
+        'Zoukn Beach 2024',
+        '2024-11-14',
+        'Balneário Camboriú/SC',
+        '/zouk-in-beach-photo-album.jpg',
+        'zouknbeach-2024');
 -- social media
 INSERT INTO social_media(id, event_id, instagram, phone_number)
 VALUES (1, 1, 'conecdansa', '41984125046');

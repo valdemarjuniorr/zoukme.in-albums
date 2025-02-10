@@ -17,8 +17,10 @@ import in.zoukme.zouk_album.repositories.events.EventRepository;
 import in.zoukme.zouk_album.repositories.events.EventWithSocialMedia;
 import in.zoukme.zouk_album.repositories.events.SubEventRepository;
 import in.zoukme.zouk_album.services.aws.BucketService;
+import java.time.LocalDate;
 import java.util.List;
 import org.springframework.data.jdbc.core.mapping.AggregateReference;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -82,7 +84,11 @@ public class EventService {
   }
 
   public List<Event> findAll() {
-    return this.repository.findAllByOrderByDate();
+    var authentication = SecurityContextHolder.getContext().getAuthentication();
+    if (authentication != null && authentication.getName().equals("admin")) {
+      return this.repository.findAllByOrderByDateDesc();
+    }
+    return this.repository.findAllByDateIsGreaterThanEqualOrderByDate(LocalDate.now());
   }
 
   public SubEventWithEvent getEventAlbumsBy(String eventUrl) {

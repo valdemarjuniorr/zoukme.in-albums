@@ -1,17 +1,7 @@
-<footer class="bg-gray-800 text-white p-6 mt-8">
+<footer id="#footer" class="bg-gray-800 text-white p-6 mt-8">
   <script type="text/javascript"
           src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-  <script th:if="${message != null}" th:inline="javascript">
-    Toastify({
-      text:  /*[[${message}]]*/ "",
-      duration: 3000,
-      close: true,
-      style: {
-        background: "linear-gradient(to right, #00b09b, #96c93d)",
-      },
-      stopOnFocus: true, // Prevents dismissing of toast on hover
-    }).showToast();
-  </script>
+  <div id="toast"></div>
   <div class="container mx-auto text-center">
     <p>© <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}"/> Zouk Me
       In. All Right Reserved.</p>

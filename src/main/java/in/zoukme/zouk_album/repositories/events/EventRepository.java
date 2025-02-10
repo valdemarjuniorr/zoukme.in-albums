@@ -1,6 +1,7 @@
 package in.zoukme.zouk_album.repositories.events;
 
 import in.zoukme.zouk_album.domains.Event;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jdbc.repository.query.Query;
@@ -28,5 +29,7 @@ public interface EventRepository extends ListCrudRepository<Event, Long> {
 
   Optional<Event> findByEventUrl(String eventUrl);
 
-  List<Event> findAllByOrderByDate();
+  List<Event> findAllByOrderByDateDesc();
+
+  List<Event> findAllByDateIsGreaterThanEqualOrderByDate(LocalDate dateIsGreaterThan);
 }

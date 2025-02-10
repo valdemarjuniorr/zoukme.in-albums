@@ -16,4 +16,10 @@ public record Event(
     String coverUrl,
     @MappedCollection(idColumn = "event_id") Set<Photo> photos,
     String eventUrl,
-    String details) {}
+    String details) {
+
+  public Boolean isComingUp() {
+    var now = LocalDate.now();
+    return date.isEqual(now) || date.isAfter(now);
+  }
+}

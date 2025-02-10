@@ -112,7 +112,7 @@ public class AdminController {
   }
 
   @PostMapping("/events/create")
-  String createEvent(EventWithSocialMedia event, Model model, Authentication authentication) {
+  String creteEvent(EventWithSocialMedia event, Model model, Authentication authentication) {
     this.eventService.save(event);
     log.info("Event created: {}", event);
 
@@ -139,8 +139,10 @@ public class AdminController {
   }
 
   @PostMapping("/events/{eventUrl}/process")
-  void processEvent(@PathVariable String eventUrl, Model model) {
+  String processEvent(@PathVariable String eventUrl, Model model, Authentication authentication) {
     this.eventService.processAlbumBy(eventUrl);
-    model.addAttribute("message", "Album processado");
+    model.addAttribute("message", "Album processado com sucesso");
+
+    return "events/toast";
   }
 }

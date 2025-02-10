@@ -1,0 +1,11 @@
+<script th:if="${message != null}" th:inline="javascript">
+  Toastify({
+    text:  /*[[${message}]]*/ "",
+    duration: 3000,
+    close: true,
+    style: {
+      background: "linear-gradient(to right, #00b09b, #96c93d)",
+    },
+    stoponfocus: true, // prevents dismissing of toast on hover
+  }).showToast();
+</script>
