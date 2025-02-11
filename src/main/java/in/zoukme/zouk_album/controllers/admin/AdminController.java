@@ -139,10 +139,10 @@ public class AdminController {
   }
 
   @PostMapping("/events/{eventUrl}/process")
-  String processEvent(@PathVariable String eventUrl, Model model, Authentication authentication) {
+  String processEvent(@PathVariable String eventUrl, Model model) {
     this.eventService.processAlbumBy(eventUrl);
     model.addAttribute("message", "Album processado com sucesso");
 
-    return "events/toast";
+    return "/events/toast";
   }
 }
