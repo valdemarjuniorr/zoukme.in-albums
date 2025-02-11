@@ -53,7 +53,10 @@ public class EventController {
       @RequestParam(defaultValue = "1") Integer page,
       @RequestParam(defaultValue = "50") Integer size,
       Model model) {
-    model.addAttribute("photos", service.getPhotosBy(eventUrl, albumName, new Page(page, size)));
+    var pageObj = new Page(page, size);
+    var photos = service.getPhotosBy(eventUrl, albumName, pageObj);
+    model.addAttribute("photos", photos);
+    model.addAttribute("pagination", pageObj.generatePagination(photos.getTotalPages()));
     model.addAttribute("albumName", albumName);
     model.addAttribute("eventUrl", eventUrl);
 

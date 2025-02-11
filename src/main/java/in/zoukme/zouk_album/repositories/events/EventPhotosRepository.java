@@ -16,6 +16,6 @@ public interface EventPhotosRepository
   Page<EventPhotos> findEventPhotosBySubEventId(Long subEventId, Pageable pageable);
 
   @Modifying
-  @Query("DELETE FROM event_photos WHERE sub_event_id IN(:subEventId)")
+  @Query("DELETE FROM event_photos WHERE sub_event_id IN(:subEventIds)")
   void deleteEventPhotosBy(List<Long> subEventIds);
 }

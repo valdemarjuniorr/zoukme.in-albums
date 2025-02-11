@@ -31,11 +31,14 @@
               th:href="@{/events/{eventUrl}/albums/{albumName}?page={page}&size={size}(albumName=${albumName}, eventUrl=${eventUrl}, page=${photos.number}, size=${photos.size})}"
               class="px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700">Anterior</a>
           </li>
-          <li th:each="page : ${#numbers.sequence(1, photos.totalPages)}">
-          <span th:if="${photos.number + 1 == page}"
+          <li th:each="page : ${pagination}">
+          <span th:if="${page == '...'}"
+                th:text="${page}"
+                class="px-3 py-2 leading-tight text-gray-500 bg-gray-100 border border-gray-300 hover:bg-gray-100 hover:text-gray-700"/>
+          <span th:if="${(photos.number + 1 + '') == page}"
                 th:text="${page}"
                 class="px-3 py-2 leading-tight text-gray-500 bg-red-100 border border-gray-300 hover:bg-red-100 hover:text-gray-700"/>
-            <a th:if="${photos.number + 1 != page}"
+            <a th:if="${(photos.number + 1 + '') != page && page != '...'}"
                th:href="@{/events/{eventUrl}/albums/{albumName}?page={page}&size={size}(albumName=${albumName}, eventUrl=${eventUrl}, page=${page}, size=${photos.size})}"
                th:text="${page}"
                class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700"/>
@@ -43,7 +46,7 @@
           <li th:if="${!photos.last}">
             <a
               th:href="@{/events/{eventUrl}/albums/{albumName}?page={page}&size={size}(albumName=${albumName}, eventUrl=${eventUrl}, page=${photos.number + 2}, size=${photos.size})}"
-              class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700">Próximo</a>
+              class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700">Próxima</a>
           </li>
         </ul>
       </nav>
