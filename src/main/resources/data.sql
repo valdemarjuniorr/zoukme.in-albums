@@ -45,17 +45,17 @@ VALUES (10, 'Sul in Zouk and Lambada 2024', 'Balneário Camboriú/SC',
 INSERT INTO albums(id, title, city, event_date, thumb_url, url)
 VALUES (11, 'Elite Samba Congress 2024', 'Balneário Camboriú/SC', '2024-08-16',
         '/11_elite2024.jpg',
-        'https://1drv.ms/f/s!AnITpg7s5sZ_kO5xyt2FJ7t4M8fbUA');
+        '/events/elitesambacongress-2024/albums');
 
 INSERT INTO albums(id, title, city, event_date, thumb_url, url)
 VALUES (12, 'Zouk Lovers 2024', 'Curitiba/PR', '2024-08-23',
         '/12_zouk_lovers2024.jpg',
-        'https://1drv.ms/f/s!AnITpg7s5sZ_k7pSPEefPrvgxx9kwg');
+        '/events/zouklovers-2024/albums');
 
 INSERT INTO albums(id, title, city, event_date, thumb_url, url)
 VALUES (13, 'Zouk`n beach 2024', 'Balneário Camboriú/SC', '2024-11-14',
         '/zouk-in-beach-photo-album.jpg',
-        'https://1drv.ms/f/s!AnITpg7s5sZ_lK8sLYj9Dq6LG_QW0Q?e=gwmXiu');
+        '/events/zouknbeach-2024/albums');
 
 INSERT INTO counters(id, album_id, count)
 VALUES (1, 1, 19);
@@ -135,6 +135,88 @@ VALUES (6, 'Zoukn Beach 2024',
         'Balneário Camboriú/SC',
         '/zouk-in-beach-photo-album.jpg',
         'zouknbeach-2024');
+
+INSERT INTO events(id, title, description, date, location, cover_url, event_url)
+VALUES (7, 'Zouk Lovers 2024',
+        'Zouk Lovers 2024',
+        '2024-08-23',
+        'Curitiba/PR',
+        '/12_zouk_lovers2024.jpg',
+        'zouklovers-2024');
+
+INSERT INTO events(id, title, description, date, location, cover_url, event_url)
+VALUES (8, 'Elite Samba Congress 2024',
+        'Elite Samba Congress 2024',
+        '2024-08-16',
+        'Balneário Camboriú/SC',
+        '/11_elite2024.jpg',
+        'elitesambacongress-2024');
+
+INSERT INTO events(id, title, description, date, location, cover_url, event_url)
+VALUES (9, 'Sul in Zouk and Lambada 2024',
+        'Sul in Zouk and Lambada 2024',
+        '2024-05-18',
+        'Balneário Camboriú/SC',
+        '/10_sul_in_zouk2024.jpg',
+        'sulinzoukandlambada-2024');
+
+INSERT INTO events(id, title, description, date, location, cover_url, event_url)
+VALUES (10, 'ConecMotion 2024',
+        'ConecMotion 2024',
+        '2024-04-12',
+        'Curitiba/PR',
+        '/9_conecmotion2024.jpg',
+        'conecmotion-2024');
+
+
+INSERT INTO events(id, title, description, date, location, cover_url, event_url)
+VALUES (11, 'Zouk na Praça',
+        'Zouk na Praça',
+        '2023-11-26',
+        'Curitiba/PR',
+        '/8_zouk_praca.jpg',
+        'zouknapraca-2023');
+
+INSERT INTO events(id, title, description, date, location, cover_url, event_url)
+VALUES (12, 'Elite Samba Congress 2023',
+        'Elite Samba Congress 2023',
+        '2023-08-18',
+        'Balneário Camboriú/SC',
+        '/6_elite_2023.jpg',
+        'elitesambacongress-2023');
+
+INSERT INTO events(id, title, description, date, location, cover_url, event_url)
+VALUES (13, 'ConecDansa 2022',
+        'ConecDansa 2022',
+        '2022-10-15',
+        'Curitiba/PR',
+        '/5_conecdansa2022.jpg',
+        'conecdansa-2022');
+
+INSERT INTO events(id, title, description, date, location, cover_url, event_url)
+VALUES (14, 'Samba Elite Congress 2022',
+        'Samba Elite Congress 2022',
+        '2022-08-19',
+        'Balneário Camboriú/SC',
+        '/4_elite_samba2022.jpg',
+        'samba-elite-congress-2022');
+
+INSERT INTO events(id, title, description, date, location, cover_url, event_url)
+VALUES (15, 'Esquenta Samba Porão da Nêga',
+        'Esquenta Samba Porão da Nêga',
+        '2022-08-06',
+        'Joinville/SC',
+        '/3_esquenta_porao2022.jpg',
+        'esquentaporaodanega-2022');
+
+INSERT INTO events(id, title, description, date, location, cover_url, event_url)
+VALUES (16, 'Esquenta Samba Elite Congress 2022',
+        'Esquenta Samba Elite Congress 2022',
+        '2022-06-04',
+        'Balneário Camboriú/SC',
+        '/2_esquenta_elite2022.jpg',
+        'esquentaelitecongress-2022');
+
 -- social media
 INSERT INTO social_media(id, event_id, instagram, phone_number)
 VALUES (1, 1, 'conecdansa', '41984125046');
@@ -189,19 +271,3 @@ INSERT INTO PHOTOS(id, event_id, image_path)
 VALUES (17, 4, '/next-events/zouknbeach-2025/zouknbeach-2025-11.jpg');
 INSERT INTO PHOTOS(id, event_id, image_path)
 VALUES (18, 4, '/next-events/zouknbeach-2025/zouknbeach-2025-12.jpg');
-
-
--- event Album test
-INSERT INTO SUB_EVENTS(id, event_id, name)
-VALUES (1, 1, 'baile-primeiro-dia');
-INSERT INTO EVENT_PHOTOS(id, sub_event_id, image_path)
-VALUES (1, 1, '/next-events/conecdansa-2022/conecdansa-2022-1.jpg');
-INSERT INTO EVENT_PHOTOS(id, sub_event_id, image_path)
-VALUES (2, 1, '/next-events/conecdansa-2022/conecdansa-2022-2.jpg');
-INSERT INTO EVENT_PHOTOS(id, sub_event_id, image_path)
-VALUES (3, 1, '/next-events/conecdansa-2022/conecdansa-2022-3.jpg');
-
-INSERT INTO SUB_EVENTS(id, event_id, name)
-VALUES (2, 1, 'baile-segundo-dia');
-INSERT INTO EVENT_PHOTOS(id, sub_event_id, image_path)
-VALUES (4, 2, '/next-events/conecdansa-2022/conecdansa-2022-1.jpg');

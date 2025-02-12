@@ -8,6 +8,12 @@ public record Page(Integer page, Integer size) {
 
   private static final Integer RANGE = 3;
 
+  public Page {
+    if (size > 50) {
+      size = 50;
+    }
+  }
+
   public PageRequest toPageRequest() {
     return PageRequest.of(this.page - 1, this.size);
   }
