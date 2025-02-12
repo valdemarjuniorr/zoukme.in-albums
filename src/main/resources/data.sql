@@ -35,12 +35,12 @@ VALUES (8, 'Zouk na Praça', 'Curitiba/PR', '2023-11-26', '/8_zouk_praca.jpg',
 INSERT INTO albums(id, title, city, event_date, thumb_url, url)
 VALUES (9, 'ConecMotion 2024', 'Curitiba/PR', '2024-04-12',
         '/9_conecmotion2024.jpg',
-        'https://1drv.ms/f/s!AnITpg7s5sZ_jepCgiryodsQ2TDV8A');
+        '/events/conecmotion-2024/albums');
 
 INSERT INTO albums(id, title, city, event_date, thumb_url, url)
 VALUES (10, 'Sul in Zouk and Lambada 2024', 'Balneário Camboriú/SC',
         '2024-05-18', '/10_sul_in_zouk2024.jpg',
-        'https://1drv.ms/f/s!AnITpg7s5sZ_jtZs9W2iMru_q7GkeQ');
+        '/events/sul-in-zouk-and-lambada-2024/albums');
 
 INSERT INTO albums(id, title, city, event_date, thumb_url, url)
 VALUES (11, 'Elite Samba Congress 2024', 'Balneário Camboriú/SC', '2024-08-16',
@@ -158,7 +158,7 @@ VALUES (9, 'Sul in Zouk and Lambada 2024',
         '2024-05-18',
         'Balneário Camboriú/SC',
         '/10_sul_in_zouk2024.jpg',
-        'sulinzoukandlambada-2024');
+        'sul-in-zouk-and-lambada-2024');
 
 INSERT INTO events(id, title, description, date, location, cover_url, event_url)
 VALUES (10, 'ConecMotion 2024',
@@ -175,7 +175,7 @@ VALUES (11, 'Zouk na Praça',
         '2023-11-26',
         'Curitiba/PR',
         '/8_zouk_praca.jpg',
-        'zouknapraca-2023');
+        'zouk-na-praca-2023');
 
 INSERT INTO events(id, title, description, date, location, cover_url, event_url)
 VALUES (12, 'Elite Samba Congress 2023',
@@ -183,7 +183,7 @@ VALUES (12, 'Elite Samba Congress 2023',
         '2023-08-18',
         'Balneário Camboriú/SC',
         '/6_elite_2023.jpg',
-        'elitesambacongress-2023');
+        'elite-samba-congress-2023');
 
 INSERT INTO events(id, title, description, date, location, cover_url, event_url)
 VALUES (13, 'ConecDansa 2022',
@@ -207,7 +207,7 @@ VALUES (15, 'Esquenta Samba Porão da Nêga',
         '2022-08-06',
         'Joinville/SC',
         '/3_esquenta_porao2022.jpg',
-        'esquentaporaodanega-2022');
+        'esquenta-porao-da-nega-2022');
 
 INSERT INTO events(id, title, description, date, location, cover_url, event_url)
 VALUES (16, 'Esquenta Samba Elite Congress 2022',
@@ -215,7 +215,7 @@ VALUES (16, 'Esquenta Samba Elite Congress 2022',
         '2022-06-04',
         'Balneário Camboriú/SC',
         '/2_esquenta_elite2022.jpg',
-        'esquentaelitecongress-2022');
+        'esquenta-elite-samba-congress-2022');
 
 -- social media
 INSERT INTO social_media(id, event_id, instagram, phone_number)
