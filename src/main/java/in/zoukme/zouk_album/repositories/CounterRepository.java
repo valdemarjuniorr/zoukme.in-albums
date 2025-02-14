@@ -17,11 +17,14 @@ public interface CounterRepository extends ListCrudRepository<Counter, Long> {
   @Query("SELECT * FROM counters c WHERE c.album_id = :albumId")
   Optional<Counter> findByAlbumId(Long albumId);
 
-  @Query("""
+  @Query(
+      """
     SELECT a.title, a.event_date, a.thumb_url, c.count
         FROM albums a
             JOIN counters c ON a.id = c.album_id
     ORDER BY c.count DESC
     """)
   List<VisitAlbumMetric> findVisitAlbumMetrics();
+
+  void deleteByAlbumId(Long id);
 }

@@ -16,8 +16,8 @@ spring:
       region:
         static: sa-east-1
       credentials:
-        access-key: ${ACCESS_KEY}
-        secret-key: ${SECRET_KEY}
+        access-key: ${AWS_ACCESS_KEY}
+        secret-key: ${AWS_SECRET_KEY}
       endpoint: https://s3.sa-east-1.amazonaws.com/
 
   application:
@@ -28,10 +28,10 @@ spring:
     password: s3cr3t
   docker:
     compose:
-      lifecycle-management: start_and_stop
+      lifecycle-management: none
   sql:
     init:
-      mode: always
+      mode: never
 
   threads:
     virtual:

@@ -9,4 +9,8 @@ public class AlbumNotFoundException extends RuntimeException {
   public AlbumNotFoundException(Long albumId) {
     super("Album with id " + albumId + " not found");
   }
+
+  public AlbumNotFoundException() {
+    super("Album not found");
+  }
 }

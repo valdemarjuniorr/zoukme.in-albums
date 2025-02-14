@@ -18,7 +18,7 @@
     <!-- Album 1 -->
     <div th:each="album : ${albums}"
          class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transform hover:scale-105 transition duration-300">
-      <a th:href="@{/{albumId}/visit(albumId=${album.id})}" target="_blank" th:title="${album.title}">
+      <a th:href="@{/{albumId}/visit(albumId=${album.id})}" th:title="${album.title}">
         <img class="w-full h-48 object-cover" th:src="${album.thumbUrl}" th:alt="${album.title}">
       </a>
       <div class="p-4">

@@ -38,8 +38,8 @@
             <p th:text="${event.location}" class="text-gray-500"></p>
           </div>
         </a>
-        <div class="flex items-center space-x-2">
-          <a type="button" th:if="${authentication != null}"
+        <div th:if="${authentication != null}" class="flex items-center space-x-2">
+          <a type="button"
              hx-confirm="Você tem certeza?"
              th:hx-delete="@{/admin/events/{title}(title=${event.eventUrl})}"
              hx-target=".main"

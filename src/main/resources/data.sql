@@ -11,7 +11,7 @@ VALUES (2, 'Esquenta Elite Samba Congress 2022', 'Balneário Camboriú/SC',
 INSERT INTO albums(id, title, city, event_date, thumb_url, url)
 VALUES (3, 'Esquenta Samba Porão da Nêga', 'Joinville/SC', '2022-08-06',
         '/3_esquenta_porao2022.jpg',
-        'events/esquenta-elite-samba-porao-da-nega-2022/albums');
+        '/events/esquenta-elite-samba-porao-da-nega-2022/albums');
 
 INSERT INTO albums(id, title, city, event_date, thumb_url, url)
 VALUES (4, 'Samba Elite Congress 2022', 'Balneário Camboriú/SC', '2022-08-19',

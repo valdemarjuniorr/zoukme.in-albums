@@ -29,7 +29,7 @@ public class AlbumService {
 
   public void save(Album album) {
     var saved = this.repository.save(album);
-    counterRepository.save(new Counter(null, 1, saved.id()));
+    counterRepository.save(new Counter(saved.id()));
     log.info("Album with id {} and title {} has been saved", saved.id(), saved.title());
   }
 
@@ -59,5 +59,13 @@ public class AlbumService {
   public void update(Album album) {
     var updated = this.repository.save(album);
     log.info("Album with id {} has been updated", updated.id());
+  }
+
+  public void deleteBy(Long eventId) {
+    var album =
+        this.repository.findAlbumByEventId(eventId).orElseThrow(AlbumNotFoundException::new);
+    this.counterRepository.deleteByAlbumId(album.id());
+    this.repository.deleteAlbumByEventId(eventId);
+    log.info("Album with id {} has been deleted", eventId);
   }
 }
