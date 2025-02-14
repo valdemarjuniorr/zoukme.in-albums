@@ -1,5 +1,6 @@
 package in.zoukme.zouk_album.services.aws;
 
+import in.zoukme.zouk_album.exceptions.FolderNotFoundException;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -9,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
@@ -69,14 +71,21 @@ public class BucketService {
 
   /** Get the list of folders from a given path. For example, "events/zoukme-in/" */
   public List<String> getFoldersNamesBy(String folderPath) {
-    return s3Client
-        .listObjectsV2(
-            b ->
-                b.bucket(EventUtils.BUCKET_NAME).prefix(folderPath + File.separator).delimiter("/"))
-        .commonPrefixes()
-        .stream()
-        .map(CommonPrefix::prefix)
-        .toList();
+    var folders =
+        s3Client
+            .listObjectsV2(
+                b ->
+                    b.bucket(EventUtils.BUCKET_NAME)
+                        .prefix(folderPath + File.separator)
+                        .delimiter("/"))
+            .commonPrefixes()
+            .stream()
+            .map(CommonPrefix::prefix)
+            .toList();
+    if (CollectionUtils.isEmpty(folders)) {
+      throw new FolderNotFoundException(folderPath);
+    }
+    return folders;
   }
 
   /** Get the list of files from a given path. For example, "events/zoukme-in/2021-09-25" */

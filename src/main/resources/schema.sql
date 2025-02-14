@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS COUNTERS
   album_id int REFERENCES ALBUMS     not null
 );
 
-CREATE SEQUENCE IF NOT EXISTS EVENTS_ID_SEQ start 17 increment 1;
+CREATE SEQUENCE IF NOT EXISTS EVENTS_ID_SEQ start 18 increment 1;
 CREATE TABLE IF NOT EXISTS EVENTS
 (
   id          int primary key default nextval('EVENTS_ID_SEQ'),
@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS SOCIAL_MEDIA
 
 );
 
-CREATE SEQUENCE IF NOT EXISTS PHOTO_ID_SEQ start 7 increment 1;
+CREATE SEQUENCE IF NOT EXISTS PHOTO_ID_SEQ start 27 increment 1;
 CREATE TABLE IF NOT EXISTS PHOTOS
 (
   id         int primary key default nextval('PHOTO_ID_SEQ'),
