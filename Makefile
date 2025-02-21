@@ -1,6 +1,6 @@
 start:
-	mvn spring-boot:run
+	./mvnw spring-boot:run
 
 native-start:
-	mvn -Pnative native:compile -DskipTests
+	./mvnw -Pnative native:compile -DskipTests
 	./target/zoukme.in-albums

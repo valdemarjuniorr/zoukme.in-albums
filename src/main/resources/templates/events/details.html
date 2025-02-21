@@ -45,8 +45,8 @@
         <h2 th:text="${event.title}"
             class="text-2xl font-bold text-gray-800"></h2>
         <p th:text="${event.description}" class="text-gray-600 mt-4"></p>
-        <p th:text="${#temporals.format(event.date,'dd/MM/yyyy')}"
-           class="text-gray-600"/>
+        <p th:text="${event.descriptiveDate}" class="text-gray-600"/>
+        <p th:text="${event.location}" class="text-gray-600"/>
       </div>
     </div>
     <div class="mt-6">

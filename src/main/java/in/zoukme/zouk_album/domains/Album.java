@@ -1,6 +1,8 @@
 package in.zoukme.zouk_album.domains;
 
 import java.time.LocalDate;
+
+import in.zoukme.zouk_album.utils.DateUtils;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.jdbc.core.mapping.AggregateReference;
 import org.springframework.data.relational.core.mapping.Table;
@@ -13,4 +15,9 @@ public record Album(
     String city,
     LocalDate eventDate,
     String thumbUrl,
-    String url) {}
+    String url) {
+
+    public String getDescriptiveDate() {
+        return DateUtils.getDescriptiveDate(this.eventDate);
+    }
+}

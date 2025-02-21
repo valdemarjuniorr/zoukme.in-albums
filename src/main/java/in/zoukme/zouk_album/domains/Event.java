@@ -2,6 +2,8 @@ package in.zoukme.zouk_album.domains;
 
 import java.time.LocalDate;
 import java.util.Set;
+
+import in.zoukme.zouk_album.utils.DateUtils;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.MappedCollection;
 import org.springframework.data.relational.core.mapping.Table;
@@ -21,5 +23,9 @@ public record Event(
   public Boolean isComingUp() {
     var now = LocalDate.now();
     return date.isEqual(now) || date.isAfter(now);
+  }
+
+  public String getDescriptiveDate() {
+    return DateUtils.getDescriptiveDate(this.date);
   }
 }

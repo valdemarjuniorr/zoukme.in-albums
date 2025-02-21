@@ -33,7 +33,7 @@
           <div class="event-details flex-1">
             <h2 th:text="${event.title}" class="text-xl font-semibold"></h2>
             <p th:text="${event.description}" class="text-gray-700"></p>
-            <p th:text="${#temporals.format(event.date,'dd/MM/yyyy')}"
+            <p th:text="${event.descriptiveDate}"
                class="text-gray-500"></p>
             <p th:text="${event.location}" class="text-gray-500"></p>
           </div>
