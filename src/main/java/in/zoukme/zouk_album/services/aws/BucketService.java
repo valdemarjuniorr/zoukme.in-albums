@@ -29,19 +29,23 @@ public class BucketService {
     this.s3Client = s3Client;
   }
 
-  public List<String> upload(String eventTitle, List<MultipartFile> files) {
-    var imagesS3Paths = new ArrayList<String>();
+  public List<BucketImage> upload(String eventTitle, List<MultipartFile> files) {
+    var imagesS3Paths = new ArrayList<BucketImage>();
     for (MultipartFile file : files) {
       try {
         var tempFile = File.createTempFile("temp", file.getOriginalFilename());
         var originalFilename = file.getOriginalFilename();
         file.transferTo(tempFile);
-        var path = EventUtils.getEventFolderName(eventTitle) + File.separator + originalFilename;
+        var eventFolderName = EventUtils.getEventFolderName(eventTitle);
+        var path = eventFolderName + File.separator + originalFilename;
         s3Client.putObject(
             builder -> builder.bucket(EventUtils.BUCKET_NAME).key(path),
             RequestBody.fromFile(Paths.get(tempFile.getAbsolutePath())));
 
-        imagesS3Paths.add(awsEndpoint + EventUtils.BUCKET_NAME + File.separator + path);
+        imagesS3Paths.add(
+            new BucketImage(
+                EventUtils.getFormatEventName(eventTitle),
+                awsEndpoint + EventUtils.BUCKET_NAME + File.separator + path));
       } catch (IOException e) {
         log.error("Error uploading file to S3", e);
         throw new RuntimeException(e);
@@ -92,5 +96,13 @@ public class BucketService {
 
   public String getBucketUri() {
     return awsEndpoint + EventUtils.BUCKET_NAME + "/";
+  }
+
+  public void deletePhotoBy(String eventUrl, String fileName) {
+    s3Client.deleteObject(
+        DeleteObjectRequest.builder()
+            .bucket(EventUtils.BUCKET_NAME)
+            .key(EventUtils.getEventFolderName(eventUrl) + File.separator + fileName)
+            .build());
   }
 }

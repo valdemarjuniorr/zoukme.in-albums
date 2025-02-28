@@ -1,64 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <script src="https://unpkg.com/htmx.org@2.0.4/dist/htmx.min.js"></script>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <title>Zouk Me In - Albums</title>
-</head>
+<head th:insert="~{fragments/header}"></head>
 
 <body class="bg-gray-100">
 <!-- Content -->
 <main class="main content container mx-auto">
-  <h1 class="text-3xl font-bold mb-6">Evento</h1>
-  <div id="album-form" th:fragment="albums-form" class="album-form bg-white p-6 rounded-lg shadow-md space-y-4">
-    <div>
-      <label class="block text-gray-700">Título</label>
-      <input name="title" class="w-full mt-1 p-2 border border-gray-300 rounded-md" placeholder="Ex.: Elite Samba Congress 2024">
-    </div>
-    <div>
-      <label class="block text-gray-700">Descrição</label>
-      <textarea name="description" class="w-full mt-1 p-2 border border-gray-300 rounded-md"
-                placeholder="Ex.: Um dos maiores eventos de samba de Santa Catarina" rows="4" cols="50">
+	<h1 class="text-3xl font-bold mb-6">Evento</h1>
+	<div id="album-form" th:fragment="albums-form" class="album-form bg-white p-6 rounded-lg shadow-md space-y-4">
+		<div>
+			<label class="block text-gray-700">Título</label>
+			<input name="title" class="w-full mt-1 p-2 border border-gray-300 rounded-md" placeholder="Ex.: Elite Samba Congress 2024" required>
+		</div>
+		<div>
+			<label class="block text-gray-700">Descrição</label>
+			<textarea name="description" class="w-full mt-1 p-2 border border-gray-300 rounded-md"
+								placeholder="Ex.: Um dos maiores eventos de samba de Santa Catarina" rows="4" cols="50" required>
       </textarea>
-    </div>
-    <div>
-      <label class="block text-gray-700">Detalhes</label>
-      <input id="details" type="hidden" name="details">
-      <div id="editor"></div>
-    </div>
-    <div>
-      <label class="block text-gray-700">Cidade/Estado</label>
-      <input name="location" class="w-full mt-1 p-2 border border-gray-300 rounded-md"
-             placeholder="Ex.: Balneário Camboriú/SC">
-    </div>
-    <div>
-      <label class="block text-gray-700">Data do evento</label>
-      <input name="date" type="date" class="w-full mt-1 p-2 border border-gray-300 rounded-md">
-    </div>
-    <div>
-      <label class="block text-gray-700">Instagram</label>
-      <input name="instagram" type="text" class="w-full mt-1 p-2 border border-gray-300 rounded-md" placeholder="Ex.: @elitesamba_congress_bc">
-    </div>
-    <div>
-      <label class="block text-gray-700">WhatsApp</label>
-      <input name="phoneNumber" type="tel" class="w-full mt-1 p-2 border border-gray-300 rounded-md" placeholder="Ex.: (47) 9-9999-9999">
-    </div>
-    <form id="uploadForm" class="space-y-4" hx-encoding="multipart/form-data" hx-post="/admin/events/upload" hx-target=".images-preview"
-          hx-include="#album-form" hx-swap="outerHTML">
-      <div class="file-input-group">
-        <input type="file" name="files[]"
-               class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
-      </div>
-      <button type="button" id="addFileInput" class="mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">Adicionar outra imagem
-      </button>
-      <button type="submit" class="mt-4 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600">Upload</button>
-      <div>
-        <progress id="progress" value="0" max="100" class="invisible"></progress>
-      </div>
-    </form>
-    <div class="images-preview"></div>
-    <script>
-        htmx.on('#uploadForm', 'htmx:xhr:progress', function (evt) {
+		</div>
+		<div>
+			<label class="text-gray-700">Detalhes</label>
+			<input id="details" type="hidden" name="details">
+			<div id="editor" style="height: 17% !important"></div>
+		</div>
+		<div>
+			<label class="block text-gray-700">Cidade/Estado</label>
+			<input name="location" class="w-full mt-1 p-2 border border-gray-300 rounded-md"
+						 placeholder="Ex.: Balneário Camboriú/SC" required>
+		</div>
+		<div>
+			<label class="block text-gray-700">Data do evento</label>
+			<input name="date" type="date" class="w-full mt-1 p-2 border border-gray-300 rounded-md" required>
+		</div>
+		<div>
+			<label class="block text-gray-700">Instagram</label>
+			<input name="instagram" type="text" class="w-full mt-1 p-2 border border-gray-300 rounded-md" placeholder="Ex.: @elitesamba_congress_bc"
+						 required>
+		</div>
+		<div>
+			<label class="block text-gray-700">WhatsApp</label>
+			<input name="phoneNumber" type="tel" class="w-full mt-1 p-2 border border-gray-300 rounded-md" placeholder="Ex.: (47) 9-9999-9999" required>
+		</div>
+		<form id="uploadForm" class="space-y-4" hx-encoding="multipart/form-data" hx-post="/admin/events/upload" hx-target=".images-preview"
+					hx-include="#album-form">
+			<div id="file-groups">
+				<div class="file-input-group">
+					<input type="file" name="files[]"
+								 class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+				</div>
+			</div>
+			<button type="button" id="addFileInput" class="mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">Adicionar outra imagem
+			</button>
+			<button type="submit" class="mt-4 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600">Upload</button>
+			<div>
+				<progress id="progress" value="0" max="100" class="invisible"></progress>
+			</div>
+			<div class="text-center">
+				<button hx-get="/admin" hx-target="closest .main" type="button"
+								class="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700">Cancelar
+				</button>
+				<button hx-post="/admin/events/create" hx-include="#album-form" hx-target=".main" type="submit"
+								class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700" onSubmit="setHiddenFieldValue()">Criar
+				</button>
+			</div>
+			<div class="images-preview"></div>
+		</form>
+		<script>
+        htmx.on('#uploadForm', 'htmx:xhr:progress', (evt) => {
             const progressElement = htmx.find('#progress')
             const progress = evt.detail.loaded / evt.detail.total * 100;
             progressElement.setAttribute('class', 'visible')
@@ -67,35 +74,38 @@
                 progressElement.setAttribute('class', 'invisible')
             }
         });
-    </script>
-    <div class="text-center">
-      <button hx-get="/admin" hx-target="closest .main" type="button"
-              class="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700">Cancelar
-      </button>
-      <button hx-post="/admin/events/create" hx-include="#album-form" hx-target=".main" type="submit"
-              class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700" onSubmit="setHiddenFieldValue()">Criar
-      </button>
-    </div>
-  </div>
+        htmx.on('#uploadForm', 'htmx:afterRequest', (evt) => {
+            const fileInputs = document.getElementsByClassName('file-input-group');
+            while (fileInputs.length > 0) {
+                fileInputs[0].parentNode.removeChild(fileInputs[0]);
+            }
+            createInputElement();
+        });
+		</script>
+	</div>
 
-  <!-- Initialize Quill editor -->
-  <script>
+	<!-- Initialize Quill editor -->
+	<script>
       const quill = new Quill("#editor", {
           theme: "snow",
           placeholder: "Ex.: Um dos maiores eventos de samba de Santa Catarina"
       });
-      quill.root.addEventListener('focusout', function () {
+      quill.root.addEventListener('focusout', () => {
           setHiddenFieldValue();
       });
-  </script>
+	</script>
 </main>
 <script>
-    document.getElementById('addFileInput').addEventListener('click', function () {
+    document.getElementById('addFileInput').addEventListener('click', () => {
+        createInputElement();
+    });
+
+    function createInputElement() {
         const fileInputGroup = document.createElement('div');
         fileInputGroup.className = 'file-input-group';
         fileInputGroup.innerHTML = '<input type="file" name="files[]" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">';
         document.getElementById('uploadForm').insertBefore(fileInputGroup, document.getElementById('addFileInput'));
-    });
+    }
 
     function setHiddenFieldValue() {
         var quillContent = quill.getContents();

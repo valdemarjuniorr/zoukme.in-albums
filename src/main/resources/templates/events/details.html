@@ -5,14 +5,14 @@
   <script async
           src="https://www.googletagmanager.com/gtag/js?id=G-ZTLEWPD9HY"></script>
   <script>
-    window.dataLayer = window.dataLayer || [];
+      window.dataLayer = window.dataLayer || [];
 
-    function gtag() {
-      dataLayer.push(arguments);
-    }
+      function gtag() {
+          dataLayer.push(arguments);
+      }
 
-    gtag('js', new Date());
-    gtag('config', 'G-ZTLEWPD9HY');
+      gtag('js', new Date());
+      gtag('config', 'G-ZTLEWPD9HY');
   </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -37,7 +37,7 @@
 <body class="bg-gray-100">
 <div th:insert="~{fragments/top :: top}"></div>
 <div class="main p-4">
-  <div class="max-w-4xl p-6 bg-white shadow-md rounded-lg mt-10 card mx-auto">
+  <div class="max-w-4xl p-6 bg-white shadow-md rounded-lg mt-4 card mx-auto">
     <div class="bg-white flex">
       <img th:src="${event.coverUrl}" th:alt="${event.title}"
            class="w-32 h-32 object-cover rounded-lg mr-4">
@@ -56,16 +56,15 @@
            target="_blank" class="text-pink-500 hover:text-pink-700">
           <i class="fab fa-instagram"></i> Instagram
         </a>
-        <a
-          th:href="'https://wa.me/+55' + ${event.phoneNumber} + '?text=Olá, vim do zoukme.in e gostaria de saber mais informações sobre o *' + ${event.title} + '*. Consegue me ajudar?'"
-          target="_blank" class="text-green-500 hover:text-green-700">
+        <a th:href="'https://wa.me/+55' + ${event.phoneNumber} + '?text=Olá, vim do zoukme.in e gostaria de saber mais informações sobre o *' + ${event.title} + '*. Consegue me ajudar?'"
+           target="_blank" class="text-green-500 hover:text-green-700">
           <i class="fa-brands fa-whatsapp"></i> WhatsApp
         </a>
       </div>
     </div>
   </div>
   <div th:if="${event.details != '' && event.details != null}"
-       class="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg mt-10 card">
+       class="max-w-4xl mx-auto p-2 bg-white shadow-md rounded-lg mt-4 card">
     <h2 class="text-3xl font-bold text-gray-800 text-center">Detalhes</h2>
     <div>
       <div id="editor-readonly" class="text-gray-600 mt-4">
@@ -73,26 +72,26 @@
       </div>
       <!-- Initialize Quill editor -->
       <script th:inline="javascript">
-        /*<![CDATA[*/
-        const quill = new Quill("#editor", {
-          theme: 'snow',
-          readOnly: true,
-          modules: {
-            toolbar: false
-          }
-        });
-        quill.setContents(/*[(${event.details})]*/);
+          /*<![CDATA[*/
+          const quill = new Quill("#editor", {
+              theme: 'snow',
+              readOnly: true,
+              modules: {
+                  toolbar: false
+              }
+          });
+          quill.setContents(/*[(${event.details})]*/);
 
-        /*]]>*/
+          /*]]>*/
       </script>
       <style>
-        .ql-container.ql-snow {
-          border: none !important;
-        }
+          .ql-container.ql-snow {
+              border: none !important;
+          }
       </style>
     </div>
   </div>
-  <div class="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg mt-10 card">
+  <div class="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg mt-4 card">
     <h2 class="text-3xl font-bold text-gray-800 text-center">Contagem
       regressiva</h2>
     <div class="countdown text-center mt-4"></div>
@@ -104,8 +103,7 @@
             <h3 id="days"
                 class="countdown-element days font-Cormorant font-semibold text-2xl text-white text-center"/>
           </div>
-          <p
-            class="text-lg font-Cormorant font-medium text-gray-900 mt-1 text-center w-full">
+          <p class="text-lg font-Cormorant font-medium text-gray-900 mt-1 text-center w-full">
             Dias</p>
         </div>
         <h3 class="font-manrope font-semibold text-2xl text-gray-900 py-4">
@@ -116,7 +114,7 @@
                 class="countdown-element hours font-Cormorant font-semibold text-2xl text-white text-center"/>
           </div>
           <p
-            class="text-lg font-Cormorant font-normal text-gray-900 mt-1 text-center w-full">
+                  class="text-lg font-Cormorant font-normal text-gray-900 mt-1 text-center w-full">
             Horas</p>
         </div>
         <h3 class="font-manrope font-semibold text-2xl text-gray-900 py-4">
@@ -126,15 +124,14 @@
             <h3 id="minutes"
                 class="countdown-element minutes font-Cormorant font-semibold text-2xl text-white text-center"/>
           </div>
-          <p
-            class="text-lg font-Cormorant font-normal text-gray-900 mt-1 text-center w-full">
+          <p class="text-lg font-Cormorant font-normal text-gray-900 mt-1 text-center w-full">
             Min</p>
         </div>
       </div>
     </div>
   </div>
   <div th:if="${event.imagePath().size() > 0}"
-       class="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg mt-10">
+       class="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg mt-4">
     <h2 class="text-xl font-semibold mb-2">Edições anteriores</h2>
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
       <img th:each="path : ${event.imagePath}" th:src="${path}"
@@ -143,35 +140,35 @@
   </div>
 </div>
 <script th:inline="javascript">
-  /*<![CDATA[*/
-  // Set the date we're counting down to
-  var countDownDate = new Date(/*[[${event.date}]]*/).getTime();
+    /*<![CDATA[*/
+    // Set the date we're counting down to
+    var countDownDate = new Date(/*[[${event.date}]]*/).getTime();
 
-  // Update the count down every 1 second
-  var x = setInterval(function () {
-    // Get today's date and time
-    var now = new Date().getTime();
+    // Update the count down every 1 second
+    var x = setInterval(function () {
+        // Get today's date and time
+        var now = new Date().getTime();
 
-    // Find the distance between now and the count down date
-    var distance = countDownDate - now;
+        // Find the distance between now and the count down date
+        var distance = countDownDate - now;
 
-    // Time calculations for days, hours, minutes and seconds
-    var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        // Time calculations for days, hours, minutes and seconds
+        var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
 
-    // Display the result in the element with id="countdown"
-    document.getElementById("days").innerHTML = days;
-    document.getElementById("hours").innerHTML = hours;
-    document.getElementById("minutes").innerHTML = minutes;
+        // Display the result in the element with id="countdown"
+        document.getElementById("days").innerHTML = days;
+        document.getElementById("hours").innerHTML = hours;
+        document.getElementById("minutes").innerHTML = minutes;
 
-    // If the count-down is over, write some text
-    if (distance < 0) {
-      clearInterval(x);
-      document.getElementById("countdown").innerHTML = "EXPIRED";
-    }
-  }, 1000);
-  /*]]>*/
+        // If the count-down is over, write some text
+        if (distance < 0) {
+            clearInterval(x);
+            document.getElementById("countdown").innerHTML = "EXPIRED";
+        }
+    }, 1000);
+    /*]]>*/
 </script>
 <div th:insert="~{fragments/footer :: footer}"></div>
 </body>

@@ -9,7 +9,10 @@ class EventUtils {
   static String getEventFolderName(String title) {
     Assert.hasText(title, "title must not be empty");
 
-    var eventTitleWithoutSpaces = title.toLowerCase().replace(" ", "-");
-    return String.format("%s/%s", "next-events", eventTitleWithoutSpaces);
+    return String.format("%s/%s", "next-events", getFormatEventName(title));
+  }
+
+  static String getFormatEventName(String title) {
+    return title.toLowerCase().replace(" ", "-");
   }
 }

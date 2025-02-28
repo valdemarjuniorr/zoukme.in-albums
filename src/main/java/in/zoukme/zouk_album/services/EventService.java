@@ -146,4 +146,9 @@ public class EventService {
   private String getFolderNameFrom(String folderPath, String prefix) {
     return folderPath.substring(prefix.length()).replace("/", "");
   }
+
+  public void deletePhoto(String eventUrl, String photoUrl) {
+    var prefix = "events/" + eventUrl;
+    this.bucketService.deletePhotoBy(eventUrl, prefix);
+  }
 }

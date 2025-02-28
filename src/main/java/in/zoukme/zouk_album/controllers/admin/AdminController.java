@@ -127,7 +127,24 @@ public class AdminController {
     model.addAttribute("events", this.eventService.findAll());
     model.addAttribute("authentication", authentication);
 
-    return "/events/list";
+    model.addAttribute("message", "Album removido com sucesso");
+
+    return "/events/toast";
+  }
+
+  @DeleteMapping("/events/{eventUrl}/photos/{fileName}")
+  String deletePhoto(
+      @PathVariable String fileName,
+      @PathVariable String eventUrl,
+      Model model,
+      Authentication authentication) {
+    this.bucketService.deletePhotoBy(eventUrl, fileName);
+    model.addAttribute("events", this.eventService.findAll());
+    model.addAttribute("authentication", authentication);
+
+    model.addAttribute("message", "Foto removida com sucesso");
+
+    return "/events/toast";
   }
 
   @PostMapping("/events/upload")
@@ -135,6 +152,7 @@ public class AdminController {
       @RequestParam("files[]") List<MultipartFile> files, String title, Model model) {
     var imagesPath = bucketService.upload(title, files);
     model.addAttribute("images", imagesPath);
+
     return "/admin/events/images-preview";
   }
 
