@@ -21,7 +21,7 @@ public class EventController {
   }
 
   @GetMapping
-  public String list(Model model, Authentication authentication) {
+  String list(Model model, Authentication authentication) {
     var events = service.findAll();
 
     model.addAttribute("events", events);
@@ -31,10 +31,11 @@ public class EventController {
   }
 
   @GetMapping("/{title}")
-  public String findByEventUrl(@PathVariable String title, Model model) {
+  String findByEventUrl(@PathVariable String title, Model model, Authentication authentication) {
     var event = service.findByEventUrl(title);
 
     model.addAttribute("event", event);
+    model.addAttribute("authentication", authentication);
 
     return "events/details";
   }
