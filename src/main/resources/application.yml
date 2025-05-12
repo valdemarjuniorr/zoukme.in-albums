@@ -28,10 +28,10 @@ spring:
     password: s3cr3t
   docker:
     compose:
-      lifecycle-management: none
+      lifecycle-management: start_and_stop
   sql:
     init:
-      mode: never
+      mode: always
 
   threads:
     virtual:

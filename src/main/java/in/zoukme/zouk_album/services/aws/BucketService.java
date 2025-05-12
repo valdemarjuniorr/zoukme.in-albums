@@ -76,7 +76,7 @@ public class BucketService {
     return s3Client
         .listObjectsV2(
             b ->
-                b.bucket(EventUtils.BUCKET_NAME).prefix(folderPath + File.separator).delimiter("/"))
+                b.bucket(EventUtils.BUCKET_NAME).prefix(folderPath + File.separator).delimiter(File.separator))
         .commonPrefixes()
         .stream()
         .map(CommonPrefix::prefix)
@@ -86,16 +86,16 @@ public class BucketService {
   /** Get the list of files from a given path. For example, "events/zoukme-in/2021-09-25" */
   public List<String> getFilesNamesBy(String folderPath) {
     return s3Client
-        .listObjectsV2(b -> b.bucket(EventUtils.BUCKET_NAME).prefix(folderPath).delimiter("/"))
+        .listObjectsV2(b -> b.bucket(EventUtils.BUCKET_NAME).prefix(folderPath).delimiter(File.separator))
         .contents()
         .stream()
         .map(S3Object::key)
-        .filter(key -> !key.endsWith("/"))
+        .filter(key -> !key.endsWith(File.separator))
         .toList();
   }
 
   public String getBucketUri() {
-    return awsEndpoint + EventUtils.BUCKET_NAME + "/";
+    return awsEndpoint + EventUtils.BUCKET_NAME + File.separator;
   }
 
   public void deletePhotoBy(String eventUrl, String fileName) {

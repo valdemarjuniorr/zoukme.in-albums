@@ -1,4 +1,4 @@
-<sDOCTYPE html>
+<DOCTYPE html>
 	<html xmlns:th="https://www.thymeleaf.org">
 
 	<head th:insert="~{fragments/header}"></head>
@@ -16,25 +16,48 @@
 			</a>
 		</div>
 		<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
-			<div th:each="photo : ${photos.content}"
-					 class="bg-white p-2 rounded-lg shadow-md">
-				<div>
+			<div th:each="photo : ${photos.content}" class="bg-white p-2 rounded-lg shadow-md">
+				<div class="text-sm">
 					<img th:src="${photo.imagePath}" class="w-full h-auto rounded-lg"
 							 th:onclick="@{openModal({photoId})(photoId=${photo.id})}"/>
-					<!-- modal content -->
-				</div>
-				<style>
-            /* Custom CSS to change the modal size */
-            .modal {
-								width: 100%;
-                max-width: 900px; /* Adjust the max-width as needed */
-								padding: 0px;
-            }
-				</style>
-				<div th:id="${photo.id}" class="modal">
-					<img th:src="${photo.imagePath}"/>
+					<div th:if="${authentication != null}" class="flex flex-row">
+						<div th:hx-post="@{/photos/like/{photoId}(photoId=${photo.id})}"
+								 th:hx-target="@{#liked{photoId}(photoId=${photo.id})}"
+								 class="cursor-pointer">
+							<!-- like button -->
+							<div class="py-2">
+								<div th:id="@{liked{photoId}(photoId=${photo.id})}">
+									<i class="fa-regular fa-heart px-2"></i>
+									<span>Curtir</span>
+								</div>
+							</div>
+						</div>
+						<!-- bookmark button -->
+						<div th:hx-post="@{/photos/bookmark/{photoId}(photoId=${photo.id})}"
+								 th:hx-target="@{#bookmarked{photoId}(photoId=${photo.id})}" class="cursor-pointer py-2 px-2">
+						<span class="py-2">
+							<div th:id="@{bookmarked{photoId}(photoId=${photo.id})}">
+								<i class="fa-regular fa-bookmark px-2"></i>
+								<span>Salvar</span>
+							</div>
+						</span>
+						</div>
+					</div>
 				</div>
 			</div>
+			<style>
+          /* Custom CSS to change the modal size */
+          .modal {
+              width: 100%;
+              max-width: 900px; /* Adjust the max-width as needed */
+              padding: 0px;
+          }
+			</style>
+			<!-- modal content -->
+			<div th:id="${photo.id}" class="modal">
+				<img th:src="${photo.imagePath}"/>
+			</div>
+		</div>
 		</div>
 		<!-- Pagination -->
 		<div th:if="${photos.totalPages != 1}" class="flex justify-center mt-8">

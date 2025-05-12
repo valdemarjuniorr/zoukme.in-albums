@@ -57,6 +57,11 @@ VALUES (13, 'Zouk`n beach 2024', 'Balneário Camboriú/SC', '2024-11-14',
         '/zouk-in-beach-photo-album.jpg',
         '/events/zouknbeach-2024/albums');
 
+INSERT INTO albums(id, title, city, event_date, thumb_url, url)
+VALUES (14, 'ConecSamba 2025', 'Curitiba/PR', '2025-04-11',
+        'https://s3.sa-east-1.amazonaws.com/zoukme.in/events/conecsamba-2025/Baile%20Glamour%20Gafieira/DSC_4646.jpg',
+        '/events/conecsamba-2025/albums');
+
 INSERT INTO counters(id, album_id, count)
 VALUES (1, 1, 19);
 
@@ -92,6 +97,9 @@ VALUES (12, 12, 57);
 
 INSERT INTO counters(id, album_id, count)
 VALUES (13, 13, 1335);
+
+INSERT INTO counters(id, album_id, count)
+VALUES (14, 14, 533);
 
 -- events
 INSERT INTO events(id, title, description, date, location, cover_url, event_url)
