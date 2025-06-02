@@ -44,7 +44,7 @@
       <div>
         <h2 th:text="${event.title}"
             class="text-2xl font-bold text-gray-800"></h2>
-        <p th:text="${event.description}" class="text-gray-600 mt-4"></p>
+        <p th:text="${event.description}" class="text-gray-600 mt-4"/>
         <p th:text="${event.descriptiveDate}" class="text-gray-600"/>
         <p th:text="${event.location}" class="text-gray-600"/>
       </div>
@@ -165,7 +165,7 @@
         // If the count-down is over, write some text
         if (distance < 0) {
             clearInterval(x);
-            document.getElementById("countdown").innerHTML = "EXPIRED";
+            document.getElementById("countdown").innerHTML = "Evento encerrado";
         }
     }, 1000);
     /*]]>*/

@@ -53,7 +53,7 @@
            hx-target="closest .container"
            class="cursor-pointer bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-700">Remover
         </a>
-        <a type="button" th:if="${authentication != null}"
+        <a type="button" th:if="${authentication != null && !event.comingUp}"
            th:hx-post="@{/admin/events/{title}/process(title=${event.eventUrl})}"
            th:hx-confirm="@{Processar álbum {title}?(title=${event.title})}"
            hx-target="#toast"
