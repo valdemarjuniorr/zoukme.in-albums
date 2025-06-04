@@ -173,7 +173,7 @@
 		</div>
 	</div>
 </div>
-<header class="container mx-auto px-4 py-16">
+<header class="container mx-auto px-4 py-4">
 	<div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
 		<div class="text-center md:text-left">
 			<h1 th:text="${event.title}" class="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
@@ -291,20 +291,20 @@
 				</div>
 			</div>
 		</div>
-		<div class="social-icons">
-			<a th:href="'https://wa.me/+55' + ${event.phoneNumber} + '?text=Olá, vim do zoukme.in e gostaria de saber mais informações sobre o *' + ${event.title} + '*. Consegue me ajudar?'"
-				 target="_blank"
-				 class="social-icon">
-				<i class="ri-whatsapp-line text-green-500 ri-lg"></i>
-			</a>
-			<a th:href="'https://www.instagram.com/' + ${event.instagram}" target="_blank" class="social-icon">
-				<i class="ri-instagram-line text-primary ri-lg"></i>
-			</a>
-			<a href="#" class="social-icon">
-				<i class="ri-share-line text-blue-500 ri-lg"></i>
-			</a>
-		</div>
 	</section>
+	<div class="social-icons">
+		<a th:href="'https://wa.me/+55' + ${event.phoneNumber} + '?text=Olá, vim do zoukme.in e gostaria de saber mais informações sobre o *' + ${event.title} + '*. Consegue me ajudar?'"
+			 target="_blank"
+			 class="social-icon">
+			<i class="ri-whatsapp-line text-green-500 ri-lg"></i>
+		</a>
+		<a th:href="'https://www.instagram.com/' + ${event.instagram}" target="_blank" class="social-icon">
+			<i class="ri-instagram-line text-primary ri-lg"></i>
+		</a>
+		<a href="#" class="social-icon">
+			<i class="ri-share-line text-blue-500 ri-lg"></i>
+		</a>
+	</div>
 	<section class="mb-20 p-4" th:if="${event.imagePath().size() > 0}">
 		<h2 class="text-3xl font-bold mb-8">Eventos anteriores</h2>
 		<div class="gallery-grid">
@@ -354,7 +354,7 @@
         const heroSection = document.querySelector("header");
         window.addEventListener("scroll", function () {
             const heroBottom = heroSection.offsetTop + heroSection.offsetHeight;
-            if (window.scrollY > heroBottom - 100) {
+            if (window.scrollY > heroBottom - 200) {
                 header.classList.add("visible");
             } else {
                 header.classList.remove("visible");
