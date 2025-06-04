@@ -8,7 +8,7 @@
   <div th:insert="~{fragments/top :: top}"></div>
 
   <!-- Content -->
-  <main th:fragment="main" class="main container mx-auto p-4">
+  <main th:fragment="main" class="main container mx-auto p-4 pt-10 pb-10">
     <h2 th:text="${event.event.title}" class="text-lg font-medium pb-4" />
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
       <div th:each="subEvent: ${event.subEvents}" class="bg-white p-2 rounded-lg shadow-md transform transition-transform duration-300 hover:scale-105 hover:text-gray-500 active:text-blue-500">

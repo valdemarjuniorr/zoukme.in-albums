@@ -1,81 +1,148 @@
 <DOCTYPE html>
-  <html xmlns:th="https://www.thymeleaf.org" lang="pt-br">
+	<html xmlns:th="https://www.thymeleaf.org" lang="pt-br">
 
-  <head th:insert="~{fragments/header}"></head>
+	<head th:insert="~{fragments/header}"></head>
 
-  <body class="bg-gray-100">
-  <!-- Header -->
-  <div th:insert="~{fragments/top :: top}"></div>
+	<body class="bg-gray-100">
+	<!-- Header -->
+	<div th:insert="~{fragments/top :: top}"></div>
 
-  <!-- Content -->
-  <main th:fragment="main" class="main container mx-auto p-4">
-    <style>
-        .event {
-            transition: background-color 0.3s ease, transform 0.3s ease;
-        }
+	<style>
+      :where([class^="ri-"])::before {
+          content: "\f3c2";
+      }
 
-        .event:hover {
-            background-color: #f3f4f6; /* Tailwind's gray-100 */
-            transform: scale(1.02);
-        }
+      .event-card {
+          transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
 
-        .htmx-indicator {
-            opacity: 0;
-            transition: opacity 500ms ease-in;
-        }
+      .event-card:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      }
 
-        .htmx-request .htmx-indicator {
-            opacity: 1;
-        }
+      .section-tab {
+          position: relative;
+          transition: all 0.3s ease;
+      }
 
-        .htmx-request.htmx-indicator {
-            opacity: 1;
-        }
-    </style>
-    <h1 class="text-3xl font-bold mb-6">Próximos eventos</h1>
-    <div th:each="event : ${events}" class="container">
-      <a th:href="@{/events/{title}(title=${event.eventUrl})}"
-         class="event cursor-pointer bg-white p-4 m-4 rounded-lg shadow-md flex">
-        <img th:src="${event.coverUrl}" th:alt="${event.title}"
-             th:class="@{w-32 h-32 object-cover rounded-lg mr-4 {comingUp}(comingUp=${event.comingUp}? '': 'grayscale') }">
-        <div class="event-details flex-1">
-          <h2 th:text="${event.title}" class="text-xl font-semibold"></h2>
-          <p th:text="${event.description}" class="text-gray-700"></p>
-          <p th:text="${event.descriptiveDate}"
-             class="text-gray-500"></p>
-          <p th:text="${event.location}" class="text-gray-500"></p>
-        </div>
-      </a>
-      <div th:if="${authentication != null}" class="flex items-center space-x-2">
-        <a type="button"
-           hx-confirm="Você tem certeza?"
-           th:hx-delete="@{/admin/events/{title}(title=${event.eventUrl})}"
-           hx-target="closest .container"
-           class="cursor-pointer bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-700">Remover
-        </a>
-        <a type="button" th:if="${authentication != null && !event.comingUp}"
-           th:hx-post="@{/admin/events/{title}/process(title=${event.eventUrl})}"
-           th:hx-confirm="@{Processar álbum {title}?(title=${event.title})}"
-           hx-target="#toast"
-           th:hx-indicator="@{#loading-{eventId}(eventId=${event.id})}"
-           class="cursor-pointer bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-700">Processar
-          Álbum</a>
-        <svg th:id="@{loading-{eventId}(eventId=${event.id})}"
-             class="htmx-indicator spinner animate-spin"
-             xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-             viewBox="0 0 24 24" fill="none" stroke="currentColor"
-             stroke-width="2" stroke-linecap="round"
-             stroke-linejoin="round">
-          <path d="M21 12a9 9 0 1 1-6.219-8.56"></path>
-        </svg>
-      </div>
-    </div>
-    <div th:if="${events.size() == 0}">
-      <h2>Não existem próximos eventos</h2>
-    </div>
-  </main>
-  <!-- footer -->
-  <div th:insert="~{fragments/footer :: footer}"></div>
-  </body>
-  </html>
+      .section-tab::after {
+          content: '';
+          position: absolute;
+          bottom: -2px;
+          left: 0;
+          width: 0;
+          height: 2px;
+          background-color: #3b82f6;
+          transition: width 0.3s ease;
+      }
+
+      .section-tab.active::after {
+          width: 100%;
+      }
+
+      .section-tab.active {
+          color: #3b82f6;
+          font-weight: 600;
+      }
+
+      input[type="number"]::-webkit-inner-spin-button,
+      input[type="number"]::-webkit-outer-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+      }
+
+      .htmx-indicator {
+          opacity: 0;
+					display: none;
+          transition: opacity 500ms ease-in;
+      }
+
+      .htmx-request .htmx-indicator {
+          opacity: 1;
+					display: inline;
+      }
+
+      .htmx-request.htmx-indicator {
+          opacity: 1;
+          display: inline;
+      }
+	</style>
+	<!-- Content -->
+	<main th:fragment="main" class="container mx-auto pt-10 pb-10">
+		<div class="flex justify-center mb-8">
+			<div class="inline-flex bg-gray-100 p-1 rounded-full">
+				<button id="upcomingTab" class="section-tab active px-5 py-2 rounded-full whitespace-nowrap">Proximos Eventos</button>
+			</div>
+		</div>
+		<div class="mb-10">
+			<div id="eventSections">
+				<section id="upcomingEvents" class="block">
+					<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
+						<!-- Event Card -->
+						<div th:each="event : ${events}" class="event-card fade-in bg-white rounded-lg overflow-hidden shadow-md">
+							<div class="relative h-48 overflow-hidden">
+								<img th:src="${event.coverUrl}" th:alt="${event.title}"
+										 th:class="@{w-full h-full object-cover object-top transition-transform duration-300 hover:scale-105 {comingUp}(comingUp=${event.comingUp}? '': 'grayscale')}"/>
+								<div class="absolute top-0 left-0 bg-primary text-white px-3 py-1 text-sm font-medium bg-secondary">
+									Eventos
+								</div>
+							</div>
+							<div class="event-container p-5">
+								<div class="flex items-center text-gray-500 text-sm mb-2">
+									<div class="w-5 h-5 flex items-center justify-center mr-2">
+										<i class="ri-calendar-line"></i>
+									</div>
+									<span th:text="${event.descriptiveDate}"></span>
+								</div>
+								<h3 th:text="${event.title}" class="text-xl font-semibold text-gray-900 mb-2"></h3>
+								<div class="flex items-center text-gray-500 text-sm mb-4">
+									<div class="w-5 h-5 flex items-center justify-center mr-2">
+										<i class="ri-map-pin-line"></i>
+									</div>
+									<span th:text="${event.location}"></span>
+								</div>
+								<div class="flex flex-col sm:flex-row justify-end items-center gap-2">
+									<div>
+									<button th:href="@{/events/{title}(title=${event.eventUrl})}" th:if="${authentication != null && !event.isComingUp}"
+													th:hx-post="@{/admin/events/{title}/process(title=${event.eventUrl})}"
+													hx-target="#toast"
+													th:hx-indicator="@{#loading-{eventId}(eventId=${event.id})}"
+													class="w-full sm:w-auto px-4 py-2 bg-amber-500 text-white hover:bg-amber-400 transition-colors !rounded-button whitespace-nowrap">
+										<i class="ri-multi-image-fill"></i> Processar Album
+										<svg th:id="@{loading-{eventId}(eventId=${event.id})}"
+												 class="htmx-indicator spinner animate-spin"
+												 xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+												 viewBox="0 0 24 24" fill="none" stroke="currentColor"
+												 stroke-width="2" stroke-linecap="round"
+												 stroke-linejoin="round">
+											<path d="M21 12a9 9 0 1 1-6.219-8.56"></path>
+										</svg>
+									</button>
+									</div>
+									<button th:hx-delete="@{/admin/events/{title}(title=${event.eventUrl})}" hx-confirm="Você tem certeza?"
+													hx-target=".event-card" hx-swap="outerHTML"
+													th:if="${authentication != null}"
+													class="w-full sm:w-auto px-4 py-2 bg-red-500 text-white hover:bg-red-400 transition-colors !rounded-button whitespace-nowrap">
+										<i class="ri-delete-bin-fill"></i> Remover
+									</button>
+									<a th:href="@{/events/{title}(title=${event.eventUrl})}"
+										 class="w-full sm:w-auto px-4 py-2 bg-primary text-white hover:bg-primary/90 transition-colors !rounded-button whitespace-nowrap">
+										<i class="ri-add-circle-fill"></i> Informações
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+			</div>
+		</div>
+		<div th:if="${events.size() == 0}">
+			<h2>Não existem próximos eventos</h2>
+		</div>
+	</main>
+	<!-- footer -->
+	<div th:insert="~{fragments/footer :: footer}"></div>
+	</body>
+	</html>
 </DOCTYPE>
