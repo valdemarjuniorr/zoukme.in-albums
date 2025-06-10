@@ -11,27 +11,45 @@
   <main th:fragment="main" class="main container mx-auto p-4">
     <h1 class="text-3xl font-bold text-center mb-8">Onde estaremos!</h1>
     <div th:insert="~{fragments/carousel}"></div>
-    <div class="mb-8">
-      <h2 class="text-center text-gray-600 mt-2">Outros eventos</h2>
-    </div>
-    <div th:frament="albums" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-      <!-- Album 1 -->
-      <div th:each="album : ${albums}"
-           class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transform hover:scale-105 transition duration-300">
-        <a th:href="@{/{albumId}/visit(albumId=${album.id})}" th:title="${album.title}" class="relative">
-          <img class="w-full h-48 object-cover" th:src="${album.thumbUrl}" th:alt="${album.title}">
-            <span th:text="${album.descriptiveDate}" class="absolute bottom-0 left-0 box-content bg-red-700 font-semibold text-white p-2"/>
-        </a>
-        <div class="p-4">
-          <h3 th:text="${album.title}" class="text-xl font-semibold"/>
-          <hr class="m-2">
-          <div class="m-1">
-            <i class="fa-solid fa-location-dot"></i>
-            <span th:text="${album.city}" class="text-gray-600"/> <br>
+    <section th:fragment="albums" class="py-10 bg-white">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl md:text-4xl font-bold mb-4">Eventos Anteriores</h2>
+          <p class="text-gray-600 max-w-2xl mx-auto">
+            Reveja o que rolou nos eventos anteriores através da nossa coleção de Álbuns
+          </p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Album 1 -->
+          <div th:each="album : ${albums}" class="album-card group" data-category="festival">
+            <div class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300">
+              <div class="relative h-64 overflow-hidden">
+                <img th:src="${album.thumbUrl}" th:alt="${album.title}"
+                    class="w-full h-full object-cover object-top transform group-hover:scale-105 transition-transform duration-500"/>
+                <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+<!--                <span class="absolute top-4 right-4 bg-primary text-white px-3 py-1 rounded-full text-sm">Festival</span>-->
+                <span th:text="${album.descriptiveDate}" class="absolute top-4 left-4 bg-black/50 text-white px-3 py-1 rounded-full text-sm"></span>
+              </div>
+              <div class="p-6">
+                <h3 th:text="${album.title}" class="text-xl font-bold mb-2"></h3>
+                <p class="text-gray-600 mb-4">Veja as fotos acessando o álbum do evento </p>
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center text-gray-500">
+                    <i class="ri-map-pin-line mr-2"></i>
+                    <span th:text="${album.city}" class="text-sm"></span>
+                  </div>
+                  <button class="text-primary hover:text-opacity-80 transition-colors flex items-center">
+                    <span>Ver álbum</span>
+                    <i class="ri-arrow-right-line ml-1"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </section>
+
   </main>
 
   <!-- footer -->

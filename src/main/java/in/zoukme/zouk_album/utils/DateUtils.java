@@ -8,7 +8,7 @@ public final class DateUtils {
   /** This method returns a descriptive date as 21/Fev/2025 */
   public static String getDescriptiveDate(LocalDate date) {
     return String.format(
-        "%d de %s de %d", date.getDayOfMonth(), getDescriptiveMonth(date.getMonth()), date.getYear());
+        "%d de %s, %d", date.getDayOfMonth(), getDescriptiveMonth(date.getMonth()), date.getYear());
   }
 
   private static String getDescriptiveMonth(Month month) {
