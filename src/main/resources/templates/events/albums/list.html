@@ -1,49 +1,26 @@
-<DOCTYPE html>
-	<html xmlns:th="https://www.thymeleaf.org">
+<html xmlns:th="https://www.thymeleaf.org">
 
-	<head th:insert="~{fragments/header}"></head>
+<head th:insert="~{fragments/header}"></head>
 
-	<body class="bg-gray-100">
-	<!-- Header -->
-	<div th:insert="~{fragments/top :: top}"></div>
+<body class="bg-gray-100">
+<!-- Header -->
+<div th:insert="~{fragments/top :: top}"></div>
 
-	<!-- Content -->
-	<main th:fragment="main" class="main container mx-auto p-4">
-		<div class="pb-4">
-			<a th:href="@{/events/{eventName}/albums(eventName=${eventUrl})}">
-				<i class="fa-solid fa-circle-chevron-left"></i>
-				<span>Voltar</span>
-			</a>
-		</div>
-		<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
-			<div th:each="photo : ${photos.content}" class="bg-white p-2 rounded-lg shadow-md">
-				<div class="text-sm">
-					<img th:src="${photo.imagePath}" class="w-full h-auto rounded-lg"
-							 th:onclick="@{openModal({photoId})(photoId=${photo.id})}"/>
-					<div th:if="${authentication != null}" class="flex flex-row">
-						<div th:hx-post="@{/photos/like/{photoId}(photoId=${photo.id})}"
-								 th:hx-target="@{#liked{photoId}(photoId=${photo.id})}"
-								 class="cursor-pointer">
-							<!-- like button -->
-							<div class="py-2">
-								<div th:id="@{liked{photoId}(photoId=${photo.id})}">
-									<i class="fa-regular fa-heart px-2"></i>
-									<span>Curtir</span>
-								</div>
-							</div>
-						</div>
-						<!-- bookmark button -->
-						<div th:hx-post="@{/photos/bookmark/{photoId}(photoId=${photo.id})}"
-								 th:hx-target="@{#bookmarked{photoId}(photoId=${photo.id})}" class="cursor-pointer py-2 px-2">
-						<span class="py-2">
-							<div th:id="@{bookmarked{photoId}(photoId=${photo.id})}">
-								<i class="fa-regular fa-bookmark px-2"></i>
-								<span>Salvar</span>
-							</div>
-						</span>
-						</div>
-					</div>
-				</div>
+<!-- Content -->
+<main th:fragment="main" class="main container mx-auto p-4">
+	<div class="pb-4">
+		<a th:href="@{/events/{eventName}/albums(eventName=${eventUrl})}">
+			<i class="fa-solid fa-circle-chevron-left"></i>
+			<span>Voltar</span>
+		</a>
+	</div>
+	<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+		<div th:each="photo : ${photos.content}"
+				 class="bg-white p-2 rounded-lg shadow-md">
+			<div>
+				<img th:src="${photo.imagePath}" class="w-full h-auto rounded-lg"
+						 th:onclick="@{openModal({photoId})(photoId=${photo.id})}"/>
+				<!-- modal content -->
 			</div>
 			<style>
           /* Custom CSS to change the modal size */
@@ -53,56 +30,55 @@
               padding: 0px;
           }
 			</style>
-			<!-- modal content -->
 			<div th:id="${photo.id}" class="modal">
 				<img th:src="${photo.imagePath}"/>
 			</div>
 		</div>
-		</div>
-		<!-- Pagination -->
-		<div th:if="${photos.totalPages != 1}" class="flex justify-center mt-8">
-			<nav aria-label="Page navigation">
-				<ul class="inline-flex items-center -space-x-px">
-					<li th:if="${!photos.first}">
-						<a
-								th:href="@{/events/{eventUrl}/albums/{albumName}?page={page}&size={size}(albumName=${albumName}, eventUrl=${eventUrl}, page=${photos.number}, size=${photos.size})}"
-								class="px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700">
-							<i class="fa-solid fa-caret-left"></i>
-						</a>
-					</li>
-					<li th:each="page : ${pagination}">
+	</div>
+	<!-- Pagination -->
+	<div th:if="${photos.totalPages != 1}" class="flex justify-center mt-8">
+		<nav aria-label="Page navigation">
+			<ul class="inline-flex items-center -space-x-px">
+				<li th:if="${!photos.first}">
+					<a
+							th:href="@{/events/{eventUrl}/albums/{albumName}?page={page}&size={size}(albumName=${albumName}, eventUrl=${eventUrl}, page=${photos.number}, size=${photos.size})}"
+							class="px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700">
+						<i class="fa-solid fa-caret-left"></i>
+					</a>
+				</li>
+				<li th:each="page : ${pagination}">
           <span th:if="${page == '...'}"
 								th:text="${page}"
 								class="px-3 py-2 leading-tight text-gray-500 bg-gray-100 border border-gray-300 hover:bg-gray-100 hover:text-gray-700"/>
-						<span th:if="${(photos.number + 1 + '') == page}"
-									th:text="${page}"
-									class="px-3 py-2 leading-tight text-gray-500 bg-red-100 border border-gray-300 hover:bg-red-100 hover:text-gray-700"/>
-						<a th:if="${(photos.number + 1 + '') != page && page != '...'}"
-							 th:href="@{/events/{eventUrl}/albums/{albumName}?page={page}&size={size}(albumName=${albumName}, eventUrl=${eventUrl}, page=${page}, size=${photos.size})}"
-							 th:text="${page}"
-							 class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700"/>
-					</li>
-					<li th:if="${!photos.last}">
-						<a
-								th:href="@{/events/{eventUrl}/albums/{albumName}?page={page}&size={size}(albumName=${albumName}, eventUrl=${eventUrl}, page=${photos.number + 2}, size=${photos.size})}"
-								class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700">
-							<i class="fa-solid fa-caret-right"></i>
-						</a>
-					</li>
-				</ul>
-			</nav>
-		</div>
-	</main>
+					<span th:if="${(photos.number + 1 + '') == page}"
+								th:text="${page}"
+								class="px-3 py-2 leading-tight text-gray-500 bg-red-100 border border-gray-300 hover:bg-red-100 hover:text-gray-700"/>
+					<a th:if="${(photos.number + 1 + '') != page && page != '...'}"
+						 th:href="@{/events/{eventUrl}/albums/{albumName}?page={page}&size={size}(albumName=${albumName}, eventUrl=${eventUrl}, page=${page}, size=${photos.size})}"
+						 th:text="${page}"
+						 class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700"/>
+				</li>
+				<li th:if="${!photos.last}">
+					<a
+							th:href="@{/events/{eventUrl}/albums/{albumName}?page={page}&size={size}(albumName=${albumName}, eventUrl=${eventUrl}, page=${photos.number + 2}, size=${photos.size})}"
+							class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700">
+						<i class="fa-solid fa-caret-right"></i>
+					</a>
+				</li>
+			</ul>
+		</nav>
+	</div>
+</main>
 
-	<script>
-      function openModal(id) {
-          $('#' + id).modal({
-              fadeDuration: 250
-          });
-      }
-	</script>
-	<!-- footer -->
-	<div th:replace="~{fragments/footer :: footer}"></div>
-	</body>
-	</html>
+<script>
+    function openModal(id) {
+        $('#' + id).modal({
+            fadeDuration: 250
+        });
+    }
+</script>
+<!-- footer -->
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>
 
