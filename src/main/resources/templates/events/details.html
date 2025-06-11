@@ -14,26 +14,23 @@
       gtag('js', new Date());
       gtag('config', 'G-ZTLEWPD9HY');
 	</script>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<script src="https://unpkg.com/htmx.org@2.0.4/dist/htmx.min.js"></script>
-	<script src="https://cdn.tailwindcss.com"></script>
-	<script src="https://kit.fontawesome.com/b431e00b38.js"
-					crossorigin="anonymous"></script>
 	<!-- Include the Quill library -->
-	<link href="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.snow.css"
-				rel="stylesheet"/>
+	<link href="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.snow.css" rel="stylesheet"/>
+	<link href="https://fonts.googleapis.com/css?family=Pacifico|Montserrat|Poppins" rel="stylesheet"/>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css"/>
-	<script src="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.js"></script>
-	<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet"/>
-	<meta name="keywords"
-				th:content="'zouk,zouk brasileiro,samba,dança de salão,dançar,bailes,congressos de dança de salão,' + ${event.title}">
+	<meta charset="UTF-8">
 	<meta name="description" th:content="${event.description}"/>
+	<meta name="keywords" th:content="'zouk,zouk brasileiro,samba,dança de salão,dançar,bailes,congressos de dança de salão,' + ${event.title}">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta property="og:description" th:content="${event.description}"/>
-	<meta property="og:image"
-				th:content="'https://zoukme.in' + ${event.coverUrl}"/>
+	<meta property="og:image" th:content="${event.coverUrl}"/>
 	<meta property="og:title" th:content="'Zoukme In - ' + ${event.title}"/>
 	<meta property="og:url" content="https://zoukme.in/"/>
+
+	<script src="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.js"></script>
+	<script src="https://cdn.tailwindcss.com"></script>
+	<script src="https://kit.fontawesome.com/b431e00b38.js" crossorigin="anonymous"></script>
+	<script src="https://unpkg.com/htmx.org@2.0.4/dist/htmx.min.js"></script>
 	<script>
       tailwind.config = {
           theme: {
@@ -223,44 +220,47 @@
 	</div>
 </header>
 <main class="container mx-auto">
-	<section th:if="${authentication != null}">
+	<section>
 		<div class="grid grid-cols-1 md:grid-cols-2 gap-12 p-4">
-			<div>
+			<div th:if="${event.details == null}"></div> <!-- Placeholder for when there are no details -->
+			<div th:if="${event.details != null}">
 				<h2 class="text-3xl font-bold mb-6">Sobre o evento</h2>
 				<div class="prose max-w-none">
-					<p class="text-gray-700 mb-4">
-						Join us for the most anticipated samba event of the year! The
-						Elite Samba Congress 2025 brings together world-renowned
-						dancers, instructors, and samba enthusiasts for four days of
-						intensive workshops, spectacular performances, and unforgettable
-						parties.
-					</p>
-					<p class="text-gray-700 mb-4">
-						This year's congress features special guest instructors from
-						Brazil, including five-time samba champion Ricardo Monteiro and
-						the legendary Carla Oliveira. Whether you're a beginner looking
-						to learn the basics or an advanced dancer aiming to perfect your
-						technique, our diverse workshop schedule offers something for
-						everyone.
-					</p>
-					<p class="text-gray-700 mb-4">
-						The congress culminates in our grand gala show on Saturday
-						night, where professional dancers showcase breathtaking
-						performances that celebrate the rich cultural heritage of samba.
-						This is followed by an all-night dance party where attendees can
-						practice their newly acquired skills.
-					</p>
-					<p class="text-gray-700">
-						Don't miss this opportunity to immerse yourself in the vibrant
-						world of samba, connect with fellow dancers from around the
-						globe, and experience the authentic rhythms and movements of
-						this beloved Brazilian dance form.
-					</p>
+					<div id="editor-readonly" class="text-gray-600 mt-4">
+						<div id="editor" class="text-gray-600 mt-4 font-['Montserrat'] text-base"></div>
+					</div>
+					<!-- Initialize Quill editor -->
+					<script th:inline="javascript">
+              /*<![CDATA[*/
+              const quill = new Quill("#editor", {
+                  theme: 'snow',
+                  readOnly: true,
+                  modules: {
+                      toolbar: false
+                  }
+              });
+              quill.setContents(/*[(${event.details})]*/);
+
+              /*]]>*/
+					</script>
+					<style>
+              .ql-container.ql-snow {
+                  border: none !important;
+              }
+					</style>
 				</div>
 			</div>
-			<div>
 				<div class="bg-white rounded-lg shadow-lg p-6 mb-8">
 					<h3 class="text-xl font-semibold mb-4">Detalhes</h3>
+					<div th:if="${event.details != null && event.details != ''}" class="flex items-start mb-4">
+						<div class="w-10 h-10 flex items-center justify-center bg-primary/10 rounded-full mr-4">
+							<i class="ri-file-text-line text-primary ri-lg"></i>
+						</div>
+						<div>
+							<h4 class="font-medium">Descrição</h4>
+							<p th:text="${event.description}" class="text-gray-600"></p>
+						</div>
+					</div>
 					<div class="flex items-start mb-4">
 						<div class="w-10 h-10 flex items-center justify-center bg-primary/10 rounded-full mr-4">
 							<i class="ri-calendar-line text-primary ri-lg"></i>
@@ -277,15 +277,6 @@
 						<div>
 							<h4 class="font-medium">Endereço</h4>
 							<p th:text="${event.location}" class="text-gray-600"></p>
-						</div>
-					</div>
-					<div th:if="${event.details != null && event.details != ''}" class="flex items-start mb-4">
-						<div class="w-10 h-10 flex items-center justify-center bg-primary/10 rounded-full mr-4">
-							<i class="ri-file-text-line text-primary ri-lg"></i>
-						</div>
-						<div>
-							<h4 class="font-medium">Descrição</h4>
-							<p th:text="${event.details}" class="text-gray-600"></p>
 						</div>
 					</div>
 				</div>

@@ -1,0 +1,434 @@
+<DOCTYPE html>
+	<html xmlns:th="https://www.thymeleaf.org" lang="pt-br">
+
+	<head th:insert="~{fragments/header}"></head>
+
+	<body class="bg-gray-100">
+	<style>
+      :where([class^="ri-"])::before {
+          content: "\f3c2";
+      }
+
+      input::-webkit-outer-spin-button,
+      input::-webkit-inner-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+      }
+
+      input[type=number] {
+          -moz-appearance: textfield;
+      }
+
+      .social-icon:hover {
+          transform: translateY(-3px);
+      }
+
+      .pricing-card:hover {
+          transform: translateY(-5px);
+      }
+
+      .faq-answer {
+          max-height: 0;
+          overflow: hidden;
+          transition: max-height 0.3s ease;
+      }
+
+      .faq-item.active .faq-answer {
+          max-height: 500px;
+      }
+
+      .faq-item.active .faq-toggle i {
+          transform: rotate(180deg);
+      }
+	</style>
+	<div th:insert="~{fragments/top :: top}"></div>
+	<section class="py-12 md:py-20 bg-gray-50 font-['Montserrat']">
+		<div class="container mx-auto px-4 sm:px-6 lg:px-8">
+			<div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center max-w-6xl mx-auto">
+				<div class="relative rounded-2xl overflow-hidden shadow-xl">
+					<img src="/about/about-image.jpg" alt="Valdemar Jr" class="w-full h-full object-cover"/>
+				</div>
+				<div>
+					<h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">Sobre mim</h2>
+					<p class="text-lg text-gray-600 mb-6 leading-relaxed">Apaixonado por fotografia, dança de salão e viagens! 🕺📸✈️ Trabalho com TI, mas nas
+						horas vagas estou sempre com a câmera na mão, explorando novos lugares ou dançando por aí.
+					<p class="text-lg text-gray-600 mb-8 leading-relaxed">
+						Apaixonado por Zouk, onde eu comecei a dançar, e agora cobrindo eventos, bailes e congressos de Zouk e dança de salão.
+					</p>
+					<p class="text-lg text-gray-600 mb-8 leading-relaxed">
+						Adoro conhecer culturas diferentes, registrar momentos únicos e me jogar na pista sempre que toca uma boa música.
+					</p>
+					<div class="flex space-x-4">
+						<a href="https://instagram.com/vjrfotografia"
+							 title="@vjrfotografia"
+							 class="social-icon w-12 h-12 flex items-center justify-center rounded-full bg-gray-100 text-gray-600 hover:bg-primary hover:text-white transition-all duration-300">
+							<i class="ri-instagram-fill ri-lg"></i>
+						</a>
+						<a href="https://instagram.com/zoukme.in"
+							 title="@zoukme.in"
+							 class="social-icon w-12 h-12 flex items-center justify-center rounded-full bg-gray-100 text-gray-600 hover:bg-primary hover:text-white transition-all duration-300">
+							<i class="ri-instagram-fill ri-lg"></i>
+						</a>
+						<a href="https://wa.me/+5547988594002?text=Olá, vim do zoukme.in e gostaria de saber mais informações sobre *cobertura de eventos*. Pode me ajudar?"
+							 target="_blank" alt="Telefone para contato (47) 98859-4002"
+							 class="social-icon w-12 h-12 flex items-center justify-center rounded-full bg-gray-100 text-gray-600 hover:bg-primary hover:text-white transition-all duration-300">
+							<i class="ri-whatsapp-fill ri-lg"></i>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<section class="py-12 md:py-20 bg-white font-['Montserrat']">
+		<div class="container mx-auto px-4 sm:px-6 lg:px-8">
+			<div class="text-center mb-12">
+				<h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+					Entre em contato
+				</h1>
+				<p class="text-lg text-gray-600 max-w-2xl mx-auto">
+					Estamos aqui para ajudar a responder qualquer pergunta que tenha.
+				</p>
+			</div>
+			<div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+				<div class="bg-gray-50 rounded-lg p-8 shadow-sm">
+					<h2 class="text-2xl font-semibold text-gray-900 mb-6">
+						Informações de Contato
+					</h2>
+					<div class="space-y-6">
+						<div class="flex items-start">
+							<div class="w-10 h-10 flex items-center justify-center rounded-full bg-primary/10 text-primary mr-4">
+								<i class="ri-map-pin-line ri-lg"></i>
+							</div>
+							<div>
+								<h3 class="text-sm font-medium text-gray-500">Localização</h3>
+								<p class="text-gray-800 mt-1">Joinville/SC</p>
+							</div>
+						</div>
+						<div class="flex items-start">
+							<div class="w-10 h-10 flex items-center justify-center rounded-full bg-primary/10 text-primary mr-4">
+								<i class="ri-phone-line ri-lg"></i>
+							</div>
+							<div>
+								<h3 class="text-sm font-medium text-gray-500">Celular</h3>
+								<p class="text-gray-800 mt-1">+55 (47) 98859-4002</p>
+							</div>
+						</div>
+						<div class="flex items-start">
+							<div class="w-10 h-10 flex items-center justify-center rounded-full bg-primary/10 text-primary mr-4">
+								<i class="ri-mail-line ri-lg"></i>
+							</div>
+							<div>
+								<h3 class="text-sm font-medium text-gray-500">Email</h3>
+								<p class="text-gray-800 mt-1">valdemarjuniorr@gmail.com</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="bg-white rounded-lg p-8 shadow-sm border border-gray-200">
+					<h2 class="text-2xl font-semibold text-gray-900 mb-6">Entre em contato</h2>
+					<form id="contact-form" class="space-y-6">
+						<div>
+							<input
+									type="text"
+									id="name"
+									class="w-full px-4 py-3 bg-white border border-gray-200 rounded focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors text-gray-900"
+									placeholder="Nome completo"
+									required/>
+						</div>
+						<div>
+							<input
+									type="email"
+									id="email"
+									class="w-full px-4 py-3 bg-white border border-gray-200 rounded focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors text-gray-900"
+									placeholder="Email"
+									required/>
+						</div>
+						<div>
+							<input
+									type="tel"
+									id="phone"
+									class="w-full px-4 py-3 bg-white border border-gray-200 rounded focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors text-gray-900"
+									placeholder="Celular (Opcional)"/>
+						</div>
+						<div>
+							<input
+									type="text"
+									id="subject"
+									class="w-full px-4 py-3 bg-white border border-gray-200 rounded focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors text-gray-900"
+									placeholder="Assunto"
+									required/>
+						</div>
+						<div>
+                <textarea
+										id="message"
+										rows="4"
+										class="w-full px-4 py-3 bg-white border border-gray-200 rounded focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors resize-none text-gray-900"
+										placeholder="Mensagem"
+										required></textarea>
+						</div>
+						<div>
+							<button
+									type="submit"
+									class="w-full bg-primary text-white py-3 px-6 rounded-button font-medium hover:bg-primary/90 transition-colors whitespace-nowrap">
+								Enviar
+							</button>
+						</div>
+					</form>
+					<div id="form-success" class="hidden mt-4 p-4 bg-green-50 border border-green-200 rounded text-green-700">
+						Thank you for your message! We'll get back to you shortly.
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<section class="py-12 md:py-20 bg-gray-50 font-['Montserrat']">
+		<div class="container mx-auto px-4 sm:px-6 lg:px-8">
+			<div class="text-center mb-12">
+				<h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+					Tabela de Preços
+				</h2>
+				<p class="text-lg text-gray-600 max-w-2xl mx-auto">
+					Escolha o plano que melhor se adapta às suas necessidades.
+				</p>
+			</div>
+			<div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+				<!-- Basic Plan -->
+				<div class="pricing-card bg-white rounded-lg border border-gray-200 shadow-sm p-8 transition-all duration-300">
+					<div class="text-center mb-6">
+						<h3 class="text-xl font-semibold text-gray-900">Pacote de baile</h3>
+						<div class="mt-4 flex items-baseline justify-center">
+							<span class="text-4xl font-bold text-gray-900">R$ 300</span>
+							<span class="ml-1 text-gray-500">/dia</span>
+						</div>
+					</div>
+					<ul class="space-y-4 mb-8">
+						<li class="flex items-start">
+							<div class="flex-shrink-0 w-5 h-5 flex items-center justify-center text-primary mt-0.5">
+								<i class="ri-check-line"></i>
+							</div>
+							<span class="ml-3 text-gray-700">Fotos online</span>
+						</li>
+						<li class="flex items-start">
+							<div class="flex-shrink-0 w-5 h-5 flex items-center justify-center text-primary mt-0.5">
+								<i class="ri-check-line"></i>
+							</div>
+							<span class="ml-3 text-gray-700">Evento disponível no zoukme.in</span>
+						</li>
+						<li class="flex items-start">
+							<div class="flex-shrink-0 w-5 h-5 flex items-center justify-center text-primary mt-0.5">
+								<i class="ri-check-line"></i>
+							</div>
+							<span class="ml-3 text-gray-700">Divulgação nas nossas redes sociais</span>
+						</li>
+					</ul>
+				</div>
+				<!-- pro plan (highlighted) -->
+				<div class="pricing-card bg-white rounded-lg border-2 border-primary shadow-md p-8 transition-all duration-300 relative">
+					<div class="absolute top-0 right-0 bg-primary text-white text-xs font-semibold px-3 py-1 rounded-bl-md rounded-tr-md">
+						popular
+					</div>
+					<div class="text-center mb-6">
+						<h3 class="text-xl font-semibold text-gray-900">Pacote de aulas e baile</h3>
+						<div class="mt-4 flex items-baseline justify-center">
+							<span class="text-4xl font-bold text-gray-900">R$ 500</span>
+							<span class="ml-1 text-gray-500">/dia</span>
+						</div>
+					</div>
+					<ul class="space-y-4 mb-8">
+						<li class="flex items-start">
+							<div class="flex-shrink-0 w-5 h-5 flex items-center justify-center text-primary mt-0.5">
+								<i class="ri-check-line"></i>
+							</div>
+							<span class="ml-3 text-gray-700">Fotos online</span>
+						</li>
+						<li class="flex items-start">
+							<div class="flex-shrink-0 w-5 h-5 flex items-center justify-center text-primary mt-0.5">
+								<i class="ri-check-line"></i>
+							</div>
+							<span class="ml-3 text-gray-700">Evento disponível no zoukme.in</span>
+						</li>
+						<li class="flex items-start">
+							<div class="flex-shrink-0 w-5 h-5 flex items-center justify-center text-primary mt-0.5">
+								<i class="ri-check-line"></i>
+							</div>
+							<span class="ml-3 text-gray-700">Divulgação nas nossas redes sociais</span>
+						</li>
+					</ul>
+				</div>
+				<!-- enterprise plan -->
+				<div class="pricing-card bg-white rounded-lg border border-gray-200 shadow-sm p-8 transition-all duration-300">
+					<div class="text-center mb-6">
+						<h3 class="text-xl font-semibold text-gray-900">Congressos</h3>
+						<div class="mt-4 flex items-baseline justify-center">
+							<span class="text-4xl font-bold text-gray-900">R$ 400</span>
+							<span class="ml-1 text-gray-500">/dia</span>
+						</div>
+					</div>
+					<ul class="space-y-4 mb-8">
+						<li class="flex items-start">
+							<div class="flex-shrink-0 w-5 h-5 flex items-center justify-center text-primary mt-0.5">
+								<i class="ri-check-line"></i>
+							</div>
+							<span class="ml-3 text-gray-700">Fotos online</span>
+						</li>
+						<li class="flex items-start">
+							<div class="flex-shrink-0 w-5 h-5 flex items-center justify-center text-primary mt-0.5">
+								<i class="ri-check-line"></i>
+							</div>
+							<span class="ml-3 text-gray-700">Evento disponível no zoukme.in</span>
+						</li>
+						<li class="flex items-start">
+							<div class="flex-shrink-0 w-5 h-5 flex items-center justify-center text-primary mt-0.5">
+								<i class="ri-check-line"></i>
+							</div>
+							<span class="ml-3 text-gray-700">Divulgação nas nossas redes sociais</span>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- FAQ Section -->
+	<section class="py-12 bg-white font-['Poppins']">
+		<div class="container mx-auto px-4 sm:px-6 lg:px-8">
+			<div class="max-w-3xl mx-auto">
+				<h2 class="text-3xl font-bold text-gray-900 mb-8 text-center">
+					Perguntas Frequentes
+				</h2>
+				<div class="space-y-4 text-sm">
+					<div class="faq-item bg-white rounded-lg shadow-sm overflow-hidden">
+						<button class="faq-toggle w-full flex justify-between items-center p-6 focus:outline-none"><span
+								class="text-lg font-medium text-gray-900">Quais tipos de momentos vocês costumam registrar em eventos de dança de salão?</span>
+							<div class="w-6 h-6 flex items-center justify-center text-gray-500 transition-transform duration-300">
+								<i class="ri-arrow-down-s-line ri-lg"></i>
+							</div>
+						</button>
+						<div class="faq-answer px-6 pb-6">
+							<p class="text-gray-700">Registramos todos os momentos importantes do evento: Aulas, bailes e apresentações
+								e também o público presente. Nosso objetivo é captar não só o evento, mas também a emoção e a
+								atmosfera do evento.</p>
+						</div>
+					</div>
+					<div class="faq-item bg-white rounded-lg shadow-sm overflow-hidden">
+						<button class="faq-toggle w-full flex justify-between items-center p-6 focus:outline-none">
+							<span class="text-lg font-medium text-gray-900">Vocês oferecem cobertura fotográfica durante todo o evento ou apenas em horários específicos?</span>
+							<div class="w-6 h-6 flex items-center justify-center text-gray-500 transition-transform duration-300">
+								<i class="ri-arrow-down-s-line ri-lg"></i>
+							</div>
+						</button>
+						<div class="faq-answer px-6 pb-6">
+							<p class="text-gray-700">Oferecemos cobertura completa do evento, do início ao fim. Também é possível contratar coberturas em horários
+								específicos, conforme a programação ou necessidade dos organizadores.</p>
+						</div>
+					</div>
+					<div class="faq-item bg-white rounded-lg shadow-sm overflow-hidden">
+						<button class="faq-toggle w-full flex justify-between items-center p-6 focus:outline-none">
+							<span
+									class="text-lg font-medium text-gray-900">Como é feita a entrega das fotos e em quanto tempo elas ficam disponíveis após o evento?</span>
+							<div class="w-6 h-6 flex items-center justify-center text-gray-500 transition-transform duration-300">
+								<i class="ri-arrow-down-s-line ri-lg"></i>
+							</div>
+						</button>
+						<div class="faq-answer px-6 pb-6">
+							<p class="text-gray-700">As fotos são entregues em galeria online disponibilizadas no <a href="https://zoukme.in">Zoukme.in</a>,
+								organizada por evento (aula, baile...), com acesso publico e disponível para download. O
+								prazo médio de entrega é de 3 dias úteis, mas geralmente conseguimos disponibilizar as fotos durante o evento no dia seguinte.
+							</p>
+						</div>
+					</div>
+					<div class="faq-item bg-white rounded-lg shadow-sm overflow-hidden">
+						<button class="faq-toggle w-full flex justify-between items-center p-6 focus:outline-none">
+							<span class="text-lg font-medium text-gray-900">Vocês também fazem vídeos ou apenas fotografias?</span>
+							<div class="w-6 h-6 flex items-center justify-center text-gray-500 transition-transform duration-300">
+								<i class="ri-arrow-down-s-line ri-lg"></i>
+							</div>
+						</button>
+						<div class="faq-answer px-6 pb-6">
+							<p class="text-gray-700">Fazemos apenas cobertura fotográfica, mas podemos indicar parceiros que fazem vídeos de eventos de dança de
+								salão. Nosso foco é garantir que cada momento especial seja capturado com qualidade e atenção aos detalhes.
+							</p>
+						</div>
+					</div>
+					<div class="faq-item bg-white rounded-lg shadow-sm overflow-hidden">
+						<button class="faq-toggle w-full flex justify-between items-center p-6 focus:outline-none">
+							<span class="text-lg font-medium text-gray-900">Por quanto tempo as fotos ficam disponíveis na galeria online?</span>
+							<div class="w-6 h-6 flex items-center justify-center text-gray-500 transition-transform duration-300">
+								<i class="ri-arrow-down-s-line ri-lg"></i>
+							</div>
+						</button>
+						<div class="faq-answer px-6 pb-6">
+							<p class="text-gray-700">
+								As fotos ficam disponíveis por pelo menos 3 anos, permitindo que os participantes acessem e baixem as imagens
+								sempre que desejarem. Recomendamos que façam o download das fotos para garantir que tenham uma cópia local.
+							</p>
+						</div>
+					</div>
+				</div>
+				<div class="mt-10 text-center">
+					<p class="text-gray-600">Ainda tem alguma dúvida?
+						Estamos aqui para ajudar! Entre em contato conosco e teremos o prazer de responder às suas perguntas.
+					</p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<script id="mobile-menu-script">
+      document.addEventListener("DOMContentLoaded", function () {
+          const mobileMenuButton = document.getElementById("mobile-menu-button");
+          const mobileMenu = document.getElementById("mobile-menu");
+          mobileMenuButton.addEventListener("click", function () {
+              mobileMenu.classList.toggle("hidden");
+              // Toggle icon between menu and close
+              const icon = mobileMenuButton.querySelector("i");
+              if (icon.classList.contains("ri-menu-line")) {
+                  icon.classList.remove("ri-menu-line");
+                  icon.classList.add("ri-close-line");
+              } else {
+                  icon.classList.remove("ri-close-line");
+                  icon.classList.add("ri-menu-line");
+              }
+          });
+      });
+	</script>
+	<script id="contact-form-script">
+      document.addEventListener("DOMContentLoaded", function () {
+          const contactForm = document.getElementById("contact-form");
+          const formSuccess = document.getElementById("form-success");
+          contactForm.addEventListener("submit", function (e) {
+              e.preventDefault();
+              // Simulate form submission
+              setTimeout(function () {
+                  contactForm.reset();
+                  formSuccess.classList.remove("hidden");
+                  // Hide success message after 5 seconds
+                  setTimeout(function () {
+                      formSuccess.classList.add("hidden");
+                  }, 5000);
+              }, 1000);
+          });
+      });
+	</script>
+	<script id="faq-script">
+      document.addEventListener("DOMContentLoaded", function () {
+          const faqToggles = document.querySelectorAll(".faq-toggle");
+          faqToggles.forEach((toggle) => {
+              toggle.addEventListener("click", function () {
+                  const faqItem = this.parentElement;
+                  // Close all other FAQ items
+                  document.querySelectorAll(".faq-item").forEach((item) => {
+                      if (item !== faqItem) {
+                          item.classList.remove("active");
+                      }
+                  });
+                  // Toggle current FAQ item
+                  faqItem.classList.toggle("active");
+              });
+          });
+      });
+	</script>
+	<!-- footer -->
+	<div th:insert="~{fragments/footer :: footer}"></div>
+	</body>
+	</html>
+</DOCTYPE>

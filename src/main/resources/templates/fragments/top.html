@@ -1,27 +1,25 @@
 <header th:fragment="top" class="bg-gray-800 p-4">
-  <div class="bg-gray-800 p-4">
-    <div class="container mx-auto flex justify-between items-center">
-      <div class="flex-shrink-0">
-        <!-- Logo Image -->
-        <a th:href="@{/}">
-          <img src="/logo-light.png" alt="Zoukme In" class="h-16 w-auto">
-        </a>
-      </div>
-      <nav>
-        <ul class="flex space-x-4">
-          <li>
-            <a th:href="@{/events}" class="cursor-pointer text-white hover:text-gray-400">Eventos</a>
-          </li>
-          <li th:if="${authentication != null}">
-            <a href="#" hx-get="/admin/home" hx-target=".main"
-               class="text-white hover:text-gray-400">Admin</a>
-          </li>
-          <li>
-            <a href="https://www.instagram.com/zoukme.in" target="_blank"
-               class="text-white hover:text-gray-400">Contato</a>
-          </li>
-        </ul>
-      </nav>
-    </div>
-  </div>
+	<div class="bg-gray-800 p-4">
+		<div class="container mx-auto flex justify-between items-center">
+			<div class="flex-shrink-0">
+				<!-- Logo Image -->
+				<a th:href="@{/}">
+					<img src="/logo-light.png" alt="Zoukme In" class="h-16 w-auto">
+				</a>
+			</div>
+			<nav>
+				<ul class="flex space-x-4">
+					<li>
+						<a th:href="@{/events}" class="cursor-pointer text-white hover:text-gray-400">Eventos</a>
+					</li>
+					<li th:if="${authentication != null}">
+						<a href="#" hx-get="/admin/home" hx-target=".main" class="text-white hover:text-gray-400">Admin</a>
+					</li>
+					<li>
+						<a href="/about" class="text-white hover:text-gray-400">Sobre Nós</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</div>
 </header>
