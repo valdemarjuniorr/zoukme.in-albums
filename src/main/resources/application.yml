@@ -19,7 +19,8 @@ spring:
         access-key: ${AWS_ACCESS_KEY}
         secret-key: ${AWS_SECRET_KEY}
       endpoint: https://s3.sa-east-1.amazonaws.com/
-
+      ses:
+        endpoint: https://email.sa-east-1.amazonaws.com
   application:
     name: zouk-albums
   datasource:
