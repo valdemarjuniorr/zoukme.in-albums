@@ -137,40 +137,13 @@
       input:focus, button:focus {
           outline: none;
       }
-
-      .sticky-header {
-          position: fixed;
-          top: 0;
-          left: 0;
-          right: 0;
-          background: white;
-          z-index: 40;
-          transform: translateY(-100%);
-          transition: transform 0.3s ease;
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      }
-
-      .sticky-header.visible {
-          transform: translateY(0);
-      }
 	</style>
-	<title th:text="'Zouk Me In - ' + ${event.title}"></title>
+	<title th:text=" ${event.title} + '- Zouk Me In'"></title>
 </head>
 
 <body class="bg-gray-50">
 <div th:insert="~{fragments/top :: top}"></div>
-<div class="sticky-header py-3 px-4">
-	<div class="container mx-auto flex justify-between items-center">
-		<div class="flex items-center">
-			<h3 th:text="${event.title}" class="text-lg font-bold mr-4"></h3>
-			<div class="hidden md:flex items-center text-sm">
-				<span class="mr-4"><i class="ri-calendar-line mr-1"></i> <span th:text="${event.descriptiveDate}"/></span>
-				<span><i class="ri-map-pin-line mr-1"></i> <span th:text="${event.location}"/></span>
-			</div>
-		</div>
-	</div>
-</div>
-<header class="container mx-auto px-4 py-4">
+<header class="container mx-auto px-4 py-14">
 	<div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
 		<div class="text-center md:text-left">
 			<h1 th:text="${event.title}" class="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
@@ -292,9 +265,6 @@
 		<a th:href="'https://www.instagram.com/' + ${event.instagram}" target="_blank" class="social-icon">
 			<i class="ri-instagram-line text-primary ri-lg"></i>
 		</a>
-		<a href="#" class="social-icon">
-			<i class="ri-share-line text-blue-500 ri-lg"></i>
-		</a>
 	</div>
 	<section class="mb-20 p-4" th:if="${event.imagePath().size() > 0}">
 		<h2 class="text-3xl font-bold mb-8">Eventos anteriores</h2>
@@ -318,14 +288,12 @@
             const distance = countDownDate - now;
             // Time calculations for days, hours, minutes and seconds
             const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor(
-                (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
-            );
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((distance % (1000 * 60)) / 1000);
             // Display the result
             document.getElementById("days").innerText = days;
-            document.getElementById("hours").innerText = hours;
+            document.getElementById("hours").innerText = hours + 3; // Adjust for timezone difference
             document.getElementById("minutes").innerText = minutes;
             document.getElementById("seconds").innerText = seconds;
             // If the count down is finished, write some text
@@ -339,20 +307,7 @@
         }, 1000);
     });
 </script>
-<script id="stickyHeaderScript">
-    document.addEventListener("DOMContentLoaded", function () {
-        const header = document.querySelector(".sticky-header");
-        const heroSection = document.querySelector("header");
-        window.addEventListener("scroll", function () {
-            const heroBottom = heroSection.offsetTop + heroSection.offsetHeight;
-            if (window.scrollY > heroBottom - 100) {
-                header.classList.add("visible");
-            } else {
-                header.classList.remove("visible");
-            }
-        });
-    });
-</script>
+
 <div th:insert="~{fragments/footer :: footer}"></div>
 </body>
 </html>

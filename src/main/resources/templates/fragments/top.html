@@ -1,25 +1,63 @@
-<header th:fragment="top" class="bg-gray-800 p-4">
-	<div class="bg-gray-800 p-4">
-		<div class="container mx-auto flex justify-between items-center">
-			<div class="flex-shrink-0">
-				<!-- Logo Image -->
-				<a th:href="@{/}">
-					<img src="/logo-light.png" alt="Zoukme In" class="h-16 w-auto">
-				</a>
-			</div>
-			<nav>
-				<ul class="flex space-x-4">
-					<li>
-						<a th:href="@{/events}" class="cursor-pointer text-white hover:text-gray-400">Eventos</a>
-					</li>
-					<li th:if="${authentication != null}">
-						<a href="#" hx-get="/admin/home" hx-target=".main" class="text-white hover:text-gray-400">Admin</a>
-					</li>
-					<li>
-						<a href="/about" class="text-white hover:text-gray-400">Sobre Nós</a>
-					</li>
-				</ul>
-			</nav>
+<header th:fragment="top" class="bg-gray-800 p-4 transition-all duration-300" id="main-header">
+	<style>
+      #main-header {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          z-index: 50;
+          transition: all 0.3s ease;
+      }
+
+      #main-header.scrolled {
+          padding: 0.5rem 1rem;
+          background-color: rgba(31, 41, 55, 0.95);
+          backdrop-filter: blur(5px);
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      }
+
+      #main-header.scrolled #header-logo {
+          height: 2.5rem;
+      }
+
+      body {
+          padding-top: 5rem;
+      }
+
+      .sticky-header {
+          display: none;
+      }
+	</style>
+	<div class="container mx-auto flex justify-between items-center">
+		<div class="flex-shrink-0 transition-all duration-300">
+			<a th:href="@{/}">
+				<img src="/logo-light.png" alt="Zoukme In" class="h-16 w-auto transition-all duration-300" id="header-logo">
+			</a>
 		</div>
+		<nav>
+			<ul class="flex space-x-4">
+				<li>
+					<a th:href="@{/events}" class="cursor-pointer text-white hover:text-gray-400">Eventos</a>
+				</li>
+				<li th:if="${authentication != null}">
+					<a href="#" hx-get="/admin/home" hx-target=".main" class="text-white hover:text-gray-400">Admin</a>
+				</li>
+				<li>
+					<a href="/about" class="text-white hover:text-gray-400">Sobre Nós</a>
+				</li>
+			</ul>
+		</nav>
 	</div>
+	<script type="text/javascript">
+      document.addEventListener("DOMContentLoaded", function () {
+          const header = document.getElementById("main-header");
+          window.addEventListener("scroll", function () {
+              if (window.scrollY > 100) {
+                  header.classList.add("scrolled");
+              } else {
+                  header.classList.remove("scrolled");
+              }
+          });
+      });
+	</script>
 </header>
