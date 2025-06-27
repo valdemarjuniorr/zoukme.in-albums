@@ -11,11 +11,12 @@ import in.zoukme.zouk_album.exceptions.EventNotFoundException;
 import in.zoukme.zouk_album.exceptions.SubEventNotFoundException;
 import in.zoukme.zouk_album.repositories.PhotoRepository;
 import in.zoukme.zouk_album.repositories.SocialMediaRepository;
+import in.zoukme.zouk_album.repositories.events.CreateEventRequest;
 import in.zoukme.zouk_album.repositories.events.EventDetails;
 import in.zoukme.zouk_album.repositories.events.EventPhotosRepository;
 import in.zoukme.zouk_album.repositories.events.EventRepository;
-import in.zoukme.zouk_album.repositories.events.EventWithSocialMedia;
 import in.zoukme.zouk_album.repositories.events.SubEventRepository;
+import in.zoukme.zouk_album.services.aws.BucketImage;
 import in.zoukme.zouk_album.services.aws.BucketService;
 import java.time.LocalDate;
 import java.util.List;
@@ -64,13 +65,32 @@ public class EventService {
   }
 
   @Transactional
-  public Long save(EventWithSocialMedia event) {
+  public void save(CreateEventRequest request) {
+    var eventTitle = request.title();
+    var uploadedCover = bucketService.upload(eventTitle, request.cover());
+    var pastEventsUrls = bucketService.upload(eventTitle, request.pastEvents());
+    var eventUrl = eventTitle.toLowerCase().replace(" ", "-");
+    var event =
+        new Event(
+            eventTitle,
+            request.description(),
+            request.location(),
+            request.date(),
+            uploadedCover.path(),
+            null,
+            eventUrl,
+            request.details());
     AggregateReference<Event, Long> eventSaved =
-        AggregateReference.to(this.repository.save(event.toDomain()).id());
+        AggregateReference.to(this.repository.save(event).id());
     this.socialMediaRepository.save(
-        new SocialMedia(null, eventSaved, event.instagram(), event.phoneNumber()));
-    event.photos().forEach(photo -> this.photoRepository.save(new Photo(null, eventSaved, photo)));
-    return eventSaved.getId();
+        new SocialMedia(eventSaved, request.instagram(), request.whatsapp()));
+    var photos = convertIntoPhotos(eventSaved, pastEventsUrls);
+    this.photoRepository.saveAll(photos);
+  }
+
+  private List<Photo> convertIntoPhotos(
+      AggregateReference<Event, Long> event, List<BucketImage> images) {
+    return images.stream().map(image -> new Photo(event, image.path())).toList();
   }
 
   @Transactional
@@ -150,5 +170,9 @@ public class EventService {
   public void deletePhoto(String eventUrl, String photoUrl) {
     var prefix = "events/" + eventUrl;
     this.bucketService.deletePhotoBy(eventUrl, prefix);
+  }
+
+  public long count() {
+    return this.repository.count();
   }
 }

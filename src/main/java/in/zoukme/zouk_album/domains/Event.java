@@ -20,6 +20,18 @@ public record Event(
     String eventUrl,
     String details) {
 
+  public Event(
+      String title,
+      String description,
+      String location,
+      LocalDate date,
+      String coverUrl,
+      Set<Photo> photos,
+      String eventUrl,
+      String details) {
+    this(null, title, description, location, date, coverUrl, photos, eventUrl, details);
+  }
+
   public Boolean isComingUp() {
     var now = LocalDate.now();
     return date.isEqual(now) || date.isAfter(now);

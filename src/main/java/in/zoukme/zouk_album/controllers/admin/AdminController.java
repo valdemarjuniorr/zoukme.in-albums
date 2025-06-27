@@ -1,12 +1,14 @@
 package in.zoukme.zouk_album.controllers.admin;
 
+import in.zoukme.zouk_album.controllers.admin.dashboard.DashboardService;
 import in.zoukme.zouk_album.domains.Album;
-import in.zoukme.zouk_album.repositories.events.EventWithSocialMedia;
+import in.zoukme.zouk_album.domains.Page;
+import in.zoukme.zouk_album.repositories.events.CreateEventRequest;
+import in.zoukme.zouk_album.repositories.events.PackageRequest;
 import in.zoukme.zouk_album.services.AlbumService;
 import in.zoukme.zouk_album.services.EventService;
-import in.zoukme.zouk_album.services.MetricService;
 import in.zoukme.zouk_album.services.aws.BucketService;
-import java.util.List;
+import java.time.LocalDate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
@@ -27,33 +29,36 @@ public class AdminController {
 
   private Logger log = LoggerFactory.getLogger(AdminController.class);
 
-  private final MetricService service;
   private final AlbumService albumService;
   private final EventService eventService;
   private final BucketService bucketService;
+  private final DashboardService dashboardService;
 
   public AdminController(
-      MetricService service,
       AlbumService albumService,
       EventService eventService,
-      BucketService bucketService) {
-    this.service = service;
+      BucketService bucketService,
+      DashboardService dashboardService) {
     this.albumService = albumService;
     this.eventService = eventService;
     this.bucketService = bucketService;
+    this.dashboardService = dashboardService;
   }
 
   @GetMapping
   String home(Model model, Authentication authentication) {
-    var albums = this.albumService.findAll();
-    model.addAttribute("albums", albums);
     model.addAttribute("authentication", authentication);
 
     return "index";
   }
 
   @GetMapping("/home")
-  String homeAdmin() {
+  String homeAdmin(Model model) {
+    var pageObj = new Page(1,6);
+    var albums = this.albumService.findAll(pageObj);
+    model.addAttribute("albums", albums);
+    model.addAttribute("pagination", pageObj.generatePagination(albums.getTotalPages()));
+
     return "admin/home";
   }
 
@@ -63,21 +68,18 @@ public class AdminController {
   }
 
   @PostMapping("/albums/create")
-  String create(Album album, Model model) {
-    this.albumService.save(album);
-    var albums = this.albumService.findAll();
-
+  String create(
+      String title,
+      String description,
+      String city,
+      LocalDate eventDate,
+      @RequestParam("file-upload") MultipartFile cover,
+      Model model) {
+    this.albumService.save(title, description, city, eventDate, cover);
+    var albums = this.albumService.findAll(new Page(1, 6));
     model.addAttribute("albums", albums);
 
     return "index";
-  }
-
-  @GetMapping("/metrics/albums/visits")
-  String visits(Model model) {
-    log.info("Showing visits metrics");
-    model.addAttribute("visits", this.service.findVisitAlbumMetric());
-
-    return "admin/metrics/metric-visiters";
   }
 
   @GetMapping("/albums")
@@ -111,14 +113,26 @@ public class AdminController {
     return "admin/events/create";
   }
 
+  @GetMapping("/events/packages")
+  String addPackage() {
+    return "admin/events/add_package";
+  }
+
+  @PostMapping("/events/packages")
+  String addPackage(PackageRequest request, Model model) {
+    model.addAttribute("package", request);
+    return "admin/events/new-line-package";
+  }
+
   @PostMapping("/events/create")
-  String creteEvent(EventWithSocialMedia event, Model model, Authentication authentication) {
-    this.eventService.save(event);
-    log.info("Event created: {}", event);
+  String creteEvent(CreateEventRequest request, Model model, Authentication authentication) {
+    this.eventService.save(request);
+    log.info("Event created: {}", request);
 
     model.addAttribute("events", this.eventService.findAll());
     model.addAttribute("authentication", authentication);
-    return "/events/list";
+
+    return homeAdmin(model);
   }
 
   @DeleteMapping("/events/{eventUrl}")
@@ -147,20 +161,32 @@ public class AdminController {
     return "/events/toast";
   }
 
-  @PostMapping("/events/upload")
-  String uploadFiles(
-      @RequestParam("files[]") List<MultipartFile> files, String title, Model model) {
-    var imagesPath = bucketService.upload(title, files);
-    model.addAttribute("images", imagesPath);
-
-    return "/admin/events/images-preview";
-  }
-
   @PostMapping("/events/{eventUrl}/process")
   String processEvent(@PathVariable String eventUrl, Model model) {
     this.eventService.processAlbumBy(eventUrl);
     model.addAttribute("message", "Album processado com sucesso");
 
     return "/events/toast";
+  }
+
+  @GetMapping("/dashboard/total-albums")
+  String getTotalAlbums(Model model) {
+    model.addAttribute("total", dashboardService.getTotalAlbums());
+
+    return "admin/dashboard/total_number";
+  }
+
+  @GetMapping("/dashboard/total-photos")
+  String getTotalPhotos(Model model) {
+    model.addAttribute("total", dashboardService.getTotalPhotos());
+
+    return "admin/dashboard/total_number";
+  }
+
+  @GetMapping("/dashboard/total-events")
+  String getTotalEvents(Model model) {
+    model.addAttribute("total", dashboardService.getTotalEvents());
+
+    return "admin/dashboard/total_number";
   }
 }

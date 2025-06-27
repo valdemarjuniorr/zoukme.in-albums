@@ -40,7 +40,7 @@
 					<a th:href="@{/events}" class="cursor-pointer text-white hover:text-gray-400">Eventos</a>
 				</li>
 				<li th:if="${authentication != null}">
-					<a href="#" hx-get="/admin/home" hx-target=".main" class="text-white hover:text-gray-400">Admin</a>
+					<a href="/admin/home" class="text-white hover:text-gray-400">Admin</a>
 				</li>
 				<li>
 					<a href="/about" class="text-white hover:text-gray-400">Sobre Nós</a>

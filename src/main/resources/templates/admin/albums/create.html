@@ -1,47 +1,245 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <script src="https://unpkg.com/htmx.org@2.0.4/dist/htmx.min.js"></script>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <title>Zouk Me In - Albums</title>
-</head>
-<body class="bg-gray-100">
-<!-- Content -->
-<main class="main content container mx-auto">
-  <h1 class="text-3xl font-bold mb-6">Detalhes do evento</h1>
-  <div id="album-form" th:fragment="albums-form" class="album-form bg-white p-6 rounded-lg shadow-md space-y-4">
-    <div>
-      <label class="block text-gray-700">Título</label>
-      <input name="title" class="w-full mt-1 p-2 border border-gray-300 rounded-md" placeholder="Ex.: Elite Samba Congress 2024">
-    </div>
-    <div>
-      <label class="block text-gray-700">Cidade/Estado</label>
-      <input name="city" class="w-full mt-1 p-2 border border-gray-300 rounded-md"
-             placeholder="Ex.: Balneário Camboriú/SC">
-    </div>
-    <div>
-      <label class="block text-gray-700">URL do álbum</label>
-      <input name="url" type="url" class="w-full mt-1 p-2 border border-gray-300 rounded-md" placeholder="Ex.: https://www.zoukme.in/album/esc2024">
-    </div>
-    <div>
-      <label class="block text-gray-700">Imagem da capa</label>
-      <input name="thumbUrl" type="url" class="w-full mt-1 p-2 border border-gray-300 rounded-md"
-             placeholder="https://www.zoukme.in/album/esc2024/image.jpg">
-    </div>
-    <div>
-      <label class="block text-gray-700">Data do evento</label>
-      <input name="eventDate" type="date" class="w-full mt-1 p-2 border border-gray-300 rounded-md">
-    </div>
-    <div class="text-center">
-      <button hx-get="/admin/albums" hx-target="closest .main" type="submit"
-              class="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700">Cancelar
-      </button>
-      <button hx-post="/admin/albums/create" hx-include="#album-form" hx-target="closest .main" type="submit"
-              class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">Criar
-      </button>
-    </div>
-  </div>
-</main>
+<DOCTYPE html>
+	<html xmlns:th="https://www.thymeleaf.org" lang="pt-br">
 
-</body>
-</html>
+	<head th:insert="~{fragments/header}"></head>
+
+	<body class="bg-gray-100">
+	<!-- Header -->
+	<div th:insert="~{fragments/top :: top}"></div>
+	<style>
+      :where([class^="ri-"])::before {
+          content: "\f3c2";
+      }
+
+      body {
+          font-family: 'Inter', sans-serif;
+      }
+
+      input[type="number"]::-webkit-inner-spin-button,
+      input[type="number"]::-webkit-outer-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+      }
+
+      .custom-checkbox {
+          appearance: none;
+          width: 18px;
+          height: 18px;
+          border: 2px solid #d1d5db;
+          border-radius: 4px;
+          position: relative;
+          cursor: pointer;
+          transition: all 0.2s;
+      }
+
+      .custom-checkbox:checked {
+          background-color: #e94057;
+          border-color: #e94057;
+      }
+
+      .custom-checkbox:checked::after {
+          content: '';
+          position: absolute;
+          left: 5px;
+          top: 2px;
+          width: 6px;
+          height: 10px;
+          border: solid white;
+          border-width: 0 2px 2px 0;
+          transform: rotate(45deg);
+      }
+
+      .file-input-label {
+          position: relative;
+          overflow: hidden;
+          display: inline-block;
+      }
+
+      .file-input {
+          position: absolute;
+          left: 0;
+          top: 0;
+          opacity: 0;
+          width: 100%;
+          height: 100%;
+          cursor: pointer;
+      }
+	</style>
+	<!-- Content -->
+	<main th:fragment="main" class="container mx-auto pt-10 pb-10 font-['Montserrat']">
+		<form action="/admin/albums/create" method="post" enctype="multipart/form-data">
+			<div class="bg-white rounded-lg shadow-sm overflow-hidden mb-8">
+				<div class="p-6 border-b border-gray-200">
+					<h2 class="text-lg font-medium text-gray-900">Informações do Álbum</h2>
+					<p class="mt-1 text-sm text-gray-500">
+						Forneça as informações necessárias para criar um novo álbum de fotos.
+					</p>
+				</div>
+				<!-- Cover photo upload section -->
+				<div class="p-6 border-b border-gray-200">
+					<label class="block text-sm font-medium text-gray-700 mb-2">Foto da capa <span class="text-red-500">*</span> </label>
+					<div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg">
+						<div class="space-y-1 text-center" id="upload-container">
+							<div class="w-20 h-20 mx-auto flex items-center justify-center text-gray-400">
+								<i class="ri-image-add-line ri-3x"></i>
+							</div>
+							<div class="flex text-sm justify-center text-gray-600">
+								<label for="file-upload"
+											 class="file-input-label relative cursor-pointer bg-white rounded-md font-medium text-primary hover:text-primary focus-within:outline-none">
+									<span>Upload </span>
+									<input id="file-upload" name="file-upload" type="file" class="file-input" accept="image/*"/>
+								</label>
+							</div>
+							<p class="text-xs text-gray-500">PNG, JPG, GIF maximo de 1MB</p>
+						</div>
+						<div id="preview-container" class="hidden relative">
+							<img id="preview-image" class="max-h-60 rounded-lg" src="" alt="Preview"/>
+							<button type="button" id="remove-image" class="absolute top-2 right-2 bg-white rounded-full p-1 shadow-sm hover:bg-gray-100">
+								<div class="w-5 h-5 flex items-center justify-center text-gray-500">
+									<i class="ri-close-line"></i>
+								</div>
+							</button>
+						</div>
+					</div>
+				</div>
+				<!-- Album details form -->
+				<div class="p-6">
+					<div class="space-y-6">
+						<div>
+							<label for="album-title" class="block text-sm font-medium text-gray-700">
+								Título <span class="text-red-500">*</span>
+							</label>
+							<div class="mt-1">
+								<input
+										type="text"
+										id="album-title"
+										name="title"
+										placeholder="Baile Zoukme In 2025"
+										class="block w-full border-gray-300 border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm"
+										required/>
+								<p class="mt-1 text-xs text-gray-500">
+									A URL será o titulo do evento separado por hifens ao inves de espacos. Por exemplo:
+									zoukme.in/events/corporate-retreat-2025/albums
+								</p>
+							</div>
+							<div id="title-error" class="hidden mt-1 text-sm text-red-600"></div>
+						</div>
+						<div>
+							<label for="album-description" class="block text-sm font-medium text-gray-700">
+								Descrição
+							</label>
+							<div class="mt-1">
+                <textarea
+										id="album-description"
+										name="description"
+										rows="4"
+										placeholder="Descrição do álbum"
+										class="block w-full border-gray-300 border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm"></textarea>
+							</div>
+						</div>
+						<div>
+							<label for="album-location" class="block text-sm font-medium text-gray-700">
+								Cidade/Estado <span class="text-red-500">*</span>
+							</label>
+							<div class="mt-1">
+								<input
+										type="text"
+										id="album-location"
+										name="city"
+										placeholder="Joinville/SC"
+										class="block w-full border-gray-300 border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm"
+								/>
+							</div>
+						</div>
+						<div>
+							<label for="date" class="block text-sm font-medium text-gray-700">
+								Data do Álbum <span class="text-red-500">*</span>
+							</label>
+							<div class="mt-1 relative rounded-md shadow-sm">
+								<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+									<div class="w-5 h-5 flex items-center justify-center text-gray-400">
+										<i class="ri-calendar-line"></i>
+									</div>
+								</div>
+								<input type="date" id="date" name="eventDate" value="2025-06-18"
+											 class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm"/>
+							</div>
+						</div>
+					</div>
+					<!-- Action buttons -->
+					<div class="mt-8 flex items-center justify-end space-x-4">
+						<a href="/admin/home" data-readdy="true"
+							 class="text-gray-700 px-4 py-2 rounded-button text-sm font-medium border border-gray-300 hover:bg-gray-50 whitespace-nowrap">
+							Cancelar
+						</a>
+						<button type="submit"
+										class="bg-primary hover:opacity-90 transition text-white px-6 py-2 rounded-button text-sm font-medium whitespace-nowrap">Criar
+						</button>
+					</div>
+				</div>
+			</div>
+		</form>
+	</main>
+	<!--		<div id="album-form" th:fragment="albums-form" class="album-form bg-white p-6 rounded-lg shadow-md space-y-4">-->
+	<!--			<div>-->
+	<!--				<label class="block text-gray-700">Título</label>-->
+	<!--				<input name="title" class="w-full mt-1 p-2 border border-gray-300 rounded-md" placeholder="Ex.: Elite Samba Congress 2024">-->
+	<!--			</div>-->
+	<!--			<div>-->
+	<!--				<label class="block text-gray-700">Cidade/Estado</label>-->
+	<!--				<input name="city" class="w-full mt-1 p-2 border border-gray-300 rounded-md"-->
+	<!--							 placeholder="Ex.: Balneário Camboriú/SC">-->
+	<!--			</div>-->
+	<!--			<div>-->
+	<!--				<label class="block text-gray-700">URL do álbum</label>-->
+	<!--				<input name="url" type="url" class="w-full mt-1 p-2 border border-gray-300 rounded-md" placeholder="Ex.: https://www.zoukme.in/album/esc2024">-->
+	<!--			</div>-->
+	<!--			<div>-->
+	<!--				<label class="block text-gray-700">Imagem da capa</label>-->
+	<!--				<input name="thumbUrl" type="url" class="w-full mt-1 p-2 border border-gray-300 rounded-md"-->
+	<!--							 placeholder="https://www.zoukme.in/album/esc2024/image.jpg">-->
+	<!--			</div>-->
+	<!--			<div>-->
+	<!--				<label class="block text-gray-700">Data do evento</label>-->
+	<!--				<input name="eventDate" type="date" class="w-full mt-1 p-2 border border-gray-300 rounded-md">-->
+	<!--			</div>-->
+	<!--			<div class="text-center">-->
+	<!--				<button hx-get="/admin/albums" hx-target="closest .main" type="submit"-->
+	<!--								class="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700">Cancelar-->
+	<!--				</button>-->
+	<!--				<button hx-post="/admin/albums/create" hx-include="#album-form" hx-target="closest .main" type="submit"-->
+	<!--								class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">Criar-->
+	<!--				</button>-->
+	<!--			</div>-->
+	<!--		</div>-->
+	<script id="fileUploadHandler">
+      document.addEventListener("DOMContentLoaded", function () {
+          const fileUpload = document.getElementById("file-upload");
+          const uploadContainer = document.getElementById("upload-container");
+          const previewContainer = document.getElementById("preview-container");
+          const previewImage = document.getElementById("preview-image");
+          const removeImageBtn = document.getElementById("remove-image");
+          fileUpload.addEventListener("change", function (e) {
+              if (e.target.files.length > 0) {
+                  const file = e.target.files[0];
+                  const reader = new FileReader();
+                  reader.onload = function (e) {
+                      previewImage.src = e.target.result;
+                      uploadContainer.classList.add("hidden");
+                      previewContainer.classList.remove("hidden");
+                  };
+                  reader.readAsDataURL(file);
+              }
+          });
+          removeImageBtn.addEventListener("click", function () {
+              fileUpload.value = "";
+              previewContainer.classList.add("hidden");
+              uploadContainer.classList.remove("hidden");
+          });
+      });
+	</script>
+	<!-- footer -->
+	<div th:insert="~{fragments/footer :: footer}"></div>
+	</body>
+	</html>
+</DOCTYPE>

@@ -29,27 +29,31 @@ public class BucketService {
     this.s3Client = s3Client;
   }
 
+  public BucketImage upload(String eventTitle, MultipartFile file) {
+    try {
+      var tempFile = File.createTempFile("temp", file.getOriginalFilename());
+      var originalFilename = file.getOriginalFilename();
+      file.transferTo(tempFile);
+      var eventFolderName = EventUtils.getEventFolderName(eventTitle);
+      var path = eventFolderName + File.separator + originalFilename;
+      s3Client.putObject(
+          builder -> builder.bucket(EventUtils.BUCKET_NAME).key(path),
+          RequestBody.fromFile(Paths.get(tempFile.getAbsolutePath())));
+
+      return new BucketImage(
+          EventUtils.getFormatEventName(eventTitle),
+          awsEndpoint + EventUtils.BUCKET_NAME + File.separator + path);
+    } catch (IOException e) {
+      log.error("Error uploading file to S3", e);
+      throw new RuntimeException(e);
+    }
+  }
+
   public List<BucketImage> upload(String eventTitle, List<MultipartFile> files) {
     var imagesS3Paths = new ArrayList<BucketImage>();
     for (MultipartFile file : files) {
-      try {
-        var tempFile = File.createTempFile("temp", file.getOriginalFilename());
-        var originalFilename = file.getOriginalFilename();
-        file.transferTo(tempFile);
-        var eventFolderName = EventUtils.getEventFolderName(eventTitle);
-        var path = eventFolderName + File.separator + originalFilename;
-        s3Client.putObject(
-            builder -> builder.bucket(EventUtils.BUCKET_NAME).key(path),
-            RequestBody.fromFile(Paths.get(tempFile.getAbsolutePath())));
-
-        imagesS3Paths.add(
-            new BucketImage(
-                EventUtils.getFormatEventName(eventTitle),
-                awsEndpoint + EventUtils.BUCKET_NAME + File.separator + path));
-      } catch (IOException e) {
-        log.error("Error uploading file to S3", e);
-        throw new RuntimeException(e);
-      }
+      var image = upload(eventTitle, file);
+      imagesS3Paths.add(image);
     }
     return imagesS3Paths;
   }
@@ -76,7 +80,9 @@ public class BucketService {
     return s3Client
         .listObjectsV2(
             b ->
-                b.bucket(EventUtils.BUCKET_NAME).prefix(folderPath + File.separator).delimiter(File.separator))
+                b.bucket(EventUtils.BUCKET_NAME)
+                    .prefix(folderPath + File.separator)
+                    .delimiter(File.separator))
         .commonPrefixes()
         .stream()
         .map(CommonPrefix::prefix)
@@ -86,7 +92,8 @@ public class BucketService {
   /** Get the list of files from a given path. For example, "events/zoukme-in/2021-09-25" */
   public List<String> getFilesNamesBy(String folderPath) {
     return s3Client
-        .listObjectsV2(b -> b.bucket(EventUtils.BUCKET_NAME).prefix(folderPath).delimiter(File.separator))
+        .listObjectsV2(
+            b -> b.bucket(EventUtils.BUCKET_NAME).prefix(folderPath).delimiter(File.separator))
         .contents()
         .stream()
         .map(S3Object::key)

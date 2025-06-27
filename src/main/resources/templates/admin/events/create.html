@@ -1,118 +1,429 @@
-<!DOCTYPE html>
-<html lang="en">
-<head th:insert="~{fragments/header}"></head>
+<DOCTYPE html>
+	<html xmlns:th="https://www.thymeleaf.org" lang="pt-br">
 
-<body class="bg-gray-100">
-<!-- Content -->
-<main class="main content container mx-auto">
-	<h1 class="text-3xl font-bold mb-6">Evento</h1>
-	<div id="album-form" th:fragment="albums-form" class="album-form bg-white p-6 rounded-lg shadow-md space-y-4">
-		<div>
-			<label class="block text-gray-700">Título</label>
-			<input name="title" class="w-full mt-1 p-2 border border-gray-300 rounded-md" placeholder="Ex.: Elite Samba Congress 2024" required>
-		</div>
-		<div>
-			<label class="block text-gray-700">Descrição</label>
-			<textarea name="description" class="w-full mt-1 p-2 border border-gray-300 rounded-md"
-								placeholder="Ex.: Um dos maiores eventos de samba de Santa Catarina" rows="4" cols="50" required></textarea>
-		</div>
-		<div>
-			<label class="text-gray-700">Detalhes</label>
-			<input id="details" type="hidden" name="details">
-			<div id="editor" style="height: 17% !important"></div>
-		</div>
-		<div>
-			<label class="block text-gray-700">Cidade/Estado</label>
-			<input name="location" class="w-full mt-1 p-2 border border-gray-300 rounded-md"
-						 placeholder="Ex.: Balneário Camboriú/SC" required>
-		</div>
-		<div>
-			<label class="block text-gray-700">Data do evento</label>
-			<input name="date" type="date" class="w-full mt-1 p-2 border border-gray-300 rounded-md" required>
-		</div>
-		<div>
-			<label class="block text-gray-700">Instagram</label>
-			<input name="instagram" type="text" class="w-full mt-1 p-2 border border-gray-300 rounded-md" placeholder="Ex.: @elitesamba_congress_bc"
-						 required>
-		</div>
-		<div>
-			<label class="block text-gray-700">WhatsApp</label>
-			<input name="phoneNumber" type="tel" class="w-full mt-1 p-2 border border-gray-300 rounded-md" placeholder="Ex.: (47) 9-9999-9999" required>
-		</div>
-		<form id="uploadForm" class="space-y-4" hx-encoding="multipart/form-data" hx-post="/admin/events/upload" hx-target=".images-preview"
-					hx-include="#album-form">
-			<div id="file-groups">
-				<div class="file-input-group">
-					<input type="file" name="files[]"
-								 class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+	<head th:insert="~{fragments/header}"></head>
+	<style>
+      :where([class^="ri-"])::before {
+          content: "\f3c2";
+      }
+
+      body {
+          font-family: 'Inter', sans-serif;
+      }
+
+      .custom-select {
+          appearance: none;
+          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+          background-repeat: no-repeat;
+          background-position: right 0.5rem center;
+          background-size: 1.5em 1.5em;
+      }
+
+      .custom-file-input::-webkit-file-upload-button {
+          visibility: hidden;
+          display: none;
+      }
+
+      .custom-file-input::before {
+          content: 'Select files';
+          display: inline-block;
+          background: #f9fafb;
+          border: 1px solid #d1d5db;
+          border-radius: 8px;
+          padding: 8px 12px;
+          outline: none;
+          white-space: nowrap;
+          cursor: pointer;
+          font-size: 14px;
+          font-weight: 500;
+          color: #374151;
+      }
+
+      .custom-file-input:hover::before {
+          background-color: #f3f4f6;
+      }
+
+      .custom-file-input:active::before {
+          background-color: #e5e7eb;
+      }
+
+      .image-preview {
+          position: relative;
+          width: 100px;
+          height: 100px;
+          border-radius: 8px;
+          overflow: hidden;
+      }
+
+      .image-preview .remove-btn {
+          position: absolute;
+          top: 4px;
+          right: 4px;
+          background-color: rgba(255, 255, 255, 0.8);
+          border-radius: 50%;
+          width: 20px;
+          height: 20px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+      }
+
+      .custom-switch {
+          position: relative;
+          display: inline-block;
+          width: 44px;
+          height: 24px;
+      }
+
+      .custom-switch input {
+          opacity: 0;
+          width: 0;
+          height: 0;
+      }
+	</style>
+	<!-- Header -->
+	<div th:insert="~{fragments/top :: top}"></div>
+	<body class="bg-gray-50 min-h-screen flex">
+	<main class="flex-1 overflow-x-hidden pb-16 md:pb-0">
+		<!-- Form content -->
+		<div class="px-4 py-6 md:px-6 lg:px-8 max-w-4xl mx-auto">
+			<form id="newEventForm" action="/admin/events/create" method="post" enctype="multipart/form-data">
+				<!-- Basic Information Section -->
+				<div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+					<h2 class="text-lg font-medium text-gray-900 mb-4">
+						Informações Básicas do Evento
+					</h2>
+					<div class="space-y-4">
+						<div>
+							<label for="title" class="block text-sm font-medium text-gray-700 mb-1">Título</label>
+							<input
+									type="text"
+									id="title"
+									name="title"
+									class="w-full px-4 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+									placeholder="Ex.: Zoukme In 2025"/>
+						</div>
+						<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+							<div>
+								<label for="date" class="block text-sm font-medium text-gray-700 mb-1">Data</label>
+								<input
+										type="date"
+										id="date"
+										name="date"
+										class="w-full px-4 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"/>
+							</div>
+							<div>
+								<label for="time" class="block text-sm font-medium text-gray-700 mb-1">Hora</label>
+								<input
+										type="time"
+										id="time"
+										name="time"
+										class="w-full px-4 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"/>
+							</div>
+						</div>
+						<div>
+							<label for="location" class="block text-sm font-medium text-gray-700 mb-1">Localização</label>
+							<input
+									type="text"
+									id="location"
+									name="location"
+									class="w-full px-4 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+									placeholder="Enter event location"
+							/>
+						</div>
+						<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+							<div>
+								<label for="instagram" class="block text-sm font-medium text-gray-700 mb-1">Instagram</label>
+								<div class="relative">
+									<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+										<i class="ri-instagram-line text-gray-400"></i>
+									</div>
+									<input
+											type="text"
+											id="instagram"
+											name="instagram"
+											class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+											placeholder="zoukme.in"/>
+								</div>
+							</div>
+							<div>
+								<label for="whatsapp" class="block text-sm font-medium text-gray-700 mb-1">WhatsApp do responsável</label>
+								<div class="relative">
+									<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+										<i class="ri-whatsapp-line text-gray-400"></i>
+									</div>
+									<input
+											type="tel"
+											id="whatsapp"
+											name="whatsapp"
+											class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+											placeholder="(99) 9-9999-9999"/>
+								</div>
+							</div>
+						</div>
+						<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+							<div>
+								<label for="type" class="block text-sm font-medium text-gray-700 mb-1">Tipo do evento</label>
+								<div class="relative">
+									<select id="type" name="eventType"
+													class="custom-select w-full px-4 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent pr-10">
+										<option value="">Selecione</option>
+										<option th:value="PARTY">Baile</option>
+										<option th:value="CONGRESS">Congresso</option>
+										<option th:value="WORKSHOP">Workshop</option>
+										<option th:value="OTHER">Outro</option>
+									</select>
+								</div>
+							</div>
+							<div>
+								<label for="status" class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+								<div class="relative">
+									<select id="status" name="eventStatus"
+													class="custom-select w-full px-4 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent pr-10">
+										<option th:value="DRAFT">Rascunho</option>
+										<option th:value="CONFIRMED">Confirmado</option>
+										<option th:value="CANCELLED">Cancelado</option>
+									</select>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
-			</div>
-			<button type="button" id="addFileInput" class="mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">Adicionar outra imagem
-			</button>
-			<button type="submit" class="mt-4 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600">Upload</button>
-			<div>
-				<progress id="progress" value="0" max="100" class="invisible"></progress>
-			</div>
-			<div class="text-center">
-				<button hx-get="/admin" hx-target="closest .main" type="button"
-								class="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700">Cancelar
-				</button>
-				<button hx-post="/admin/events/create" hx-include="#album-form" hx-target=".main" type="submit"
-								class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700" onSubmit="setHiddenFieldValue()">Criar
-				</button>
-			</div>
-			<div class="images-preview"></div>
-		</form>
-		<script>
-        htmx.on('#uploadForm', 'htmx:xhr:progress', (evt) => {
-            const progressElement = htmx.find('#progress')
-            const progress = evt.detail.loaded / evt.detail.total * 100;
-            progressElement.setAttribute('class', 'visible')
-            progressElement.setAttribute('value', progress)
-            if (progress > 100) {
-                progressElement.setAttribute('class', 'invisible')
-            }
-        });
-        htmx.on('#uploadForm', 'htmx:afterRequest', (evt) => {
-            const fileInputs = document.getElementsByClassName('file-input-group');
-            while (fileInputs.length > 0) {
-                fileInputs[0].parentNode.removeChild(fileInputs[0]);
-            }
-            createInputElement();
-        });
-		</script>
-	</div>
-
-	<!-- Initialize Quill editor -->
-	<script>
-      const quill = new Quill("#editor", {
-          theme: "snow",
-          placeholder: "Ex.: Um dos maiores eventos de samba de Santa Catarina"
-      });
-      quill.root.addEventListener('focusout', () => {
-          setHiddenFieldValue();
+				<!-- Event Packages Section -->
+				<div th:insert="~{admin/events/packages}"></div>
+				<!-- Additional Details Section -->
+				<div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+					<h2 class="text-lg font-medium text-gray-900 mb-4">Detalhes</h2>
+					<div class="space-y-4">
+						<div>
+							<label for="description" class="block text-sm font-medium text-gray-700 mb-1">Descrição</label>
+							<textarea
+									id="description"
+									name="description"
+									rows="4"
+									class="w-full px-4 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+									placeholder="Descreva brevemente sobre o evento"></textarea>
+						</div>
+						<div class="mb-4">
+							<label for="editor" class="block text-sm font-medium text-gray-700 mb-1">Mais detalhes</label>
+							<input type="hidden" id="details" name="details">
+							<div id="editor" style="height: 17% !important" class="bg-white border border-gray-300 rounded-md"></div>
+						</div>
+						<div>
+							<label class="block text-sm font-medium text-gray-700 mb-1">Capa do evento</label>
+							<div class="flex items-center">
+								<label class="block">
+									<input type="file" accept="image/*"
+												 name="cover"
+												 class="custom-file-input sr-only"
+												 id="referenceImages"/>
+									<span class="text-sm text-gray-700 cursor-pointer">Upload</span>
+								</label>
+								<p class="text-xs text-gray-500 ml-4">Adicione imagem de capa</p>
+							</div>
+							<div id="imagePreviewContainer" class="flex flex-wrap gap-3 mt-3">
+								<!-- Image previews will be added here -->
+							</div>
+						</div>
+						<!-- Uploaded Images Section -->
+						<div class="mt-6">
+							<label class="block text-sm font-medium text-gray-700 mb-3">Evento anterior</label>
+							<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+								<div
+										class="border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center p-4 hover:border-primary transition-colors cursor-pointer">
+									<input type="file" name="pastEvents" id="uploadEventImage" multiple accept="image/*" class="hidden"/>
+									<label for="uploadEventImage" class="w-full h-full flex flex-col items-center justify-center cursor-pointer">
+										<i class="ri-upload-cloud-line text-2xl text-gray-400 mb-2"></i>
+										<span class="text-sm text-gray-500">Upload</span>
+									</label>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- Action Buttons -->
+				<div class="bg-white border-t border-gray-200 p-4 flex justify-end space-x-4 z-10">
+					<a href="/admin/home"
+						 class="px-6 py-2 border border-gray-300 rounded-button text-sm font-medium text-gray-700 hover:bg-gray-50 whitespace-nowrap">
+						Cancelar
+					</a>
+					<button type="submit"
+									class="px-6 py-2 bg-primary text-white rounded-button text-sm font-medium hover:opacity-90 transition whitespace-nowrap">Criar
+					</button>
+				</div>
+			</form>
+		</div>
+	</main>
+	<script id="formHandlers">
+      document.addEventListener("DOMContentLoaded", function () {
+          // Handle event image upload
+          const uploadEventImage = document.getElementById("uploadEventImage");
+          uploadEventImage.addEventListener("change", function (e) {
+              for (const file of this.files) {
+                  if (file.type.startsWith("image/")) {
+                      const reader = new FileReader();
+                      reader.onload = function (e) {
+                          const newImageContainer = document.createElement("div");
+                          newImageContainer.className =
+                              "relative aspect-square rounded-lg overflow-hidden bg-gray-100 group";
+                          newImageContainer.innerHTML = `
+      <img src="${e.target.result}" class="w-full h-full object-cover">
+      <div class="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+      <button class="p-2 bg-white rounded-full text-gray-700 hover:text-primary">
+      <i class="ri-download-line"></i>
+      </button>
+      <button class="p-2 bg-white rounded-full text-gray-700 hover:text-primary">
+      <i class="ri-delete-bin-line"></i>
+      </button>
+      </div>
+      `;
+                          const uploadButton = document.querySelector(".border-dashed").parentElement;
+                          uploadButton.insertBefore(newImageContainer, uploadButton.lastElementChild,);
+                      };
+                      reader.readAsDataURL(file);
+                  }
+              }
+          });
+          // Handle image uploads
+          const imageInput = document.getElementById("referenceImages");
+          const previewContainer = document.getElementById("imagePreviewContainer");
+          imageInput.addEventListener("change", function () {
+              for (const file of this.files) {
+                  if (file.type.startsWith("image/")) {
+                      const reader = new FileReader();
+                      reader.onload = function (e) {
+                          const previewDiv = document.createElement("div");
+                          previewDiv.className = "image-preview";
+                          const img = document.createElement("img");
+                          img.src = e.target.result;
+                          img.className = "w-full h-full object-cover";
+                          const removeBtn = document.createElement("div");
+                          removeBtn.className = "remove-btn";
+                          removeBtn.innerHTML = '<i class="ri-close-line"></i>';
+                          removeBtn.addEventListener("click", function () {
+                              previewDiv.remove();
+                          });
+                          previewDiv.appendChild(img);
+                          previewDiv.appendChild(removeBtn);
+                          previewContainer.appendChild(previewDiv);
+                      };
+                      reader.readAsDataURL(file);
+                  }
+              }
+          });
+          // Handle uploaded images actions
+          document.querySelectorAll(".group").forEach((group) => {
+              const downloadBtn = group.querySelector(".ri-download-line")?.parentElement;
+              const deleteBtn = group.querySelector(".ri-delete-bin-line")?.parentElement;
+              const img = group.querySelector("img");
+              if (!downloadBtn || !deleteBtn || !img) return;
+              downloadBtn.addEventListener("click", function (e) {
+                  e.preventDefault();
+                  const link = document.createElement("a");
+                  link.href = img.src;
+                  link.download = "event-image.jpg";
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
+              });
+              deleteBtn.addEventListener("click", function (e) {
+                  e.preventDefault();
+                  group.remove();
+              });
+          });
+          // Format phone number input
+          const whatsappInput = document.getElementById("whatsapp");
+          whatsappInput.addEventListener("input", function (e) {
+              let value = e.target.value.replace(/\D/g, "");
+              if (value.length > 0) {
+                  if (value.length <= 3) {
+                      value = "+" + value;
+                  } else if (value.length <= 6) {
+                      value = "+" + value.slice(0, 3) + " (" + value.slice(3);
+                  } else if (value.length <= 9) {
+                      value =
+                          "+" +
+                          value.slice(0, 3) +
+                          " (" +
+                          value.slice(3, 6) +
+                          ") " +
+                          value.slice(6);
+                  } else {
+                      value =
+                          "+" +
+                          value.slice(0, 3) +
+                          " (" +
+                          value.slice(3, 6) +
+                          ") " +
+                          value.slice(6, 9) +
+                          "-" +
+                          value.slice(9, 13);
+                  }
+                  e.target.value = value;
+              }
+          });
+          // Format Instagram handle input
+          const instagramInput = document.getElementById("instagram");
+          instagramInput.addEventListener("input", function (e) {
+              let value = e.target.value.replace(/\s/g, "");
+              if (value && !value.startsWith("@")) {
+                  value = "@" + value;
+              }
+              e.target.value = value;
+          });
+          // Initialize Quill editor
+          const quill = new Quill("#editor", {
+              theme: "snow",
+              placeholder: "Adicione mais detalhes sobre o evento...",
+              modules: {
+                  toolbar: [
+                      ["bold", "italic", "underline"],
+                      [{list: "ordered"}, {list: "bullet"}],
+                      ["link"],
+                      ["clean"],
+                  ],
+              },
+          });
+          quill.root.addEventListener('focusout', () => {
+              var quillContent = quill.getContents();
+              // Convert the Delta object to a JSON string-->
+              document.getElementById('details').value = JSON.stringify(quillContent);
+          });
+          // add a before submit to get packages values and add into the request in packages attributes
+          const newEventForm = document.getElementById("newEventForm");
+          newEventForm.addEventListener("submit", function (e) {
+              e.preventDefault();
+              const packages = [];
+              document.querySelectorAll("#packageTableBody tr").forEach((item) => {
+                  // get the title, description and price from the td row
+									const title = item.querySelector("td:nth-child(1)").textContent.trim();
+                  const description = item.querySelector("td:nth-child(2)").textContent.trim();
+                  const price = item.querySelector("td:nth-child(3)").textContent.trim();
+                  packages.push({title, description, price});
+              });
+              const formData = new FormData(this);
+              formData.append("packages", JSON.stringify(packages));
+              fetch(this.action, {
+                  method: "POST",
+                  body: formData,
+              })
+                  .then((response) => response.json())
+                  .then((data) => {
+                      if (data.success) {
+                          window.location.href = "/admin/home";
+                      } else {
+                          alert(data.message || "Erro ao criar evento.");
+                      }
+                  })
+                  .catch((error) => {
+                      console.error("Error:", error);
+                  });
+          });
       });
 	</script>
-</main>
-<script>
-    document.getElementById('addFileInput').addEventListener('click', () => {
-        createInputElement();
-    });
 
-    function createInputElement() {
-        const fileInputGroup = document.createElement('div');
-        fileInputGroup.className = 'file-input-group';
-        fileInputGroup.innerHTML = '<input type="file" name="files[]" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">';
-        document.getElementById('uploadForm').insertBefore(fileInputGroup, document.getElementById('addFileInput'));
-    }
-
-    function setHiddenFieldValue() {
-        var quillContent = quill.getContents();
-        // Convert the Delta object to a JSON string
-        var details = JSON.stringify(quillContent);
-        document.getElementById('details').value = details;
-    }
-</script>
-
-</body>
-</html>
+	<div th:insert="~{fragments/footer :: footer}"></div>
+	</body>
+	</html>
+</DOCTYPE>

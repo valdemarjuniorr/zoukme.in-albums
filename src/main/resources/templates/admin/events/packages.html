@@ -1,0 +1,32 @@
+<div id="packagesTable" th:fragment="packages" class="bg-white rounded-lg shadow-sm p-6 mb-6">
+	<div class="flex items-center justify-between mb-4">
+		<h2 class="text-lg font-medium text-gray-900">Pacotes</h2>
+		<button hx-get="/admin/events/packages" hx-target="#package-container" type="button" id="addPackageBtn"
+						class="flex items-center text-sm text-primary hover:opacity-80">Adicionar pacote
+		</button>
+	</div>
+	<div class="overflow-x-auto mb-6">
+		<table class="w-full text-sm">
+			<thead>
+			<tr class="bg-gray-50 border-b border-gray-200 text-gray-600">
+				<th class="px-4 py-3 text-left font-medium">Título</th>
+				<th class="px-4 py-3 text-left font-medium">Descrição</th>
+				<th class="pr-4 py-3 text-right font-medium">Preço</th>
+				<th class="px-4 py-3 text-center font-medium">Ações</th>
+			</tr>
+			</thead>
+			<tbody id="packageTableBody">
+			</tbody>
+		</table>
+	</div>
+	<div id="package-container"></div>
+	<script type="text/javascript">
+      function deletePackageRow(event) {
+          event.preventDefault();
+          const row = event.target.closest('tr');
+          if (row) {
+              row.remove();
+          }
+      }
+	</script>
+</div>
