@@ -1,7 +1,8 @@
-package in.zoukme.zouk_album.services;
+package in.zoukme.zouk_album.services.aws;
 
 import in.zoukme.zouk_album.domains.Event;
 import in.zoukme.zouk_album.domains.EventPhotos;
+import in.zoukme.zouk_album.domains.payments.Package;
 import in.zoukme.zouk_album.domains.Page;
 import in.zoukme.zouk_album.domains.Photo;
 import in.zoukme.zouk_album.domains.SocialMedia;
@@ -16,8 +17,8 @@ import in.zoukme.zouk_album.repositories.events.EventDetails;
 import in.zoukme.zouk_album.repositories.events.EventPhotosRepository;
 import in.zoukme.zouk_album.repositories.events.EventRepository;
 import in.zoukme.zouk_album.repositories.events.SubEventRepository;
-import in.zoukme.zouk_album.services.aws.BucketImage;
-import in.zoukme.zouk_album.services.aws.BucketService;
+import in.zoukme.zouk_album.services.PackageService;
+
 import java.time.LocalDate;
 import java.util.List;
 import org.springframework.data.jdbc.core.mapping.AggregateReference;
@@ -35,6 +36,7 @@ public class EventService {
   private final BucketService bucketService;
   private final SubEventRepository subEventRepository;
   private final EventPhotosRepository eventPhotosRepository;
+  private final PackageService packageService;
 
   public EventService(
       EventRepository repository,
@@ -42,13 +44,15 @@ public class EventService {
       PhotoRepository photoRepository,
       BucketService bucketService,
       SubEventRepository subEventRepository,
-      EventPhotosRepository eventPhotosRepository) {
+      EventPhotosRepository eventPhotosRepository,
+      PackageService packageService) {
     this.repository = repository;
     this.socialMediaRepository = socialMediaRepository;
     this.photoRepository = photoRepository;
     this.bucketService = bucketService;
     this.subEventRepository = subEventRepository;
     this.eventPhotosRepository = eventPhotosRepository;
+    this.packageService = packageService;
   }
 
   public EventDetails findBy(Long id) {
@@ -86,6 +90,7 @@ public class EventService {
         new SocialMedia(eventSaved, request.instagram(), request.whatsapp()));
     var photos = convertIntoPhotos(eventSaved, pastEventsUrls);
     this.photoRepository.saveAll(photos);
+    this.packageService.save(request.toPackages(eventSaved));
   }
 
   private List<Photo> convertIntoPhotos(
@@ -161,6 +166,10 @@ public class EventService {
                                     bucketService.getBucketUri() + fileName)));
                   });
             });
+  }
+
+  public List<Package> getPackagesBy(Long eventId) {
+    return this.packageService.findBy(eventId);
   }
 
   private String getFolderNameFrom(String folderPath, String prefix) {

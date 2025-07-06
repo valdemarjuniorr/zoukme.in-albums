@@ -6,8 +6,9 @@ import in.zoukme.zouk_album.domains.Page;
 import in.zoukme.zouk_album.repositories.events.CreateEventRequest;
 import in.zoukme.zouk_album.repositories.events.PackageRequest;
 import in.zoukme.zouk_album.services.AlbumService;
-import in.zoukme.zouk_album.services.EventService;
 import in.zoukme.zouk_album.services.aws.BucketService;
+import in.zoukme.zouk_album.services.aws.EventService;
+import in.zoukme.zouk_album.services.payments.PaymentService;
 import java.time.LocalDate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,22 +28,25 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/admin")
 public class AdminController {
 
-  private Logger log = LoggerFactory.getLogger(AdminController.class);
+  private static final Logger log = LoggerFactory.getLogger(AdminController.class);
 
   private final AlbumService albumService;
   private final EventService eventService;
   private final BucketService bucketService;
   private final DashboardService dashboardService;
+  private final PaymentService paymentService;
 
   public AdminController(
       AlbumService albumService,
       EventService eventService,
       BucketService bucketService,
-      DashboardService dashboardService) {
+      DashboardService dashboardService,
+      PaymentService paymentService) {
     this.albumService = albumService;
     this.eventService = eventService;
     this.bucketService = bucketService;
     this.dashboardService = dashboardService;
+    this.paymentService = paymentService;
   }
 
   @GetMapping
@@ -54,7 +58,7 @@ public class AdminController {
 
   @GetMapping("/home")
   String homeAdmin(Model model) {
-    var pageObj = new Page(1,6);
+    var pageObj = new Page(1, 6);
     var albums = this.albumService.findAll(pageObj);
     model.addAttribute("albums", albums);
     model.addAttribute("pagination", pageObj.generatePagination(albums.getTotalPages()));
@@ -188,5 +192,14 @@ public class AdminController {
     model.addAttribute("total", dashboardService.getTotalEvents());
 
     return "admin/dashboard/total_number";
+  }
+
+  @GetMapping("/payments/list")
+  String getPaymentsPanel(Model model) {
+    model.addAttribute("payments", paymentService.findAll());
+    model.addAttribute("totalPending", dashboardService.getTotalPending());
+    model.addAttribute("totalCompleted", dashboardService.getTotalCompleted());
+    model.addAttribute("total", dashboardService.getTotalAmount());
+    return "admin/dashboard/payments/list";
   }
 }

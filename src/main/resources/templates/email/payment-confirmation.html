@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Confirmação de Pagamento</title>
+	<style>
+      @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+
+      * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+      }
+
+      .fallback-font {
+          font-family: Arial, sans-serif !important;
+      }
+
+      @media screen and (max-width: 600px) {
+          .mobile-wrapper {
+              width: 100% !important;
+              padding: 10px !important;
+          }
+
+          .mobile-button {
+              width: 100% !important;
+              display: block !important;
+          }
+      }
+	</style>
+</head>
+<body
+		style="margin: 0; padding: 0; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; font-family: Arial, sans-serif; color: #666666; line-height: 1.5; background-color: #f5f5f5;">
+<div
+		style="display: none; font-size: 1px; line-height: 1px; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
+	Confirmação de Pagamento - [[${details.eventTitle}]]
+</div>
+<center style="width: 100%; background-color: #f5f5f5; padding: 20px 0;">
+	<table role="presentation" class="mobile-wrapper"
+				 style="margin: 0 auto; background-color: #ffffff; border-radius: 16px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); border-spacing: 0; border-collapse: collapse; width: 600px;">
+		<tr>
+			<td style="padding: 0;">
+				<!-- Header with Logo -->
+				<table role="presentation" style="width: 100%; border-spacing: 0; border-collapse: collapse;">
+					<tr>
+						<td style="text-align: center; padding: 30px; background-color: #ffffff; border: none;">
+							<h1 style="font-family: 'Pacifico', Arial, sans-serif; font-size: 36px; color: #e94057; margin: 0;">Zoukme In</h1>
+						</td>
+					</tr>
+				</table>
+				<!-- Event Image -->
+				<table role="presentation" style="width: 100%; border-spacing: 0; border-collapse: collapse;">
+					<tr>
+						<td>
+							<img class="event-image"
+									 th:src="${details.eventCoverUrl}"
+									 th:title="${details.eventTitle}"
+									 style="display: block; width: 100%; max-width: 600px; height: auto; border: 0; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic;">
+						</td>
+					</tr>
+				</table>
+				<!-- Content Section -->
+				<table role="presentation" style="width: 100%; border-spacing: 0; border-collapse: collapse;">
+					<tr>
+						<td style="padding: 40px 50px;">
+							<h1 style="font-size: 24px; margin-bottom: 30px;">Pagamento Confirmado!</h1>
+							<p style="margin-bottom: 25px;">Olá [[${details.fullName}]],</p>
+							<p style="margin-bottom: 35px;">Temos o prazer de confirmar que seu pagamento de <span class="accent-text" style="font-weight: bold;">R$ [[${#numbers.formatDecimal(details.amount, 1, 2, 'COMMA')}]]</span>
+								foi processado com sucesso. Sua reserva para o <span class="secondary-text" style="font-weight: bold;">[[${details.eventTitle}]]</span>
+								está confirmada!</p>
+							<table role="presentation"
+										 style="width: 100%; border: 1px solid #e0e0e0; border-radius: 12px; background-color: #fafafa; margin: 30px 0; border-spacing: 0; border-collapse: collapse;">
+								<tr>
+									<td style="padding: 35px;">
+										<h2 style="font-size: 18px; margin-top: 0; margin-bottom: 20px; color: #333333;">Detalhes do seu Pacote</h2>
+										<table role="presentation" style="width: 100%; margin-bottom: 10px; border-spacing: 0; border-collapse: collapse;">
+											<tr>
+												<td style="padding-bottom: 10px; border-bottom: 1px solid #eeeeee;">
+													<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+														<tr>
+															<td style="font-weight: bold; color: #333333;">Evento:</td>
+															<td align="right">[[${details.eventTitle}]]</td>
+														</tr>
+													</table>
+												</td>
+											</tr>
+										</table>
+										<div class="detail-row">
+											<span class="detail-label">Data:</span>
+											<span>[[${descriptiveDate}]]</span>
+										</div>
+										<div class="detail-row">
+											<span class="detail-label">Pacote:</span>
+											<span>[[${details.packTitle}]]</span>
+										</div>
+										<div class="detail-row">
+											<span class="detail-label">Quantidade:</span>
+											<span>1</span>
+										</div>
+										<div class="detail-row">
+											<span class="detail-label">Número da pedido:</span>
+											<span>[[${details.transactionId}]]</span>
+										</div>
+										<div style="background-color: #fff8f8; border: 1px solid #ffe0e0; border-radius: 12px; padding: 35px; margin: 35px 0;">
+											<h2 style="font-size: 18px; margin-top: 0; color: #e94057; margin-bottom: 20px;">Informações Importantes</h2>
+											<ul style="list-style-type: none; padding: 0; margin: 0;">
+												<li style="margin-bottom: 15px; display: flex; align-items: start;">
+													<i class="ri-checkbox-circle-line" style="color: #e94057; margin-right: 10px; margin-top: 3px;"></i>
+													Por favor, traga um documento de identificação com foto para verificação na entrada.
+												</li>
+												<li style="margin-bottom: 15px; display: flex; align-items: start;">
+													<i class="ri-time-line" style="color: #e94057; margin-right: 10px; margin-top: 3px;"></i>
+													O evento começa às 21h. Chegue cedo para aproveitar ao máximo!
+												</li>
+												<li style="margin-bottom: 0; display: flex; align-items: start;">
+													<i class="ri-emotion-happy-line" style="color: #e94057; margin-right: 10px; margin-top: 3px;"></i>
+													Venha com disposição para dançar e se divertir!
+												</li>
+											</ul>
+										</div>
+										<p style="margin-bottom: 25px;">Estamos muito felizes em ter você conosco para o que promete ser uma experiência inesquecível!</p>
+										<p style="margin-bottom: 25px;">Se você tiver alguma dúvida ou precisar de ajuda, não hesite em contatar a nossa equipe de suporte
+											pelo <a href="https://zoukme.in/about" style="color: #e94057;">Zoukme In</a>.</p>
+										<p style="margin-bottom: 25px;">Mal podemos esperar para vê-lo no evento!</p>
+										<p style="margin-top: 35px;">Atenciosamente,<br>
+											Equipe Zoukme In.</p>
+									</td>
+								</tr>
+							</table>
+							<!-- Footer Section -->
+							<table role="presentation" style="width: 100%; border-spacing: 0; border-collapse: collapse;">
+								<tr>
+									<td style="padding: 40px 50px; text-align: center; background-color: #fafafa; border-bottom-left-radius: 16px; border-bottom-right-radius: 16px;">
+										<p>© 2025 Zouk Me In. All rights reserved.</p>
+										<p>
+											<a href="#" style="color: #999999; text-decoration: none; margin: 0 10px;">Zoukme In</a> |
+											<a href="#" style="color: #999999; text-decoration: none; margin: 0 10px;">Sobre Nós</a>
+										</p>
+										<p style="margin-top: 15px;">
+											<a href="https://zoukme.in" target="_blank" style="display: inline-block; margin: 0 5px;">
+												<i class="ri-mail-line" style="color: #999999; font-size: 20px;"></i>
+											</a>
+											<a href="https://zoukme.in/about" target="_blank" style="display: inline-block; margin: 0 5px;">
+												<i class="ri-phone-line" style="color: #999999; font-size: 20px;"></i>
+											</a>
+										</p>
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>
+</center>
+</body>
+</html>

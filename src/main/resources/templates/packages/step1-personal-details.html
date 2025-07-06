@@ -1,0 +1,243 @@
+<DOCTYPE html>
+	<html xmlns:th="https://www.thymeleaf.org" lang="pt-br">
+
+	<head th:insert="~{fragments/header}"></head>
+	<style>
+      :where([class^="ri-"])::before {
+          content: "\f3c2";
+      }
+
+      body {
+          font-family: 'Montserrat', sans-serif;
+          background-color: #f9fafb;
+      }
+
+      input:focus, select:focus {
+          outline: none;
+          border-color: #e94057;
+          box-shadow: 0 0 0 3px rgba(233, 64, 87, 0.1);
+      }
+
+      input[type="number"]::-webkit-inner-spin-button,
+      input[type="number"]::-webkit-outer-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+      }
+
+      .progress-bar-step {
+          position: relative;
+      }
+
+      .progress-bar-step::after {
+          content: '';
+          position: absolute;
+          top: 50%;
+          left: 100%;
+          transform: translateY(-50%);
+          height: 2px;
+          width: calc(100% - 40px);
+          background-color: #e5e7eb;
+          z-index: -1;
+      }
+
+      .progress-bar-step:last-child::after {
+          display: none;
+      }
+	</style>
+	<body class="bg-gray-100">
+	<!-- Header -->
+	<div th:insert="~{fragments/top :: top}"></div>
+
+	<!-- Content -->
+	<main th:fragment="main" class="container mx-auto px-4 py-8">
+		<div class="container mx-auto px-4 py-8">
+			<div class="max-w-5xl mx-auto">
+				<div class="mb-12 relative">
+          <div class="absolute top-[15px] left-0 w-full h-1 bg-gray-200 -z-10"></div>
+          <div class="absolute top-[15px] left-0 w-1/3 h-1 bg-primary transition-all duration-300 -z-10"></div>
+          <div class="flex justify-between items-start">
+            <div class="flex flex-col items-center space-y-2">
+              <div class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center shadow-md">
+                <i class="ri-user-line text-sm"></i>
+              </div>
+              <span class="text-xs font-medium text-primary whitespace-nowrap">Detalhes</span>
+            </div>
+            <div class="flex flex-col items-center space-y-2">
+              <div class="w-8 h-8 rounded-full bg-white border-2 border-gray-200 text-gray-400 flex items-center justify-center">
+                <i class="ri-bank-card-line text-sm"></i>
+              </div>
+              <span class="text-xs font-medium text-gray-400 whitespace-nowrap">Pagamento</span>
+            </div>
+            <div class="flex flex-col items-center space-y-2">
+              <div class="w-8 h-8 rounded-full bg-white border-2 border-gray-200 text-gray-400 flex items-center justify-center">
+                <i class="ri-check-line text-sm"></i>
+              </div>
+              <span class="text-xs font-medium text-gray-400 whitespace-nowrap">Confirmação</span>
+            </div>
+          </div>
+        </div>
+				<form action="/packages" method="post">
+					<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+						<!-- Registration Form -->
+						<div class="lg:col-span-2">
+							<div class="bg-white rounded-lg shadow-md p-6 mb-6">
+								<h2 class="text-2xl font-bold mb-6">Informações Pessoais</h2>
+								<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+									<div>
+										<label for="firstName" class="flex items-center text-sm font-medium text-gray-700 mb-1">
+											<i class="ri-user-line mr-2"></i>Primeiro nome *
+										</label>
+										<div class="relative">
+											<i class="ri-user-line absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+											<input
+													type="text"
+													id="firstName"
+													name="firstName"
+													class="w-full pl-11 pr-4 py-2 border border-gray-300 rounded-button text-gray-900"
+													required
+													placeholder="Digite o primeiro nome"/>
+										</div>
+									</div>
+									<div>
+										<label for="lastName" class="flex items-center text-sm font-medium text-gray-700 mb-1">
+											<i class="ri-user-line mr-2"></i>Ultimo nome *
+										</label>
+										<div class="relative">
+											<i class="ri-user-line absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+											<input
+													type="text"
+													id="lastName"
+													name="lastName"
+													class="w-full pl-11 pr-4 py-2 border border-gray-300 rounded-button text-gray-900"
+													required
+													placeholder="Digite seu ultimo nome"/>
+										</div>
+									</div>
+								</div>
+								<div class="mb-6">
+									<label for="email" class="flex items-center text-sm font-medium text-gray-700 mb-1">
+										<i class="ri-mail-line mr-2"></i>E-mail *
+									</label>
+									<div class="relative">
+										<i class="ri-mail-line absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+										<input
+												type="email"
+												id="email"
+												name="email"
+												class="w-full pl-11 pr-4 py-2 border border-gray-300 rounded-button text-gray-900"
+												required
+												placeholder="Digite o seu e-mail"/>
+									</div>
+								</div>
+								<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div>
+                  <label for="phone" class="flex items-center text-sm font-medium text-gray-700 mb-1">
+                    <i class="ri-phone-line mr-2"></i>Celular *
+                  </label>
+                  <div class="relative">
+                    <i class="ri-phone-line absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                    <input
+                      type="tel"
+                      id="phone"
+											name="phone"
+                      class="w-full pl-11 pr-4 py-2 border border-gray-300 rounded-button text-gray-900"
+                      required
+                      placeholder="Digite o seu celular" />
+                  </div>
+                </div>
+                <div>
+                  <label for="document" class="flex items-center text-sm font-medium text-gray-700 mb-1">
+                    <i class="ri-file-text-line mr-2"></i>CPF *
+                  </label>
+                  <div class="relative">
+                    <i class="ri-file-text-line absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+										<input
+                      type="text"
+                      id="document"
+											name="document"
+                      class="w-full pl-11 pr-4 py-2 border border-gray-300 rounded-button text-gray-900"
+                      required
+                      placeholder="Digite seu CPF" />
+                  </div>
+                </div>
+              </div>
+							</div>
+						</div>
+						<!-- Order Summary -->
+						<div class="lg:col-span-1">
+							<div class="bg-white rounded-lg shadow-md p-6 sticky top-6">
+								<h2 class="text-xl font-bold mb-6">Resumo do pedido</h2>
+								<div class="border-b border-gray-200 pb-4 mb-4">
+									<div class="flex justify-between mb-2">
+										<span th:text="${package.title}" class="text-gray-700"></span>
+										<span class="font-medium">R$ <span th:text="${#numbers.formatDecimal(package.price, 1, 2, 'COMMA')}" class="font-medium"></span></span>
+									</div>
+									<p th:text="${package.description}" class="text-sm text-gray-600 mb-4"></p>
+								</div>
+								<div class="border-b border-gray-200 pb-4 mb-4">
+									<div class="flex justify-between mb-2">
+										<span class="text-gray-700">Subtotal</span>
+										<span class="font-medium" id="subtotal">R$ <span class="font-medium" th:text="${#numbers.formatDecimal(package.price, 1, 2, 'COMMA')}"></span></span>
+									</div>
+									<div class="flex justify-between">
+										<span class="text-gray-700">Taxa</span>
+										<span class="font-medium" id="tax">R$ 0,00</span>
+									</div>
+								</div>
+								<div class="flex justify-between mb-6">
+									<span class="text-lg font-bold">Total</span>
+									<span th:text="${#numbers.formatDecimal(package.price, 1, 2, 'COMMA')}" class="text-lg font-bold text-primary" id="total"></span>
+								</div>
+								<input type="hidden" name="amount" th:value="${package.price}"/>
+								<input type="hidden" name="packId" th:value="${package.id}"/>
+								<div class="mb-6">
+									<h3 class="font-medium mb-2">Isso inclui:</h3>
+									<ul class="text-sm text-gray-700 space-y-2">
+										<li class="flex items-start">
+											<i class="ri-check-line text-green-500 mr-2 mt-0.5"></i>
+											<span>Access to all 4 evening parties (July 15-18)</span>
+										</li>
+										<li class="flex items-start">
+											<i class="ri-check-line text-green-500 mr-2 mt-0.5"></i>
+											<span>Social dancing from 9 PM to 2 AM each night</span>
+										</li>
+										<li class="flex items-start">
+											<i class="ri-check-line text-green-500 mr-2 mt-0.5"></i>
+											<span>Live music performances</span>
+										</li>
+										<li class="flex items-start">
+											<i class="ri-check-line text-green-500 mr-2 mt-0.5"></i>
+											<span>Complimentary welcome drink each night</span>
+										</li>
+									</ul>
+								</div>
+								<a href="https://readdy.ai/home/f197fe0d-3faf-42b5-a653-01c6271bcb16/ce35ea62-5180-4b0e-8ca9-76cea3f446e3" data-readdy="true">
+									<button id="continueToPayment"
+													class="w-full bg-primary hover:bg-primary/90 text-white py-3 !rounded-button font-semibold whitespace-nowrap transition-all flex items-center justify-center">
+										<span>Continue para pagamento</span>
+										<i class="ri-arrow-right-line ml-2"></i>
+									</button>
+								</a>
+								<div class="mt-4 flex items-center justify-center text-sm text-gray-600">
+									<i class="ri-lock-line mr-2"></i>
+									<span>Secure checkout</span>
+								</div>
+								<div class="mt-4 flex items-center justify-center gap-2">
+									<i class="ri-visa-fill text-blue-700 ri-lg"></i>
+									<i class="ri-mastercard-fill text-orange-600 ri-lg"></i>
+									<i class="ri-paypal-fill text-blue-800 ri-lg"></i>
+									<i class="ri-american-express-fill text-blue-500 ri-lg"></i>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</main>
+
+	<!-- footer -->
+	<div th:insert="~{fragments/footer :: footer}"></div>
+	</body>
+	</html>
+</DOCTYPE>

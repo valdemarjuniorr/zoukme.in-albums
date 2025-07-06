@@ -1,14 +1,22 @@
-package in.zoukme.zouk_album.repositories.events;
+package in.zoukme.zouk_album.domains.payments;
+
+import java.math.BigDecimal;
 
 import in.zoukme.zouk_album.domains.Event;
-import in.zoukme.zouk_album.domains.payments.Package;
-import java.math.BigDecimal;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.jdbc.core.mapping.AggregateReference;
+import org.springframework.data.relational.core.mapping.Table;
 import org.springframework.util.StringUtils;
 
-public record PackageRequest(String title, String description, BigDecimal price) {
+@Table("packages")
+public record Package(
+    @Id Long id,
+    AggregateReference<Event, Long> eventId,
+    String title,
+    String description,
+    BigDecimal price) {
 
-  public PackageRequest {
+  public Package {
     if (!StringUtils.hasText(title)) {
       throw new IllegalArgumentException("Title cannot be null or blank");
     }
@@ -21,7 +29,7 @@ public record PackageRequest(String title, String description, BigDecimal price)
     }
   }
 
-  public Package toDomain(AggregateReference<Event, Long> eventSaved) {
-    return new Package(null, eventSaved, title, description, price);
+  public Package(String title, String description, BigDecimal price) {
+    this(null, null, title, description, price);
   }
 }

@@ -1,29 +1,63 @@
 package in.zoukme.zouk_album.services.aws.ses;
 
+import jakarta.mail.MessagingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.mail.MailSender;
-import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
 @Service
 public class EmailService {
 
   private static final Logger log = LoggerFactory.getLogger(EmailService.class);
-  private final MailSender mailSender;
+  private final JavaMailSender mailSender;
+  private final TemplateEngine templateEngine;
 
-  public EmailService(MailSender mailSender) {
+  public EmailService(JavaMailSender mailSender, TemplateEngine templateEngine) {
     this.mailSender = mailSender;
+    this.templateEngine = templateEngine;
   }
 
   public void send(Email email) {
-    var message = new SimpleMailMessage();
-    log.info("Sending email: {}", email);
-    message.setTo(email.to());
-    message.setFrom(email.from());
-    message.setSubject(email.subject());
-    message.setText(email.body());
+    var message = mailSender.createMimeMessage();
+    try {
+      var helper = new MimeMessageHelper(message, Boolean.TRUE);
+      Context context = new Context();
+      context.setVariable("name", "Valdemar Jr");
+      context.setVariable("email", email);
+      String htmlContent = templateEngine.process("email/payment-confirmation", context);
+      log.info("Sending email: {}", email);
+      helper.setTo(email.to());
+      helper.setFrom(email.from());
+      helper.setSubject(email.subject());
+      helper.setText(htmlContent, Boolean.TRUE);
+    } catch (MessagingException e) {
+      log.error("Error creating email message", e);
+      throw new RuntimeException(e);
+    }
     mailSender.send(message);
-    log.info("Email sent");
+  }
+
+  public void send(EmailTemplate email) {
+    var message = mailSender.createMimeMessage();
+    var helper = new MimeMessageHelper(message);
+    var context = new Context();
+    context.setVariables(email.getTemplateVariables());
+    var htmlContent = templateEngine.process(email.getTemplateName(), context);
+    try {
+      helper.setTo(email.getEmail().to());
+      helper.setFrom(email.getEmail().from());
+      helper.setSubject(email.getEmail().subject());
+      helper.setText(htmlContent, Boolean.TRUE);
+
+      mailSender.send(message);
+      log.info("Email sent");
+    } catch (MessagingException e) {
+      log.error("Error creating email message", e);
+      throw new RuntimeException(e);
+    }
   }
 }

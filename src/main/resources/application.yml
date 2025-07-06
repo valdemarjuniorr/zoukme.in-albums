@@ -1,10 +1,15 @@
+clients:
+  pagbank:
+    base-url: https://sandbox.api.pagseguro.com
+    token: ${PAGBANK_TOKEN}
+
 server:
   compression:
     enabled: true
     mime-types: text/html,text/xml,text/plain,text/css,text/javascript,application/javascript,application/json
   http2:
     enabled: true
-  port: 443
+  port: 8443
   ssl:
     key-store: classpath:ssl/keystore.p12
     key-store-password: ${KEY_STORE_PASSWORD}
@@ -23,6 +28,9 @@ spring:
         endpoint: https://email.sa-east-1.amazonaws.com
   application:
     name: zouk-albums
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
   datasource:
     url: jdbc:postgresql://localhost:5432/zouk-albums
     username: zoukme.in

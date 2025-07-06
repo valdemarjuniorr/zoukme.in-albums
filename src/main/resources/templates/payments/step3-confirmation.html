@@ -1,0 +1,196 @@
+<DOCTYPE html>
+	<html xmlns:th="https://www.thymeleaf.org" lang="pt-br">
+
+	<head th:insert="~{fragments/header}"></head>
+	<style>
+      :where([class^="ri-"])::before {
+          content: "\f3c2";
+      }
+
+      body {
+          font-family: 'Montserrat', sans-serif;
+          background-color: #f9fafb;
+      }
+
+      .progress-bar-step {
+          position: relative;
+      }
+
+      .progress-bar-step::after {
+          content: '';
+          position: absolute;
+          top: 16px;
+          left: 100%;
+          transform: translateY(-50%);
+          height: 2px;
+          width: calc(100% - 32px);
+          background-color: #e5e7eb;
+          z-index: -1;
+      }
+
+      @media (min-width: 640px) {
+          .progress-bar-step::after {
+              top: 20px;
+              width: calc(100% - 40px);
+          }
+      }
+
+      .progress-bar-step:last-child::after {
+          display: none;
+      }
+
+      .progress-bar-step.completed::after {
+          background-color: #e94057;
+      }
+	</style>
+	<body class="bg-gray-100">
+	<!-- Header -->
+	<div th:insert="~{fragments/top :: top}"></div>
+
+	<!-- Content -->
+	<main th:fragment="main" class="main container mx-auto p-4 py-8">
+		<div class="container mx-auto px-4 py-8">
+			<div class="max-w-5xl mx-auto">
+				<!-- progress bar -->
+				<div class="mb-12 relative">
+					<div class="absolute top-[15px] left-0 w-full h-1 bg-gray-200 -z-10"></div>
+					<div class="absolute top-[15px] left-0 w-full h-1 bg-primary transition-all duration-300 -z-10"></div>
+					<div class="flex justify-between items-start">
+						<div class="flex flex-col items-center space-y-2">
+							<div class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center shadow-md">
+								<i class="ri-user-line text-sm"></i>
+							</div>
+							<span class="text-xs font-medium text-primary whitespace-nowrap">Detalhes</span>
+						</div>
+						<div class="flex flex-col items-center space-y-2">
+							<div class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center shadow-md">
+								<i class="ri-bank-card-line text-sm"></i>
+							</div>
+							<span class="text-xs font-medium text-gray-400 whitespace-nowrap">Pagamento</span>
+						</div>
+						<div class="flex flex-col items-center space-y-2">
+							<div class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center shadow-md">
+								<i class="ri-check-line text-sm"></i>
+							</div>
+							<span class="text-xs font-medium text-gray-400 whitespace-nowrap">Confirmação</span>
+						</div>
+					</div>
+				</div>
+
+				<!-- Success Message -->
+				<div class="bg-white rounded-lg shadow-md p-8 mb-8 text-center">
+					<div class="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-6">
+						<i class="ri-check-line text-green-500 ri-2x"></i>
+					</div>
+					<h1 class="text-3xl font-bold text-gray-900 mb-2">Pagamento confirmado!</h1>
+					<p class="text-lg text-gray-600 mb-4">Obrigado pela sua compra!</p>
+					<div class="inline-block bg-gray-100 rounded-full px-4 py-2 text-sm font-medium text-gray-700 mb-6">
+						Confirmação #<span th:text="${details.transactionId}" class="font-semibold"></span>
+					</div>
+					<p class="text-gray-600">
+						A confirmação foi enviada para o e-mail: <span th:text="${details.email}" class="font-medium"></span>
+					</p>
+					<p class="text-gray-500 text-sm mt-2">
+						Transação realizada em <span th:text="${details.getDescriptivePaymentDate}" class="font-medium"></span>.
+					</p>
+				</div>
+				<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+					<!-- Order Details -->
+					<div class="lg:col-span-3">
+						<!-- Order Summary -->
+						<div class="bg-white rounded-lg shadow-md p-6 mb-6">
+							<h2 class="text-xl font-bold mb-6 flex items-center">
+								<i class="ri-file-list-3-line text-primary mr-2"></i>
+								Resumo do Pedido
+							</h2>
+							<div class="border-b border-gray-200 pb-4 mb-4">
+								<div class="flex justify-between mb-2">
+									<span th:text="${details.packTitle}" class="text-gray-700"></span>
+									<span class="font-medium">R$ <span th:text="${#numbers.formatDecimal(details.amount, 1, 2, 'COMMA')}"></span>
+							</span>
+								</div>
+								<p th:text="${details.packDescription}" class="text-sm text-gray-600 mb-4"></p>
+							</div>
+							<div class="border-b border-gray-200 pb-4 mb-4">
+								<div class="flex justify-between mb-2">
+									<span class="text-gray-700">Subtotal</span>
+									<span class="font-medium">R$ <span th:text="${#numbers.formatDecimal(details.amount, 1, 2, 'COMMA')}"></span>
+									</span>
+								</div>
+								<div class="flex justify-between">
+									<span class="text-gray-700">Taxa</span>
+									<span class="font-medium">R$ 0,00</span>
+								</div>
+							</div>
+							<div class="flex justify-between mb-6">
+								<span class="text-lg font-bold">Total</span>
+								<span class="text-lg font-bold text-primary">R$ <span th:text="${#numbers.formatDecimal(details.amount, 1, 2, 'COMMA')}"></span>
+								</span>
+							</div>
+							<div class="border-t border-gray-200 pt-4">
+								<h3 class="font-medium mb-3">Informações do Pagamento</h3>
+								<div class="flex items-center mb-2">
+									<i class="ri-bank-card-line text-gray-500 mr-2"></i>
+									<span class="text-gray-700">Visa ending in 4242</span>
+								</div>
+								<div class="flex items-center">
+									<i class="ri-user-line text-gray-500 mr-2"></i>
+									<span th:text="${details.fullName}" class="text-gray-700"></span>
+								</div>
+								<p class="text-sm text-gray-500 mt-3">
+									Transaction ID: <span th:text="${details.transactionId}" class="font-medium"></span>
+								</p>
+							</div>
+						</div>
+						<!-- Event Details -->
+						<div class="bg-white rounded-lg shadow-md p-6 mb-6">
+							<h2 class="text-xl font-bold mb-6 flex items-center">Detalhes sobre o evento</h2>
+							<div class="mb-4">
+								<h3 th:text="${details.eventTitle}" class="font-medium text-lg mb-2"></h3>
+								<div class="flex items-start mb-2">
+									<i class="ri-calendar-line text-gray-500 mr-2 mt-1"></i>
+									<div>
+										<p th:text="${details.descriptiveDate}" class="text-gray-700"></p>
+									</div>
+								</div>
+								<div class="flex items-start mb-4">
+									<i class="ri-map-pin-line text-gray-500 mr-2 mt-1"></i>
+									<div>
+										<p th:text="${details.eventLocation}" class="text-gray-700"></p>
+									</div>
+								</div>
+							</div>
+							<div class="bg-gray-50 rounded-md p-4 border border-gray-200">
+								<h3 class="font-medium mb-2 text-gray-800">Informações Importantes:</h3>
+								<ul class="text-sm text-gray-700 space-y-2">
+									<li class="flex items-start">
+										<i class="ri-information-line text-primary mr-2 mt-0.5"></i>
+										<span>Por favor, traga um documento de identificação com foto para verificação na entrada.</span>
+									</li>
+									<li class="flex items-start">
+										<i class="ri-information-line text-primary mr-2 mt-0.5"></i>
+										<span>O evento começa às 21h. Chegue cedo para aproveitar ao máximo!</span>
+									</li>
+									<li class="flex items-start">
+										<i class="ri-information-line text-primary mr-2 mt-0.5"></i>
+										<span>Venha com disposição para dançar e se divertir!</span>
+									</li>
+								</ul>
+							</div>
+						</div>
+						<a href="/"
+							 class="block w-full bg-primary hover:bg-primary/90 text-white py-3 px-6 !rounded-button font-semibold whitespace-nowrap transition-all flex items-center justify-center mb-6 no-print">
+							<i class="ri-arrow-left-line mr-2"></i>
+							<span>Voltar para a página inicial</span>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+
+	<!-- footer -->
+	<div th:insert="~{fragments/footer :: footer}"></div>
+	</body>
+	</html>
+</DOCTYPE>

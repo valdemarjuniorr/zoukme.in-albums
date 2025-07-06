@@ -133,10 +133,6 @@
               margin: 1.5rem 0;
           }
       }
-
-      input:focus, button:focus {
-          outline: none;
-      }
 	</style>
 	<title th:text=" ${event.title} + '- Zouk Me In'"></title>
 </head>
@@ -155,7 +151,6 @@
 			<div class="grid grid-cols-4 gap-4 mb-8 max-w-lg">
 				<div class="countdown-item bg-primary/5 px-3 py-4 rounded-lg">
 					<div class="text-2xl md:text-3xl font-bold text-primary" id="days">
-						42
 					</div>
 					<div class="text-xs text-gray-600 uppercase tracking-wider">
 						Days
@@ -163,7 +158,6 @@
 				</div>
 				<div class="countdown-item bg-primary/5 px-3 py-4 rounded-lg">
 					<div class="text-2xl md:text-3xl font-bold text-primary" id="hours">
-						11
 					</div>
 					<div class="text-xs text-gray-600 uppercase tracking-wider">
 						Horas
@@ -171,7 +165,6 @@
 				</div>
 				<div class="countdown-item bg-primary/5 px-3 py-4 rounded-lg">
 					<div class="text-2xl md:text-3xl font-bold text-primary" id="minutes">
-						32
 					</div>
 					<div class="text-xs text-gray-600 uppercase tracking-wider">
 						Minutos
@@ -179,7 +172,6 @@
 				</div>
 				<div class="countdown-item bg-primary/5 px-3 py-4 rounded-lg">
 					<div class="text-2xl md:text-3xl font-bold text-primary" id="seconds">
-						18
 					</div>
 					<div class="text-xs text-gray-600 uppercase tracking-wider">
 						Segundos
@@ -223,36 +215,63 @@
 					</style>
 				</div>
 			</div>
-				<div class="bg-white rounded-lg shadow-lg p-6 mb-8">
-					<h3 class="text-xl font-semibold mb-4">Detalhes</h3>
-					<div th:if="${event.details != null && event.details != ''}" class="flex items-start mb-4">
-						<div class="w-10 h-10 flex items-center justify-center bg-primary/10 rounded-full mr-4">
-							<i class="ri-file-text-line text-primary ri-lg"></i>
-						</div>
-						<div>
-							<h4 class="font-medium">Descrição</h4>
-							<p th:text="${event.description}" class="text-gray-600"></p>
-						</div>
+			<div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+				<h3 class="text-xl font-semibold mb-4">Detalhes</h3>
+				<div th:if="${event.details != null && event.details != ''}" class="flex items-start mb-4">
+					<div class="w-10 h-10 flex items-center justify-center bg-primary/10 rounded-full mr-4">
+						<i class="ri-file-text-line text-primary ri-lg"></i>
 					</div>
-					<div class="flex items-start mb-4">
-						<div class="w-10 h-10 flex items-center justify-center bg-primary/10 rounded-full mr-4">
-							<i class="ri-calendar-line text-primary ri-lg"></i>
-						</div>
-						<div>
-							<h4 class="font-medium">Data</h4>
-							<p th:text="${event.descriptiveDate}" class="text-gray-600"></p>
-						</div>
-					</div>
-					<div class="flex items-start mb-4">
-						<div class="w-10 h-10 flex items-center justify-center bg-primary/10 rounded-full mr-4">
-							<i class="ri-map-pin-line text-primary ri-lg"></i>
-						</div>
-						<div>
-							<h4 class="font-medium">Endereço</h4>
-							<p th:text="${event.location}" class="text-gray-600"></p>
-						</div>
+					<div>
+						<h4 class="font-medium">Descrição</h4>
+						<p th:text="${event.description}" class="text-gray-600"></p>
 					</div>
 				</div>
+				<div class="flex items-start mb-4">
+					<div class="w-10 h-10 flex items-center justify-center bg-primary/10 rounded-full mr-4">
+						<i class="ri-calendar-line text-primary ri-lg"></i>
+					</div>
+					<div>
+						<h4 class="font-medium">Data</h4>
+						<p th:text="${event.descriptiveDate}" class="text-gray-600"></p>
+					</div>
+				</div>
+				<div class="flex items-start mb-4">
+					<div class="w-10 h-10 flex items-center justify-center bg-primary/10 rounded-full mr-4">
+						<i class="ri-map-pin-line text-primary ri-lg"></i>
+					</div>
+					<div>
+						<h4 class="font-medium">Endereço</h4>
+						<p th:text="${event.location}" class="text-gray-600"></p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<section class="mb-20" th:if="${packages != null and packages.size() > 0}">
+		<h2 class="text-3xl font-bold text-center mb-4">Escolha a sua experiência</h2>
+		<p class="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
+			Escolha o pacote perfeito que combina com a sua jornada de dança.
+			Se você está aqui para as festas ou quer a experiência completa do evento.
+		</p>
+		<div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+			<div th:each="pack : ${packages}" class="bg-white rounded-xl p-8 shadow-lg hover:shadow-xl transition-shadow border border-gray-100">
+				<div class="flex items-center justify-between mb-4">
+					<h3 th:text="${pack.title}" class="text-2xl font-bold"></h3>
+					<div class="w-12 h-12 flex items-center justify-center bg-primary/10 rounded-full">
+						<i class="ri-award-line text-primary ri-lg"></i>
+					</div>
+				</div>
+				<p th:text="${pack.description}" class="text-gray-600 mb-6"></p>
+				<div class="flex items-baseline mb-6">
+					<!-- Assuming price is a number, format it to Brazilian currency -->
+					<span class="text-3xl font-bold text-primary">
+						R$ <span th:text="${#numbers.formatDecimal(pack.price, 1, 2, 'COMMA')}"></span>
+					</span>
+					<span class="text-gray-500 ml-2">/ pessoa</span>
+				</div>
+				<a th:href="@{/packages?packId={packageId}(packageId=${pack.id})}" class="block text-center cursor-pointer w-full bg-primary hover:bg-primary/90 text-white py-3 !rounded-button font-semibold whitespace-nowrap transition-all">
+					Adquirir agora
+				</a>
 			</div>
 		</div>
 	</section>

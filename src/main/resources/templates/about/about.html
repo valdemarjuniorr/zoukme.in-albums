@@ -358,7 +358,7 @@
           faqToggles.forEach((toggle) => {
               toggle.addEventListener("click", function () {
                   const faqItem = this.parentElement;
-                  // Close all other FAQ items
+                  // Close all other FAQ item
                   document.querySelectorAll(".faq-item").forEach((item) => {
                       if (item !== faqItem) {
                           item.classList.remove("active");

@@ -1,6 +1,7 @@
 package in.zoukme.zouk_album.utils;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Month;
 
 public final class DateUtils {
@@ -9,6 +10,16 @@ public final class DateUtils {
   public static String getDescriptiveDate(LocalDate date) {
     return String.format(
         "%d de %s, %d", date.getDayOfMonth(), getDescriptiveMonth(date.getMonth()), date.getYear());
+  }
+
+  public static String getDescriptiveDateTime(LocalDateTime date) {
+    return String.format(
+        "%d de %s, %d às %02d:%02d",
+        date.getDayOfMonth(),
+        getDescriptiveMonth(date.getMonth()),
+        date.getYear(),
+        date.getHour(),
+        date.getMinute());
   }
 
   private static String getDescriptiveMonth(Month month) {

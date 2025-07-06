@@ -364,13 +364,14 @@
 					<button class="tab-button px-6 py-4 text-sm font-medium text-gray-500 whitespace-nowrap">
 						Fotos
 					</button>
-					<button class="tab-button px-6 py-4 text-sm font-medium text-gray-500 whitespace-nowrap">
+					<button hx-get="/admin/payments/list" hx-target="#main-table-content"
+									class="tab-button px-6 py-4 text-sm font-medium text-gray-500 whitespace-nowrap">
 						Pagamentos
 					</button>
 				</div>
 			</div>
 			<!-- Tab content -->
-			<div class="p-6">
+			<div id="main-table-content" class="p-6">
 				<!-- Albums tab content -->
 				<div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
 					<h2 class="text-lg font-medium text-gray-900">
@@ -378,7 +379,6 @@
 					</h2>
 				</div>
 				<section id="albumsTable" hx-get="/albums" hx-target="#albumsTable" hx-trigger="load"></section>
-
 			</div>
 		</div>
 		<!-- Recent Activity and Upcoming Events -->

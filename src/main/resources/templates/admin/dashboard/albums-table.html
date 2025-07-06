@@ -38,17 +38,11 @@
 				</div>
 			</td>
 			<td class="px-6 py-4 whitespace-nowrap">
-								<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-[#f0f7ff] text-blue-800">
-									Evento
-                </span>
+				<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-[#f0f7ff] text-blue-800">Evento</span>
 			</td>
-			<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-				42
-			</td>
+			<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">42</td>
 			<td class="px-6 py-4 whitespace-nowrap">
-								<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-									Publicado
-                </span>
+				<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Publicado</span>
 			</td>
 			<td th:text="${album.descriptiveDate}" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"></td>
 			<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
@@ -58,7 +52,8 @@
 							<i class="ri-edit-line"></i>
 						</div>
 					</button>
-					<button class="text-gray-500 hover:text-red-600">
+					<button class="text-gray-500 hover:text-red-600" hx-delete="@{/admin/albums/{albumId}(albumId=${album.id})}" hx-target="#albumsTableBody"
+									hx-confirm="Tem certeza que deseja excluir este álbum?" hx-indicator="#loading-indicator">
 						<div class="w-5 h-5 flex items-center justify-center">
 							<i class="ri-delete-bin-line"></i>
 						</div>

@@ -1,7 +1,8 @@
 package in.zoukme.zouk_album.controllers.events;
 
 import in.zoukme.zouk_album.domains.Page;
-import in.zoukme.zouk_album.services.EventService;
+import in.zoukme.zouk_album.services.PackageService;
+import in.zoukme.zouk_album.services.aws.EventService;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,9 +16,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class EventController {
 
   private final EventService service;
+  private final PackageService packageService;
 
-  public EventController(EventService service) {
+  public EventController(EventService service, PackageService packageService) {
     this.service = service;
+      this.packageService = packageService;
   }
 
   @GetMapping
@@ -34,6 +37,7 @@ public class EventController {
   String findByEventUrl(@PathVariable String title, Model model, Authentication authentication) {
     var event = service.findByEventUrl(title);
 
+    model.addAttribute("packages", packageService.findBy(event.getId()));
     model.addAttribute("event", event);
     model.addAttribute("authentication", authentication);
 
