@@ -54,7 +54,7 @@ public class PaymentService {
     var referenceId = UUID.randomUUID();
     var request =
         new CreateCheckoutRequest(
-            pack.id().toString(),
+            referenceId,
             customer,
             item,
             "https://zoukme.in",

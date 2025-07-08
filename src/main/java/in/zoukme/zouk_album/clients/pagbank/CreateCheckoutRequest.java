@@ -2,9 +2,10 @@ package in.zoukme.zouk_album.clients.pagbank;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
+import java.util.UUID;
 
 public record CreateCheckoutRequest(
-    @JsonProperty("reference_id") String referenceId,
+    @JsonProperty("reference_id") UUID referenceId,
     Customer customer,
     List<Item> items,
     List<PaymentMethod> paymentMethods, // TODO: add a type attribute {"type": "credit_card"}
@@ -14,7 +15,7 @@ public record CreateCheckoutRequest(
         List<String> paymentNotificationUrls /* notify payment status */) {
 
   public CreateCheckoutRequest(
-      String referenceId,
+      UUID referenceId,
       Customer customer,
       Item item,
       String returnUrl,
