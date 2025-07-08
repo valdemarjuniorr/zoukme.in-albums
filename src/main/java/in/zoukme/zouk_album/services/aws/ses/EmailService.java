@@ -50,7 +50,6 @@ public class EmailService {
       log.info("Email sent");
     } catch (MessagingException e) {
       log.error("Error creating email message", e);
-      throw new RuntimeException(e);
     }
   }
 }
