@@ -32,4 +32,5 @@ public record CreateCheckoutRequest(
         List.of(notificationUrl), // notificationUrls
         List.of(paymentNotificationUrl)); // paymentNotificationUrls
   }
+
 }

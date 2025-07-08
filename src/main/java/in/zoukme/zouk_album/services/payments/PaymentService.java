@@ -16,6 +16,7 @@ import in.zoukme.zouk_album.repositories.payments.PaymentsRepository;
 import in.zoukme.zouk_album.services.aws.ses.EmailService;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.jdbc.core.mapping.AggregateReference;
@@ -50,6 +51,7 @@ public class PaymentService {
             pack.description(),
             payment.amount(),
             "https://www.petz.com.br/blog//wp-content/upload/2018/09/tamanho-de-cachorro-pet-1.jpg");
+    var referenceId = UUID.randomUUID();
     var response =
         pagBankService.createCheckOut(
             new CreateCheckoutRequest(
@@ -57,7 +59,7 @@ public class PaymentService {
                 customer,
                 item,
                 "https://zoukme.in/payments/confirmation/paid",
-                "notificationUrl",
+                "",
                 "https://zoukme.in/payments/pagbank/webhook"));
     repository.save(
         new Payment(
@@ -67,14 +69,15 @@ public class PaymentService {
             customer.email(),
             payment.phone(),
             payment.amount(),
+            referenceId,
             response.id()));
     return response;
   }
 
-  public PaymentEmailDetails updateStatus(String transactionId, PaymentStatus status) {
+  public PaymentEmailDetails updateStatus(UUID referenceId, PaymentStatus status) {
     var payment =
         this.repository
-            .findPaymentDetailsByTransactionId(transactionId)
+            .findPaymentDetailsByReferenceId(referenceId)
             .orElseThrow(PaymentNotFoundException::new);
     repository.updateStatus(payment.id(), status);
     switch (status) {
@@ -82,9 +85,13 @@ public class PaymentService {
         log.info("Payment with ID {} has been paid successfully.", payment.id());
         emailService.send(new PaymentConfirmationEmail(payment));
       }
-      case IN_ANALYSIS -> {
-        log.info("Payment with ID {} is in analysis.", payment.id());
+      case WAITING -> {
+        log.info("Payment with ID {} is waiting.", payment.id());
         emailService.send(new PaymentWaitingEmail(payment));
+      }
+      case DECLINED -> {
+        log.info("Payment with ID {} has been declined.", payment.id());
+        emailService.send(new PaymentDeclinedEmail(payment));
       }
     }
     return payment;

@@ -1,20 +1,20 @@
 package in.zoukme.zouk_album.services.payments;
 
+
 import in.zoukme.zouk_album.repositories.payments.PaymentEmailDetails;
 
-public class PaymentWaitingEmail extends AbstractEmailTemplate {
+public class PaymentDeclinedEmail extends AbstractEmailTemplate {
 
-  public PaymentWaitingEmail(PaymentEmailDetails details) {
+  protected PaymentDeclinedEmail(PaymentEmailDetails details) {
     super(details);
   }
 
-  @Override
   public String getEmailSubject() {
-    return "Zoukme In - Aguardando confirmação de Pagamento";
+    return "Zoukme In - Pagamento recusado";
   }
 
   @Override
   public String getTemplate() {
-    return "/email/payment-waiting";
+    return "/email/payment-refused";
   }
 }

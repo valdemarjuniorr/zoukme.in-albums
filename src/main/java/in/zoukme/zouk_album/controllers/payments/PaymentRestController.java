@@ -21,7 +21,7 @@ public class PaymentRestController {
   @PostMapping("/pagbank/webhook")
   void redirectFromPagbank(@RequestBody PagBankWebHookResponse response, Model model) {
     paymentService.updateStatus(
-        response.id(), PaymentStatus.valueOf(response.charges().get(0).status().name()));
+        response.referenceId(), PaymentStatus.valueOf(response.charges().getFirst().status().name()));
   }
 
 }

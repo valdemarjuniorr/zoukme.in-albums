@@ -158,7 +158,14 @@
 											id="whatsapp"
 											name="whatsapp"
 											class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-											placeholder="(99) 9-9999-9999"/>
+											placeholder="(99) 99999-9999"/>
+									<script type="text/javascript">
+                      var cleave = new Cleave('#whatsapp', {
+                          blocks: [0, 2, 5, 4],
+                          delimiters: ['(', ') ', ' - '],
+                          numeral: false
+                      });
+									</script>
 								</div>
 							</div>
 						</div>
@@ -168,7 +175,6 @@
 								<div class="relative">
 									<select id="type" name="eventType"
 													class="custom-select w-full px-4 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent pr-10">
-										<option value="">Selecione</option>
 										<option th:value="PARTY">Baile</option>
 										<option th:value="CONGRESS">Congresso</option>
 										<option th:value="WORKSHOP">Workshop</option>
@@ -332,37 +338,6 @@
                   group.remove();
               });
           });
-          // Format phone number input
-          const whatsappInput = document.getElementById("whatsapp");
-          whatsappInput.addEventListener("input", function (e) {
-              let value = e.target.value.replace(/\D/g, "");
-              if (value.length > 0) {
-                  if (value.length <= 3) {
-                      value = "+" + value;
-                  } else if (value.length <= 6) {
-                      value = "+" + value.slice(0, 3) + " (" + value.slice(3);
-                  } else if (value.length <= 9) {
-                      value =
-                          "+" +
-                          value.slice(0, 3) +
-                          " (" +
-                          value.slice(3, 6) +
-                          ") " +
-                          value.slice(6);
-                  } else {
-                      value =
-                          "+" +
-                          value.slice(0, 3) +
-                          " (" +
-                          value.slice(3, 6) +
-                          ") " +
-                          value.slice(6, 9) +
-                          "-" +
-                          value.slice(9, 13);
-                  }
-                  e.target.value = value;
-              }
-          });
           // Format Instagram handle input
           const instagramInput = document.getElementById("instagram");
           instagramInput.addEventListener("input", function (e) {
@@ -397,9 +372,10 @@
               const packages = [];
               document.querySelectorAll("#packageTableBody tr").forEach((item) => {
                   // get the title, description and price from the td row
-									const title = item.querySelector("td:nth-child(1)").textContent.trim();
+                  const title = item.querySelector("td:nth-child(1)").textContent.trim();
                   const description = item.querySelector("td:nth-child(2)").textContent.trim();
-                  const price = item.querySelector("td:nth-child(3)").textContent.trim();
+                  let price = item.querySelector("td:nth-child(3)").textContent.trim();
+                  price = price.replace(".", "").replace(",", "."); // Convert to a valid decimal format
                   packages.push({title, description, price});
               });
               const formData = new FormData(this);

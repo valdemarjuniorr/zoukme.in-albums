@@ -2,9 +2,10 @@ package in.zoukme.zouk_album.controllers.payments;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
+import java.util.UUID;
 
 record PagBankWebHookResponse(
-    String id, @JsonProperty("reference_id") String referenceId, List<Change> charges) {
+        String id, @JsonProperty("reference_id") UUID referenceId, List<Change> charges) {
   record Change(
       String id,
       @JsonProperty("reference_id") String referenceId,

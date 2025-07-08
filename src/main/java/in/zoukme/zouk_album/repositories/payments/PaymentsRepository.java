@@ -5,6 +5,8 @@ import in.zoukme.zouk_album.domains.payments.Payment;
 import in.zoukme.zouk_album.domains.payments.PaymentStatus;
 import java.math.BigDecimal;
 import java.util.Optional;
+import java.util.UUID;
+
 import org.springframework.data.jdbc.repository.query.Modifying;
 import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.ListCrudRepository;
@@ -25,9 +27,9 @@ public interface PaymentsRepository extends ListCrudRepository<Payment, Long> {
           FROM packages pack
                    INNER JOIN events ev ON pack.event_id = ev.id
                    INNER JOIN payments pay ON pay.package_id = pack.id
-          where pay.transaction_id = :transactionId;
+          where pay.reference_id = :referenceId;
           """)
-  Optional<PaymentEmailDetails> findPaymentDetailsByTransactionId(String transactionId);
+  Optional<PaymentEmailDetails> findPaymentDetailsByReferenceId(UUID referenceId);
 
   @Query("SELECT SUM(amount) FROM payments")
   BigDecimal getTotalAmount();

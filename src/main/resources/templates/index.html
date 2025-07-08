@@ -40,7 +40,7 @@
 										<span th:text="${album.city}" class="font-['Poppins'] text-sm"></span>
 									</div>
 									<button class="text-primary hover:text-opacity-80 transition-colors flex items-center">
-										<a th:href="@{/{albumId}/visit(albumId=${album.id})}" th:title="${album.title}">
+										<a th:href="${album.url}" th:title="${album.title}">
 											Ver álbum<i class="ri-arrow-right-line ml-1"></i>
 										</a>
 									</button>

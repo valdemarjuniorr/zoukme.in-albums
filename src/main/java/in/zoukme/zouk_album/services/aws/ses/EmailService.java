@@ -3,6 +3,7 @@ package in.zoukme.zouk_album.services.aws.ses;
 import jakarta.mail.MessagingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -22,26 +23,18 @@ public class EmailService {
   }
 
   public void send(Email email) {
-    var message = mailSender.createMimeMessage();
-    try {
-      var helper = new MimeMessageHelper(message, Boolean.TRUE);
-      Context context = new Context();
-      context.setVariable("name", "Valdemar Jr");
-      context.setVariable("email", email);
-      String htmlContent = templateEngine.process("email/payment-confirmation", context);
-      log.info("Sending email: {}", email);
-      helper.setTo(email.to());
-      helper.setFrom(email.from());
-      helper.setSubject(email.subject());
-      helper.setText(htmlContent, Boolean.TRUE);
-    } catch (MessagingException e) {
-      log.error("Error creating email message", e);
-      throw new RuntimeException(e);
-    }
+    var message = new SimpleMailMessage();
+    log.info("Sending email: {}", email);
+    message.setTo(email.to());
+    message.setFrom("contato@zoukme.in");
+    message.setSubject(email.subject());
+    message.setText(email.body());
     mailSender.send(message);
+    log.info("Email sent");
   }
 
   public void send(EmailTemplate email) {
+    log.info("Sending email template: {}", email.getEmail());
     var message = mailSender.createMimeMessage();
     var helper = new MimeMessageHelper(message);
     var context = new Context();

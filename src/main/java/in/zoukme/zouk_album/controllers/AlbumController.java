@@ -2,8 +2,6 @@ package in.zoukme.zouk_album.controllers;
 
 import in.zoukme.zouk_album.domains.Page;
 import in.zoukme.zouk_album.services.AlbumService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/")
 class AlbumController {
 
-  private Logger log = LoggerFactory.getLogger(AlbumController.class);
   private final AlbumService service;
 
   public AlbumController(AlbumService service) {

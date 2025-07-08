@@ -31,6 +31,7 @@ spring:
   flyway:
     enabled: true
     baseline-on-migrate: true
+
   datasource:
     url: jdbc:postgresql://localhost:5432/zouk-albums
     username: zoukme.in

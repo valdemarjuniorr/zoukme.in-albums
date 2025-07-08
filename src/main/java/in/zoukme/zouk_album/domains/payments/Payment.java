@@ -3,6 +3,7 @@ package in.zoukme.zouk_album.domains.payments;
 import in.zoukme.zouk_album.utils.DateUtils;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.UUID;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.jdbc.core.mapping.AggregateReference;
 import org.springframework.data.relational.core.mapping.Table;
@@ -18,6 +19,7 @@ public record Payment(
     BigDecimal amount,
     PaymentStatus status,
     LocalDateTime paymentDate,
+    UUID referenceId,
     String transactionId) {
 
   public Payment(
@@ -27,6 +29,7 @@ public record Payment(
       String email,
       String phone,
       BigDecimal amount,
+      UUID referenceId,
       String transactionId) {
     this(
         null,
@@ -38,6 +41,7 @@ public record Payment(
         amount,
         PaymentStatus.WAITING,
         LocalDateTime.now(),
+        referenceId,
         transactionId);
   }
 

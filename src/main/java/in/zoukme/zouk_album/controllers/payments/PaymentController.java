@@ -22,7 +22,8 @@ public class PaymentController {
   String redirectFromPagBank(@RequestBody PagBankWebHookResponse response, Model model) {
     var details =
         paymentService.updateStatus(
-            response.id(), PaymentStatus.valueOf(response.charges().getFirst().status().name()));
+            response.referenceId(),
+            PaymentStatus.valueOf(response.charges().getFirst().status().name()));
     model.addAttribute("details", details);
 
     return "/payments/step3-confirmation";

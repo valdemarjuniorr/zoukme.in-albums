@@ -53,29 +53,29 @@
 		<div class="container mx-auto px-4 py-8">
 			<div class="max-w-5xl mx-auto">
 				<div class="mb-12 relative">
-          <div class="absolute top-[15px] left-0 w-full h-1 bg-gray-200 -z-10"></div>
-          <div class="absolute top-[15px] left-0 w-1/3 h-1 bg-primary transition-all duration-300 -z-10"></div>
-          <div class="flex justify-between items-start">
-            <div class="flex flex-col items-center space-y-2">
-              <div class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center shadow-md">
-                <i class="ri-user-line text-sm"></i>
-              </div>
-              <span class="text-xs font-medium text-primary whitespace-nowrap">Detalhes</span>
-            </div>
-            <div class="flex flex-col items-center space-y-2">
-              <div class="w-8 h-8 rounded-full bg-white border-2 border-gray-200 text-gray-400 flex items-center justify-center">
-                <i class="ri-bank-card-line text-sm"></i>
-              </div>
-              <span class="text-xs font-medium text-gray-400 whitespace-nowrap">Pagamento</span>
-            </div>
-            <div class="flex flex-col items-center space-y-2">
-              <div class="w-8 h-8 rounded-full bg-white border-2 border-gray-200 text-gray-400 flex items-center justify-center">
-                <i class="ri-check-line text-sm"></i>
-              </div>
-              <span class="text-xs font-medium text-gray-400 whitespace-nowrap">Confirmação</span>
-            </div>
-          </div>
-        </div>
+					<div class="absolute top-[15px] left-0 w-full h-1 bg-gray-200 -z-10"></div>
+					<div class="absolute top-[15px] left-0 w-1/3 h-1 bg-primary transition-all duration-300 -z-10"></div>
+					<div class="flex justify-between items-start">
+						<div class="flex flex-col items-center space-y-2">
+							<div class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center shadow-md">
+								<i class="ri-user-line text-sm"></i>
+							</div>
+							<span class="text-xs font-medium text-primary whitespace-nowrap">Detalhes</span>
+						</div>
+						<div class="flex flex-col items-center space-y-2">
+							<div class="w-8 h-8 rounded-full bg-white border-2 border-gray-200 text-gray-400 flex items-center justify-center">
+								<i class="ri-bank-card-line text-sm"></i>
+							</div>
+							<span class="text-xs font-medium text-gray-400 whitespace-nowrap">Pagamento</span>
+						</div>
+						<div class="flex flex-col items-center space-y-2">
+							<div class="w-8 h-8 rounded-full bg-white border-2 border-gray-200 text-gray-400 flex items-center justify-center">
+								<i class="ri-check-line text-sm"></i>
+							</div>
+							<span class="text-xs font-medium text-gray-400 whitespace-nowrap">Confirmação</span>
+						</div>
+					</div>
+				</div>
 				<form action="/packages" method="post">
 					<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 						<!-- Registration Form -->
@@ -130,37 +130,51 @@
 									</div>
 								</div>
 								<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                <div>
-                  <label for="phone" class="flex items-center text-sm font-medium text-gray-700 mb-1">
-                    <i class="ri-phone-line mr-2"></i>Celular *
-                  </label>
-                  <div class="relative">
-                    <i class="ri-phone-line absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
-                    <input
-                      type="tel"
-                      id="phone"
-											name="phone"
-                      class="w-full pl-11 pr-4 py-2 border border-gray-300 rounded-button text-gray-900"
-                      required
-                      placeholder="Digite o seu celular" />
-                  </div>
-                </div>
-                <div>
-                  <label for="document" class="flex items-center text-sm font-medium text-gray-700 mb-1">
-                    <i class="ri-file-text-line mr-2"></i>CPF *
-                  </label>
-                  <div class="relative">
-                    <i class="ri-file-text-line absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
-										<input
-                      type="text"
-                      id="document"
-											name="document"
-                      class="w-full pl-11 pr-4 py-2 border border-gray-300 rounded-button text-gray-900"
-                      required
-                      placeholder="Digite seu CPF" />
-                  </div>
-                </div>
-              </div>
+									<div>
+										<label for="phone" class="flex items-center text-sm font-medium text-gray-700 mb-1">
+											<i class="ri-phone-line mr-2"></i>Celular *
+										</label>
+										<div class="relative">
+											<i class="ri-phone-line absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+											<input
+													type="tel"
+													id="phone"
+													name="phone"
+													class="w-full pl-11 pr-4 py-2 border border-gray-300 rounded-button text-gray-900"
+													required
+													placeholder="Digite o seu celular"/>
+											<script type="text/javascript">
+												var cleave = new Cleave('#phone', {
+													blocks: [0, 2, 5, 4],
+													delimiters: ['(', ') ', ' - '],
+													numeral: false
+												});
+											</script>
+										</div>
+									</div>
+									<div>
+										<label for="document" class="flex items-center text-sm font-medium text-gray-700 mb-1">
+											<i class="ri-file-text-line mr-2"></i>CPF *
+										</label>
+										<div class="relative">
+											<i class="ri-file-text-line absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+											<input
+													type="text"
+													id="document"
+													name="document"
+													class="w-full pl-11 pr-4 py-2 border border-gray-300 rounded-button text-gray-900"
+													required
+													placeholder="Digite seu CPF"/>
+											<script type="text/javascript">
+                          var cleave = new Cleave('#document', {
+                              blocks: [3, 3, 3, 2],
+                              delimiters: [".", ".", "-"],
+                              numeral: false
+                          });
+											</script>
+										</div>
+									</div>
+								</div>
 							</div>
 						</div>
 						<!-- Order Summary -->
@@ -170,14 +184,16 @@
 								<div class="border-b border-gray-200 pb-4 mb-4">
 									<div class="flex justify-between mb-2">
 										<span th:text="${package.title}" class="text-gray-700"></span>
-										<span class="font-medium">R$ <span th:text="${#numbers.formatDecimal(package.price, 1, 2, 'COMMA')}" class="font-medium"></span></span>
+										<span class="font-medium">R$ <span th:text="${#numbers.formatDecimal(package.price, 1, 2, 'COMMA')}"
+																											 class="font-medium"></span></span>
 									</div>
 									<p th:text="${package.description}" class="text-sm text-gray-600 mb-4"></p>
 								</div>
 								<div class="border-b border-gray-200 pb-4 mb-4">
 									<div class="flex justify-between mb-2">
 										<span class="text-gray-700">Subtotal</span>
-										<span class="font-medium" id="subtotal">R$ <span class="font-medium" th:text="${#numbers.formatDecimal(package.price, 1, 2, 'COMMA')}"></span></span>
+										<span class="font-medium" id="subtotal">R$ <span class="font-medium"
+																																		 th:text="${#numbers.formatDecimal(package.price, 1, 2, 'COMMA')}"></span></span>
 									</div>
 									<div class="flex justify-between">
 										<span class="text-gray-700">Taxa</span>
@@ -190,43 +206,20 @@
 								</div>
 								<input type="hidden" name="amount" th:value="${package.price}"/>
 								<input type="hidden" name="packId" th:value="${package.id}"/>
-								<div class="mb-6">
-									<h3 class="font-medium mb-2">Isso inclui:</h3>
-									<ul class="text-sm text-gray-700 space-y-2">
-										<li class="flex items-start">
-											<i class="ri-check-line text-green-500 mr-2 mt-0.5"></i>
-											<span>Access to all 4 evening parties (July 15-18)</span>
-										</li>
-										<li class="flex items-start">
-											<i class="ri-check-line text-green-500 mr-2 mt-0.5"></i>
-											<span>Social dancing from 9 PM to 2 AM each night</span>
-										</li>
-										<li class="flex items-start">
-											<i class="ri-check-line text-green-500 mr-2 mt-0.5"></i>
-											<span>Live music performances</span>
-										</li>
-										<li class="flex items-start">
-											<i class="ri-check-line text-green-500 mr-2 mt-0.5"></i>
-											<span>Complimentary welcome drink each night</span>
-										</li>
-									</ul>
-								</div>
-								<a href="https://readdy.ai/home/f197fe0d-3faf-42b5-a653-01c6271bcb16/ce35ea62-5180-4b0e-8ca9-76cea3f446e3" data-readdy="true">
 									<button id="continueToPayment"
 													class="w-full bg-primary hover:bg-primary/90 text-white py-3 !rounded-button font-semibold whitespace-nowrap transition-all flex items-center justify-center">
 										<span>Continue para pagamento</span>
 										<i class="ri-arrow-right-line ml-2"></i>
 									</button>
-								</a>
 								<div class="mt-4 flex items-center justify-center text-sm text-gray-600">
 									<i class="ri-lock-line mr-2"></i>
-									<span>Secure checkout</span>
+									<span>Checkout seguro</span>
 								</div>
 								<div class="mt-4 flex items-center justify-center gap-2">
-									<i class="ri-visa-fill text-blue-700 ri-lg"></i>
-									<i class="ri-mastercard-fill text-orange-600 ri-lg"></i>
-									<i class="ri-paypal-fill text-blue-800 ri-lg"></i>
-									<i class="ri-american-express-fill text-blue-500 ri-lg"></i>
+									<i class="ri-visa-fill text-blue-700 ri-lg" title="VISA"></i>
+									<i class="ri-mastercard-fill text-orange-600 ri-lg" title="Master Card"></i>
+									<i class="ri-pix-fill text-cyan-600 ri-lg" title="PIX"></i>
+									<i class="ri-article-fill text-gray-600 ri-lg" title="Boleto"></i>
 								</div>
 							</div>
 						</div>
