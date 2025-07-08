@@ -48,7 +48,7 @@ public class EmailService {
 
       mailSender.send(message);
       log.info("Email sent");
-    } catch (MessagingException e) {
+    } catch (MessagingException | RuntimeException e) {
       log.error("Error creating email message", e);
     }
   }
