@@ -7,17 +7,18 @@ public record CreateCheckoutRequest(
     @JsonProperty("reference_id") String referenceId,
     Customer customer,
     List<Item> items,
-    List<PaymentMethod> paymentMethods,
-    String redirectUrl,
-    List<String> notificationUrls, // notify checkout status
-    List<String> paymentNotificationUrls /* notify payment status */) {
+    List<PaymentMethod> paymentMethods, // TODO: add a type attribute {"type": "credit_card"}
+    @JsonProperty("return_url") String returnUrl,
+    @JsonProperty("redirect_url") String redirectUrl,
+    @JsonProperty("payment_notification_urls")
+        List<String> paymentNotificationUrls /* notify payment status */) {
 
   public CreateCheckoutRequest(
       String referenceId,
       Customer customer,
       Item item,
+      String returnUrl,
       String redirectUrl,
-      String notificationUrl,
       String paymentNotificationUrl) {
     this(
         referenceId,
@@ -28,9 +29,8 @@ public record CreateCheckoutRequest(
             PaymentMethod.DEBIT_CARD,
             PaymentMethod.BOLETO,
             PaymentMethod.PIX), /* paymentMethods */
+        returnUrl,
         redirectUrl,
-        List.of(notificationUrl), // notificationUrls
         List.of(paymentNotificationUrl)); // paymentNotificationUrls
   }
-
 }

@@ -52,15 +52,17 @@ public class PaymentService {
             payment.amount(),
             "https://www.petz.com.br/blog//wp-content/upload/2018/09/tamanho-de-cachorro-pet-1.jpg");
     var referenceId = UUID.randomUUID();
-    var response =
-        pagBankService.createCheckOut(
-            new CreateCheckoutRequest(
-                pack.id().toString(),
-                customer,
-                item,
-                "https://zoukme.in/payments/confirmation/paid",
-                "",
-                "https://zoukme.in/payments/pagbank/webhook"));
+    var request =
+        new CreateCheckoutRequest(
+            pack.id().toString(),
+            customer,
+            item,
+            "https://zoukme.in",
+            "https://zoukme.in/payments/confirmation/paid",
+            "https://zoukme.in/payments/pagbank/webhook");
+
+    var response = pagBankService.createCheckOut(request);
+
     repository.save(
         new Payment(
             AggregateReference.to(pack.id()),
