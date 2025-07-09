@@ -1,0 +1,156 @@
+<div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
+	<h2 class="text-lg font-medium text-gray-900">Gerenciamento de Eventos</h2>
+	<div class="mt-4 md:mt-0 flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
+		<div class="relative">
+			<select
+					class="appearance-none bg-gray-50 border border-gray-300 text-gray-700 py-2 pl-3 pr-8 rounded-button text-sm focus:outline-none focus:ring-2 focus:ring-primary">
+				<option>Todos os Tipos</option>
+				<option>Eventos</option>
+				<option>Congressos</option>
+				<option>Workshops</option>
+			</select>
+			<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+				<div class="w-4 h-4 flex items-center justify-center">
+					<i class="ri-arrow-down-s-line"></i>
+				</div>
+			</div>
+		</div>
+		<div class="relative">
+			<select
+					class="appearance-none bg-gray-50 border border-gray-300 text-gray-700 py-2 pl-3 pr-8 rounded-button text-sm focus:outline-none focus:ring-2 focus:ring-primary">
+				<option>Ordenar por: Mais Recentes</option>
+				<option>Ordenar por: Mais Antigos</option>
+				<option>Ordenar por: Nome A-Z</option>
+				<option>Ordenar por: Nome Z-A</option>
+			</select>
+			<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+				<div class="w-4 h-4 flex items-center justify-center">
+					<i class="ri-arrow-down-s-line"></i>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- Events table -->
+<div class="overflow-x-auto">
+	<table class="min-w-full divide-y divide-gray-200">
+		<thead class="bg-[#fef2f3]">
+		<tr>
+			<th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+				<div class="flex items-center">
+					Evento
+				</div>
+			</th>
+			<th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+				Tipo
+			</th>
+			<th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+				Data
+			</th>
+			<th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+				Status
+			</th>
+			<th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+				Ações
+			</th>
+		</tr>
+		</thead>
+		<tbody class="bg-white divide-y divide-gray-200">
+		<tr th:each="event : ${events}" class="hover:bg-gray-50">
+			<td class="px-6 py-4 whitespace-nowrap">
+				<div class="flex items-center">
+					<div class="flex-shrink-0 h-10 w-10 rounded overflow-hidden">
+						<img th:src="${event.coverUrl}" th:title="${event.title}" class="h-10 w-10 object-cover" th:alt="${event.title}">
+					</div>
+					<div class="ml-4">
+						<div th:text="${event.title}" class="text-sm font-medium text-gray-900"></div>
+						<div class="text-sm text-gray-500">
+							<span th:text="${event.location}"></span>
+						</div>
+					</div>
+				</div>
+			</td>
+			<td class="px-6 py-4 whitespace-nowrap">
+      <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-pink-100 text-pink-800">
+      Eventos
+      </span>
+			</td>
+			<td th:text="${event.descriptiveDate}" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"></td>
+			<td class="px-6 py-4 whitespace-nowrap">
+      <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+      Confirmado
+      </span>
+			</td>
+			<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+				<div class="flex justify-end space-x-2">
+					<a th:href="@{/admin/events/{eventUrl}(eventUrl=${event.eventUrl})}" class="text-gray-500 hover:text-primary">
+						<div class="w-5 h-5 flex items-center justify-center">
+							<i class="ri-edit-line"></i>
+						</div>
+					</a>
+					<button class="text-gray-500 hover:text-primary">
+						<div class="w-5 h-5 flex items-center justify-center">
+							<i class="ri-calendar-line"></i>
+						</div>
+					</button>
+					<button class="text-gray-500 hover:text-red-600">
+						<div class="w-5 h-5 flex items-center justify-center">
+							<i class="ri-delete-bin-line"></i>
+						</div>
+					</button>
+				</div>
+			</td>
+		</tr>
+		</tbody>
+	</table>
+</div>
+<!-- Pagination -->
+<div class="flex items-center justify-between px-4 py-3 sm:px-6 mt-4">
+	<div class="flex-1 flex justify-between sm:hidden">
+		<a href="#"
+			 class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-button text-gray-700 bg-white hover:bg-gray-50">
+			Anterior
+		</a>
+		<a href="#"
+			 class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-button text-gray-700 bg-white hover:bg-gray-50">
+			Próximo
+		</a>
+	</div>
+	<div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+		<div>
+			<p class="text-sm text-gray-700">
+				Mostrando <span class="font-medium">1</span> a <span class="font-medium">3</span> de <span class="font-medium">12</span> resultados
+			</p>
+		</div>
+		<div>
+			<nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+				<a href="#"
+					 class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+					<span class="sr-only">Anterior</span>
+					<div class="w-5 h-5 flex items-center justify-center">
+						<i class="ri-arrow-left-s-line"></i>
+					</div>
+				</a>
+				<a href="#" aria-current="page"
+					 class="z-10 bg-primary border-primary text-white relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+					1
+				</a>
+				<a href="#"
+					 class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+					2
+				</a>
+				<a href="#"
+					 class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+					3
+				</a>
+				<a href="#"
+					 class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+					<span class="sr-only">Próximo</span>
+					<div class="w-5 h-5 flex items-center justify-center">
+						<i class="ri-arrow-right-s-line"></i>
+					</div>
+				</a>
+			</nav>
+		</div>
+	</div>
+</div>

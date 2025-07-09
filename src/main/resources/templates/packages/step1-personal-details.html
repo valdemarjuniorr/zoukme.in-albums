@@ -211,6 +211,14 @@
 										<span>Continue para pagamento</span>
 										<i class="ri-arrow-right-line ml-2"></i>
 									</button>
+								<script>
+                    document.querySelector('form').addEventListener('submit', function(e) {
+                        const button = document.getElementById('continueToPayment');
+                        // Disable button
+                        button.disabled = true;
+                        button.classList.add('opacity-70', 'cursor-not-allowed');
+                    });
+								</script>
 								<div class="mt-4 flex items-center justify-center text-sm text-gray-600">
 									<i class="ri-lock-line mr-2"></i>
 									<span>Checkout seguro</span>

@@ -357,13 +357,13 @@
 		<div class="bg-white rounded-lg shadow-sm mb-6">
 			<div class="border-b border-gray-200">
 				<div class="flex overflow-x-auto">
-					<button class="tab-button active px-6 py-4 text-sm font-medium whitespace-nowrap">Albuns</button>
-					<button class="tab-button px-6 py-4 text-sm font-medium text-gray-500 whitespace-nowrap">
-						Eventos
+					<button hx-get="/albums" hx-target="#main-table-content" hx-trigger="click"
+									class="tab-button active px-6 py-4 text-sm font-medium whitespace-nowrap">Albuns
 					</button>
-					<button class="tab-button px-6 py-4 text-sm font-medium text-gray-500 whitespace-nowrap">
-						Fotos
+					<button hx-get="/admin/events" hx-target="#main-table-content" hx-trigger="click"
+									class="tab-button px-6 py-4 text-sm font-medium text-gray-500 whitespace-nowrap">Eventos
 					</button>
+					<button class="tab-button px-6 py-4 text-sm font-medium text-gray-500 whitespace-nowrap">Fotos</button>
 					<button hx-get="/admin/payments/list" hx-target="#main-table-content"
 									class="tab-button px-6 py-4 text-sm font-medium text-gray-500 whitespace-nowrap">
 						Pagamentos
@@ -373,11 +373,6 @@
 			<!-- Tab content -->
 			<div id="main-table-content" class="p-6">
 				<!-- Albums tab content -->
-				<div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
-					<h2 class="text-lg font-medium text-gray-900">
-						Gerenciamento dos albums
-					</h2>
-				</div>
 				<section id="albumsTable" hx-get="/albums" hx-target="#albumsTable" hx-trigger="load"></section>
 			</div>
 		</div>
@@ -390,123 +385,56 @@
 				</div>
 				<div class="p-6">
 					<div class="space-y-4">
-						<div class="bg-[#fef2f3] rounded-lg p-4">
-							<div class="flex items-start">
-								<div class="flex-shrink-0">
-									<div class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-primary">
-										<div class="w-5 h-5 flex items-center justify-center">
-											<i class="ri-calendar-event-line"></i>
+						<div class="bg-gray-50 rounded-lg p-4">
+							<div th:each="event : ${events}" th:if="${event.isComingUp}" class="flex flex-col space-y-4">
+								<!-- Event info -->
+								<div class="flex items-start">
+									<div class="flex-shrink-0">
+										<div class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-purple-500">
+											<div class="w-5 h-5 flex items-center justify-center">
+												<i class="ri-calendar-event-line"></i>
+											</div>
+										</div>
+									</div>
+									<div class="ml-3 flex-1">
+										<h4 th:text="${event.title}" class="text-sm font-medium text-gray-900"></h4>
+										<div class="mt-1 flex items-center text-xs text-gray-500">
+											<div class="w-4 h-4 flex items-center justify-center mr-1">
+												<i class="ri-time-line"></i>
+											</div>
+											<span th:text="${event.descriptiveDate}"></span>
+										</div>
+										<div class="mt-1 flex items-center text-xs text-gray-500">
+											<div class="w-4 h-4 flex items-center justify-center mr-1">
+												<i class="ri-map-pin-line"></i>
+											</div>
+											<span th:text="${event.location}"></span>
 										</div>
 									</div>
 								</div>
-								<div class="ml-3 flex-1">
-									<h4 class="text-sm font-medium text-gray-900">
-										Corporate Retreat Photoshoot
-									</h4>
-									<div class="mt-1 flex items-center text-xs text-gray-500">
-										<div class="w-4 h-4 flex items-center justify-center mr-1">
-											<i class="ri-time-line"></i>
-										</div>
-										June 18, 2025 • 9:00 AM
-									</div>
-									<div class="mt-1 flex items-center text-xs text-gray-500">
-										<div class="w-4 h-4 flex items-center justify-center mr-1">
-											<i class="ri-map-pin-line"></i>
-										</div>
-										Mountain View Resort
-									</div>
-								</div>
-							</div>
-							<div class="mt-3 flex space-x-2">
-								<button class="flex-1 bg-white text-primary border border-primary px-3 py-1 rounded-button text-xs font-medium whitespace-nowrap">Ver
-									detalhes
-								</button>
-								<a
-										href="https://readdy.ai/home/f197fe0d-3faf-42b5-a653-01c6271bcb16/2fc4f3ba-9f74-409d-878c-84cd7c4c8d9b"
-										data-readdy="true"
-										class="flex-1">
-									<button class="w-full bg-primary text-white px-3 py-1 rounded-button text-xs font-medium whitespace-nowrap">
-										Preparar álbum
+								<!-- Action buttons -->
+								<div class="flex flex-col sm:flex-row gap-2 sm:gap-4">
+									<button
+											class="flex-1 bg-white text-gray-700 border border-gray-300 px-3 py-1 rounded-button text-xs font-medium whitespace-nowrap">
+										<i class="ri-eye-line mr-2"></i>
+										Ver Detalhes
 									</button>
-								</a>
-							</div>
-						</div>
-						<div class="bg-gray-50 rounded-lg p-4">
-							<div class="flex items-start">
-								<div class="flex-shrink-0">
-									<div class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-blue-500">
-										<div class="w-5 h-5 flex items-center justify-center">
-											<i class="ri-calendar-event-line"></i>
-										</div>
-									</div>
+									<button
+											class="flex-1 bg-secondary hover:opacity-90 text-white px-4 py-2 rounded-button text-xs font-medium transition-colors duration-200 flex items-center justify-center">
+										<i class="ri-image-add-line mr-2"></i>
+										Preparar Album
+									</button>
 								</div>
-								<div class="ml-3 flex-1">
-									<h4 class="text-sm font-medium text-gray-900">
-										Miller Family Portrait Session
-									</h4>
-									<div class="mt-1 flex items-center text-xs text-gray-500">
-										<div class="w-4 h-4 flex items-center justify-center mr-1">
-											<i class="ri-time-line"></i>
-										</div>
-										June 20, 2025 • 4:30 PM
-									</div>
-									<div class="mt-1 flex items-center text-xs text-gray-500">
-										<div class="w-4 h-4 flex items-center justify-center mr-1">
-											<i class="ri-map-pin-line"></i>
-										</div>
-										Sunset Beach Park
-									</div>
-								</div>
-							</div>
-							<div class="mt-3 flex space-x-2">
-								<button class="flex-1 bg-white text-gray-700 border border-gray-300 px-3 py-1 rounded-button text-xs font-medium whitespace-nowrap">
-									View Details
-								</button>
-								<button class="flex-1 bg-blue-500 text-white px-3 py-1 rounded-button text-xs font-medium whitespace-nowrap">
-									Prepare Album
-								</button>
-							</div>
-						</div>
-						<div class="bg-gray-50 rounded-lg p-4">
-							<div class="flex items-start">
-								<div class="flex-shrink-0">
-									<div class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-purple-500">
-										<div class="w-5 h-5 flex items-center justify-center">
-											<i class="ri-calendar-event-line"></i>
-										</div>
-									</div>
-								</div>
-								<div class="ml-3 flex-1">
-									<h4 class="text-sm font-medium text-gray-900">
-										Richardson Wedding
-									</h4>
-									<div class="mt-1 flex items-center text-xs text-gray-500">
-										<div class="w-4 h-4 flex items-center justify-center mr-1">
-											<i class="ri-time-line"></i>
-										</div>
-										June 25, 2025 • 2:00 PM
-									</div>
-									<div class="mt-1 flex items-center text-xs text-gray-500">
-										<div class="w-4 h-4 flex items-center justify-center mr-1">
-											<i class="ri-map-pin-line"></i>
-										</div>
-										Grand Ballroom Hotel
-									</div>
-								</div>
-							</div>
-							<div class="mt-3 flex space-x-2">
-								<button class="flex-1 bg-white text-gray-700 border border-gray-300 px-3 py-1 rounded-button text-xs font-medium whitespace-nowrap">
-									View Details
-								</button>
-								<button class="flex-1 bg-purple-500 text-white px-3 py-1 rounded-button text-xs font-medium whitespace-nowrap">
-									Prepare Album
-								</button>
+								<!-- Divider -->
+								<div class="border-b border-gray-200 -mx-4 last:border-0 last:mb-0"></div>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
+	</div>
+	</div>
 	</div>
 </main>
 <script id="tabSwitcher">
