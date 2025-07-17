@@ -1,9 +1,7 @@
 package in.zoukme.zouk_album.services.aws;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
-import com.oracle.svm.core.annotate.Inject;
 import in.zoukme.zouk_album.domains.Event;
 import in.zoukme.zouk_album.domains.payments.Package;
 import in.zoukme.zouk_album.repositories.events.EventRepository;
@@ -15,14 +13,15 @@ import java.util.Set;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 class EventServiceTest {
 
-  @Inject private EventService service;
-  @InjectMocks private EventRepository repository;
+  @InjectMocks private EventService service;
+  @Mock private EventRepository repository;
 
   @Test
   void update() {
