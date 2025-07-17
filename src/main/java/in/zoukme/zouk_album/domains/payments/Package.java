@@ -1,8 +1,8 @@
 package in.zoukme.zouk_album.domains.payments;
 
-import java.math.BigDecimal;
-
 import in.zoukme.zouk_album.domains.Event;
+import java.math.BigDecimal;
+import java.util.Objects;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.jdbc.core.mapping.AggregateReference;
 import org.springframework.data.relational.core.mapping.Table;
@@ -31,5 +31,28 @@ public record Package(
 
   public Package(String title, String description, BigDecimal price) {
     this(null, null, title, description, price);
+  }
+
+  public boolean equals(Package other) {
+    if (this == other) {
+      return true;
+    }
+    if (Objects.isNull(other)) {
+      return false;
+    }
+    if (Objects.nonNull(this.title)
+        && Objects.nonNull(other.title)
+        && !this.title.equals(other.title)) {
+      return false;
+    }
+    if (Objects.nonNull(this.description)
+        && Objects.nonNull(other.description)
+        && !this.description.equals(other.description)) {
+      return false;
+    }
+    if (Objects.nonNull(this.price) && Objects.nonNull(other.price)) {
+      return this.price.compareTo(other.price) == 0;
+    }
+    return true;
   }
 }

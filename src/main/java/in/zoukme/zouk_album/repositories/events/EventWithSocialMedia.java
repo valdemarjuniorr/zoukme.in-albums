@@ -32,6 +32,8 @@ public record EventWithSocialMedia(
         coverUrl,
         null,
         eventUrl,
-        this.details);
+        this.details,
+        null,
+        null);
   }
 }

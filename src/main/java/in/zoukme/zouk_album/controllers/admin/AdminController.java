@@ -3,13 +3,18 @@ package in.zoukme.zouk_album.controllers.admin;
 import in.zoukme.zouk_album.controllers.admin.dashboard.DashboardService;
 import in.zoukme.zouk_album.domains.Album;
 import in.zoukme.zouk_album.domains.Page;
+import in.zoukme.zouk_album.domains.payments.PaymentStatus;
 import in.zoukme.zouk_album.repositories.events.CreateEventRequest;
 import in.zoukme.zouk_album.repositories.events.PackageRequest;
+import in.zoukme.zouk_album.repositories.events.UpdateEventRequest;
 import in.zoukme.zouk_album.services.AlbumService;
 import in.zoukme.zouk_album.services.aws.BucketService;
 import in.zoukme.zouk_album.services.aws.EventService;
 import in.zoukme.zouk_album.services.payments.PaymentService;
+import in.zoukme.zouk_album.utils.DateUtils;
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
@@ -53,14 +58,16 @@ public class AdminController {
   String home(Model model, Authentication authentication) {
     model.addAttribute("authentication", authentication);
 
-    return "index";
+    return "admin/home";
   }
 
   @GetMapping("/home")
   String homeAdmin(Model model) {
-    var pageObj = new Page(1, 6);
+    var pageObj = Page.defaultPage();
     var albums = this.albumService.findAll(pageObj);
+    var events = this.eventService.findAll(pageObj);
     model.addAttribute("albums", albums);
+    model.addAttribute("events", events);
     model.addAttribute("pagination", pageObj.generatePagination(albums.getTotalPages()));
 
     return "admin/home";
@@ -80,7 +87,7 @@ public class AdminController {
       @RequestParam("file-upload") MultipartFile cover,
       Model model) {
     this.albumService.save(title, description, city, eventDate, cover);
-    var albums = this.albumService.findAll(new Page(1, 6));
+    var albums = this.albumService.findAll(Page.defaultPage());
     model.addAttribute("albums", albums);
 
     return "index";
@@ -113,7 +120,11 @@ public class AdminController {
   }
 
   @GetMapping("/events/create")
-  String createEvent() {
+  String createEvent(Model model) {
+    model.addAttribute(
+        "event",
+        new CreateEventRequest(
+            null, null, null, null, null, null, null, null, null, List.of(), null, null, null));
     return "admin/events/create";
   }
 
@@ -129,25 +140,22 @@ public class AdminController {
   }
 
   @PostMapping("/events/create")
-  String creteEvent(CreateEventRequest request, Model model, Authentication authentication) {
+  String createEvent(CreateEventRequest request, Model model, Authentication authentication) {
     this.eventService.save(request);
     log.info("Event created: {}", request);
 
-    model.addAttribute("events", this.eventService.findAll());
-    model.addAttribute("authentication", authentication);
-
-    return homeAdmin(model);
-  }
-
-  @DeleteMapping("/events/{eventUrl}")
-  String delete(@PathVariable String eventUrl, Model model, Authentication authentication) {
-    this.eventService.delete(eventUrl);
-    model.addAttribute("events", this.eventService.findAll());
+    model.addAttribute("events", this.eventService.findAll(Page.defaultPage()));
     model.addAttribute("authentication", authentication);
 
     model.addAttribute("message", "Album removido com sucesso");
 
     return "/events/toast";
+  }
+
+  @PostMapping("/events/{eventId}/update")
+  String updateEvent(@PathVariable Long eventId, UpdateEventRequest request, Model model) {
+    this.eventService.update(eventId, request);
+    return "";
   }
 
   @DeleteMapping("/events/{eventUrl}/photos/{fileName}")
@@ -157,7 +165,7 @@ public class AdminController {
       Model model,
       Authentication authentication) {
     this.bucketService.deletePhotoBy(eventUrl, fileName);
-    model.addAttribute("events", this.eventService.findAll());
+    model.addAttribute("events", this.eventService.findAll(Page.defaultPage()));
     model.addAttribute("authentication", authentication);
 
     model.addAttribute("message", "Foto removida com sucesso");
@@ -195,11 +203,47 @@ public class AdminController {
   }
 
   @GetMapping("/payments/list")
-  String getPaymentsPanel(Model model) {
-    model.addAttribute("payments", paymentService.findAll());
-    model.addAttribute("totalPending", dashboardService.getTotalPending());
-    model.addAttribute("totalCompleted", dashboardService.getTotalCompleted());
-    model.addAttribute("total", dashboardService.getTotalAmount());
+  String getPaymentsPanel(
+      @RequestParam(required = false) String status,
+      @RequestParam(required = false) Integer rangeDays,
+      Model model) {
+    var paymentStatus = Objects.nonNull(status) ? PaymentStatus.valueOf(status) : null;
+    var afterDateTime =
+        Objects.nonNull(rangeDays)
+            ? DateUtils.endDateTime(LocalDate.now().minusDays(rangeDays))
+            : null;
+    model.addAttribute(
+        "payments", paymentService.findAllBy(paymentStatus, afterDateTime, Page.defaultPage()));
+    model.addAttribute("totalPending", dashboardService.getTotalPending(afterDateTime));
+    model.addAttribute("totalCompleted", dashboardService.getTotalCompleted(afterDateTime));
+    model.addAttribute("total", dashboardService.getTotalAmount(afterDateTime));
+    model.addAttribute("paymentsStatus", PaymentStatus.values());
+
     return "admin/dashboard/payments/list";
+  }
+
+  @GetMapping("/events")
+  String getEvents(
+      @RequestParam(defaultValue = "1") Integer page,
+      @RequestParam(defaultValue = "6") Integer size,
+      Model model,
+      Authentication authentication) {
+    var pageObj = new Page(page, size);
+    var events = this.eventService.findAll(pageObj);
+    model.addAttribute("events", events);
+    model.addAttribute("authentication", authentication);
+    model.addAttribute("pagination", pageObj.generatePagination(events.getTotalPages()));
+
+    return "admin/dashboard/events-table";
+  }
+
+  @GetMapping("/events/{id}")
+  String getEventDetails(@PathVariable Long id, Model model, Authentication authentication) {
+    var event = this.eventService.findBy(id);
+    var eventRequest = new UpdateEventRequest(event);
+    model.addAttribute("event", eventRequest);
+    model.addAttribute("authentication", authentication);
+
+    return "admin/events/update";
   }
 }

@@ -22,6 +22,23 @@ public final class DateUtils {
         date.getMinute());
   }
 
+  /** This method returns a LocalDateTime with the initial time of the day */
+  public static LocalDateTime startDateTime(LocalDate date) {
+    return LocalDateTime.of(date, LocalDateTime.MIN.toLocalTime());
+  }
+
+  public static LocalDateTime endDateTime(LocalDate date) {
+    return LocalDateTime.of(date, LocalDateTime.MAX.toLocalTime());
+  }
+
+  public static LocalDateTime beginningOfTheYear(Integer year) {
+    return LocalDateTime.of(year, Month.JANUARY, 1, 0, 0);
+  }
+
+  public static LocalDateTime beginningOfTheCurrentYear() {
+    return beginningOfTheYear(LocalDateTime.now().getYear());
+  }
+
   private static String getDescriptiveMonth(Month month) {
     return switch (month) {
       case JANUARY -> "Janeiro";

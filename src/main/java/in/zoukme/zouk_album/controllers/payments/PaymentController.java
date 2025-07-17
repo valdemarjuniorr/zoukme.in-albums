@@ -21,7 +21,7 @@ public class PaymentController {
 
   @GetMapping("/confirmation/{referenceId}/paid")
   String redirectFromPagBank(@PathVariable UUID referenceId, Model model) {
-    var details = paymentService.updateStatus(referenceId, PaymentStatus.PAID);
+    var details = paymentService.updateStatus(referenceId, PaymentStatus.IN_ANALYSIS);
 
     model.addAttribute("details", details);
 

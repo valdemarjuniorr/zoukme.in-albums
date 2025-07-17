@@ -1,4 +1,4 @@
-<tr th:id="${package}" class="package-item border-b border-gray-200 hover:bg-gray-50">
+<tr th:id="${package.id}" class="package-item border-b border-gray-200 hover:bg-gray-50">
 	<td th:text="${package.title}" class="px-4 py-3 text-gray-600"></td>
 	<td th:text="${package.description}" class="px-4 py-3 text-gray-600"></td>
 	<td th:text="${#numbers.formatDecimal(package.price, 1, 2, 'COMMA')}" class="px-4 py-3 text-right text-gray-600"></td>

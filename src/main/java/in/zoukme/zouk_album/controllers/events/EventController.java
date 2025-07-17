@@ -20,12 +20,16 @@ public class EventController {
 
   public EventController(EventService service, PackageService packageService) {
     this.service = service;
-      this.packageService = packageService;
+    this.packageService = packageService;
   }
 
   @GetMapping
-  String list(Model model, Authentication authentication) {
-    var events = service.findAll();
+  String list(
+      @RequestParam(defaultValue = "1") Integer page,
+      @RequestParam(defaultValue = "6") Integer size,
+      Model model,
+      Authentication authentication) {
+    var events = service.findAll(new Page(page, size));
 
     model.addAttribute("events", events);
     model.addAttribute("authentication", authentication);

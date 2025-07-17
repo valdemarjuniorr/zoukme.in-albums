@@ -1,4 +1,4 @@
-<div id="packagesTable" th:fragment="packages" class="bg-white rounded-lg shadow-sm p-6 mb-6">
+<div id="packagesTable" th:if="${packages != null}" th:fragment="render(packages)" class="bg-white rounded-lg shadow-sm p-6 mb-6">
 	<div class="flex items-center justify-between mb-4">
 		<h2 class="text-lg font-medium text-gray-900">Pacotes</h2>
 		<button hx-get="/admin/events/packages" hx-target="#package-container" type="button" id="addPackageBtn"
@@ -16,6 +16,20 @@
 			</tr>
 			</thead>
 			<tbody id="packageTableBody">
+			<tr th:each="pack : ${packages}" th:id="${pack.id}" class="package-item border-b border-gray-200 hover:bg-gray-50">
+				<td th:text="${pack.title}" class="px-4 py-3 text-gray-600"></td>
+				<td th:text="${pack.description}" class="px-4 py-3 text-gray-600"></td>
+				<td th:text="${#numbers.formatDecimal(pack.price, 1, 2, 'COMMA')}" class="px-4 py-3 text-right text-gray-600"></td>
+				<td class="px-4 py-3 text-center">
+					<!--		<button type="button" class="cursor-pointer text-gray-400 hover:text-gray-600 mx-1 edit-package">-->
+					<!--			<i class="ri-edit-line"></i>-->
+					<!--		</button>-->
+					<button type="button" class="cursor-pointer text-gray-400 hover:text-gray-600 mx-1 delete-package"
+									onclick="deletePackageRow(event)">
+						<i class="ri-delete-bin-line"></i>
+					</button>
+				</td>
+			</tr>
 			</tbody>
 		</table>
 	</div>

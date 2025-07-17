@@ -2,11 +2,11 @@ package in.zoukme.zouk_album.services.aws;
 
 import in.zoukme.zouk_album.domains.Event;
 import in.zoukme.zouk_album.domains.EventPhotos;
-import in.zoukme.zouk_album.domains.payments.Package;
 import in.zoukme.zouk_album.domains.Page;
 import in.zoukme.zouk_album.domains.Photo;
 import in.zoukme.zouk_album.domains.SocialMedia;
 import in.zoukme.zouk_album.domains.SubEvent;
+import in.zoukme.zouk_album.domains.payments.Package;
 import in.zoukme.zouk_album.domains.subevent.SubEventWithEvent;
 import in.zoukme.zouk_album.exceptions.EventNotFoundException;
 import in.zoukme.zouk_album.exceptions.SubEventNotFoundException;
@@ -17,10 +17,11 @@ import in.zoukme.zouk_album.repositories.events.EventDetails;
 import in.zoukme.zouk_album.repositories.events.EventPhotosRepository;
 import in.zoukme.zouk_album.repositories.events.EventRepository;
 import in.zoukme.zouk_album.repositories.events.SubEventRepository;
+import in.zoukme.zouk_album.repositories.events.UpdateEventRequest;
 import in.zoukme.zouk_album.services.PackageService;
-
 import java.time.LocalDate;
 import java.util.List;
+import java.util.function.Predicate;
 import org.springframework.data.jdbc.core.mapping.AggregateReference;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -55,10 +56,8 @@ public class EventService {
     this.packageService = packageService;
   }
 
-  public EventDetails findBy(Long id) {
-    var event = repository.findBy(id).orElseThrow(EventNotFoundException::new);
-    event.setImagePath(this.photoRepository.findPhotoByEventId(id));
-    return event;
+  public Event findBy(Long id) {
+    return repository.findById(id).orElseThrow(EventNotFoundException::new);
   }
 
   public EventDetails findByEventUrl(String eventUrl) {
@@ -108,12 +107,13 @@ public class EventService {
     this.bucketService.deleteFolder(event.title());
   }
 
-  public List<Event> findAll() {
+  public org.springframework.data.domain.Page<Event> findAll(Page page) {
     var authentication = SecurityContextHolder.getContext().getAuthentication();
     if (authentication != null && authentication.getName().equals("admin")) {
-      return this.repository.findAllByOrderByDateDesc();
+      return this.repository.findAllByOrderByDateDesc(page.toPageRequest());
     }
-    return this.repository.findAllByDateIsGreaterThanEqualOrderByDate(LocalDate.now());
+    return this.repository.findAllByDateIsGreaterThanEqualOrderByDate(
+        LocalDate.now(), page.toPageRequest());
   }
 
   public SubEventWithEvent getEventAlbumsBy(String eventUrl) {
@@ -183,5 +183,15 @@ public class EventService {
 
   public long count() {
     return this.repository.count();
+  }
+
+  public void update(Long eventId, UpdateEventRequest request) {
+    var event = this.repository.findById(eventId).orElseThrow(EventNotFoundException::new);
+    var packRequest = request.toPackages(AggregateReference.to(event.id()));
+    var packages = event.packages();
+    var newPackages = packages.stream().filter(Predicate.not(packRequest::contains)).toList();
+    if (!newPackages.isEmpty()) {
+      this.packageService.save(newPackages);
+    }
   }
 }

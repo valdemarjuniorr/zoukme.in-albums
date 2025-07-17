@@ -83,18 +83,18 @@
 			</td>
 			<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
 				<div class="flex justify-end space-x-2">
-					<a th:href="@{/admin/events/{eventUrl}(eventUrl=${event.eventUrl})}" class="text-gray-500 hover:text-primary">
-						<div class="w-5 h-5 flex items-center justify-center">
+					<a th:href="@{/admin/events/{eventUrl}(eventUrl=${event.id})}" class="text-gray-500 hover:text-primary">
+						<div title="Editar" class="w-5 h-5 flex items-center justify-center">
 							<i class="ri-edit-line"></i>
 						</div>
 					</a>
-					<button class="text-gray-500 hover:text-primary">
-						<div class="w-5 h-5 flex items-center justify-center">
-							<i class="ri-calendar-line"></i>
+					<a th:href="@{/events/{eventUrl}(eventUrl=${event.eventUrl})}" target="_blank" class="text-gray-500 hover:text-primary">
+						<div title="Detalhes" class="w-5 h-5 flex items-center justify-center">
+							<i class="ri-external-link-line"></i>
 						</div>
-					</button>
+					</a>
 					<button class="text-gray-500 hover:text-red-600">
-						<div class="w-5 h-5 flex items-center justify-center">
+						<div title="Excluir" class="w-5 h-5 flex items-center justify-center">
 							<i class="ri-delete-bin-line"></i>
 						</div>
 					</button>
@@ -104,47 +104,31 @@
 		</tbody>
 	</table>
 </div>
-<!-- Pagination -->
-<div class="flex items-center justify-between px-4 py-3 sm:px-6 mt-4">
-	<div class="flex-1 flex justify-between sm:hidden">
-		<a href="#"
-			 class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-button text-gray-700 bg-white hover:bg-gray-50">
-			Anterior
-		</a>
-		<a href="#"
-			 class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-button text-gray-700 bg-white hover:bg-gray-50">
-			Próximo
-		</a>
-	</div>
-	<div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+<div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
 		<div>
 			<p class="text-sm text-gray-700">
-				Mostrando <span class="font-medium">1</span> a <span class="font-medium">3</span> de <span class="font-medium">12</span> resultados
+				Mostrando <span th:text="${events.number + 1}" class="font-medium"></span> de
+				<span th:text="${events.totalPages}" class="font-medium"></span> de
+				<span th:text="${events.totalElements}" class="font-medium"></span> resultados
 			</p>
 		</div>
+	<!-- pagination -->
 		<div>
 			<nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
-				<a href="#"
-					 class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+				<a th:if="${!events.first}" th:hx-get="@{/admin/events?page={page}(page=${events.number})}" hx-target="#main-table-content"
+					 class="cursor-pointer relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
 					<span class="sr-only">Anterior</span>
 					<div class="w-5 h-5 flex items-center justify-center">
 						<i class="ri-arrow-left-s-line"></i>
 					</div>
 				</a>
-				<a href="#" aria-current="page"
-					 class="z-10 bg-primary border-primary text-white relative inline-flex items-center px-4 py-2 border text-sm font-medium">
-					1
+				<a th:each="page : ${pagination}" th:text="${page}" th:hx-get="@{/admin/events?page={page}(page=${page})}" hx-target="#main-table-content"
+					 th:class="${page == events.number + 1 + ''
+							? 'z-10 bg-primary border-primary text-white relative inline-flex items-center px-4 py-2 border text-sm font-medium'
+							: 'cursor-pointer bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium'}">
 				</a>
-				<a href="#"
-					 class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
-					2
-				</a>
-				<a href="#"
-					 class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
-					3
-				</a>
-				<a href="#"
-					 class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+				<a th:if="${!events.last}" th:hx-get="@{/admin/events?page={page}(page=${events.number + 2})}" hx-target="#main-table-content"
+					 class="cursor-pointer relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
 					<span class="sr-only">Próximo</span>
 					<div class="w-5 h-5 flex items-center justify-center">
 						<i class="ri-arrow-right-s-line"></i>
@@ -153,4 +137,3 @@
 			</nav>
 		</div>
 	</div>
-</div>

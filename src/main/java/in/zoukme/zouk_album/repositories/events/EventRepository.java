@@ -2,12 +2,16 @@ package in.zoukme.zouk_album.repositories.events;
 
 import in.zoukme.zouk_album.domains.Event;
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.ListCrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
-public interface EventRepository extends ListCrudRepository<Event, Long> {
+public interface EventRepository
+    extends PagingAndSortingRepository<Event, Long>, ListCrudRepository<Event, Long> {
 
   @Query(
       """
@@ -29,7 +33,8 @@ public interface EventRepository extends ListCrudRepository<Event, Long> {
 
   Optional<Event> findByEventUrl(String eventUrl);
 
-  List<Event> findAllByOrderByDateDesc();
+  Page<Event> findAllByOrderByDateDesc(Pageable pageable);
 
-  List<Event> findAllByDateIsGreaterThanEqualOrderByDate(LocalDate dateIsGreaterThan);
+  Page<Event> findAllByDateIsGreaterThanEqualOrderByDate(
+      LocalDate dateIsGreaterThan, PageRequest pageRequest);
 }

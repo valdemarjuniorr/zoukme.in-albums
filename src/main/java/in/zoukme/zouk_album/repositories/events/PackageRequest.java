@@ -3,10 +3,12 @@ package in.zoukme.zouk_album.repositories.events;
 import in.zoukme.zouk_album.domains.Event;
 import in.zoukme.zouk_album.domains.payments.Package;
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.Set;
 import org.springframework.data.jdbc.core.mapping.AggregateReference;
 import org.springframework.util.StringUtils;
 
-public record PackageRequest(String title, String description, BigDecimal price) {
+public record PackageRequest(Long id, String title, String description, BigDecimal price) {
 
   public PackageRequest {
     if (!StringUtils.hasText(title)) {
@@ -23,5 +25,11 @@ public record PackageRequest(String title, String description, BigDecimal price)
 
   public Package toDomain(AggregateReference<Event, Long> eventSaved) {
     return new Package(null, eventSaved, title, description, price);
+  }
+
+  public static List<PackageRequest> from(Set<Package> packages) {
+    return packages.stream()
+        .map(pack -> new PackageRequest(pack.id(), pack.title(), pack.description(), pack.price()))
+        .toList();
   }
 }

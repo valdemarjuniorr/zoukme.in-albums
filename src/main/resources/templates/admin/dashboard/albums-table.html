@@ -53,13 +53,18 @@
 			<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
 				<div class="flex justify-end space-x-2">
 					<button class="text-gray-500 hover:text-primary">
-						<div class="w-5 h-5 flex items-center justify-center">
+						<div title="Editar" class="w-5 h-5 flex items-center justify-center">
 							<i class="ri-edit-line"></i>
 						</div>
 					</button>
+					<a th:href="${album.url}" target="_blank" class="text-gray-500 hover:text-primary">
+						<div title="Detalhes" class="w-5 h-5 flex items-center justify-center">
+							<i class="ri-external-link-line"></i>
+						</div>
+					</a>
 					<button class="text-gray-500 hover:text-red-600" hx-delete="@{/admin/albums/{albumId}(albumId=${album.id})}" hx-target="#albumsTableBody"
 									hx-confirm="Tem certeza que deseja excluir este álbum?" hx-indicator="#loading-indicator">
-						<div class="w-5 h-5 flex items-center justify-center">
+						<div title="Excluir" class="w-5 h-5 flex items-center justify-center">
 							<i class="ri-delete-bin-line"></i>
 						</div>
 					</button>
@@ -71,11 +76,11 @@
 </div>
 <div class="flex items-center justify-between px-4 py-3 sm:px-6 mt-4">
 	<div class="flex-1 flex justify-between sm:hidden">
-		<a th:if="${!albums.first}" th:hx-get="@{/albums?page={page}(page=${albums.number})}" hx-target="#albumsTable"
+		<a th:if="${!albums.first}" th:hx-get="@{/albums?page={page}(page=${albums.number})}" hx-target="#main-table-content"
 			 class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-button text-gray-700 bg-white hover:bg-gray-50">
 			Anterior
 		</a>
-		<a th:if="${!albums.last}" th:hx-get="@{/albums?page={page}(page=${albums.number + 2})}" hx-target="#albumsTable"
+		<a th:if="${!albums.last}" th:hx-get="@{/albums?page={page}(page=${albums.number + 2})}" hx-target="#main-table-content"
 			 class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-button text-gray-700 bg-white hover:bg-gray-50">
 			Próximo
 		</a>
@@ -91,19 +96,19 @@
 		<!-- pagination -->
 		<div>
 			<nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
-				<a th:if="${!albums.first}" th:hx-get="@{/albums?page={page}(page=${albums.number})}" hx-target="#albumsTable"
+				<a th:if="${!albums.first}" th:hx-get="@{/albums?page={page}(page=${albums.number})}" hx-target="#main-table-content"
 					 class="cursor-pointer relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
 					<span class="sr-only">Anterior</span>
 					<div class="w-5 h-5 flex items-center justify-center">
 						<i class="ri-arrow-left-s-line"></i>
 					</div>
 				</a>
-				<a th:each="page : ${pagination}" th:text="${page}" th:hx-get="@{/albums?page={page}(page=${page})}" hx-target="#albumsTable"
+				<a th:each="page : ${pagination}" th:text="${page}" th:hx-get="@{/albums?page={page}(page=${page})}" hx-target="#main-table-content"
 					 th:class="${page == albums.number + 1 + ''
 							? 'z-10 bg-primary border-primary text-white relative inline-flex items-center px-4 py-2 border text-sm font-medium'
 							: 'cursor-pointer bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium'}">
 				</a>
-				<a th:if="${!albums.last}" th:hx-get="@{/albums?page={page}(page=${albums.number + 2})}" hx-target="#albumsTable"
+				<a th:if="${!albums.last}" th:hx-get="@{/albums?page={page}(page=${albums.number + 2})}" hx-target="#main-table-content"
 					 class="cursor-pointer relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
 					<span class="sr-only">Próximo</span>
 					<div class="w-5 h-5 flex items-center justify-center">

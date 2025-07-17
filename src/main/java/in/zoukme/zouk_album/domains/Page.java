@@ -14,6 +14,10 @@ public record Page(Integer page, Integer size) {
     }
   }
 
+  public static Page defaultPage() {
+    return new Page(1, 6);
+  }
+
   public PageRequest toPageRequest() {
     return PageRequest.of(this.page - 1, this.size);
   }

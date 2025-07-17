@@ -6,6 +6,7 @@ import in.zoukme.zouk_album.services.AlbumService;
 import in.zoukme.zouk_album.services.aws.EventService;
 import in.zoukme.zouk_album.services.payments.PaymentService;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -39,16 +40,16 @@ public class DashboardService {
     return photoService.count();
   }
 
-  public BigDecimal getTotalAmount() {
-    return paymentService.getTotalAmount();
+  public BigDecimal getTotalAmount(LocalDateTime afterDateTime) {
+    return paymentService.getTotalAmount(afterDateTime);
   }
 
-  public SumPriceTotalTransaction getTotalCompleted() {
-    return getValueOrZero(paymentService.getTotalCompleted());
+  public SumPriceTotalTransaction getTotalCompleted(LocalDateTime afterDateTime) {
+    return getValueOrZero(paymentService.getTotalCompleted(afterDateTime));
   }
 
-  public SumPriceTotalTransaction getTotalPending() {
-    return getValueOrZero(paymentService.getTotalPending());
+  public SumPriceTotalTransaction getTotalPending(LocalDateTime afterDateTime) {
+    return getValueOrZero(paymentService.getTotalPending(afterDateTime));
   }
 
   private SumPriceTotalTransaction getValueOrZero(SumPriceTotalTransaction total) {
