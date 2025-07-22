@@ -5,6 +5,7 @@ import in.zoukme.zouk_album.controllers.packages.PersonalDetailsRequest;
 import in.zoukme.zouk_album.domains.payments.Package;
 import in.zoukme.zouk_album.exceptions.PackageNotFoundException;
 import in.zoukme.zouk_album.repositories.PackageRepository;
+import in.zoukme.zouk_album.repositories.events.PackageRequest;
 import in.zoukme.zouk_album.services.payments.PaymentService;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -40,5 +41,13 @@ public class PackageService {
     var pack =
         this.repository.findById(request.packId()).orElseThrow(PackageNotFoundException::new);
     return paymentService.save(request, pack);
+  }
+
+  public void update(PackageRequest request) {
+    var pack = this.repository.findById(request.id()).orElseThrow(PackageNotFoundException::new);
+    var updatedPack =
+        new Package(
+            pack.id(), pack.eventId(), request.title(), request.description(), request.price());
+    save(updatedPack);
   }
 }

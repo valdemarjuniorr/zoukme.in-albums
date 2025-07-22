@@ -1,17 +1,19 @@
 package in.zoukme.zouk_album.services.payments;
 
 import in.zoukme.zouk_album.clients.pagbank.CreateCheckoutRequest;
-import in.zoukme.zouk_album.clients.pagbank.Customer;
-import in.zoukme.zouk_album.clients.pagbank.Item;
 import in.zoukme.zouk_album.clients.pagbank.PagBankResponse;
 import in.zoukme.zouk_album.clients.pagbank.PagBankService;
+import in.zoukme.zouk_album.clients.pagbank.domain.Customer;
+import in.zoukme.zouk_album.clients.pagbank.domain.Item;
 import in.zoukme.zouk_album.controllers.packages.PersonalDetailsRequest;
 import in.zoukme.zouk_album.domains.Page;
 import in.zoukme.zouk_album.domains.SumPriceTotalTransaction;
 import in.zoukme.zouk_album.domains.payments.Package;
 import in.zoukme.zouk_album.domains.payments.Payment;
 import in.zoukme.zouk_album.domains.payments.PaymentStatus;
+import in.zoukme.zouk_album.exceptions.EventNotFoundException;
 import in.zoukme.zouk_album.exceptions.PaymentNotFoundException;
+import in.zoukme.zouk_album.repositories.events.EventRepository;
 import in.zoukme.zouk_album.repositories.payments.PaymentEmailDetails;
 import in.zoukme.zouk_album.repositories.payments.PaymentsRepository;
 import in.zoukme.zouk_album.services.aws.ses.EmailService;
@@ -30,19 +32,27 @@ import org.springframework.stereotype.Service;
 @Service
 public class PaymentService {
 
+  private static final String HOST_URL = "https://zoukme.in";
   private static final Logger log = LoggerFactory.getLogger(PaymentService.class);
   private final PaymentsRepository repository;
   private final PagBankService pagBankService;
   private final EmailService emailService;
+  private final EventRepository eventRepository;
 
   public PaymentService(
-      PaymentsRepository repository, PagBankService pagBankService, EmailService emailService) {
+      PaymentsRepository repository,
+      PagBankService pagBankService,
+      EmailService emailService,
+      EventRepository eventRepository) {
     this.repository = repository;
     this.pagBankService = pagBankService;
     this.emailService = emailService;
+    this.eventRepository = eventRepository;
   }
 
   public PagBankResponse save(PersonalDetailsRequest payment, Package pack) {
+    var event =
+        eventRepository.findById(pack.eventId().getId()).orElseThrow(EventNotFoundException::new);
     var customer =
         new Customer(
             payment.firstName() + " " + payment.lastName(),
@@ -55,16 +65,16 @@ public class PaymentService {
             pack.title(),
             pack.description(),
             payment.amount(),
-            "https://www.petz.com.br/blog//wp-content/upload/2018/09/tamanho-de-cachorro-pet-1.jpg");
+            event.coverUrl());
     var referenceId = UUID.randomUUID();
     var request =
         new CreateCheckoutRequest(
             referenceId,
             customer,
             item,
-            "https://zoukme.in",
-            String.format("https://zoukme.in/payments/confirmation/%s/paid", referenceId),
-            "https://zoukme.in/payments/pagbank/webhook");
+            String.format("%s/events/%s", HOST_URL, event.eventUrl()),
+            String.format("%s/payments/confirmation/%s/paid", HOST_URL, referenceId),
+            HOST_URL + "/payments/pagbank/webhook");
 
     var response = pagBankService.createCheckOut(request);
 
@@ -134,12 +144,12 @@ public class PaymentService {
   public org.springframework.data.domain.Page<Payment> findAllBy(
       PaymentStatus status, LocalDateTime beforeDateTime, Page page) {
     if (Objects.isNull(status)) {
-      return repository.findAll(page.toPageRequest());
+      return repository.findAllByOrderByPaymentDateDesc(page.toPageRequest());
     }
     if (Objects.isNull(beforeDateTime)) {
       beforeDateTime = DateUtils.endDateTime(LocalDate.now().minusYears(1));
     }
-    return repository.findAllByStatusAndPaymentDateIsAfter(
+    return repository.findAllByStatusAndPaymentDateIsAfterOrderByPaymentDateDesc(
         status, beforeDateTime, page.toPageRequest());
   }
 }

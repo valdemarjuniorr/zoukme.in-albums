@@ -6,7 +6,6 @@ import in.zoukme.zouk_album.domains.Page;
 import in.zoukme.zouk_album.domains.Photo;
 import in.zoukme.zouk_album.domains.SocialMedia;
 import in.zoukme.zouk_album.domains.SubEvent;
-import in.zoukme.zouk_album.domains.payments.Package;
 import in.zoukme.zouk_album.domains.subevent.SubEventWithEvent;
 import in.zoukme.zouk_album.exceptions.EventNotFoundException;
 import in.zoukme.zouk_album.exceptions.SubEventNotFoundException;
@@ -116,6 +115,10 @@ public class EventService {
         LocalDate.now(), page.toPageRequest());
   }
 
+  public List<Event> findAllActiveEvents() {
+    return this.repository.findAllActiveEventsByDateIsAfter(LocalDate.now());
+  }
+
   public SubEventWithEvent getEventAlbumsBy(String eventUrl) {
     var event = this.repository.findByEventUrl(eventUrl).orElseThrow(EventNotFoundException::new);
     var subEvents = this.subEventRepository.findSubEventsBy(eventUrl);
@@ -168,17 +171,8 @@ public class EventService {
             });
   }
 
-  public List<Package> getPackagesBy(Long eventId) {
-    return this.packageService.findBy(eventId);
-  }
-
   private String getFolderNameFrom(String folderPath, String prefix) {
     return folderPath.substring(prefix.length()).replace("/", "");
-  }
-
-  public void deletePhoto(String eventUrl, String photoUrl) {
-    var prefix = "events/" + eventUrl;
-    this.bucketService.deletePhotoBy(eventUrl, prefix);
   }
 
   public long count() {

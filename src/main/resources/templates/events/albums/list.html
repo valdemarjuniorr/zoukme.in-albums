@@ -1,7 +1,15 @@
 <html xmlns:th="https://www.thymeleaf.org">
 
 <head th:insert="~{fragments/header}"></head>
-
+<script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                colors: {primary: "#e94057", secondary: "#8a2be2"},
+            },
+        },
+    };
+</script>
 <body class="bg-gray-100">
 <!-- Header -->
 <div th:insert="~{fragments/top :: top}"></div>

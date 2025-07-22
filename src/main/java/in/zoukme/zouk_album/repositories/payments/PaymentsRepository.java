@@ -13,10 +13,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jdbc.repository.query.Modifying;
 import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.ListCrudRepository;
-import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.repository.ListPagingAndSortingRepository;
 
 public interface PaymentsRepository
-    extends PagingAndSortingRepository<Payment, Long>, ListCrudRepository<Payment, Long> {
+    extends ListPagingAndSortingRepository<Payment, Long>, ListCrudRepository<Payment, Long> {
 
   @Query("SELECT * FROM payments WHERE package_id = :packageId")
   Optional<Payment> findByPackageId(Long packageId);
@@ -53,6 +53,8 @@ public interface PaymentsRepository
   Page<Payment> findAllByStatusAndPaymentDateIsBefore(
       PaymentStatus status, LocalDateTime paymentDateBefore, Pageable pageable);
 
-  Page<Payment> findAllByStatusAndPaymentDateIsAfter(
+  Page<Payment> findAllByStatusAndPaymentDateIsAfterOrderByPaymentDateDesc(
       PaymentStatus status, LocalDateTime paymentDateAfter, Pageable pageable);
+
+  Page<Payment> findAllByOrderByPaymentDateDesc(Pageable pageable);
 }

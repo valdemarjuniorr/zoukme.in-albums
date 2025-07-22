@@ -1,4 +1,4 @@
-package in.zoukme.zouk_album.clients.pagbank;
+package in.zoukme.zouk_album.clients.pagbank.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

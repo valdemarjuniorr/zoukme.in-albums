@@ -27,11 +27,13 @@
           },
       };
 	</script>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+	<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet"/>
 	<link rel="preconnect" href="https://fonts.googleapis.com"/>
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-	<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet"/>
-	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css"/>
+	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+	<script src="https://cdn.jsdelivr.net/npm/cleave.js@1.6.0/dist/cleave.min.js"></script>
 	<style>
       :where([class^="ri-"])::before {
           content: "\f3c2";
@@ -143,7 +145,7 @@
 			<div class="w-6 h-6 flex items-center justify-center mr-3 text-primary">
 				<i class="ri-gallery-line"></i>
 			</div>
-			<span>Fotos</span>
+			<span>Pacotes</span>
 		</a>
 		<a href="#" class="sidebar-link flex items-center px-4 py-3 text-sm text-gray-700">
 			<div class="w-6 h-6 flex items-center justify-center mr-3 text-primary">
@@ -363,7 +365,9 @@
 					<button hx-get="/admin/events" hx-target="#main-table-content" hx-trigger="click"
 									class="tab-button px-6 py-4 text-sm font-medium text-gray-500 whitespace-nowrap">Eventos
 					</button>
-					<button class="tab-button px-6 py-4 text-sm font-medium text-gray-500 whitespace-nowrap">Fotos</button>
+					<button hx-get="/admin/events/packages/list" hx-target="#main-table-content"
+									class="tab-button px-6 py-4 text-sm font-medium text-gray-500 whitespace-nowrap">Pacotes
+					</button>
 					<button hx-get="/admin/payments/list" hx-target="#main-table-content"
 									class="tab-button px-6 py-4 text-sm font-medium text-gray-500 whitespace-nowrap">
 						Pagamentos
@@ -434,9 +438,10 @@
 			</div>
 		</div>
 	</div>
-	</div>
-	</div>
 </main>
+<script type="text/javascript"
+				src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<div id="toast"></div>    <!-- Footer -->
 <script id="tabSwitcher">
     document.addEventListener("DOMContentLoaded", function () {
         const tabButtons = document.querySelectorAll(".tab-button");

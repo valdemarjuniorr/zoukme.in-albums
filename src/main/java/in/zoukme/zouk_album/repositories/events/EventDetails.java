@@ -1,7 +1,6 @@
 package in.zoukme.zouk_album.repositories.events;
 
 import in.zoukme.zouk_album.utils.DateUtils;
-
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -84,5 +83,10 @@ public final class EventDetails {
 
   public String getDescriptiveDate() {
     return DateUtils.getDescriptiveDate(this.date);
+  }
+
+  public Boolean isComingUp() {
+    var now = LocalDate.now();
+    return date.isEqual(now) || date.isAfter(now);
   }
 }

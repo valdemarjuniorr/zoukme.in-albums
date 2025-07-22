@@ -247,14 +247,15 @@
 			</div>
 		</div>
 	</section>
-	<section class="mb-20" th:if="${packages != null and packages.size() > 0}">
+	<section id="pacotes" class="mb-20" th:if="${(packages != null and !#lists.isEmpty(packages))}">
 		<h2 class="text-3xl font-bold text-center mb-4">Escolha a sua experiência</h2>
 		<p class="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
 			Escolha o pacote perfeito que combina com a sua jornada de dança.
 			Se você está aqui para as festas ou quer a experiência completa do evento.
 		</p>
 		<div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-			<div th:each="pack : ${packages}" class="bg-white rounded-xl p-8 shadow-lg hover:shadow-xl transition-shadow border border-gray-100 gap-12 m-4">
+			<div th:if="${event.comingUp}" th:each="pack : ${packages}"
+					 class="bg-white rounded-xl p-8 shadow-lg hover:shadow-xl transition-shadow border border-gray-100 gap-12 m-4">
 				<div class="flex items-center justify-between mb-4">
 					<h3 th:text="${pack.title}" class="text-2xl font-bold"></h3>
 					<div class="w-12 h-12 flex items-center justify-center bg-primary/10 rounded-full">
@@ -269,10 +270,21 @@
 					</span>
 					<span class="text-gray-500 ml-2">/ pessoa</span>
 				</div>
-				<a th:href="@{/packages?packId={packageId}(packageId=${pack.id})}" class="block text-center cursor-pointer w-full bg-primary hover:bg-primary/90 text-white py-3 !rounded-button font-semibold whitespace-nowrap transition-all">
+				<a th:href="@{/packages?packId={packageId}(packageId=${pack.id})}"
+					 class="block text-center cursor-pointer w-full bg-primary hover:bg-primary/90 text-white py-3 !rounded-button font-semibold whitespace-nowrap transition-all">
 					Adquirir agora
 				</a>
 			</div>
+		</div>
+		<div id="happening-event" th:if="${!event.comingUp}"
+				 class="max-w-3xl mx-auto text-center bg-yellow-50 border border-yellow-200 rounded-xl p-4 mx-2 md:mx-auto">
+			<div class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
+				<i class="ri-timer-line text-yellow-600 text-2xl"></i>
+			</div>
+			<h2 class="text-2xl font-bold text-yellow-800 mb-3">Evento em andamento ou finalizado!</h2>
+			<p class="text-yellow-700">
+				Os pacotes para este evento não estão mais disponíveis para compra.
+			</p>
 		</div>
 	</section>
 	<div class="social-icons">

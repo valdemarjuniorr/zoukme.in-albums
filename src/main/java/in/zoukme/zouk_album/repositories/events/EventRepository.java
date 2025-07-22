@@ -2,6 +2,7 @@ package in.zoukme.zouk_album.repositories.events;
 
 import in.zoukme.zouk_album.domains.Event;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -37,4 +38,6 @@ public interface EventRepository
 
   Page<Event> findAllByDateIsGreaterThanEqualOrderByDate(
       LocalDate dateIsGreaterThan, PageRequest pageRequest);
+
+  List<Event> findAllActiveEventsByDateIsAfter(LocalDate dateAfter);
 }

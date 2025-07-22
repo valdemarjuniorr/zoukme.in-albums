@@ -8,6 +8,7 @@ import in.zoukme.zouk_album.repositories.events.CreateEventRequest;
 import in.zoukme.zouk_album.repositories.events.PackageRequest;
 import in.zoukme.zouk_album.repositories.events.UpdateEventRequest;
 import in.zoukme.zouk_album.services.AlbumService;
+import in.zoukme.zouk_album.services.PackageService;
 import in.zoukme.zouk_album.services.aws.BucketService;
 import in.zoukme.zouk_album.services.aws.EventService;
 import in.zoukme.zouk_album.services.payments.PaymentService;
@@ -40,18 +41,21 @@ public class AdminController {
   private final BucketService bucketService;
   private final DashboardService dashboardService;
   private final PaymentService paymentService;
+  private final PackageService packageService;
 
   public AdminController(
       AlbumService albumService,
       EventService eventService,
       BucketService bucketService,
       DashboardService dashboardService,
-      PaymentService paymentService) {
+      PaymentService paymentService,
+      PackageService packageService) {
     this.albumService = albumService;
     this.eventService = eventService;
     this.bucketService = bucketService;
     this.dashboardService = dashboardService;
     this.paymentService = paymentService;
+    this.packageService = packageService;
   }
 
   @GetMapping
@@ -137,6 +141,27 @@ public class AdminController {
   String addPackage(PackageRequest request, Model model) {
     model.addAttribute("package", request);
     return "admin/events/new-line-package";
+  }
+
+  @GetMapping("/events/packages/list")
+  String getPackages(Model model) {
+    model.addAttribute("events", this.eventService.findAllActiveEvents());
+    return "admin/dashboard/packages/list";
+  }
+
+  @GetMapping("/events/packages/details")
+  String getPackagesByEvent(@RequestParam(required = false) Long eventId, Model model) {
+    var packages = this.packageService.findBy(eventId);
+    model.addAttribute("packages", packages);
+    return "admin/dashboard/packages/table";
+  }
+
+  @PostMapping("/events/packages/update")
+  String updatePackage(PackageRequest request, Model model) {
+    this.packageService.update(request);
+    model.addAttribute("message", "Pacote atualizado com sucesso");
+
+    return "/events/toast";
   }
 
   @PostMapping("/events/create")

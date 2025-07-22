@@ -1,5 +1,6 @@
 package in.zoukme.zouk_album.clients.pagbank;
 
+import in.zoukme.zouk_album.clients.pagbank.domain.Customer;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
