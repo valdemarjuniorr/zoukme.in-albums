@@ -27,7 +27,11 @@
 								<img th:src="${album.thumbUrl}" th:alt="${album.title}"
 										 class="w-full h-full object-cover object-top transform group-hover:scale-105 transition-transform duration-500"/>
 								<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-								<!--                <span class="absolute top-4 right-4 bg-primary text-white px-3 py-1 rounded-full text-sm">Festival</span>-->
+								<div th:if="${album.isNew}"
+										 class="absolute top-4 right-4 bg-gradient-to-r from-primary to-secondary text-white text-xs font-bold py-1 px-3 rounded-lg shadow-md flex items-center gap-1 rotate-12">
+									<i class="ri-flashlight-line"></i>
+									<span>Novo</span>
+								</div>
 								<span th:text="${album.descriptiveDate}"
 											class="font-['Montserrat'] absolute top-4 left-4 bg-black/50 text-white px-3 py-1 rounded-full text-sm"></span>
 							</div>

@@ -30,4 +30,10 @@ public record Album(
   public String getDescriptiveDate() {
     return DateUtils.getDescriptiveDate(this.eventDate);
   }
+
+  /** If the event date is more than a week away, it is considered new. */
+  public Boolean isNew() {
+    var oneWeek = LocalDate.now().minusWeeks(1);
+    return eventDate.equals(oneWeek) || eventDate.isAfter(oneWeek);
+  }
 }
