@@ -1,6 +1,6 @@
 clients:
   pagbank:
-    base-url: https://api.pagseguro.comk
+    base-url: https://api.pagseguro.com
     token: ${PAGBANK_TOKEN}
 
 server:

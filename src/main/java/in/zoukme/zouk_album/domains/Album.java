@@ -17,7 +17,14 @@ public record Album(
     String url) {
 
   public Album(String title, String city, LocalDate eventDate, String cover) {
-    this(null, null, title, city, eventDate, cover, title.toLowerCase().replace(" ", "-"));
+    this(
+        null,
+        null,
+        title,
+        city,
+        eventDate,
+        cover,
+        String.format("/events/%s/albums", title.toLowerCase().replace(" ", "-")));
   }
 
   public String getDescriptiveDate() {
