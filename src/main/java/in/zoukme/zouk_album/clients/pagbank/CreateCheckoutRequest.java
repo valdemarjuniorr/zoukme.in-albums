@@ -16,6 +16,7 @@ public record CreateCheckoutRequest(
     @JsonProperty("redirect_url") String redirectUrl,
     @JsonProperty("payment_notification_urls")
         List<String> paymentNotificationUrls /* notify payment status */,
+    @JsonProperty("notification_urls") List<String> notificationUrls,
     @JsonProperty("payment_methods_configs") List<PaymentMethodsConfig> paymentMethodConfigs) {
 
   public CreateCheckoutRequest(
@@ -24,6 +25,7 @@ public record CreateCheckoutRequest(
       Item item,
       String returnUrl,
       String redirectUrl,
+      String notificationUrl,
       String paymentNotificationUrl) {
     this(
         referenceId,
@@ -33,6 +35,7 @@ public record CreateCheckoutRequest(
         returnUrl,
         redirectUrl,
         List.of(paymentNotificationUrl), // paymentNotificationUrls
+        List.of(notificationUrl),
         List.of(PaymentMethodsConfig.installmentLimitThree()));
   }
 

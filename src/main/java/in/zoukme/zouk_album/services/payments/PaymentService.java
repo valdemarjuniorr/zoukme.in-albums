@@ -74,6 +74,7 @@ public class PaymentService {
             item,
             String.format("%s/events/%s", HOST_URL, event.eventUrl()),
             String.format("%s/payments/confirmation/%s/paid", HOST_URL, referenceId),
+            HOST_URL + "/payments/pagbank/webhook/checkout",
             HOST_URL + "/payments/pagbank/webhook");
 
     var response = pagBankService.createCheckOut(request);

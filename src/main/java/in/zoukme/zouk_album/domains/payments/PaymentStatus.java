@@ -5,6 +5,7 @@ public enum PaymentStatus {
   IN_ANALYSIS("Em Análise"),
   DECLINED("Recusado"),
   CANCELED("Cancelado"),
+  EXPIRED("Expirado"),
   WAITING("Aguardando");
 
   private String status;

@@ -5,6 +5,7 @@ public enum PagBankStatus {
   IN_ANALYSIS("Em Analise"),
   DECLINED("Recusado"),
   CANCELED("Cancelado"),
+  EXPIRED("Expirado"),
   WAITING("Aguardando");
 
   private String status;
