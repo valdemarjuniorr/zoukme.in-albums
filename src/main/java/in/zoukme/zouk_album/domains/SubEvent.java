@@ -7,9 +7,12 @@ import org.springframework.data.relational.core.mapping.Table;
 
 @Table("sub_events")
 public record SubEvent(
-    @Id Long id, @Column("event_id") AggregateReference<Event, Long> eventId, String name) {
+    @Id Long id,
+    @Column("event_id") AggregateReference<Event, Long> eventId,
+    String name,
+    String coverUrl) {
 
   public SubEvent(AggregateReference<Event, Long> eventId, String name) {
-    this(null, eventId, name);
+    this(null, eventId, name, null);
   }
 }

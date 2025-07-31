@@ -10,6 +10,20 @@
         },
     };
 </script>
+<style>
+    .image-container:hover .gallery-image {
+        transform: scale(1.02);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .image-container:hover .overlay {
+        opacity: 1;
+    }
+
+    .image-container:hover .action-icons {
+        opacity: 1;
+    }
+</style>
 <body class="bg-gray-100">
 <!-- Header -->
 <div th:insert="~{fragments/top :: top}"></div>
@@ -25,9 +39,27 @@
 	<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
 		<div th:each="photo : ${photos.content}"
 				 class="bg-white p-2 rounded-lg shadow-md">
-			<div>
+			<div class="image-container relative rounded-lg overflow-hidden shadow-sm group">
 				<img th:src="${photo.imagePath}" class="w-full h-auto rounded-lg"
 						 th:onclick="@{openModal({photoId})(photoId=${photo.id})}"/>
+				<div th:if="${authentication != null}">
+					<!-- change cover image section -->
+					<div class="overlay absolute inset-0"></div>
+					<div class="absolute top-2 right-2 z-10">
+						<div class="relative">
+							<input type="checkbox" class="peer absolute top-0 right-0 w-8 h-8 opacity-0 cursor-pointer z-10"/>
+							<button class="w-8 h-8 flex items-center justify-center rounded-full bg-black/30 hover:bg-black/40 transition-colors">
+								<i class="ri-more-2-fill text-white"></i>
+							</button>
+							<div class="invisible peer-checked:visible absolute right-0 mt-1 w-48 bg-white/90 backdrop-blur-sm rounded-lg shadow-lg py-1">
+								<button th:hx-post="@{/admin/subevents/{photoId}/cover(photoId=${photo.id})}" hx-target="#toast"
+												class="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 active:bg-gray-200 transition-colors">
+									Definir Capa Sub álbum
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
 				<!-- modal content -->
 			</div>
 			<style>

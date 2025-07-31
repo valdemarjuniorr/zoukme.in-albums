@@ -3,6 +3,7 @@ package in.zoukme.zouk_album.repositories.events;
 import in.zoukme.zouk_album.domains.SubEvent;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.jdbc.repository.query.Modifying;
 import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.ListCrudRepository;
 
@@ -10,7 +11,7 @@ public interface SubEventRepository extends ListCrudRepository<SubEvent, Long> {
 
   @Query(
       """
-		SELECT se.id, se.name, se.event_id
+		SELECT se.id, se.name, se.event_id, se.cover_url
 	 	FROM sub_events se
 			INNER JOIN events e ON se.event_id = e.id
 		WHERE e.event_url = :eventUrl
@@ -25,4 +26,8 @@ public interface SubEventRepository extends ListCrudRepository<SubEvent, Long> {
  		WHERE e.event_url = :eventUrl AND se.name = :name
 	""")
   Optional<SubEvent> findByName(String name, String eventUrl);
+
+  @Modifying
+  @Query("UPDATE sub_events SET cover_url = :coverUrl WHERE id = :id")
+  void updateCover(Long id, String coverUrl);
 }

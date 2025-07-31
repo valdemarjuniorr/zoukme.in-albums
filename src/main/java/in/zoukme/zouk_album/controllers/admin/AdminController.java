@@ -271,4 +271,12 @@ public class AdminController {
 
     return "admin/events/update";
   }
+
+  @PostMapping("/subevents/{photoId}/cover")
+  String setSubEventCover(@PathVariable Long photoId, Model model) {
+    albumService.setCover(photoId);
+    model.addAttribute("message", "Capa atualizada com sucesso");
+
+    return "/events/toast";
+  }
 }

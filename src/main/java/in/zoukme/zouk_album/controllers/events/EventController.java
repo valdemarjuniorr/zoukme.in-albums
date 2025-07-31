@@ -61,13 +61,15 @@ public class EventController {
       @PathVariable String albumName,
       @RequestParam(defaultValue = "1") Integer page,
       @RequestParam(defaultValue = "50") Integer size,
-      Model model) {
+      Model model,
+      Authentication authentication) {
     var pageObj = new Page(page, size);
     var photos = service.getPhotosBy(eventUrl, albumName, pageObj);
     model.addAttribute("photos", photos);
     model.addAttribute("pagination", pageObj.generatePagination(photos.getTotalPages()));
     model.addAttribute("albumName", albumName);
     model.addAttribute("eventUrl", eventUrl);
+    model.addAttribute("authentication", authentication);
 
     return "events/albums/list";
   }

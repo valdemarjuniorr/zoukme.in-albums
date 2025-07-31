@@ -19,10 +19,13 @@ public class AlbumService {
 
   private final AlbumRepository repository;
   private final BucketService bucketService;
+  private final SubEventService subEventService;
 
-  public AlbumService(AlbumRepository repository, BucketService bucketService) {
+  public AlbumService(
+      AlbumRepository repository, BucketService bucketService, SubEventService subEventService) {
     this.repository = repository;
     this.bucketService = bucketService;
+    this.subEventService = subEventService;
   }
 
   public List<Album> findAll() {
@@ -41,12 +44,7 @@ public class AlbumService {
   }
 
   public Album findBy(Long id) {
-    return this.repository
-        .findById(id)
-        .orElseGet(
-            () -> {
-              throw new AlbumNotFoundException(id);
-            });
+    return this.repository.findById(id).orElseThrow(() -> new AlbumNotFoundException(id));
   }
 
   public void update(Album album) {
@@ -55,13 +53,17 @@ public class AlbumService {
   }
 
   public void deleteBy(Long eventId) {
-    var album =
-        this.repository.findAlbumByEventId(eventId).orElseThrow(AlbumNotFoundException::new);
+    this.repository.findAlbumByEventId(eventId).orElseThrow(AlbumNotFoundException::new);
     this.repository.deleteAlbumByEventId(eventId);
     log.info("Album with id {} has been deleted", eventId);
   }
 
   public long count() {
     return this.repository.count();
+  }
+
+  public void setCover(Long photoId) {
+    this.subEventService.setCover(photoId);
+    log.info("Cover for sub-event with id {} has been set", photoId);
   }
 }
