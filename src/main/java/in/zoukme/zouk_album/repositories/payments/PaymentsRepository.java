@@ -57,4 +57,10 @@ public interface PaymentsRepository
       PaymentStatus status, LocalDateTime paymentDateAfter, Pageable pageable);
 
   Page<Payment> findAllByOrderByPaymentDateDesc(Pageable pageable);
+
+  Optional<Payment> findByTransactionId(String transactionId);
+
+  @Modifying
+  @Query("UPDATE payments SET status = :status WHERE transaction_id = :transactionId")
+  void updatePaymentStatusByReferenceId(String transactionId, PaymentStatus status);
 }

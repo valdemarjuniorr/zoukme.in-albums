@@ -38,16 +38,19 @@ public class PaymentService {
   private final PagBankService pagBankService;
   private final EmailService emailService;
   private final EventRepository eventRepository;
+  private final PaymentsRepository paymentsRepository;
 
   public PaymentService(
       PaymentsRepository repository,
       PagBankService pagBankService,
       EmailService emailService,
-      EventRepository eventRepository) {
+      EventRepository eventRepository,
+      PaymentsRepository paymentsRepository) {
     this.repository = repository;
     this.pagBankService = pagBankService;
     this.emailService = emailService;
     this.eventRepository = eventRepository;
+    this.paymentsRepository = paymentsRepository;
   }
 
   public PagBankResponse save(PersonalDetailsRequest payment, Package pack) {
@@ -115,8 +118,12 @@ public class PaymentService {
     return payment;
   }
 
-  public Payment findById(Long id) {
+  public Payment findByPackageId(Long id) {
     return repository.findByPackageId(id).orElseThrow(PaymentNotFoundException::new);
+  }
+
+  public Payment findBy(Long id) {
+    return repository.findById(id).orElseThrow(PaymentNotFoundException::new);
   }
 
   public List<Payment> findAll() {
@@ -152,5 +159,15 @@ public class PaymentService {
     }
     return repository.findAllByStatusAndPaymentDateIsAfterOrderByPaymentDateDesc(
         status, beforeDateTime, page.toPageRequest());
+  }
+
+  public void inactivate(String transactionId) {
+    var payment =
+        paymentsRepository
+            .findByTransactionId(transactionId)
+            .orElseThrow(PaymentNotFoundException::new);
+    pagBankService.inactivateCheckout(transactionId);
+    paymentsRepository.updatePaymentStatusByReferenceId(transactionId, PaymentStatus.EXPIRED);
+    log.info("Payment with reference ID {} has been inactivated.", transactionId);
   }
 }

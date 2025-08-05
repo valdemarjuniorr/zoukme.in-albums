@@ -1,5 +1,5 @@
 <style>
-    #DECLINED {
+    #DECLINED, #EXPIRED {
         background-color: #fef2f3;
         color: #b91c1c;
     }
@@ -32,7 +32,7 @@
 		</div>
 		<div class="relative">
 			<select name="rangeDays" hx-target="#main-table-content" th:hx-get="@{/admin/payments/list}" hx-trigger="change"
-					class="appearance-none bg-gray-50 border border-gray-300 text-gray-700 py-2 pl-3 pr-8 rounded-button text-sm focus:outline-none focus:ring-2 focus:ring-primary">
+							class="appearance-none bg-gray-50 border border-gray-300 text-gray-700 py-2 pl-3 pr-8 rounded-button text-sm focus:outline-none focus:ring-2 focus:ring-primary">
 				<option>Todos</option>
 				<option value="30">Últimos 30 dias</option>
 				<option value="60">Últimos 60 dias</option>
@@ -144,7 +144,8 @@
 				<td th:text="${payment.descriptiveDate}" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"></td>
 				<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
 					<div class="flex justify-end space-x-2">
-						<button class="text-gray-500 hover:text-primary">
+						<button th:hx-get="@{/admin/payments/{id}/details(id=${payment.id})}" hx-target="#payment-details-modal" hx-swap="afterbegin"
+										class="text-gray-500 hover:text-primary">
 							<div class="w-5 h-5 flex items-center justify-center">
 								<i class="ri-file-list-line"></i>
 							</div>
@@ -152,6 +153,14 @@
 						<button class="text-gray-500 hover:text-primary">
 							<div class="w-5 h-5 flex items-center justify-center">
 								<i class="ri-printer-line"></i>
+							</div>
+						</button>
+						<button title="Inativar" th:hx-delete="@{/admin/payments/{transactionId}/inactivate(transactionId=${payment.transactionId})}"
+										hx-confirm="Tem certeza que deseja inativar este pagamento?"
+										hx-trigger="click"
+										class="text-gray-500 hover:text-primary">
+							<div class="w-5 h-5 flex items-center justify-center">
+								<i class="ri-close-circle-line"></i>
 							</div>
 						</button>
 					</div>
@@ -164,4 +173,6 @@
 			</tbody>
 		</table>
 	</div>
+	<!-- render the payment details modal -->
+	<div id="payment-details-modal"></div>
 </div>

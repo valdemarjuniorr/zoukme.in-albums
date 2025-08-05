@@ -7,6 +7,7 @@ import in.zoukme.zouk_album.domains.payments.PaymentStatus;
 import in.zoukme.zouk_album.repositories.events.CreateEventRequest;
 import in.zoukme.zouk_album.repositories.events.PackageRequest;
 import in.zoukme.zouk_album.repositories.events.UpdateEventRequest;
+import in.zoukme.zouk_album.repositories.payments.PaymentsRepository;
 import in.zoukme.zouk_album.services.AlbumService;
 import in.zoukme.zouk_album.services.PackageService;
 import in.zoukme.zouk_album.services.aws.BucketService;
@@ -49,7 +50,8 @@ public class AdminController {
       BucketService bucketService,
       DashboardService dashboardService,
       PaymentService paymentService,
-      PackageService packageService) {
+      PackageService packageService,
+      PaymentsRepository paymentsRepository) {
     this.albumService = albumService;
     this.eventService = eventService;
     this.bucketService = bucketService;
@@ -275,8 +277,22 @@ public class AdminController {
   @PostMapping("/subevents/{photoId}/cover")
   String setSubEventCover(@PathVariable Long photoId, Model model) {
     albumService.setCover(photoId);
-    model.addAttribute("message", "Capa atualizada com sucesso");
+    model.addAttribute("message", "Capa atualizada");
 
     return "/events/toast";
+  }
+
+  @DeleteMapping("/payments/{transactionId}/inactivate")
+  String inactivate(@PathVariable String transactionId, Model model) {
+    paymentService.inactivate(transactionId);
+    model.addAttribute("message", "Pagamento inativado");
+    return "/events/toast";
+  }
+
+  @GetMapping("/payments/{id}/details")
+  String getPaymentDetails(@PathVariable Long id, Model model) {
+    var payment = paymentService.findBy(id);
+    model.addAttribute("payment", payment);
+    return "admin/dashboard/payments/details";
   }
 }

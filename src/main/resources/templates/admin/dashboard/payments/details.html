@@ -1,0 +1,93 @@
+<div id="modal" class="fixed inset-0 bg-gray-900 bg-opacity-50 items-center justify-center z-50 flex">
+	<div class="bg-white rounded-xl shadow-lg w-full max-w-2xl mx-4 my-8 sm:my-0">
+		<div class="p-4 sm:p-6 border-b border-gray-100">
+			<div class="flex items-center justify-between">
+				<h3 class="text-base sm:text-lg font-semibold text-gray-900">
+					Detalhes do Pagamento
+				</h3>
+				<button onclick="closeModal()" class="close-modal text-gray-400 hover:text-gray-600 p-1">
+					<i class="ri-close-line text-lg sm:text-xl"></i>
+				</button>
+			</div>
+		</div>
+		<div class="p-4 sm:p-6">
+			<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+				<div>
+					<p class="text-sm font-medium text-gray-500 mb-1">ID do Pagamento</p>
+					<p th:text="${payment.referenceId}" class="text-sm text-gray-900"></p>
+				</div>
+				<div>
+					<p class="text-sm font-medium text-gray-500 mb-1">Status</p>
+					<span th:text="${payment.status.status}"
+								class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800"></span>
+				</div>
+				<div>
+					<p class="text-sm font-medium text-gray-500 mb-1">Cliente</p>
+					<p th:text="${payment.fullName}" class="text-sm text-gray-900"></p>
+					<p th:text="${payment.email}" class="text-sm text-gray-500"></p>
+				</div>
+				<div>
+					<p class="text-sm font-medium text-gray-500 mb-1">Valor</p>
+					<span class="font-medium">R$ <span th:text="${#numbers.formatDecimal(payment.amount, 1, 2, 'COMMA')}" class="text-sm text-gray-900"></span></span>
+				</div>
+				<div>
+					<p class="text-sm font-medium text-gray-500 mb-1">Data de Criação</p>
+					<p th:text="${payment.descriptiveDate}" class="text-sm text-gray-900"></p>
+				</div>
+				<div>
+					<p class="text-sm font-medium text-gray-500 mb-1">Método de Pagamento</p>
+					<div class="flex items-center space-x-2">
+						<i class="ri-bank-card-fill text-gray-400"></i>
+						<span class="text-sm text-gray-900">Cartão de Crédito</span>
+					</div>
+				</div>
+			</div>
+			<div class="mt-6">
+				<p class="text-sm font-medium text-gray-500 mb-2">
+					Histórico de Transações
+				</p>
+				<div class="space-y-3">
+					<div class="flex items-center text-sm">
+						<div class="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center mr-3">
+							<i class="ri-time-line text-red-600"></i>
+						</div>
+						<div class="flex-1">
+							<p class="text-gray-900">
+								Pagamento Expirado
+							</p>
+							<p class="text-gray-500">
+								1 de Agosto, 2025 - 23:59
+							</p>
+						</div>
+					</div>
+					<div class="flex items-center text-sm">
+						<div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+							<i class="ri-file-list-line text-blue-600"></i>
+						</div>
+						<div class="flex-1">
+							<p class="text-gray-900">
+								Pagamento Criado
+							</p>
+							<p class="text-gray-500">
+								1 de Agosto, 2025 - 14:30
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="p-4 sm:p-6 border-t border-gray-100">
+			<div class="flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-3">
+				<button onclick="closeModal()"
+								class="close-modal w-full sm:w-auto px-4 py-2 border border-gray-300 text-gray-700 text-sm font-medium rounded-button hover:bg-gray-50">
+					Fechar
+				</button>
+			</div>
+		</div>
+	</div>
+	<script>
+      function closeModal() {
+          document.querySelector('#modal').remove();
+      }
+	</script>
+</div>
