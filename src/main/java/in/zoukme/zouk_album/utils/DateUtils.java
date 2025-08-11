@@ -8,18 +8,18 @@ public final class DateUtils {
 
   /** This method returns a descriptive date as 21/Fev/2025 */
   public static String getDescriptiveDate(LocalDate date) {
-    return String.format(
-        "%d de %s, %d", date.getDayOfMonth(), getDescriptiveMonth(date.getMonth()), date.getYear());
+    return "%d de %s, %d"
+        .formatted(date.getDayOfMonth(), getDescriptiveMonth(date.getMonth()), date.getYear());
   }
 
   public static String getDescriptiveDateTime(LocalDateTime date) {
-    return String.format(
-        "%d de %s, %d às %02d:%02d",
-        date.getDayOfMonth(),
-        getDescriptiveMonth(date.getMonth()),
-        date.getYear(),
-        date.getHour(),
-        date.getMinute());
+    return "%d de %s, %d às %02d:%02d"
+        .formatted(
+            date.getDayOfMonth(),
+            getDescriptiveMonth(date.getMonth()),
+            date.getYear(),
+            date.getHour(),
+            date.getMinute());
   }
 
   /** This method returns a LocalDateTime with the initial time of the day */
