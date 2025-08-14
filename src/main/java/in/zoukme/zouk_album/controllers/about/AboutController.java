@@ -30,12 +30,9 @@ public class AboutController {
             "valdemarjuniorr@gmail.com",
             "contato@zoukme.in",
             contact.subject(),
-            String.format(
-                "Nome Completo: %s\nEmail: %s\nCelular: %s\nMensagem: %s",
-                contact.fullName(),
-                contact.email(),
-                contact.mobile(),
-                contact.message())));
+            "Nome Completo: %s\nEmail: %s\nCelular: %s\nMensagem: %s"
+                .formatted(
+                    contact.fullName(), contact.email(), contact.mobile(), contact.message())));
 
     return "about/success";
   }

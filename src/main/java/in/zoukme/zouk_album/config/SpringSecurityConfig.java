@@ -16,7 +16,7 @@ public class SpringSecurityConfig {
   @Bean
   SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http.csrf(csrf -> csrf.disable())
-        .authorizeRequests(
+        .authorizeHttpRequests(
             authorizeRequests ->
                 authorizeRequests
                     .requestMatchers("/admin/**")
@@ -29,7 +29,7 @@ public class SpringSecurityConfig {
   }
 
   @Bean
-  public UserDetailsService userDetailsService() {
+  UserDetailsService userDetailsService() {
     var manager = new InMemoryUserDetailsManager();
     manager.createUser(
         User.withDefaultPasswordEncoder()

@@ -75,8 +75,8 @@ public class PaymentService {
             referenceId,
             customer,
             item,
-            String.format("%s/events/%s", HOST_URL, event.eventUrl()),
-            String.format("%s/payments/confirmation/%s/paid", HOST_URL, referenceId),
+            "%s/events/%s".formatted(HOST_URL, event.eventUrl()),
+            "%s/payments/confirmation/%s/paid".formatted(HOST_URL, referenceId),
             HOST_URL + "/payments/pagbank/webhook/checkout",
             HOST_URL + "/payments/pagbank/webhook");
 

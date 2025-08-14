@@ -2,13 +2,14 @@ package in.zoukme.zouk_album.services.aws;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
@@ -38,7 +39,7 @@ public class BucketService {
       var path = eventFolderName + File.separator + originalFilename;
       s3Client.putObject(
           builder -> builder.bucket(EventUtils.BUCKET_NAME).key(path),
-          RequestBody.fromFile(Paths.get(tempFile.getAbsolutePath())));
+          RequestBody.fromFile(Path.of(tempFile.getAbsolutePath())));
 
       return new BucketImage(
           EventUtils.getFormatEventName(eventTitle),
@@ -50,6 +51,9 @@ public class BucketService {
   }
 
   public List<BucketImage> upload(String eventTitle, List<MultipartFile> files) {
+    if (CollectionUtils.isEmpty(files)) {
+      return List.of();
+    }
     var imagesS3Paths = new ArrayList<BucketImage>();
     for (MultipartFile file : files) {
       var image = upload(eventTitle, file);

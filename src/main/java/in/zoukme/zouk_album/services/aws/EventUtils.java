@@ -9,7 +9,7 @@ class EventUtils {
   static String getEventFolderName(String title) {
     Assert.hasText(title, "title must not be empty");
 
-    return String.format("%s/%s", "next-events", getFormatEventName(title));
+    return "%s/%s".formatted("next-events", getFormatEventName(title));
   }
 
   static String getFormatEventName(String title) {

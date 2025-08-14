@@ -17,7 +17,7 @@ class PagBankClientConfig {
   }
 
   @Bean
-  public PagBankClient pagBankClient() {
+  PagBankClient pagBankClient() {
     var restClient =
         RestClient.builder()
             .baseUrl(properties.getBaseUrl())

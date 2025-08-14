@@ -24,7 +24,7 @@ public record Album(
         city,
         eventDate,
         cover,
-        String.format("/events/%s/albums", title.toLowerCase().replace(" ", "-")));
+        "/events/%s/albums".formatted(title.toLowerCase().replace(" ", "-")));
   }
 
   public String getDescriptiveDate() {

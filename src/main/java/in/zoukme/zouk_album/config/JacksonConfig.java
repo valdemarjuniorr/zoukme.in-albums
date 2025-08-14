@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 public class JacksonConfig {
 
   @Bean
-  public ObjectMapper objectMapper() {
+  ObjectMapper objectMapper() {
     var objectMapper = new ObjectMapper();
     objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
     objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);

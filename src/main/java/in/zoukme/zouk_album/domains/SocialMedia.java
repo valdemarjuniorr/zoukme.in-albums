@@ -10,6 +10,6 @@ public record SocialMedia(
 
   public SocialMedia(
       AggregateReference<Event, Long> eventId, String instagram, String phoneNumber) {
-    this(null, eventId, instagram, phoneNumber.replaceAll("[^0-9]", ""));
+    this(null, eventId, instagram.replace("@", ""), phoneNumber.replaceAll("[^0-9]", ""));
   }
 }
