@@ -7,7 +7,6 @@ import in.zoukme.zouk_album.domains.payments.PaymentStatus;
 import in.zoukme.zouk_album.repositories.events.CreateEventRequest;
 import in.zoukme.zouk_album.repositories.events.PackageRequest;
 import in.zoukme.zouk_album.repositories.events.UpdateEventRequest;
-import in.zoukme.zouk_album.repositories.payments.PaymentsRepository;
 import in.zoukme.zouk_album.services.AlbumService;
 import in.zoukme.zouk_album.services.PackageService;
 import in.zoukme.zouk_album.services.aws.BucketService;
@@ -50,8 +49,7 @@ public class AdminController {
       BucketService bucketService,
       DashboardService dashboardService,
       PaymentService paymentService,
-      PackageService packageService,
-      PaymentsRepository paymentsRepository) {
+      PackageService packageService) {
     this.albumService = albumService;
     this.eventService = eventService;
     this.bucketService = bucketService;

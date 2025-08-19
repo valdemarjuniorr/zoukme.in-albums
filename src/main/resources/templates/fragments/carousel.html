@@ -12,22 +12,15 @@
 	<div class="relative">
 		<!-- Carousel Item -->
 		<div class="carousel-item active">
-			<a href="/events/elitesamba-congress-2025">
-				<img src="/next-events/elite_samba_congress2025.png" alt="Image 1" class="w-full h-64 object-cover rounded">
-				<div class="absolute bottom-0 left-0 bg-black bg-opacity-50 text-white p-4 w-full">
-					<h2 class="text-xl font-bold">Elite Samba Congress 2025</h2>
-					<p class="text-sm">Balneário Camboriú/SC</p>
-				</div>
-			</a>
-		</div>
-		<div class="carousel-item">
-			<a href="/events/zoukn-beach2025">
-				<img src="/next-events/zouknbeach-2025.jpg" alt="Image 1" class="w-full h-64 object-cover rounded">
-				<div class="absolute bottom-0 left-0 bg-black bg-opacity-50 text-white p-4 w-full">
-					<h2 class="text-xl font-bold">Zouk'n Beach 2025</h2>
-					<p class="text-sm">Balneário Camboriú/SC</p>
-				</div>
-			</a>
+			<div class="carousel-item">
+				<a href="/events/zoukn-beach2025">
+					<img src="/next-events/zouknbeach-2025.jpg" alt="Image 1" class="w-full h-64 object-cover rounded">
+					<div class="absolute bottom-0 left-0 bg-black bg-opacity-50 text-white p-4 w-full">
+						<h2 class="text-xl font-bold">Zouk'n Beach 2025</h2>
+						<p class="text-sm">Balneário Camboriú/SC</p>
+					</div>
+				</a>
+			</div>
 		</div>
 		<div class="carousel-item">
 			<a href="/events/coneczouk-2025">
@@ -38,7 +31,6 @@
 				</div>
 			</a>
 		</div>
-
 		<!-- Navigation Arrows -->
 		<button id="prev" class="absolute top-1/2 left-0 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full">
 			◀
@@ -46,7 +38,6 @@
 		<button id="next" class="absolute top-1/2 right-0 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full">
 			▶
 		</button>
-
 		<!-- Position Indicators -->
 		<div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 flex space-x-2 p-2">
 			<button class="indicator w-3 h-3 bg-gray-800 rounded-full" data-slide="0"></button>
@@ -55,7 +46,6 @@
 		</div>
 	</div>
 </div>
-
 <script>
     const item = document.querySelectorAll('.carousel-item');
     const indicators = document.querySelectorAll('.indicator');

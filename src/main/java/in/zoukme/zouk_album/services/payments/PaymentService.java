@@ -142,7 +142,8 @@ public class PaymentService {
     return repository.getTotalPending(getDefaultDateTime(afterDateTime));
   }
 
-  /*  * Returns the total number of payments made after a specific date.
+  /*
+   * * Returns the total number of payments made after a specific date.
    * If no date is provided, it defaults to the beginning of the current year.
    */
   private LocalDateTime getDefaultDateTime(LocalDateTime afterDateTime) {
