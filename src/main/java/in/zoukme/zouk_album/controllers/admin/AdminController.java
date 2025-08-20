@@ -280,6 +280,15 @@ public class AdminController {
     return "/events/toast";
   }
 
+  @PostMapping("/albums/{eventUrl}/photos/{photoId}/cover")
+  String setAlbumCover(@PathVariable String eventUrl, @PathVariable Long photoId, Model model) {
+    var updated = albumService.updateAlbumCover(eventUrl, photoId);
+    var message = updated ? "Capa atualizada" : "Capa não atualizada. Verifique os logs";
+    model.addAttribute("message", message);
+
+    return "/events/toast";
+  }
+
   @DeleteMapping("/payments/{transactionId}/inactivate")
   String inactivate(@PathVariable String transactionId, Model model) {
     paymentService.inactivate(transactionId);

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 	<!-- Google tag (gtag.js) -->
-	<script async
-					src="https://www.googletagmanager.com/gtag/js?id=G-ZTLEWPD9HY"></script>
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZTLEWPD9HY"></script>
 	<script>
       window.dataLayer = window.dataLayer || [];
 
@@ -20,7 +20,8 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css"/>
 	<meta charset="UTF-8">
 	<meta name="description" th:content="${event.description}"/>
-	<meta name="keywords" th:content="'zouk,zouk brasileiro,samba,dança de salão,dançar,bailes,congressos de dança de salão,' + ${event.title}">
+	<meta name="keywords"
+				th:content="'zouk,zouk brasileiro,samba,dança de salão,dançar,bailes,congressos de dança de salão,' + ${event.title}">
 	<meta name="author" content="Zouk Me In">
 	<meta name="robots" content="index, follow">
 	<meta name="language" content="pt-BR">
@@ -273,8 +274,8 @@
 				<div class="flex items-baseline mb-6">
 					<!-- Assuming price is a number, format it to Brazilian currency -->
 					<span class="text-3xl font-bold text-primary">
-						R$ <span th:text="${#numbers.formatDecimal(pack.price, 1, 2, 'COMMA')}"></span>
-					</span>
+              R$ <span th:text="${#numbers.formatDecimal(pack.price, 1, 2, 'COMMA')}"></span>
+            </span>
 					<span class="text-gray-500 ml-2">/ pessoa</span>
 				</div>
 				<a th:href="@{/packages?packId={packageId}(packageId=${pack.id})}"
@@ -296,8 +297,7 @@
 	</section>
 	<div class="social-icons">
 		<a th:href="'https://wa.me/+55' + ${event.phoneNumber} + '?text=Olá, vim do zoukme.in e gostaria de saber mais informações sobre o *' + ${event.title} + '*. Consegue me ajudar?'"
-			 target="_blank"
-			 class="social-icon">
+			 target="_blank" class="social-icon">
 			<i class="ri-whatsapp-line text-green-500 ri-lg"></i>
 		</a>
 		<a th:href="'https://www.instagram.com/' + ${event.instagram}" target="_blank" class="social-icon">
@@ -317,7 +317,8 @@
     /*<![CDATA[*/
     document.addEventListener("DOMContentLoaded", function () {
         // Set the date we're counting down to
-        var countDownDate = new Date(/*[[${event.date}]]*/).getTime();
+        var countDownDate = new Date(/*[[${event.date}]]*/); // This is a Date object
+        countDownDate.setHours(countDownDate.getHours() + 3); // Add 3 hours
         // Update the countdown every 1 second
         const x = setInterval(function () {
             // Get today's date and time
@@ -331,7 +332,7 @@
             const seconds = Math.floor((distance % (1000 * 60)) / 1000);
             // Display the result
             document.getElementById("days").innerText = days;
-            document.getElementById("hours").innerText = hours + 3; // Adjust for timezone difference
+            document.getElementById("hours").innerText = hours;
             document.getElementById("minutes").innerText = minutes;
             document.getElementById("seconds").innerText = seconds;
             // If the count down is finished, write some text
@@ -348,4 +349,5 @@
 
 <div th:insert="~{fragments/footer :: footer}"></div>
 </body>
+
 </html>

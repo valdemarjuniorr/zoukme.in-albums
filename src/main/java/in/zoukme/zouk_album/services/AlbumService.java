@@ -3,6 +3,7 @@ package in.zoukme.zouk_album.services;
 import in.zoukme.zouk_album.domains.Album;
 import in.zoukme.zouk_album.domains.Page;
 import in.zoukme.zouk_album.exceptions.AlbumNotFoundException;
+import in.zoukme.zouk_album.exceptions.EventPhotoNotFoundException;
 import in.zoukme.zouk_album.repositories.AlbumRepository;
 import in.zoukme.zouk_album.services.aws.BucketService;
 import java.time.LocalDate;
@@ -20,12 +21,19 @@ public class AlbumService {
   private final AlbumRepository repository;
   private final BucketService bucketService;
   private final SubEventService subEventService;
+  private final EventPhotosService eventPhotosService;
+
+  private Integer updateCover;
 
   public AlbumService(
-      AlbumRepository repository, BucketService bucketService, SubEventService subEventService) {
+      AlbumRepository repository,
+      BucketService bucketService,
+      SubEventService subEventService,
+      EventPhotosService eventPhotosService) {
     this.repository = repository;
     this.bucketService = bucketService;
     this.subEventService = subEventService;
+    this.eventPhotosService = eventPhotosService;
   }
 
   public List<Album> findAll() {
@@ -65,5 +73,13 @@ public class AlbumService {
   public void setCover(Long photoId) {
     this.subEventService.setCover(photoId);
     log.info("Cover for sub-event with id {} has been set", photoId);
+  }
+
+  public boolean updateAlbumCover(String eventUrl, Long photoId) {
+    var eventPhoto =
+        this.eventPhotosService.findBy(photoId).orElseThrow(EventPhotoNotFoundException::new);
+    var updatedLines = this.repository.updateCover(eventUrl, eventPhoto.imagePath());
+    // TODO: delete photo updated in case in the next-events folder
+    return updatedLines == 1;
   }
 }

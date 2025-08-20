@@ -2,7 +2,6 @@ package in.zoukme.zouk_album.services;
 
 import in.zoukme.zouk_album.domains.SubEvent;
 import in.zoukme.zouk_album.exceptions.EventPhotoNotFoundException;
-import in.zoukme.zouk_album.repositories.events.EventPhotosRepository;
 import in.zoukme.zouk_album.repositories.events.SubEventRepository;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
@@ -11,19 +10,16 @@ import org.springframework.stereotype.Service;
 public class SubEventService {
 
   private final SubEventRepository repository;
-  private final EventPhotosRepository eventPhotosRepository;
+  private final EventPhotosService eventPhotosService;
 
-  public SubEventService(
-      SubEventRepository repository, EventPhotosRepository eventPhotosRepository) {
+  public SubEventService(SubEventRepository repository, EventPhotosService eventPhotosService) {
     this.repository = repository;
-    this.eventPhotosRepository = eventPhotosRepository;
+    this.eventPhotosService = eventPhotosService;
   }
 
   public void setCover(Long eventPhotoId) {
     var eventPhoto =
-        this.eventPhotosRepository
-            .findById(eventPhotoId)
-            .orElseThrow(EventPhotoNotFoundException::new);
+        this.eventPhotosService.findBy(eventPhotoId).orElseThrow(EventPhotoNotFoundException::new);
 
     this.repository.updateCover(eventPhoto.subEventId().getId(), eventPhoto.imagePath());
   }

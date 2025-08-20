@@ -109,6 +109,7 @@ public class BucketService {
     return awsEndpoint + EventUtils.BUCKET_NAME + File.separator;
   }
 
+  /** delete photo from event which is in the next-events folder */
   public void deletePhotoBy(String eventUrl, String fileName) {
     s3Client.deleteObject(
         DeleteObjectRequest.builder()

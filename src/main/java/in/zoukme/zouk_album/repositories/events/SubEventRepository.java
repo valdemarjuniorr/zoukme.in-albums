@@ -11,20 +11,20 @@ public interface SubEventRepository extends ListCrudRepository<SubEvent, Long> {
 
   @Query(
       """
-		SELECT se.id, se.name, se.event_id, se.cover_url
-	 	FROM sub_events se
-			INNER JOIN events e ON se.event_id = e.id
-		WHERE e.event_url = :eventUrl
-	""")
+      SELECT se.id, se.name, se.event_id, se.cover_url
+       FROM sub_events se
+      	INNER JOIN events e ON se.event_id = e.id
+      	WHERE e.event_url = :eventUrl
+      """)
   List<SubEvent> findSubEventsBy(String eventUrl);
 
   @Query(
       """
-  		SELECT se.id, se.name, se.event_id
-  		FROM sub_events se
-  			INNER JOIN events e ON se.event_id = e.id
- 		WHERE e.event_url = :eventUrl AND se.name = :name
-	""")
+       SELECT se.id, se.name, se.event_id
+       FROM sub_events se
+       	INNER JOIN events e ON se.event_id = e.id
+      WHERE e.event_url = :eventUrl AND se.name = :name
+      """)
   Optional<SubEvent> findByName(String name, String eventUrl);
 
   @Modifying
