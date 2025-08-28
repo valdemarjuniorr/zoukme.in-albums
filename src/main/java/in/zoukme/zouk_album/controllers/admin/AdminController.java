@@ -302,4 +302,11 @@ public class AdminController {
     model.addAttribute("payment", payment);
     return "admin/dashboard/payments/details";
   }
+
+  @DeleteMapping("/events/{eventUrl}")
+  String deleteEventBy(@PathVariable String eventUrl, Model model) {
+    this.eventService.delete(eventUrl);
+    model.addAttribute("message", "Evento removido com sucesso");
+    return "/events/toast";
+  }
 }

@@ -34,8 +34,8 @@
 	<div class="container mx-auto px-4">
 		<div class="min-w-0 grid grid-cols-2 items-center gap-2 py-2">
 			<a th:href="@{/events/{eventName}/albums(eventName=${eventUrl})}"
-				 class="inline-flex items-center text-gray-500 hover:text-gray-900">
-				<i class="fa-solid fa-circle-chevron-left mr-2"></i>
+				 class="gap-2 inline-flex items-center text-gray-500 hover:text-gray-900">
+				<i class="ri-arrow-left-circle-fill text-xl"></i>
 				<span class="truncate">Voltar</span>
 			</a>
 			<div class="justify-self-end inline-flex items-center bg-gray-200 px-3 py-1.5 rounded-full
@@ -45,6 +45,7 @@
 			</div>
 		</div>
 	</div>
+	<hr class="my-2 border-gray-300"/>
 	<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
 		<div th:each="photo : ${photos.content}" class="bg-white p-2 rounded-lg shadow-md">
 			<div class="image-container relative rounded-lg overflow-hidden shadow-sm group">
@@ -112,6 +113,8 @@
 						 th:text="${page}"
 						 class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700"/>
 				</li>
+				<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+				<div id="toast"></div> <!-- Footer -->
 				<li th:if="${!photos.last}">
 					<a th:href="@{/events/{eventUrl}/albums/{albumName}?page={page}&size={size}(albumName=${albumName}, eventUrl=${eventUrl}, page=${photos.number + 2}, size=${photos.size})}"
 						 class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700">

@@ -28,7 +28,7 @@
 	</nav>
 	<div class="mb-8">
 		<h1 th:text="${event.event.title}" class="text-3xl md:text-4xl font-bold text-gray-900 mb-2"></h1>
-		<p th:text="'Navegue entre os álbuns do evento ' + ${event.event.title}" class="text-gray-600"></p>
+		<p class="text-gray-600">Navegue entre os álbuns do evento <span th:text="${event.event.title}" class="font-bold"/></p>
 	</div>
 	<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
 		<!-- Album 1 -->

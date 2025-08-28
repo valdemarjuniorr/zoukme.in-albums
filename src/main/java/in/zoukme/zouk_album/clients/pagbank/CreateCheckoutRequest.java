@@ -36,7 +36,7 @@ public record CreateCheckoutRequest(
         redirectUrl,
         List.of(paymentNotificationUrl), // paymentNotificationUrls
         List.of(notificationUrl),
-        List.of(PaymentMethodsConfig.installmentLimitThree()));
+        List.of(PaymentMethodsConfig.installmentLimitTen()));
   }
 
   record PaymentMethod(PaymentType type) {

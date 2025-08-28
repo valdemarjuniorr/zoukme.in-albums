@@ -60,7 +60,8 @@
 			<td class="px-6 py-4 whitespace-nowrap">
 				<div class="flex items-center">
 					<div class="flex-shrink-0 h-10 w-10 rounded overflow-hidden">
-						<img th:src="${event.coverUrl}" th:title="${event.title}" class="h-10 w-10 object-cover" th:alt="${event.title}">
+						<img th:src="${event.coverUrl}" th:title="${event.title}" class="h-10 w-10 object-cover"
+								 th:alt="${event.title}">
 					</div>
 					<div class="ml-4">
 						<div th:text="${event.title}" class="text-sm font-medium text-gray-900"></div>
@@ -71,31 +72,39 @@
 				</div>
 			</td>
 			<td class="px-6 py-4 whitespace-nowrap">
-      <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-pink-100 text-pink-800">
-      Eventos
-      </span>
+          <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-pink-100 text-pink-800">
+            Eventos
+          </span>
 			</td>
 			<td th:text="${event.descriptiveDate}" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"></td>
 			<td class="px-6 py-4 whitespace-nowrap">
-      <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-      Confirmado
-      </span>
+          <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+            Confirmado
+          </span>
 			</td>
 			<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
 				<div class="flex justify-end space-x-2">
+					<button th:hx-post="@{/admin/events/{eventUrl}/process(eventUrl=${event.eventUrl})}" th:if="${!event.isComingUp}"
+									class="text-gray-500 hover:text-primary" hx-confirm="Deseja processar esse álbum?" htx-target="#toast">
+						<div title="Processar" class="w-5 h-5 flex items-center justify-center">
+							<i class="ri-refresh-line"></i>
+						</div>
+					</button>
 					<a th:href="@{/admin/events/{eventUrl}(eventUrl=${event.id})}" class="text-gray-500 hover:text-primary">
 						<div title="Editar" class="w-5 h-5 flex items-center justify-center">
 							<i class="ri-edit-line"></i>
 						</div>
 					</a>
-					<a th:href="@{/events/{eventUrl}(eventUrl=${event.eventUrl})}" target="_blank" class="text-gray-500 hover:text-primary">
-						<div title="Detalhes" class="w-5 h-5 flex items-center justify-center">
+					<a th:href="@{/events/{eventurl}(eventurl=${event.eventUrl})}" target="_blank"
+						 class="text-gray-500 hover:text-primary">
+						<div title="detalhes" class="w-5 h-5 flex items-center justify-center">
 							<i class="ri-external-link-line"></i>
 						</div>
 					</a>
-					<button class="text-gray-500 hover:text-red-600">
+					<button th:hx-delete="@{/admin/events/{title}(title=${event.eventUrl})}" hx-confirm="Você tem certeza?"
+									class="text-gray-500 hover:text-red-600" hx-target="#toast" hx-swap="outerHTML">
 						<div title="Excluir" class="w-5 h-5 flex items-center justify-center">
-							<i class="ri-delete-bin-line"></i>
+							<i class="ri-delete-bin-fill"></i>
 						</div>
 					</button>
 				</div>
@@ -105,35 +114,42 @@
 	</table>
 </div>
 <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-		<div>
-			<p class="text-sm text-gray-700">
-				Mostrando <span th:text="${events.number + 1}" class="font-medium"></span> de
-				<span th:text="${events.totalPages}" class="font-medium"></span> de
-				<span th:text="${events.totalElements}" class="font-medium"></span> resultados
-			</p>
-		</div>
+	<div>
+		<p class="text-sm text-gray-700">
+			Mostrando
+			<span th:text="${events.number + 1}" class="font-medium"></span>
+			de
+			<span th:text="${events.totalPages}" class="font-medium"></span>
+			de
+			<span th:text="${events.totalElements}" class="font-medium"></span>
+			resultados
+		</p>
+	</div>
 	<!-- pagination -->
-		<div>
-			<nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
-				<a th:if="${!events.first}" th:hx-get="@{/admin/events?page={page}(page=${events.number})}" hx-target="#main-table-content"
-					 class="cursor-pointer relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-					<span class="sr-only">Anterior</span>
-					<div class="w-5 h-5 flex items-center justify-center">
-						<i class="ri-arrow-left-s-line"></i>
-					</div>
-				</a>
-				<a th:each="page : ${pagination}" th:text="${page}" th:hx-get="@{/admin/events?page={page}(page=${page})}" hx-target="#main-table-content"
-					 th:class="${page == events.number + 1 + ''
+	<div>
+		<nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+			<a th:if="${!events.first}" th:hx-get="@{/admin/events?page={page}(page=${events.number})}"
+				 hx-target="#main-table-content"
+				 class="cursor-pointer relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+				<span class="sr-only">Anterior</span>
+				<div class="w-5 h-5 flex items-center justify-center">
+					<i class="ri-arrow-left-s-line"></i>
+				</div>
+			</a>
+			<a th:each="page : ${pagination}" th:text="${page}" th:hx-get="@{/admin/events?page={page}(page=${page})}"
+				 hx-target="#main-table-content"
+				 th:class="${page == events.number + 1 + ''
 							? 'z-10 bg-primary border-primary text-white relative inline-flex items-center px-4 py-2 border text-sm font-medium'
 							: 'cursor-pointer bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium'}">
-				</a>
-				<a th:if="${!events.last}" th:hx-get="@{/admin/events?page={page}(page=${events.number + 2})}" hx-target="#main-table-content"
-					 class="cursor-pointer relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-					<span class="sr-only">Próximo</span>
-					<div class="w-5 h-5 flex items-center justify-center">
-						<i class="ri-arrow-right-s-line"></i>
-					</div>
-				</a>
-			</nav>
-		</div>
+			</a>
+			<a th:if="${!events.last}" th:hx-get="@{/admin/events?page={page}(page=${events.number + 2})}"
+				 hx-target="#main-table-content"
+				 class="cursor-pointer relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+				<span class="sr-only">Próximo</span>
+				<div class="w-5 h-5 flex items-center justify-center">
+					<i class="ri-arrow-right-s-line"></i>
+				</div>
+			</a>
+		</nav>
 	</div>
+</div>

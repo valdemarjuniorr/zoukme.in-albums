@@ -1,4 +1,4 @@
-<header th:fragment="top" class="bg-gray-800 p-4 transition-all duration-300" id="main-header">
+<header th:fragment="top" class="fixed top-0 left-0 right-0 bg-gray-800 p-4 transition-all duration-300 z-50" id="main-header">
 	<style>
       #main-header {
           position: fixed;
@@ -27,35 +27,89 @@
       .sticky-header {
           display: none;
       }
+
+      #main-header.scrolled {
+          @apply bg-opacity-95 backdrop-blur-sm shadow-md py-2;
+      }
+
+      #main-header.scrolled #header-logo {
+          @apply h-10;
+      }
+
+      body {
+          @apply pt-20;
+      }
 	</style>
+
 	<div class="container mx-auto flex justify-between items-center">
 		<div class="flex-shrink-0 transition-all duration-300">
 			<a th:href="@{/}">
 				<img src="/logo-light.png" alt="Zoukme In" class="h-16 w-auto transition-all duration-300" id="header-logo">
 			</a>
 		</div>
-		<nav>
+
+		<!-- Desktop Menu -->
+		<nav class="hidden md:block">
 			<ul class="flex space-x-4">
 				<li>
-					<a th:href="@{/events}" class="cursor-pointer text-white hover:text-gray-400">Eventos</a>
+					<a th:href="@{/events}" class="text-white hover:text-gray-400 transition-colors">Eventos</a>
 				</li>
 				<li th:if="${authentication != null}">
-					<a href="/admin/home" class="text-white hover:text-gray-400">Admin</a>
+					<a href="/admin/home" class="text-white hover:text-gray-400 transition-colors">Admin</a>
 				</li>
 				<li>
-					<a href="/about" class="text-white hover:text-gray-400">Sobre Nós</a>
+					<a href="/about" class="text-white hover:text-gray-400 transition-colors">Sobre Nós</a>
 				</li>
 			</ul>
 		</nav>
+
+		<!-- Mobile Menu Button -->
+		<button class="md:hidden text-white focus:outline-none" id="mobile-menu-button">
+			<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+			</svg>
+		</button>
+
+		<!-- Mobile Menu -->
+		<div class="hidden md:hidden absolute top-full left-0 right-0 bg-gray-800 bg-opacity-95 backdrop-blur-sm shadow-md" id="mobile-menu">
+			<nav class="container mx-auto py-4">
+				<ul class="flex flex-col space-y-4">
+					<li>
+						<a th:href="@{/events}" class="block text-white hover:text-gray-400 transition-colors text-center px-4">Eventos</a>
+					</li>
+					<li th:if="${authentication != null}">
+						<a href="/admin/home" class="block text-white hover:text-gray-400 transition-colors text-center px-4">Admin</a>
+					</li>
+					<li>
+						<a href="/about" class="block text-white hover:text-gray-400 transition-colors text-center px-4">Sobre Nós</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
 	</div>
+
 	<script type="text/javascript">
       document.addEventListener("DOMContentLoaded", function () {
           const header = document.getElementById("main-header");
+          const mobileMenuButton = document.getElementById("mobile-menu-button");
+          const mobileMenu = document.getElementById("mobile-menu");
+
           window.addEventListener("scroll", function () {
               if (window.scrollY > 100) {
                   header.classList.add("scrolled");
               } else {
                   header.classList.remove("scrolled");
+              }
+          });
+
+          mobileMenuButton.addEventListener("click", function (e) {
+              e.stopPropagation();
+              mobileMenu.classList.toggle("hidden");
+          });
+
+          document.addEventListener("click", function (event) {
+              if (!header.contains(event.target)) {
+                  mobileMenu.classList.add("hidden");
               }
           });
       });
