@@ -51,18 +51,20 @@
 		<!-- Desktop Menu -->
 		<nav class="hidden md:block">
 			<ul class="flex space-x-4">
+				<li th:if="${authentication != null}">
+					<a href="/admin/home" class="text-white hover:text-gray-400 transition-colors">Admin</a>
+				</li>
 				<li>
 					<a th:href="@{/events}" class="text-white hover:text-gray-400 transition-colors">Eventos</a>
 				</li>
-				<li th:if="${authentication != null}">
-					<a href="/admin/home" class="text-white hover:text-gray-400 transition-colors">Admin</a>
+				<li>
+					<a th:href="@{/prices}" class="text-white hover:text-gray-400 transition-colors">Preços</a>
 				</li>
 				<li>
 					<a href="/about" class="text-white hover:text-gray-400 transition-colors">Sobre Nós</a>
 				</li>
 			</ul>
 		</nav>
-
 		<!-- Mobile Menu Button -->
 		<button class="md:hidden text-white focus:outline-none" id="mobile-menu-button">
 			<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -74,11 +76,14 @@
 		<div class="hidden md:hidden absolute top-full left-0 right-0 bg-gray-800 bg-opacity-95 backdrop-blur-sm shadow-md" id="mobile-menu">
 			<nav class="container mx-auto py-4">
 				<ul class="flex flex-col space-y-4">
+					<li th:if="${authentication != null}">
+						<a href="/admin/home" class="block text-white hover:text-gray-400 transition-colors text-center px-4">Admin</a>
+					</li>
 					<li>
 						<a th:href="@{/events}" class="block text-white hover:text-gray-400 transition-colors text-center px-4">Eventos</a>
 					</li>
-					<li th:if="${authentication != null}">
-						<a href="/admin/home" class="block text-white hover:text-gray-400 transition-colors text-center px-4">Admin</a>
+					<li>
+						<a th:href="@{/prices}" class="block text-white hover:text-gray-400 transition-colors text-center px-4">Preços</a>
 					</li>
 					<li>
 						<a href="/about" class="block text-white hover:text-gray-400 transition-colors text-center px-4">Sobre Nós</a>
