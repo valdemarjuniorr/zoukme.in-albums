@@ -32,8 +32,8 @@
 					<li>
 						<a href="/events" class="text-gray-400 hover:text-white transition-colors">Eventos</a>
 					</li>
-					<li th:if="${authentication != null}">
-						<a href="#gallery" class="text-gray-400 hover:text-white transition-colors">Galeria</a>
+					<li>
+						<a href="/prices" class="text-gray-400 hover:text-white transition-colors">Preços</a>
 					</li>
 					<li>
 						<a href="/about" class="text-gray-400 hover:text-white transition-colors">Sobre Nós</a>
@@ -63,7 +63,6 @@
 				</ul>
 			</div>
 		</div>
-
 		<div class="pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center">
 			<p class="text-gray-400 text-sm mb-4 md:mb-0">&copy; <span
 					th:text="${#dates.format(#dates.createNow(), 'yyyy')}"/> Zouk Me In. All rights reserved.</p>
