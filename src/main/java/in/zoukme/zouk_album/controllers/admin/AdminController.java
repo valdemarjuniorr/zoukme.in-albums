@@ -171,8 +171,7 @@ public class AdminController {
 
     model.addAttribute("events", this.eventService.findAll(Page.defaultPage()));
     model.addAttribute("authentication", authentication);
-
-    model.addAttribute("message", "Album removido com sucesso");
+    model.addAttribute("message", "Evento criado com sucesso");
 
     return "/events/toast";
   }

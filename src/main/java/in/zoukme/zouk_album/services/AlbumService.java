@@ -23,8 +23,6 @@ public class AlbumService {
   private final SubEventService subEventService;
   private final EventPhotosService eventPhotosService;
 
-  private Integer updateCover;
-
   public AlbumService(
       AlbumRepository repository,
       BucketService bucketService,

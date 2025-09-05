@@ -84,6 +84,7 @@
 	</style>
 	<!-- Header -->
 	<div th:insert="~{fragments/top :: top}"></div>
+
 	<body class="bg-gray-50 min-h-screen flex">
 	<main class="flex-1 overflow-x-hidden pb-16 md:pb-0">
 		<!-- Form content -->
@@ -240,13 +241,14 @@
                       }
                   })
                   .catch((error) => {
-                      console.error("Error:", error);
+                      console.warn("Error:", error);
+                      window.location.href = "/events";
                   });
           });
       });
 	</script>
-
 	<div th:insert="~{fragments/footer :: footer}"></div>
 	</body>
+
 	</html>
 </DOCTYPE>

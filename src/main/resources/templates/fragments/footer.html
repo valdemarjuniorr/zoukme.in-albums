@@ -4,12 +4,102 @@
 	<!-- jQuery Modal -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.2/jquery.modal.min.js"></script>
 	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-	<div id="toast"></div> <!-- Footer -->
+	<div id="toast"></div>
+
+	<div id="browser-modal"
+			 class="browser-modal fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-40 p-4"
+			 style="display: none;">
+		<div class="browser-modal-content bg-white rounded-lg shadow-lg p-4 sm:p-6 mx-auto max-w-lg w-full">
+			<!-- Modal content here -->
+			<div class="browser-modal-content">
+				<div class="flex items-center justify-between mb-4 sm:mb-6">
+					<div class="flex items-center">
+						<i class="ri-error-warning-line text-yellow-500 ri-2x"></i>
+						<h3 class="text-lg sm:text-xl font-bold ml-3 text-black">Aviso sobre Compatibilidade de Navegador</h3>
+					</div>
+					<button id="close-browser-modal" class="text-gray-400 hover:text-gray-600">
+						<i class="ri-close-line ri-lg"></i>
+					</button>
+				</div>
+				<p class="text-gray-600 mb-4 sm:mb-6 text-sm sm:text-base">Detectamos que você está usando um navegador não
+					recomendado <span class="font-bold">(como o navegador interno de aplicativos, ex: Instagram).</span>
+				</p>
+				<p class="text-gray-600 mb-4 sm:mb-6 text-sm sm:text-base">Para melhor desempenho e acesso a todos os
+					recursos, abra este link em um navegador compatível, como Chrome, Safari, Firefox ou Edge.</p>
+				<div class="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-4">
+					<button id="dismiss-browser-modal"
+									class="px-4 py-2 bg-primary text-white hover:bg-opacity-90 transition-colors !rounded-button whitespace-nowrap text-sm sm:text-base">
+						Entendi!
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+      function openModal(id) {
+          const modal = document.getElementById(id);
+          if (!modal) return;
+
+          // Show the modal and prevent body scrolling
+          modal.style.display = 'flex';
+          document.body.style.overflow = 'hidden';
+
+          // Helper to close modal and clean up
+          function handleClose() {
+              closeModal(id);
+              removeListeners();
+          }
+
+          // Event listeners
+          const closeBtn = document.getElementById('close-browser-modal');
+          const dismissBtn = document.getElementById('dismiss-browser-modal');
+          const continueBtn = document.getElementById('continue-anyway');
+
+          function removeListeners() {
+              closeBtn?.removeEventListener('click', handleClose);
+              dismissBtn?.removeEventListener('click', handleClose);
+              continueBtn?.removeEventListener('click', handleClose);
+              modal.removeEventListener('click', outsideClick);
+          }
+
+          function outsideClick(event) {
+              if (event.target === modal) {
+                  handleClose();
+              }
+          }
+
+          closeBtn?.addEventListener('click', handleClose);
+          dismissBtn?.addEventListener('click', handleClose);
+          continueBtn?.addEventListener('click', handleClose);
+          modal.addEventListener('click', outsideClick);
+      }
+
+      function closeModal(id) {
+          const modal = document.getElementById(id);
+          if (modal) modal.style.display = 'none';
+          document.body.style.overflow = '';
+      }
+
+      function checkBrowserCompatibility() {
+          // Detect Instagram or Facebook in-app browsers
+          const ua = navigator.userAgent || navigator.vendor || window.opera;
+          const isInAppBrowser =
+              /Instagram|FBAN|FBAV|FB_IAB|FBAN\/FBIOS|FBAV\/[0-9\.]+/i.test(ua);
+
+          if (isInAppBrowser) {
+              openModal('browser-modal');
+          }
+      }
+
+      // Run compatibility check on page load
+      checkBrowserCompatibility();
+	</script>
+	<!-- Footer -->
 	<div class="container mx-auto px-4">
 		<div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-			<div>
-				<a href="/" class="text-3xl font-['Pacifico'] text-white mb-4 inline-block">Zoukme.in</a>
-				<p class="text-gray-400 mb-6">
+			<div class="space-y-4">
+				<a href="/" class="text-3xl font-['Pacifico'] text-white inline-block">Zoukme.in</a>
+				<p class="text-gray-400">
 					Site dedicado a promover o Zouk Brasileiro e eventos de dança de salão no geral, com informações sobre
 					eventos, congressos, venda de pacotes, bailes e muito mais.
 				</p>
@@ -23,9 +113,9 @@
 					</a>
 				</div>
 			</div>
-			<div>
-				<h4 class="text-lg font-bold mb-4">Menu</h4>
-				<ul class="space-y-2">
+			<div class="space-y-4">
+				<h4 class="text-lg font-bold">Menu</h4>
+				<ul class="space-y-3">
 					<li>
 						<a href="/" class="text-gray-400 hover:text-white transition-colors">Home</a>
 					</li>
@@ -40,9 +130,9 @@
 					</li>
 				</ul>
 			</div>
-			<div>
-				<h4 class="text-lg font-bold mb-4">Entre em contato</h4>
-				<ul class="space-y-2">
+			<div class="space-y-4">
+				<h4 class="text-lg font-bold">Entre em contato</h4>
+				<ul class="space-y-3">
 					<li class="flex items-center">
 						<div class="w-5 h-5 flex items-center justify-center text-gray-400">
 							<i class="ri-phone-line"></i>
@@ -64,8 +154,8 @@
 			</div>
 		</div>
 		<div class="pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center">
-			<p class="text-gray-400 text-sm mb-4 md:mb-0">&copy; <span
-					th:text="${#dates.format(#dates.createNow(), 'yyyy')}"/> Zouk Me In. All rights reserved.</p>
+			<p class="text-gray-400 text-sm">&copy; <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}"/> Zouk Me
+				In. All rights reserved.</p>
 		</div>
 	</div>
 </footer>
