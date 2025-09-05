@@ -58,8 +58,59 @@
 
 	</main>
 
-	<!-- footer -->
-	<div th:insert="~{fragments/footer :: footer}"></div>
-	</body>
-	</html>
+        // Helper to close modal and clean up
+        function handleClose() {
+          closeModal(id);
+          removeListeners();
+        }
+
+        // Event listeners
+        const closeBtn = document.getElementById('close-browser-modal');
+        const dismissBtn = document.getElementById('dismiss-browser-modal');
+        const continueBtn = document.getElementById('continue-anyway');
+
+        function removeListeners() {
+          closeBtn?.removeEventListener('click', handleClose);
+          dismissBtn?.removeEventListener('click', handleClose);
+          continueBtn?.removeEventListener('click', handleClose);
+          modal.removeEventListener('click', outsideClick);
+        }
+
+        function outsideClick(event) {
+          if (event.target === modal) {
+            handleClose();
+          }
+        }
+
+        closeBtn?.addEventListener('click', handleClose);
+        dismissBtn?.addEventListener('click', handleClose);
+        continueBtn?.addEventListener('click', handleClose);
+        modal.addEventListener('click', outsideClick);
+      }
+
+      function closeModal(id) {
+        const modal = document.getElementById(id);
+        if (modal) modal.style.display = 'none';
+        document.body.style.overflow = '';
+      }
+
+      function checkBrowserCompatibility() {
+        // Detect Instagram or Facebook in-app browsers
+        const ua = navigator.userAgent || navigator.vendor || window.opera;
+        const isInAppBrowser =
+          /Instagram|FBAN|FBAV|FB_IAB|FBAN\/FBIOS|FBAV\/[0-9\.]+/i.test(ua);
+
+        if (isInAppBrowser) {
+          openModal('browser-modal');
+        }
+      }
+
+      // Run compatibility check on page load
+      checkBrowserCompatibility();
+    </script>
+    <!-- footer -->
+    <div th:insert="~{fragments/footer :: footer}"></div>
+  </body>
+
+  </html>
 </DOCTYPE>
