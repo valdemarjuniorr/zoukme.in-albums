@@ -1,6 +1,5 @@
 package in.zoukme.zouk_album.controllers.events;
 
-import in.zoukme.zouk_album.domains.Page;
 import in.zoukme.zouk_album.services.PackageService;
 import in.zoukme.zouk_album.services.aws.EventService;
 import org.springframework.security.core.Authentication;
@@ -10,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import in.zoukme.zouk_album.domains.Page;
 
 @Controller
 @RequestMapping("/events")
@@ -49,9 +49,9 @@ public class EventController {
   }
 
   @GetMapping("/{eventUrl}/albums")
-  String getSubEvents(@PathVariable String eventUrl, Model model) {
+  String getSubEvents(@PathVariable String eventUrl, Model model, Authentication authentication) {
     model.addAttribute("event", service.getEventAlbumsBy(eventUrl));
-
+    model.addAttribute("authentication", authentication);
     return "events/subevents/list";
   }
 
