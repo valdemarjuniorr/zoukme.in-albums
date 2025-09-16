@@ -1,585 +1,632 @@
 <DOCTYPE html>
-	<html xmlns:th="https://www.thymeleaf.org" lang="pt-br">
+  <html xmlns:th="https://www.thymeleaf.org" lang="pt-br">
 
-	<head th:insert="~{fragments/header}"></head>
+  <head th:insert="~{fragments/header}"></head>
 
-	<body class="bg-gray-100">
-	<!-- Header -->
-	<div th:insert="~{fragments/top :: top}"></div>
-	<style>
+  <body class="bg-gray-100">
+    <!-- Header -->
+    <div th:insert="~{fragments/top :: top}"></div>
+    <style>
       :where([class^="ri-"])::before {
-          content: "\f3c2";
+        content: "\f3c2";
       }
 
       html {
-          scroll-behavior: smooth;
+        scroll-behavior: smooth;
       }
 
       .gradient-bg {
-          background: linear-gradient(135deg, #e94057 0%, #8a2be2 100%);
+        background: linear-gradient(135deg, #e94057 0%, #8a2be2 100%);
       }
 
       .masonry {
-          column-count: 3;
-          column-gap: 1rem;
+        column-count: 3;
+        column-gap: 1rem;
       }
 
       @media (max-width: 768px) {
-          .masonry {
-              column-count: 2;
-          }
+        .masonry {
+          column-count: 2;
+        }
       }
 
       @media (max-width: 480px) {
-          .masonry {
-              column-count: 1;
-          }
+        .masonry {
+          column-count: 1;
+        }
       }
 
       .masonry-item {
-          break-inside: avoid;
-          margin-bottom: 1rem;
+        break-inside: avoid;
+        margin-bottom: 1rem;
       }
 
       .parallax {
-          background-attachment: fixed;
-          background-position: center;
-          background-repeat: no-repeat;
-          background-size: cover;
+        background-attachment: fixed;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
       }
 
       .equipment-card {
-          transition: all 0.3s ease;
+        transition: all 0.3s ease;
       }
 
       .equipment-card:hover {
-          transform: translateY(-5px);
+        transform: translateY(-5px);
       }
 
       .timeline-item::before {
-          content: '';
-          position: absolute;
-          left: 50%;
-          top: 2rem;
-          width: 2px;
-          height: calc(100% - 4rem);
-          background: linear-gradient(to bottom, #e94057, #8a2be2);
-          transform: translateX(-50%);
+        content: '';
+        position: absolute;
+        left: 50%;
+        top: 2rem;
+        width: 2px;
+        height: calc(100% - 4rem);
+        background: linear-gradient(to bottom, #e94057, #8a2be2);
+        transform: translateX(-50%);
       }
 
       @media (max-width: 768px) {
-          .timeline-item::before {
-              left: 1rem;
-          }
+        .timeline-item::before {
+          left: 1rem;
+        }
       }
 
       .faq-answer {
-          max-height: 0;
-          overflow: hidden;
-          transition: max-height 0.3s ease;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
       }
 
       .faq-item.active .faq-answer {
-          max-height: 500px;
+        max-height: 500px;
       }
 
       .faq-item.active .faq-toggle i {
-          transform: rotate(180deg);
+        transform: rotate(180deg);
       }
-	</style>
-	<!-- Content -->
-	<main th:fragment="main" class="main container mx-auto p-4 py-8">
-		<section id="pricing" class="py-20 bg-white">
-			<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-				<div class="text-center mb-16">
-					<h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-						Pacotes de Fotografia
-					</h2>
-					<p class="text-xl text-gray-600 max-w-3xl mx-auto">
-						Escolha o pacote perfeito para seu evento especial. Cada pacote foi
-						desenvolvido para capturar todos os momentos preciosos com
-						excelência profissional.
-					</p>
-				</div>
-				<div class="grid md:grid-cols-3 gap-8">
-					<div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-shadow">
-						<div class="text-center mb-8">
-							<h3 class="text-2xl font-bold text-gray-900 mb-2">Pacote de bailes</h3>
-							<div class="flex items-center justify-center">
-								<div class="text-4xl font-bold text-primary">R$ 300</div>
-								<span class="ml-1 text-gray-500">/dia</span>
-							</div>
-							<p class="text-gray-600">Ideal para eventos pequenos</p>
-						</div>
-						<div th:insert="~{about/advantages}"></div>
-					</div>
-					<div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-shadow border-2 border-primary relative">
-						<div class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-primary text-white px-6 py-2 !rounded-button text-sm font-semibold">
-							Mais Popular
-						</div>
-						<div class="text-center mb-8">
-							<h3 class="text-2xl font-bold text-gray-900 mb-2">Pacote de bailes + aulas</h3>
-							<div class="flex items-center justify-center">
-								<div class="text-4xl font-bold text-primary">R$ 500</div>
-								<span class="ml-1 text-gray-500">/dia</span>
-							</div>
-							<p class="text-gray-600">Ideal para um dia inteiro de evento</p>
-						</div>
-						<div th:insert="~{about/advantages}"></div>
-					</div>
-					<div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-shadow">
-						<div class="text-center mb-8">
-							<h3 class="text-2xl font-bold text-gray-900 mb-2">Pacote Congressos</h3>
-							<div class="flex items-center justify-center">
-								<div class="text-4xl font-bold text-primary">R$ 450</div>
-								<span class="ml-1 text-gray-500">/dia</span>
-							</div>
-							<p class="text-gray-600">Experiência fotográfica de todo o evento</p>
-						</div>
-						<div th:insert="~{about/advantages}"></div>
-					</div>
-				</div>
-			</div>
-		</section>
-		<section id="gallery" class="py-20 bg-white">
-			<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-				<div class="text-center mb-16">
-					<h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Galeria de fotos</h2>
-					<p class="text-xl text-gray-600 max-w-3xl mx-auto">
-						Explore nossa coleção de momentos capturados em diversos eventos e congressos.
-					</p>
-				</div>
-				<div class="masonry" id="gallery-container">
-					<div class="masonry-item">
-						<img
-								src="https://s3.sa-east-1.amazonaws.com/zoukme.in/events/zathus-zouk-congress/Aulas%20de%20domingo/DSC_0561.jpg"
-								alt="Zathus Zouk Congress 2025"
-								class="w-full rounded-lg hover:scale-105 transition-transform cursor-pointer object-top"/>
-					</div>
-					<div class="masonry-item">
-						<img
-								src="https://s3.sa-east-1.amazonaws.com/zoukme.in/events/elite-samba-congress-2025/Baile%20Nosso%20samba%20tem%20pagode/DSC_5623.jpg"
-								alt="Elite Samba Congress 2025"
-								class="w-full rounded-lg hover:scale-105 transition-transform cursor-pointer object-top"/>
-					</div>
-					<div class="masonry-item">
-						<img
-								src="https://s3.sa-east-1.amazonaws.com/zoukme.in/next-events/baila-litoral-2025/1000224116.jpg"
-								alt="Baila Litoral 2025"
-								class="w-full rounded-lg hover:scale-105 transition-transform cursor-pointer object-top"/>
-					</div>
-					<div class="masonry-item">
-						<img
-								src="https://s3.sa-east-1.amazonaws.com/zoukme.in/events/baila-litoral-2025/Apresenta%C3%A7%C3%B5es%20s%C3%A1bado/DSC_7866.jpg"
-								alt="Baila Litoral 2025"
-								class="w-full rounded-lg hover:scale-105 transition-transform cursor-pointer object-top"/>
-					</div>
-					<div class="masonry-item">
-						<img
-								src="https://s3.sa-east-1.amazonaws.com/zoukme.in/events/zouknbeach-2024/festa-no-barco/DSC_2609.jpg"
-								alt="Zoukn Beach 2024"
-								class="w-full rounded-lg hover:scale-105 transition-transform cursor-pointer object-top"
-						/>
-					</div>
-					<div class="masonry-item">
-						<img
-								src="https://s3.sa-east-1.amazonaws.com/zoukme.in/events/elite-samba-congress-2025/Baile%20Fragr%C3%A2ncia/DSC_4027.jpg"
-								alt="Elite Samba Congress 2025"
-								class="w-full rounded-lg hover:scale-105 transition-transform cursor-pointer object-top"/>
-					</div>
-					<div class="masonry-item">
-						<img
-								src="https://s3.sa-east-1.amazonaws.com/zoukme.in/events/conecsamba-2025/Baile%20Glamour%20Gafieira/DSC_4391.jpg"
-								alt="ConecSamba 2025"
-								class="w-full rounded-lg hover:scale-105 transition-transform cursor-pointer object-top"/>
-					</div>
-					<div class="masonry-item">
-						<img
-								src="https://s3.sa-east-1.amazonaws.com/zoukme.in/events/sul-in-zouk-and-lambada-2025/Baile%20Neon%20Night/DSC_7194.jpg"
-								alt="Sul in Zouk and Lambada 2025"
-								class="w-full rounded-lg hover:scale-105 transition-transform cursor-pointer object-top"
-						/>
-					</div>
-				</div>
-			</div>
-		</section>
-		<section id="events" class="py-20 bg-gray-50">
-			<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-				<div class="text-center mb-16">
-					<h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Eventos recentes</h2>
-					<p class="text-xl text-gray-600 max-w-3xl mx-auto">Acompanhe os eventos mais recentes e os depoimentos de quem viveu nossa cobertura de
-						dança de salão</p>
-				</div>
-				<div class="relative">
-					<div class="space-y-16">
-						<div class="timeline-item relative">
-							<div class="grid md:grid-cols-2 gap-8 items-center relative">
-								<div class="md:text-right">
-									<div class="bg-white p-8 rounded-2xl shadow-lg">
-										<div class="text-primary font-semibold mb-2">
-											22 à 24 Agosto, 2025
-										</div>
-										<h3 class="text-2xl font-bold text-gray-900 mb-4">Baila Litoral</h3>
-										<p class="text-gray-600 mb-4">
-											O Baila Litoral 2025 foi pura energia: aulas top, shows incríveis e noites de baile que ninguém queria que acabassem.
-										</p>
-										<div class="flex flex-wrap gap-2 mb-4">
-											<span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">Congresso</span>
-											<span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">Dança de salão</span>
-											<span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">600 Pessoas</span>
-										</div>
-										<blockquote class="italic text-gray-700">
-											"Encantada com teu trabalho, sensibilidade, competência e gentileza. Eternizou momentos de muita alegria!" - Giselle Frufrek
-										</blockquote>
-									</div>
-								</div>
-								<div>
-									<img
-											src="https://s3.sa-east-1.amazonaws.com/zoukme.in/events/baila-litoral-2025/Grande%20baile%20sexta-feira/DSC_6463.jpg"
-											alt="Baila Litoral 2025"
-											class="w-full rounded-2xl shadow-lg object-top"/>
-								</div>
-							</div>
-						</div>
-						<div class="timeline-item relative">
-							<div class="grid md:grid-cols-2 gap-8 items-center relative">
-								<div class="relative z-10">
-									<img
-											src="https://s3.sa-east-1.amazonaws.com/zoukme.in/events/elite-samba-congress-2025/Baile%20Nosso%20samba%20tem%20pagode/DSC_5412.jpg"
-											alt="Elite Samba Congress 2025"
-											class="w-full rounded-2xl shadow-lg object-top"
-									/>
-								</div>
-								<div class="md:text-right relative z-10">
-									<div class="bg-white p-8 rounded-2xl shadow-lg">
-										<div class="text-primary font-semibold mb-2">
-											15 à 17 Agosto, 2025
-										</div>
-										<h3 class="text-2xl font-bold text-gray-900 mb-4">Elite Samba Congress 2025</h3>
-										<p class="text-gray-600 mb-4">O Elite Samba Congress 2025 chegou com tudo! Aulas incríveis, apresentações que deixaram todo mundo
-											de queixo caído e noites de baile cheias de energia e diversão. Um evento que uniu talento, paixão e muita dança em cada
-											momento!</p>
-										<div class="flex flex-wrap gap-2 mb-4">
-											<span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">Samba de Gafieira</span>
-											<span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">Congresso</span>
-											<span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">270 Pessoas</span></div>
-										<blockquote class="italic text-gray-700">
-											"Obrigado pelos registros!! Você arrasa demais nas fotos!" - Claudia Margarida
-										</blockquote>
-									</div>
-								</div>
+    </style>
+    <!-- Content -->
+    <main th:fragment="main" class="main container mx-auto p-4 py-8">
+      <section id="pricing" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="text-center mb-16">
+            <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+              Pacotes de Fotografia
+            </h2>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+              Escolha o pacote perfeito para seu evento especial. Cada pacote foi
+              desenvolvido para capturar todos os momentos preciosos com
+              excelência profissional.
+            </p>
+          </div>
+          <div class="grid md:grid-cols-3 gap-8">
+            <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-shadow">
+              <div class="text-center mb-8">
+                <h3 class="text-2xl font-bold text-gray-900 mb-2">Pacote de bailes</h3>
+                <div class="flex items-center justify-center">
+                  <div class="text-4xl font-bold text-primary">R$ 300</div>
+                  <span class="ml-1 text-gray-500">/dia</span>
+                </div>
+                <p class="text-gray-600">Ideal para eventos pequenos</p>
+              </div>
+              <div th:insert="~{about/advantages}"></div>
+            </div>
+            <div
+              class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-shadow border-2 border-primary relative">
+              <div
+                class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-primary text-white px-6 py-2 !rounded-button text-sm font-semibold">
+                Mais Popular
+              </div>
+              <div class="text-center mb-8">
+                <h3 class="text-2xl font-bold text-gray-900 mb-2">Pacote de bailes + aulas</h3>
+                <div class="flex items-center justify-center">
+                  <div class="text-4xl font-bold text-primary">R$ 500</div>
+                  <span class="ml-1 text-gray-500">/dia</span>
+                </div>
+                <p class="text-gray-600">Ideal para um dia inteiro de evento</p>
+              </div>
+              <div th:insert="~{about/advantages}"></div>
+            </div>
+            <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-shadow">
+              <div class="text-center mb-8">
+                <h3 class="text-2xl font-bold text-gray-900 mb-2">Pacote Congressos</h3>
+                <div class="flex items-center justify-center">
+                  <div class="text-4xl font-bold text-primary">R$ 450</div>
+                  <span class="ml-1 text-gray-500">/dia</span>
+                </div>
+                <p class="text-gray-600">Experiência fotográfica de todo o evento</p>
+              </div>
+              <div th:insert="~{about/advantages}"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section id="gallery" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="text-center mb-16">
+            <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Galeria de fotos</h2>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+              Explore nossa coleção de momentos capturados em diversos eventos e congressos.
+            </p>
+          </div>
+          <div class="masonry" id="gallery-container">
+            <div class="masonry-item">
+              <img
+                src="https://s3.sa-east-1.amazonaws.com/zoukme.in/events/zathus-zouk-congress/Aulas%20de%20domingo/DSC_0561.jpg"
+                alt="Zathus Zouk Congress 2025"
+                class="w-full rounded-lg hover:scale-105 transition-transform cursor-pointer object-top" />
+            </div>
+            <div class="masonry-item">
+              <img
+                src="https://s3.sa-east-1.amazonaws.com/zoukme.in/events/elite-samba-congress-2025/Baile%20Nosso%20samba%20tem%20pagode/DSC_5623.jpg"
+                alt="Elite Samba Congress 2025"
+                class="w-full rounded-lg hover:scale-105 transition-transform cursor-pointer object-top" />
+            </div>
+            <div class="masonry-item">
+              <img src="https://s3.sa-east-1.amazonaws.com/zoukme.in/next-events/baila-litoral-2025/1000224116.jpg"
+                alt="Baila Litoral 2025"
+                class="w-full rounded-lg hover:scale-105 transition-transform cursor-pointer object-top" />
+            </div>
+            <div class="masonry-item">
+              <img
+                src="https://s3.sa-east-1.amazonaws.com/zoukme.in/events/baila-litoral-2025/Apresenta%C3%A7%C3%B5es%20s%C3%A1bado/DSC_7866.jpg"
+                alt="Baila Litoral 2025"
+                class="w-full rounded-lg hover:scale-105 transition-transform cursor-pointer object-top" />
+            </div>
+            <div class="masonry-item">
+              <img src="https://s3.sa-east-1.amazonaws.com/zoukme.in/events/zouknbeach-2024/festa-no-barco/DSC_2609.jpg"
+                alt="Zoukn Beach 2024"
+                class="w-full rounded-lg hover:scale-105 transition-transform cursor-pointer object-top" />
+            </div>
+            <div class="masonry-item">
+              <img
+                src="https://s3.sa-east-1.amazonaws.com/zoukme.in/events/elite-samba-congress-2025/Baile%20Fragr%C3%A2ncia/DSC_4027.jpg"
+                alt="Elite Samba Congress 2025"
+                class="w-full rounded-lg hover:scale-105 transition-transform cursor-pointer object-top" />
+            </div>
+            <div class="masonry-item">
+              <img
+                src="https://s3.sa-east-1.amazonaws.com/zoukme.in/events/conecsamba-2025/Baile%20Glamour%20Gafieira/DSC_4391.jpg"
+                alt="ConecSamba 2025"
+                class="w-full rounded-lg hover:scale-105 transition-transform cursor-pointer object-top" />
+            </div>
+            <div class="masonry-item">
+              <img
+                src="https://s3.sa-east-1.amazonaws.com/zoukme.in/events/sul-in-zouk-and-lambada-2025/Baile%20Neon%20Night/DSC_7194.jpg"
+                alt="Sul in Zouk and Lambada 2025"
+                class="w-full rounded-lg hover:scale-105 transition-transform cursor-pointer object-top" />
+            </div>
+          </div>
+        </div>
+      </section>
+      <section id="events" class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="text-center mb-16">
+            <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Eventos recentes</h2>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">Acompanhe os eventos mais recentes e os depoimentos de
+              quem viveu nossa cobertura de
+              dança de salão</p>
+          </div>
+          <div class="relative">
+            <div class="space-y-16">
+              <div class="timeline-item relative">
+                <div class="grid md:grid-cols-2 gap-8 items-center relative">
+                  <div>
+                    <img
+                      src="https://s3.sa-east-1.amazonaws.com/zoukme.in/events/coneczouk-2025/Baile%20capivara%20zouk%20festival/DSC_1653.jpg"
+                      alt="ConecZouk 2025" class="w-full rounded-2xl shadow-lg object-top" />
+                  </div>
+                  <div class="md:text-right">
+                    <div class="bg-white p-8 rounded-2xl shadow-lg">
+                      <div class="text-primary font-semibold mb-2">
+                        12 à 14 de Setembro, 2025
+                      </div>
+                      <h3 class="text-2xl font-bold text-gray-900 mb-4">ConecZouk 2025</h3>
+                      <p class="text-gray-600 mb-4">
+                        O ConecZouk 2025 foi de uma energia impressionante, com bailes incríveis, aulas que inspiraram e
+                        ensinaram muito, para quem era iniciante ou avançado. Um evento que celebrou a paixão pela dança
+                        e a conexão entre os congressistas!
+                      </p>
+                      <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">Congresso</span>
+                        <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">Zouk</span>
+                        <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">170 Pessoas</span>
+                      </div>
+                      <blockquote class="italic text-gray-700">
+                        "Eu amei do jeito que você tira as fotos. As fotos ficaram incríveis. Muito muito lindas. Uma
+                        mais top do que a outra." - Stephany Viana
+                      </blockquote>
+                    </div>
+                  </div>
 
-							</div>
-						</div>
-						<div class="timeline-item relative">
-							<div class="grid md:grid-cols-2 gap-8 items-center relative">
-								<div class="md:text-right">
-									<div class="bg-white p-8 rounded-2xl shadow-lg">
-										<div class="text-primary font-semibold mb-2">
-											25 à 27 Julho, 2025
-										</div>
-										<h3 class="text-2xl font-bold text-gray-900 mb-4">Zathus Zouk Congress</h3>
-										<p class="text-gray-600 mb-4">
-											O Zathus Zouk Congress 2025 foi pura magia! Aulas incríveis, apresentações de tirar o fôlego e noites de baile com muita energia
-											e conexão entre dançarinos. Um evento que celebrou talento, paixão e muita dança!
-										</p>
-										<div class="flex flex-wrap gap-2 mb-4">
-											<span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">Congresso</span>
-											<span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">Zouk</span>
-											<span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">200 Pessoas</span>
-										</div>
-										<blockquote class="italic text-gray-700">
-											"Que registros mais incríveis nas suas lentes. Você é fera demais. Amei cada registro seu." - Fernanda N Nog
-										</blockquote>
-									</div>
-								</div>
-								<div>
-									<img
-											src="https://s3.sa-east-1.amazonaws.com/zoukme.in/events/zathus-zouk-congress/Baile%20Zathus/DSC_3310.jpg"
-											alt="Zathus Zouk Congress 2025"
-											class="w-full rounded-2xl shadow-lg object-top"
-									/>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</section>
-		<section id="equipment" class="py-20 bg-white">
-			<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-				<div class="text-center mb-16">
-					<h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Equipamentos</h2>
-					<p class="text-xl text-gray-600 max-w-3xl mx-auto">
-						Equipamentos fotográficos de ponta, garantindo a mais alta qualidade em cada registro dos seus eventos de dança de salão.
-					</p>
-				</div>
-				<div class="grid lg:grid-cols-2 gap-12 items-center">
-					<div class="grid grid-cols-2 gap-4">
-						<div class="col-span-2 aspect-[2/1] overflow-hidden">
-							<img
-									src="https://readdy.ai/api/search-image?query=Professional%20photography%20equipment%20setup%20with%20high-end%20cameras%2C%20lenses%2C%20lighting%20equipment%20arranged%20on%20modern%20minimalist%20white%20table%2C%20premium%20camera%20gear%20display%20with%20soft%20studio%20lighting%2C%20clean%20and%20elegant%20composition&width=800&height=400&seq=equipment001&orientation=landscape"
-									alt="Main Photography Equipment"
-									class="w-full h-full rounded-2xl shadow-lg object-cover hover:scale-105 transition-transform duration-300 ease-in-out"
-							/>
-						</div>
-						<div>
-							<img
-									src="https://readdy.ai/api/search-image?query=Professional%20camera%20lenses%20collection%20arranged%20beautifully%20on%20light%20surface%2C%20premium%20glass%20optics%20display%2C%20professional%20photography%20gear%20with%20subtle%20lighting%2C%20minimalist%20product%20photography&width=400&height=300&seq=equipment002&orientation=landscape"
-									alt="Camera Lenses"
-									class="w-full h-full rounded-2xl shadow-lg object-cover"
-							/>
-						</div>
-						<div>
-							<img
-									src="https://readdy.ai/api/search-image?query=Professional%20studio%20lighting%20equipment%20setup%20with%20softboxes%20and%20LED%20panels%2C%20modern%20photography%20lighting%20gear%2C%20clean%20studio%20setup%20with%20white%20background%2C%20professional%20lighting%20display&width=400&height=300&seq=equipment003&orientation=landscape"
-									alt="Lighting Equipment"
-									class="w-full h-full rounded-2xl shadow-lg object-cover"
-							/>
-						</div>
-						<div class="col-span-2">
-							<img
-									src="https://readdy.ai/api/search-image?query=Professional%20camera%20accessories%20and%20support%20equipment%20including%20tripods%2C%20gimbals%2C%20and%20stabilizers%20arranged%20professionally%2C%20modern%20photography%20gear%20on%20clean%20white%20surface%2C%20premium%20equipment%20display&width=800&height=300&seq=equipment004&orientation=landscape"
-									alt="Camera Accessories"
-									class="w-full h-full rounded-2xl shadow-lg object-cover"
-							/>
-						</div>
-					</div>
-					<div class="space-y-6">
-						<div class="equipment-card bg-gray-50 p-6 rounded-xl">
-							<div class="flex items-center mb-4">
-								<div class="w-12 h-12 flex items-center justify-center bg-primary/10 rounded-lg mr-4">
-									<i class="ri-camera-line text-primary text-xl"></i>
-								</div>
-								<h3 class="text-xl font-bold text-gray-900">Câmeras Profissionais</h3>
-							</div>
-							<p class="text-gray-600 mb-3">
-								Nikon Z6 II - Full-frame mirrorless
-								Câmeras com uma performance exceptional para ambientes com pouca luz.
-							</p>
-							<button class="equipment-toggle text-primary font-medium flex items-center" data-target="cameras">
-								<span>Detalhes</span>
-								<div class="w-4 h-4 flex items-center justify-center ml-2">
-									<i class="ri-arrow-down-s-line"></i>
-								</div>
-							</button>
-							<div id="cameras" class="hidden mt-4 p-4 bg-white rounded-lg">
-								<ul class="space-y-2 text-sm text-gray-600">
-									<li>• Nikon Z6 II - Mirrorless</li>
-									<li>• Nikon 650D - Full frame</li>
-								</ul>
-							</div>
-						</div>
-						<div class="equipment-card bg-gray-50 p-6 rounded-xl">
-							<div class="flex items-center mb-4">
-								<div class="w-12 h-12 flex items-center justify-center bg-secondary/10 rounded-lg mr-4">
-									<i class="ri-focus-3-line text-secondary text-xl"></i>
-								</div>
-								<h3 class="text-xl font-bold text-gray-900">Lentes Premium</h3>
-							</div>
-							<p class="text-gray-600 mb-3">
-								Lentes profissionais Nikkor e Sigma Art que cobrem os mais diversos ângulos para imagens nítidas e com qualidade professional.
-							</p>
-							<button class="equipment-toggle text-secondary font-medium flex items-center" data-target="lenses">
-								<span>Detalhes</span>
-								<div class="w-4 h-4 flex items-center justify-center ml-2">
-									<i class="ri-arrow-down-s-line"></i>
-								</div>
-							</button>
-							<div id="lenses" class="hidden mt-4 p-4 bg-white rounded-lg">
-								<ul class="space-y-2 text-sm text-gray-600">
-									<li>• 17-50mm f/2.8 - Grande angular e versátil excelente para lugares pequenos</li>
-									<li>• 35mm f/1.4 - Grande angular, excelente para lugares pequenos</li>
-									<li>• 50mm f/1.8 - Lente com zoom padrão</li>
-									<li>• 85mm f/1.4 - Lente de fotografia, para um bokeh incrível</li>
-								</ul>
-							</div>
-						</div>
-						<div class="equipment-card bg-gray-50 p-6 rounded-xl">
-							<div class="flex items-center mb-4">
-								<div class="w-12 h-12 flex items-center justify-center bg-secondary/10 rounded-lg mr-4">
-									<i class="ri-tools-line text-secondary text-xl"></i>
-								</div>
-								<h3 class="text-xl font-bold text-gray-900">Suporte e acessórios</h3>
-							</div>
-							<p class="text-gray-600 mb-3">
-								Tripes profissionais e Softbox para uma sessão de fotos, igual para fotografar em um painel do evento, por exemplo.
-							</p>
-							<button class="equipment-toggle text-secondary font-medium flex items-center" data-target="accessories">
-								<span>Detalhes</span>
-								<div class="w-4 h-4 flex items-center justify-center ml-2">
-									<i class="ri-arrow-down-s-line"></i>
-								</div>
-							</button>
-							<div id="accessories" class="hidden mt-4 p-4 bg-white rounded-lg">
-								<ul class="space-y-2 text-sm text-gray-600">
-									<li>• Tripe Ulanzi Carbono</li>
-									<li>• Tripe STC-360</li>
-									<li>• Softbox Triopo</li>
-									<li>• Rebatedor</li>
-								</ul>
-							</div>
-						</div>
-						<div class="equipment-card bg-gray-50 p-6 rounded-xl">
-							<div class="flex items-center mb-4">
-								<div class="w-12 h-12 flex items-center justify-center bg-primary/10 rounded-lg mr-4">
-									<i class="ri-lightbulb-line text-primary text-xl"></i>
-								</div>
-								<h3 class="text-xl font-bold text-gray-900">Iluminação e Flashes</h3>
-							</div>
-							<p class="text-gray-600 mb-3">
-								Flash profissional, bastão de LED e luzes auxiliares para garantir uma luz perfeita na maioria dos ambientes ou condições.
-							</p>
-						</div>
-					</div>
-				</div>
-			</div>
-		</section>
-		<section class="py-12 bg-white font-['Poppins']">
-			<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-				<div class="text-center mb-16">
-					<h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-						Perguntas Frequentes
-					</h2>
-					<p class="text-xl text-gray-600 max-w-3xl mx-auto">
-						Encontre respostas para as perguntas mais comuns sobre nossos serviços de fotografia e cobertura de eventos
-					</p>
-				</div>
-				<div class="space-y-4 text-sm">
-					<div class="space-y-4 text-sm">
-						<div class="faq-item bg-white rounded-lg shadow-sm overflow-hidden">
-							<button class="faq-toggle w-full flex justify-between items-center p-6 focus:outline-none"><span
-									class="text-lg font-medium text-gray-900">Os custos de deslocamento, alimentação e hospedagem estão incluídos no valor da cobertura fotográfica?</span>
-								<div class="w-6 h-6 flex items-center justify-center text-gray-500 transition-transform duration-300">
-									<i class="ri-arrow-down-s-line ri-lg"></i>
-								</div>
-							</button>
-							<div class="faq-answer px-6 pb-6">
-								<p class="text-gray-700">
-									Os custos de deslocamento, alimentação e hospedagem não estão incluídos no valor da cobertura e ficam por conta do contratante.
-									Esses
-									detalhes são alinhados previamente para garantir organização e transparência.
-								</p>
-							</div>
-						</div>
-						<div class="faq-item bg-white rounded-lg shadow-sm overflow-hidden">
-							<button class="faq-toggle w-full flex justify-between items-center p-6 focus:outline-none"><span
-									class="text-lg font-medium text-gray-900">Quais tipos de momentos vocês costumam registrar em eventos de dança de salão?</span>
-								<div class="w-6 h-6 flex items-center justify-center text-gray-500 transition-transform duration-300">
-									<i class="ri-arrow-down-s-line ri-lg"></i>
-								</div>
-							</button>
-							<div class="faq-answer px-6 pb-6">
-								<p class="text-gray-700">Registramos todos os momentos importantes do evento: Aulas, bailes e apresentações
-									e também o público presente. Nosso objetivo é captar não só o evento, mas também a emoção e a
-									atmosfera do evento.</p>
-							</div>
-						</div>
-						<div class="faq-item bg-white rounded-lg shadow-sm overflow-hidden">
-							<button class="faq-toggle w-full flex justify-between items-center p-6 focus:outline-none">
-								<span class="text-lg font-medium text-gray-900">Vocês oferecem cobertura fotográfica durante todo o evento ou apenas em horários específicos?</span>
-								<div class="w-6 h-6 flex items-center justify-center text-gray-500 transition-transform duration-300">
-									<i class="ri-arrow-down-s-line ri-lg"></i>
-								</div>
-							</button>
-							<div class="faq-answer px-6 pb-6">
-								<p class="text-gray-700">Oferecemos cobertura completa do evento, do início ao fim. Também é possível contratar coberturas em horários
-									específicos, conforme a programação ou necessidade dos organizadores.</p>
-							</div>
-						</div>
-						<div class="faq-item bg-white rounded-lg shadow-sm overflow-hidden">
-							<button class="faq-toggle w-full flex justify-between items-center p-6 focus:outline-none">
-							<span
-									class="text-lg font-medium text-gray-900">Como é feita a entrega das fotos e em quanto tempo elas ficam disponíveis após o evento?</span>
-								<div class="w-6 h-6 flex items-center justify-center text-gray-500 transition-transform duration-300">
-									<i class="ri-arrow-down-s-line ri-lg"></i>
-								</div>
-							</button>
-							<div class="faq-answer px-6 pb-6">
-								<p class="text-gray-700">As fotos são entregues em galeria online disponibilizadas no <a href="https://zoukme.in">Zoukme.in</a>,
-									organizada por evento (aula, baile...), com acesso publico e disponível para download. O
-									prazo médio de entrega é de 3 dias úteis, mas geralmente conseguimos disponibilizar as fotos durante o evento no dia seguinte.
-								</p>
-							</div>
-						</div>
-						<div class="faq-item bg-white rounded-lg shadow-sm overflow-hidden">
-							<button class="faq-toggle w-full flex justify-between items-center p-6 focus:outline-none">
-								<span class="text-lg font-medium text-gray-900">Vocês também fazem vídeos ou apenas fotografias?</span>
-								<div class="w-6 h-6 flex items-center justify-center text-gray-500 transition-transform duration-300">
-									<i class="ri-arrow-down-s-line ri-lg"></i>
-								</div>
-							</button>
-							<div class="faq-answer px-6 pb-6">
-								<p class="text-gray-700">Fazemos apenas cobertura fotográfica, mas podemos indicar parceiros que fazem vídeos de eventos de dança de
-									salão. Nosso foco é garantir que cada momento especial seja capturado com qualidade e atenção aos detalhes.
-								</p>
-							</div>
-						</div>
-						<div class="faq-item bg-white rounded-lg shadow-sm overflow-hidden">
-							<button class="faq-toggle w-full flex justify-between items-center p-6 focus:outline-none">
-								<span class="text-lg font-medium text-gray-900">Por quanto tempo as fotos ficam disponíveis na galeria online?</span>
-								<div class="w-6 h-6 flex items-center justify-center text-gray-500 transition-transform duration-300">
-									<i class="ri-arrow-down-s-line ri-lg"></i>
-								</div>
-							</button>
-							<div class="faq-answer px-6 pb-6">
-								<p class="text-gray-700">
-									As fotos ficam disponíveis por pelo menos 3 anos, permitindo que os participantes acessem e baixem as imagens
-									sempre que desejarem. Recomendamos que façam o download das fotos para garantir que tenham uma cópia local.
-								</p>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="mt-10 text-center">
-					<p class="text-gray-600">Ainda tem alguma dúvida?
-						Estamos aqui para ajudar! Entre em <a href="/about" class="text-primary font-medium">contato conosco</a> e teremos o
-						prazer de responder às suas perguntas.
-					</p>
-				</div>
-			</div>
-		</section>
-	</main>
-	<script id="faq-script">
+                </div>
+              </div>
+              <div class="timeline-item relative">
+                <div class="grid md:grid-cols-2 gap-8 items-center relative">
+                  <div class="md:text-right">
+                    <div class="bg-white p-8 rounded-2xl shadow-lg">
+                      <div class="text-primary font-semibold mb-2">
+                        22 à 24 de Agosto, 2025
+                      </div>
+                      <h3 class="text-2xl font-bold text-gray-900 mb-4">Baila Litoral</h3>
+                      <p class="text-gray-600 mb-4">
+                        O Baila Litoral 2025 foi pura energia: aulas top, shows incríveis e noites de baile que ninguém
+                        queria que acabassem.
+                      </p>
+                      <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">Congresso</span>
+                        <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">Dança de salão</span>
+                        <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">600 Pessoas</span>
+                      </div>
+                      <blockquote class="italic text-gray-700">
+                        "Encantada com teu trabalho, sensibilidade, competência e gentileza. Eternizou momentos de muita
+                        alegria!" - Giselle Frufrek
+                      </blockquote>
+                    </div>
+                  </div>
+                  <div>
+                    <img
+                      src="https://s3.sa-east-1.amazonaws.com/zoukme.in/events/baila-litoral-2025/Grande%20baile%20sexta-feira/DSC_6463.jpg"
+                      alt="Baila Litoral 2025" class="w-full rounded-2xl shadow-lg object-top" />
+                  </div>
+                </div>
+              </div>
+              <div class="timeline-item relative">
+                <div class="grid md:grid-cols-2 gap-8 items-center relative">
+                  <div class="relative z-10">
+                    <img
+                      src="https://s3.sa-east-1.amazonaws.com/zoukme.in/events/elite-samba-congress-2025/Baile%20Nosso%20samba%20tem%20pagode/DSC_5412.jpg"
+                      alt="Elite Samba Congress 2025" class="w-full rounded-2xl shadow-lg object-top" />
+                  </div>
+                  <div class="md:text-right relative z-10">
+                    <div class="bg-white p-8 rounded-2xl shadow-lg">
+                      <div class="text-primary font-semibold mb-2">
+                        15 à 17 de Agosto, 2025
+                      </div>
+                      <h3 class="text-2xl font-bold text-gray-900 mb-4">Elite Samba Congress 2025</h3>
+                      <p class="text-gray-600 mb-4">O Elite Samba Congress 2025 chegou com tudo! Aulas incríveis,
+                        apresentações que deixaram todo mundo
+                        de queixo caído e noites de baile cheias de energia e diversão. Um evento que uniu talento,
+                        paixão e muita dança em cada
+                        momento!</p>
+                      <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">Samba de Gafieira</span>
+                        <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">Congresso</span>
+                        <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">270 Pessoas</span>
+                      </div>
+                      <blockquote class="italic text-gray-700">
+                        "Obrigado pelos registros!! Você arrasa demais nas fotos!" - Claudia Margarida
+                      </blockquote>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+              <div class="timeline-item relative">
+                <div class="grid md:grid-cols-2 gap-8 items-center relative">
+                  <div class="md:text-right">
+                    <div class="bg-white p-8 rounded-2xl shadow-lg">
+                      <div class="text-primary font-semibold mb-2">
+                        25 à 27 de Julho, 2025
+                      </div>
+                      <h3 class="text-2xl font-bold text-gray-900 mb-4">Zathus Zouk Congress</h3>
+                      <p class="text-gray-600 mb-4">
+                        O Zathus Zouk Congress 2025 foi pura magia! Aulas incríveis, apresentações de tirar o fôlego e
+                        noites de baile com muita energia
+                        e conexão entre dançarinos. Um evento que celebrou talento, paixão e muita dança!
+                      </p>
+                      <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">Congresso</span>
+                        <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">Zouk</span>
+                        <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">200 Pessoas</span>
+                      </div>
+                      <blockquote class="italic text-gray-700">
+                        "Que registros mais incríveis nas suas lentes. Você é fera demais. Amei cada registro seu." -
+                        Fernanda N Nog
+                      </blockquote>
+                    </div>
+                  </div>
+                  <div>
+                    <img
+                      src="https://s3.sa-east-1.amazonaws.com/zoukme.in/events/zathus-zouk-congress/Baile%20Zathus/DSC_3310.jpg"
+                      alt="Zathus Zouk Congress 2025" class="w-full rounded-2xl shadow-lg object-top" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section id="equipment" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="text-center mb-16">
+            <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Equipamentos</h2>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+              Equipamentos fotográficos de ponta, garantindo a mais alta qualidade em cada registro dos seus eventos de
+              dança de salão.
+            </p>
+          </div>
+          <div class="grid lg:grid-cols-2 gap-12 items-center">
+            <div class="grid grid-cols-2 gap-4">
+              <div class="col-span-2 aspect-[2/1] overflow-hidden">
+                <img
+                  src="https://readdy.ai/api/search-image?query=Professional%20photography%20equipment%20setup%20with%20high-end%20cameras%2C%20lenses%2C%20lighting%20equipment%20arranged%20on%20modern%20minimalist%20white%20table%2C%20premium%20camera%20gear%20display%20with%20soft%20studio%20lighting%2C%20clean%20and%20elegant%20composition&width=800&height=400&seq=equipment001&orientation=landscape"
+                  alt="Main Photography Equipment"
+                  class="w-full h-full rounded-2xl shadow-lg object-cover hover:scale-105 transition-transform duration-300 ease-in-out" />
+              </div>
+              <div>
+                <img
+                  src="https://readdy.ai/api/search-image?query=Professional%20camera%20lenses%20collection%20arranged%20beautifully%20on%20light%20surface%2C%20premium%20glass%20optics%20display%2C%20professional%20photography%20gear%20with%20subtle%20lighting%2C%20minimalist%20product%20photography&width=400&height=300&seq=equipment002&orientation=landscape"
+                  alt="Camera Lenses" class="w-full h-full rounded-2xl shadow-lg object-cover" />
+              </div>
+              <div>
+                <img
+                  src="https://readdy.ai/api/search-image?query=Professional%20studio%20lighting%20equipment%20setup%20with%20softboxes%20and%20LED%20panels%2C%20modern%20photography%20lighting%20gear%2C%20clean%20studio%20setup%20with%20white%20background%2C%20professional%20lighting%20display&width=400&height=300&seq=equipment003&orientation=landscape"
+                  alt="Lighting Equipment" class="w-full h-full rounded-2xl shadow-lg object-cover" />
+              </div>
+              <div class="col-span-2">
+                <img
+                  src="https://readdy.ai/api/search-image?query=Professional%20camera%20accessories%20and%20support%20equipment%20including%20tripods%2C%20gimbals%2C%20and%20stabilizers%20arranged%20professionally%2C%20modern%20photography%20gear%20on%20clean%20white%20surface%2C%20premium%20equipment%20display&width=800&height=300&seq=equipment004&orientation=landscape"
+                  alt="Camera Accessories" class="w-full h-full rounded-2xl shadow-lg object-cover" />
+              </div>
+            </div>
+            <div class="space-y-6">
+              <div class="equipment-card bg-gray-50 p-6 rounded-xl">
+                <div class="flex items-center mb-4">
+                  <div class="w-12 h-12 flex items-center justify-center bg-primary/10 rounded-lg mr-4">
+                    <i class="ri-camera-line text-primary text-xl"></i>
+                  </div>
+                  <h3 class="text-xl font-bold text-gray-900">Câmeras Profissionais</h3>
+                </div>
+                <p class="text-gray-600 mb-3">
+                  Nikon Z6 II - Full-frame mirrorless
+                  Câmeras com uma performance exceptional para ambientes com pouca luz.
+                </p>
+                <button class="equipment-toggle text-primary font-medium flex items-center" data-target="cameras">
+                  <span>Detalhes</span>
+                  <div class="w-4 h-4 flex items-center justify-center ml-2">
+                    <i class="ri-arrow-down-s-line"></i>
+                  </div>
+                </button>
+                <div id="cameras" class="hidden mt-4 p-4 bg-white rounded-lg">
+                  <ul class="space-y-2 text-sm text-gray-600">
+                    <li>• Nikon Z6 II - Mirrorless</li>
+                    <li>• Nikon 650D - Full frame</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="equipment-card bg-gray-50 p-6 rounded-xl">
+                <div class="flex items-center mb-4">
+                  <div class="w-12 h-12 flex items-center justify-center bg-secondary/10 rounded-lg mr-4">
+                    <i class="ri-focus-3-line text-secondary text-xl"></i>
+                  </div>
+                  <h3 class="text-xl font-bold text-gray-900">Lentes Premium</h3>
+                </div>
+                <p class="text-gray-600 mb-3">
+                  Lentes profissionais Nikkor e Sigma Art que cobrem os mais diversos ângulos para imagens nítidas e com
+                  qualidade professional.
+                </p>
+                <button class="equipment-toggle text-secondary font-medium flex items-center" data-target="lenses">
+                  <span>Detalhes</span>
+                  <div class="w-4 h-4 flex items-center justify-center ml-2">
+                    <i class="ri-arrow-down-s-line"></i>
+                  </div>
+                </button>
+                <div id="lenses" class="hidden mt-4 p-4 bg-white rounded-lg">
+                  <ul class="space-y-2 text-sm text-gray-600">
+                    <li>• 17-50mm f/2.8 - Grande angular e versátil excelente para lugares pequenos</li>
+                    <li>• 35mm f/1.4 - Grande angular, excelente para lugares pequenos</li>
+                    <li>• 50mm f/1.8 - Lente com zoom padrão</li>
+                    <li>• 85mm f/1.4 - Lente de fotografia, para um bokeh incrível</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="equipment-card bg-gray-50 p-6 rounded-xl">
+                <div class="flex items-center mb-4">
+                  <div class="w-12 h-12 flex items-center justify-center bg-secondary/10 rounded-lg mr-4">
+                    <i class="ri-tools-line text-secondary text-xl"></i>
+                  </div>
+                  <h3 class="text-xl font-bold text-gray-900">Suporte e acessórios</h3>
+                </div>
+                <p class="text-gray-600 mb-3">
+                  Tripes profissionais e Softbox para uma sessão de fotos, igual para fotografar em um painel do evento,
+                  por exemplo.
+                </p>
+                <button class="equipment-toggle text-secondary font-medium flex items-center" data-target="accessories">
+                  <span>Detalhes</span>
+                  <div class="w-4 h-4 flex items-center justify-center ml-2">
+                    <i class="ri-arrow-down-s-line"></i>
+                  </div>
+                </button>
+                <div id="accessories" class="hidden mt-4 p-4 bg-white rounded-lg">
+                  <ul class="space-y-2 text-sm text-gray-600">
+                    <li>• Tripe Ulanzi Carbono</li>
+                    <li>• Tripe STC-360</li>
+                    <li>• Softbox Triopo</li>
+                    <li>• Rebatedor</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="equipment-card bg-gray-50 p-6 rounded-xl">
+                <div class="flex items-center mb-4">
+                  <div class="w-12 h-12 flex items-center justify-center bg-primary/10 rounded-lg mr-4">
+                    <i class="ri-lightbulb-line text-primary text-xl"></i>
+                  </div>
+                  <h3 class="text-xl font-bold text-gray-900">Iluminação e Flashes</h3>
+                </div>
+                <p class="text-gray-600 mb-3">
+                  Flash profissional, bastão de LED e luzes auxiliares para garantir uma luz perfeita na maioria dos
+                  ambientes ou condições.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="py-12 bg-white font-['Poppins']">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="text-center mb-16">
+            <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+              Perguntas Frequentes
+            </h2>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+              Encontre respostas para as perguntas mais comuns sobre nossos serviços de fotografia e cobertura de
+              eventos
+            </p>
+          </div>
+          <div class="space-y-4 text-sm">
+            <div class="space-y-4 text-sm">
+              <div class="faq-item bg-white rounded-lg shadow-sm overflow-hidden">
+                <button class="faq-toggle w-full flex justify-between items-center p-6 focus:outline-none"><span
+                    class="text-lg font-medium text-gray-900">Os custos de deslocamento, alimentação e hospedagem estão
+                    incluídos no valor da cobertura fotográfica?</span>
+                  <div class="w-6 h-6 flex items-center justify-center text-gray-500 transition-transform duration-300">
+                    <i class="ri-arrow-down-s-line ri-lg"></i>
+                  </div>
+                </button>
+                <div class="faq-answer px-6 pb-6">
+                  <p class="text-gray-700">
+                    Os custos de deslocamento, alimentação e hospedagem não estão incluídos no valor da cobertura e
+                    ficam por conta do contratante.
+                    Esses
+                    detalhes são alinhados previamente para garantir organização e transparência.
+                  </p>
+                </div>
+              </div>
+              <div class="faq-item bg-white rounded-lg shadow-sm overflow-hidden">
+                <button class="faq-toggle w-full flex justify-between items-center p-6 focus:outline-none"><span
+                    class="text-lg font-medium text-gray-900">Quais tipos de momentos vocês costumam registrar em
+                    eventos de dança de salão?</span>
+                  <div class="w-6 h-6 flex items-center justify-center text-gray-500 transition-transform duration-300">
+                    <i class="ri-arrow-down-s-line ri-lg"></i>
+                  </div>
+                </button>
+                <div class="faq-answer px-6 pb-6">
+                  <p class="text-gray-700">Registramos todos os momentos importantes do evento: Aulas, bailes e
+                    apresentações
+                    e também o público presente. Nosso objetivo é captar não só o evento, mas também a emoção e a
+                    atmosfera do evento.</p>
+                </div>
+              </div>
+              <div class="faq-item bg-white rounded-lg shadow-sm overflow-hidden">
+                <button class="faq-toggle w-full flex justify-between items-center p-6 focus:outline-none">
+                  <span class="text-lg font-medium text-gray-900">Vocês oferecem cobertura fotográfica durante todo o
+                    evento ou apenas em horários específicos?</span>
+                  <div class="w-6 h-6 flex items-center justify-center text-gray-500 transition-transform duration-300">
+                    <i class="ri-arrow-down-s-line ri-lg"></i>
+                  </div>
+                </button>
+                <div class="faq-answer px-6 pb-6">
+                  <p class="text-gray-700">Oferecemos cobertura completa do evento, do início ao fim. Também é possível
+                    contratar coberturas em horários
+                    específicos, conforme a programação ou necessidade dos organizadores.</p>
+                </div>
+              </div>
+              <div class="faq-item bg-white rounded-lg shadow-sm overflow-hidden">
+                <button class="faq-toggle w-full flex justify-between items-center p-6 focus:outline-none">
+                  <span class="text-lg font-medium text-gray-900">Como é feita a entrega das fotos e em quanto tempo
+                    elas ficam disponíveis após o evento?</span>
+                  <div class="w-6 h-6 flex items-center justify-center text-gray-500 transition-transform duration-300">
+                    <i class="ri-arrow-down-s-line ri-lg"></i>
+                  </div>
+                </button>
+                <div class="faq-answer px-6 pb-6">
+                  <p class="text-gray-700">As fotos são entregues em galeria online disponibilizadas no <a
+                      href="https://zoukme.in">Zoukme.in</a>,
+                    organizada por evento (aula, baile...), com acesso publico e disponível para download. O
+                    prazo médio de entrega é de 3 dias úteis, mas geralmente conseguimos disponibilizar as fotos durante
+                    o evento no dia seguinte.
+                  </p>
+                </div>
+              </div>
+              <div class="faq-item bg-white rounded-lg shadow-sm overflow-hidden">
+                <button class="faq-toggle w-full flex justify-between items-center p-6 focus:outline-none">
+                  <span class="text-lg font-medium text-gray-900">Vocês também fazem vídeos ou apenas
+                    fotografias?</span>
+                  <div class="w-6 h-6 flex items-center justify-center text-gray-500 transition-transform duration-300">
+                    <i class="ri-arrow-down-s-line ri-lg"></i>
+                  </div>
+                </button>
+                <div class="faq-answer px-6 pb-6">
+                  <p class="text-gray-700">Fazemos apenas cobertura fotográfica, mas podemos indicar parceiros que fazem
+                    vídeos de eventos de dança de
+                    salão. Nosso foco é garantir que cada momento especial seja capturado com qualidade e atenção aos
+                    detalhes.
+                  </p>
+                </div>
+              </div>
+              <div class="faq-item bg-white rounded-lg shadow-sm overflow-hidden">
+                <button class="faq-toggle w-full flex justify-between items-center p-6 focus:outline-none">
+                  <span class="text-lg font-medium text-gray-900">Por quanto tempo as fotos ficam disponíveis na galeria
+                    online?</span>
+                  <div class="w-6 h-6 flex items-center justify-center text-gray-500 transition-transform duration-300">
+                    <i class="ri-arrow-down-s-line ri-lg"></i>
+                  </div>
+                </button>
+                <div class="faq-answer px-6 pb-6">
+                  <p class="text-gray-700">
+                    As fotos ficam disponíveis por pelo menos 3 anos, permitindo que os participantes acessem e baixem
+                    as imagens
+                    sempre que desejarem. Recomendamos que façam o download das fotos para garantir que tenham uma cópia
+                    local.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="mt-10 text-center">
+            <p class="text-gray-600">Ainda tem alguma dúvida?
+              Estamos aqui para ajudar! Entre em <a href="/about" class="text-primary font-medium">contato conosco</a> e
+              teremos o
+              prazer de responder às suas perguntas.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+    <script id="faq-script">
       document.addEventListener("DOMContentLoaded", function () {
-          const faqToggles = document.querySelectorAll(".faq-toggle");
-          faqToggles.forEach((toggle) => {
-              toggle.addEventListener("click", function () {
-                  const faqItem = this.parentElement;
-                  // Close all other FAQ item
-                  document.querySelectorAll(".faq-item").forEach((item) => {
-                      if (item !== faqItem) {
-                          item.classList.remove("active");
-                      }
-                  });
-                  // Toggle current FAQ item
-                  faqItem.classList.toggle("active");
-              });
+        const faqToggles = document.querySelectorAll(".faq-toggle");
+        faqToggles.forEach((toggle) => {
+          toggle.addEventListener("click", function () {
+            const faqItem = this.parentElement;
+            // Close all other FAQ item
+            document.querySelectorAll(".faq-item").forEach((item) => {
+              if (item !== faqItem) {
+                item.classList.remove("active");
+              }
+            });
+            // Toggle current FAQ item
+            faqItem.classList.toggle("active");
           });
+        });
       });
-	</script>
-	<script id="equipment-toggle-script">
+    </script>
+    <script id="equipment-toggle-script">
       document.addEventListener("DOMContentLoaded", function () {
-          const toggleButtons = document.querySelectorAll(".equipment-toggle");
-          toggleButtons.forEach((button) => {
-              button.addEventListener("click", function () {
-                  const target = document.getElementById(this.getAttribute("data-target"));
-                  const icon = this.querySelector("i");
-                  if (target.classList.contains("hidden")) {
-                      target.classList.remove("hidden");
-                      icon.classList.remove("ri-arrow-down-s-line");
-                      icon.classList.add("ri-arrow-up-s-line");
-                  } else {
-                      target.classList.add("hidden");
-                      icon.classList.remove("ri-arrow-up-s-line");
-                      icon.classList.add("ri-arrow-down-s-line");
-                  }
-              });
+        const toggleButtons = document.querySelectorAll(".equipment-toggle");
+        toggleButtons.forEach((button) => {
+          button.addEventListener("click", function () {
+            const target = document.getElementById(this.getAttribute("data-target"));
+            const icon = this.querySelector("i");
+            if (target.classList.contains("hidden")) {
+              target.classList.remove("hidden");
+              icon.classList.remove("ri-arrow-down-s-line");
+              icon.classList.add("ri-arrow-up-s-line");
+            } else {
+              target.classList.add("hidden");
+              icon.classList.remove("ri-arrow-up-s-line");
+              icon.classList.add("ri-arrow-down-s-line");
+            }
           });
+        });
       });
-	</script>
-	<!-- footer -->
-	<div th:insert="~{fragments/footer :: footer}"></div>
-	</body>
-	</html>
+    </script>
+    <!-- footer -->
+    <div th:insert="~{fragments/footer :: footer}"></div>
+  </body>
+
+  </html>
 </DOCTYPE>
