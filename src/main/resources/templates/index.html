@@ -13,8 +13,11 @@
       <div th:insert="~{fragments/carousel}"></div>
       <section th:fragment="albums" class="py-10 bg-white">
         <div class="container mx-auto px-4">
+          <!-- feature event section -->
+          <div id="featured_event" hx-get="/events/featured" hx-trigger="load"></div>
+
           <div class="text-center mb-12">
-            <h2 class="text-3xl md:text-4xl font-bold mb-4">Eventos Anteriores</h2>
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">Eventos anteriores</h2>
             <p class="font-['Montserrat'] text-gray-600 max-w-2xl mx-auto">
               Reveja o que rolou nos eventos anteriores através da nossa coleção de álbuns
             </p>
