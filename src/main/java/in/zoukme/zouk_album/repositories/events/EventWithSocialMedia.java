@@ -30,6 +30,7 @@ public record EventWithSocialMedia(
         this.location,
         this.date,
         coverUrl,
+        Boolean.FALSE,
         null,
         eventUrl,
         this.details,

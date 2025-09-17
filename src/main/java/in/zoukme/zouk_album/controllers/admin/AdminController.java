@@ -1,21 +1,9 @@
 package in.zoukme.zouk_album.controllers.admin;
 
-import in.zoukme.zouk_album.controllers.admin.dashboard.DashboardService;
-import in.zoukme.zouk_album.domains.Album;
-import in.zoukme.zouk_album.domains.Page;
-import in.zoukme.zouk_album.domains.payments.PaymentStatus;
-import in.zoukme.zouk_album.repositories.events.CreateEventRequest;
-import in.zoukme.zouk_album.repositories.events.PackageRequest;
-import in.zoukme.zouk_album.repositories.events.UpdateEventRequest;
-import in.zoukme.zouk_album.services.AlbumService;
-import in.zoukme.zouk_album.services.PackageService;
-import in.zoukme.zouk_album.services.aws.BucketService;
-import in.zoukme.zouk_album.services.aws.EventService;
-import in.zoukme.zouk_album.services.payments.PaymentService;
-import in.zoukme.zouk_album.utils.DateUtils;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
@@ -29,6 +17,20 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+
+import in.zoukme.zouk_album.controllers.admin.dashboard.DashboardService;
+import in.zoukme.zouk_album.domains.Album;
+import in.zoukme.zouk_album.domains.Page;
+import in.zoukme.zouk_album.domains.payments.PaymentStatus;
+import in.zoukme.zouk_album.repositories.events.CreateEventRequest;
+import in.zoukme.zouk_album.repositories.events.PackageRequest;
+import in.zoukme.zouk_album.repositories.events.UpdateEventRequest;
+import in.zoukme.zouk_album.services.AlbumService;
+import in.zoukme.zouk_album.services.PackageService;
+import in.zoukme.zouk_album.services.aws.BucketService;
+import in.zoukme.zouk_album.services.aws.EventService;
+import in.zoukme.zouk_album.services.payments.PaymentService;
+import in.zoukme.zouk_album.utils.DateUtils;
 
 @Controller
 @RequestMapping("/admin")
@@ -232,10 +234,9 @@ public class AdminController {
       @RequestParam(required = false) Integer rangeDays,
       Model model) {
     var paymentStatus = Objects.nonNull(status) ? PaymentStatus.valueOf(status) : null;
-    var afterDateTime =
-        Objects.nonNull(rangeDays)
-            ? DateUtils.endDateTime(LocalDate.now().minusDays(rangeDays))
-            : null;
+    var afterDateTime = Objects.nonNull(rangeDays)
+        ? DateUtils.endDateTime(LocalDate.now().minusDays(rangeDays))
+        : null;
     model.addAttribute(
         "payments", paymentService.findAllBy(paymentStatus, afterDateTime, Page.defaultPage()));
     model.addAttribute("totalPending", dashboardService.getTotalPending(afterDateTime));
@@ -306,6 +307,22 @@ public class AdminController {
   String deleteEventBy(@PathVariable String eventUrl, Model model) {
     this.eventService.delete(eventUrl);
     model.addAttribute("message", "Evento removido com sucesso");
+    return "/events/toast";
+  }
+
+  @PostMapping("/events/{id}/featured")
+  String setFeaturedEvent(@PathVariable Long id, Model model) {
+    this.eventService.setFeaturedEvent(id);
+    model.addAttribute("message", "Evento em destaque atualizado com sucesso");
+
+    return "/events/toast";
+  }
+
+  @PostMapping("/events/{id}/unfeatured")
+  String setUnFeaturedEvent(@PathVariable Long id, Model model) {
+    this.eventService.setUnFeaturedEvent();
+    model.addAttribute("message", "Removido destaque de evento");
+
     return "/events/toast";
   }
 }

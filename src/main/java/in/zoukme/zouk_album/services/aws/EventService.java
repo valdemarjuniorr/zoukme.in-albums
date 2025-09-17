@@ -20,12 +20,14 @@ import in.zoukme.zouk_album.repositories.events.UpdateEventRequest;
 import in.zoukme.zouk_album.services.PackageService;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 import org.springframework.data.jdbc.core.mapping.AggregateReference;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import in.zoukme.zouk_album.domains.EventPhotos;
 
 @Service
 public class EventService {
@@ -60,8 +62,7 @@ public class EventService {
   }
 
   public EventDetails findByEventUrl(String eventUrl) {
-    var event =
-        repository.findEventDetailsByEventUrl(eventUrl).orElseThrow(EventNotFoundException::new);
+    var event = repository.findEventDetailsByEventUrl(eventUrl).orElseThrow(EventNotFoundException::new);
     event.setImagePath(this.photoRepository.findPhotoByEventId(event.getId()));
     return event;
   }
@@ -72,18 +73,16 @@ public class EventService {
     var uploadedCover = bucketService.upload(eventTitle, request.cover());
     var pastEventsUrls = bucketService.upload(eventTitle, request.pastEvents());
     var eventUrl = eventTitle.toLowerCase().replace(" ", "-");
-    var event =
-        new Event(
-            eventTitle,
-            request.description(),
-            request.location(),
-            request.date(),
-            uploadedCover.path(),
-            null,
-            eventUrl,
-            request.details());
-    AggregateReference<Event, Long> eventSaved =
-        AggregateReference.to(this.repository.save(event).id());
+    var event = new Event(
+        eventTitle,
+        request.description(),
+        request.location(),
+        request.date(),
+        uploadedCover.path(),
+        null,
+        eventUrl,
+        request.details());
+    AggregateReference<Event, Long> eventSaved = AggregateReference.to(this.repository.save(event).id());
     this.socialMediaRepository.save(
         new SocialMedia(eventSaved, request.instagram(), request.whatsapp()));
     var photos = convertIntoPhotos(eventSaved, pastEventsUrls);
@@ -128,10 +127,9 @@ public class EventService {
 
   public org.springframework.data.domain.Page<EventPhotos> getPhotosBy(
       String eventUrl, String albumName, Page page) {
-    var subEvent =
-        this.subEventRepository
-            .findByName(albumName, eventUrl)
-            .orElseThrow(SubEventNotFoundException::new);
+    var subEvent = this.subEventRepository
+        .findByName(albumName, eventUrl)
+        .orElseThrow(SubEventNotFoundException::new);
     return this.eventPhotosRepository.findEventPhotosBySubEventId(
         subEvent.id(), page.toPageRequest());
   }
@@ -155,18 +153,16 @@ public class EventService {
               var folders = this.bucketService.getFoldersNamesBy(prefix);
               folders.forEach(
                   folder -> {
-                    var subEvent =
-                        new SubEvent(
-                            AggregateReference.to(event.id()), getFolderNameFrom(folder, prefix));
+                    var subEvent = new SubEvent(
+                        AggregateReference.to(event.id()), getFolderNameFrom(folder, prefix));
                     var fileNamesFromFolder = this.bucketService.getFilesNamesBy(folder);
 
                     var subEventId = this.subEventRepository.save(subEvent).id();
                     fileNamesFromFolder.forEach(
-                        fileName ->
-                            this.eventPhotosRepository.save(
-                                new EventPhotos(
-                                    AggregateReference.to(subEventId),
-                                    bucketService.getBucketUri() + fileName)));
+                        fileName -> this.eventPhotosRepository.save(
+                            new EventPhotos(
+                                AggregateReference.to(subEventId),
+                                bucketService.getBucketUri() + fileName)));
                   });
             });
   }
@@ -187,5 +183,18 @@ public class EventService {
     if (!newPackages.isEmpty()) {
       this.packageService.save(newPackages);
     }
+  }
+
+  public void setFeaturedEvent(Long eventId) {
+    this.repository.unSetAllFeatureEvent();
+    this.repository.setFeatureEvent(eventId);
+  }
+
+  public void setUnFeaturedEvent() {
+    this.repository.unSetAllFeatureEvent();
+  }
+
+  public Optional<EventDetails> getFeaturedEvent() {
+    return this.repository.findFeatureEvent();
   }
 }

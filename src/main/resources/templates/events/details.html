@@ -2,352 +2,353 @@
 <html lang="en">
 
 <head>
-	<!-- Google tag (gtag.js) -->
-	<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZTLEWPD9HY"></script>
-	<script>
-      window.dataLayer = window.dataLayer || [];
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZTLEWPD9HY"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
 
-      function gtag() {
-          dataLayer.push(arguments);
-      }
+    function gtag() {
+      dataLayer.push(arguments);
+    }
 
-      gtag('js', new Date());
-      gtag('config', 'G-ZTLEWPD9HY');
-	</script>
-	<!-- Include the Quill library -->
-	<link href="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.snow.css" rel="stylesheet"/>
-	<link href="https://fonts.googleapis.com/css?family=Pacifico|Montserrat|Poppins" rel="stylesheet"/>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css"/>
-	<meta charset="UTF-8">
-	<meta name="description" th:content="${event.description}"/>
-	<meta name="keywords"
-				th:content="'zouk,zouk brasileiro,samba,dança de salão,dançar,bailes,congressos de dança de salão,' + ${event.title}">
-	<meta name="author" content="Zouk Me In">
-	<meta name="robots" content="index, follow">
-	<meta name="language" content="pt-BR">
+    gtag('js', new Date());
+    gtag('config', 'G-ZTLEWPD9HY');
+  </script>
+  <!-- Include the Quill library -->
+  <link href="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.snow.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css?family=Pacifico|Montserrat|Poppins" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css" />
+  <meta charset="UTF-8">
+  <meta name="description" th:content="${event.description}" />
+  <meta name="keywords"
+    th:content="'zouk,zouk brasileiro,samba,dança de salão,dançar,bailes,congressos de dança de salão,' + ${event.title}">
+  <meta name="author" content="Zouk Me In">
+  <meta name="robots" content="index, follow">
+  <meta name="language" content="pt-BR">
 
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta property="og:type" content="website">
-	<meta property="og:description" th:content="${event.description}"/>
-	<meta property="og:image" th:content="${event.coverUrl}"/>
-	<meta property="og:title" th:content="'Zoukme In - ' + ${event.title}"/>
-	<meta property="og:url" content="https://zoukme.in/"/>
-	<meta property="og:locale" content="pt_BR">
-	<meta property="og:site_name" content="Zouk Me In">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta property="og:type" content="website">
+  <meta property="og:description" th:content="${event.description}" />
+  <meta property="og:image" th:content="${event.coverUrl}" />
+  <meta property="og:title" th:content="'Zoukme In - ' + ${event.title}" />
+  <meta property="og:url" content="https://zoukme.in/" />
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:site_name" content="Zouk Me In">
 
-	<script src="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.js"></script>
-	<script src="https://cdn.tailwindcss.com"></script>
-	<script src="https://kit.fontawesome.com/b431e00b38.js" crossorigin="anonymous"></script>
-	<script src="https://unpkg.com/htmx.org@2.0.4/dist/htmx.min.js"></script>
-	<script>
-      tailwind.config = {
-          theme: {
-              extend: {
-                  colors: {primary: "#e94057", secondary: "#8a2be2"},
-              },
-          },
-      };
-	</script>
-	<style>
-      :where([class^="ri-"])::before {
-          content: "\f3c2";
-      }
+  <script src="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://kit.fontawesome.com/b431e00b38.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/htmx.org@2.0.4/dist/htmx.min.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {primary: "#e94057", secondary: "#8a2be2"},
+        },
+      },
+    };
+  </script>
+  <style>
+    :where([class^="ri-"])::before {
+      content: "\f3c2";
+    }
 
-      body {
-          font-family: 'Montserrat', sans-serif;
-      }
+    body {
+      font-family: 'Montserrat', sans-serif;
+    }
 
-      .countdown-item {
-          position: relative;
-      }
+    .countdown-item {
+      position: relative;
+    }
 
-      .countdown-item:not(:last-child):after {
-          content: ":";
-          position: absolute;
-          right: -5px;
-          top: 50%;
-          transform: translateY(-50%);
-          font-size: 2rem;
-          font-weight: 700;
-          color: white;
-      }
+    .countdown-item:not(:last-child):after {
+      content: ":";
+      position: absolute;
+      right: -5px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 2rem;
+      font-weight: 700;
+      color: white;
+    }
 
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+
+    .gallery-item {
+      position: relative;
+      overflow: hidden;
+      border-radius: 8px;
+      height: 0;
+      padding-bottom: 100%;
+    }
+
+    .gallery-item img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .gallery-item:hover img {
+      transform: scale(1.05);
+    }
+
+    .social-icons {
+      position: fixed;
+      right: 1.5rem;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      z-index: 50;
+    }
+
+    .social-icon {
+      width: 3rem;
+      height: 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: white;
+      border-radius: 50%;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .social-icon:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+    }
+
+    @media (max-width: 768px) {
       .gallery-grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 1rem;
-      }
-
-      .gallery-item {
-          position: relative;
-          overflow: hidden;
-          border-radius: 8px;
-          height: 0;
-          padding-bottom: 100%;
-      }
-
-      .gallery-item img {
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          transition: transform 0.3s ease;
-      }
-
-      .gallery-item:hover img {
-          transform: scale(1.05);
+        grid-template-columns: repeat(1, 1fr);
       }
 
       .social-icons {
-          position: fixed;
-          right: 1.5rem;
-          top: 50%;
-          transform: translateY(-50%);
-          display: flex;
-          flex-direction: column;
-          gap: 1rem;
-          z-index: 50;
+        position: static;
+        flex-direction: row;
+        justify-content: center;
+        transform: none;
+        margin: 1.5rem 0;
       }
-
-      .social-icon {
-          width: 3rem;
-          height: 3rem;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          background: white;
-          border-radius: 50%;
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-          transition: transform 0.3s ease, box-shadow 0.3s ease;
-      }
-
-      .social-icon:hover {
-          transform: translateY(-3px);
-          box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-      }
-
-      @media (max-width: 768px) {
-          .gallery-grid {
-              grid-template-columns: repeat(1, 1fr);
-          }
-
-          .social-icons {
-              position: static;
-              flex-direction: row;
-              justify-content: center;
-              transform: none;
-              margin: 1.5rem 0;
-          }
-      }
-	</style>
-	<title th:text="${event.title} + ' - Zouk Me In'"></title>
+    }
+  </style>
+  <title th:text="${event.title} + ' - Zouk Me In'"></title>
 </head>
 
 <body class="bg-gray-50">
-<div th:insert="~{fragments/top :: top}"></div>
-<header class="container mx-auto px-4 py-14">
-	<div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
-		<div class="text-center md:text-left">
-			<h1 th:text="${event.title}" class="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
-			</h1>
-			<div class="text-xl text-gray-600 mb-8 space-y-2">
-				<div><i class="ri-calendar-line mr-2"></i><span th:text="${event.descriptiveDate}"/></div>
-				<div><i class="ri-map-pin-line mr-2"></i><span th:text="${event.location}"/></div>
-			</div>
-			<div class="grid grid-cols-4 gap-4 mb-8 max-w-lg">
-				<div class="countdown-item bg-primary/5 px-3 py-4 rounded-lg">
-					<div class="text-2xl md:text-3xl font-bold text-primary" id="days">
-					</div>
-					<div class="text-xs text-gray-600 uppercase tracking-wider">
-						Days
-					</div>
-				</div>
-				<div class="countdown-item bg-primary/5 px-3 py-4 rounded-lg">
-					<div class="text-2xl md:text-3xl font-bold text-primary" id="hours">
-					</div>
-					<div class="text-xs text-gray-600 uppercase tracking-wider">
-						Horas
-					</div>
-				</div>
-				<div class="countdown-item bg-primary/5 px-3 py-4 rounded-lg">
-					<div class="text-2xl md:text-3xl font-bold text-primary" id="minutes">
-					</div>
-					<div class="text-xs text-gray-600 uppercase tracking-wider">
-						Minutos
-					</div>
-				</div>
-				<div class="countdown-item bg-primary/5 px-3 py-4 rounded-lg">
-					<div class="text-2xl md:text-3xl font-bold text-primary" id="seconds">
-					</div>
-					<div class="text-xs text-gray-600 uppercase tracking-wider">
-						Segundos
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="w-full rounded-lg overflow-hidden shadow-lg">
-			<img th:src="${event.coverUrl}" th:alt="${event.title}" class="w-full h-full object-cover"/>
-		</div>
-	</div>
-</header>
-<main class="container mx-auto">
-	<section>
-		<div class="grid grid-cols-1 md:grid-cols-2 gap-12 p-4">
-			<div th:if="${event.details == null}"></div> <!-- Placeholder for when there are no details -->
-			<div th:if="${event.details != null}">
-				<h2 class="text-3xl font-bold mb-6">Sobre o evento</h2>
-				<div class="prose max-w-none">
-					<div id="editor-readonly" class="text-gray-600 mt-4">
-						<div id="editor" class="text-gray-600 mt-4 font-['Montserrat'] text-base"></div>
-					</div>
-					<!-- Initialize Quill editor -->
-					<script th:inline="javascript">
+  <div th:insert="~{fragments/top :: top}"></div>
+  <header class="container mx-auto px-4 py-14">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+      <div class="text-center md:text-left">
+        <h1 th:text="${event.title}" class="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
+        </h1>
+        <div class="text-xl text-gray-600 mb-8 space-y-2">
+          <div><i class="ri-calendar-line mr-2"></i><span th:text="${event.descriptiveDate}" /></div>
+          <div><i class="ri-map-pin-line mr-2"></i><span th:text="${event.location}" /></div>
+        </div>
+        <div class="grid grid-cols-4 gap-4 mb-8 max-w-lg">
+          <div class="countdown-item bg-primary/5 px-3 py-4 rounded-lg">
+            <div class="text-2xl md:text-3xl font-bold text-primary" id="days">
+            </div>
+            <div class="text-xs text-gray-600 uppercase tracking-wider">
+              Days
+            </div>
+          </div>
+          <div class="countdown-item bg-primary/5 px-3 py-4 rounded-lg">
+            <div class="text-2xl md:text-3xl font-bold text-primary" id="hours">
+            </div>
+            <div class="text-xs text-gray-600 uppercase tracking-wider">
+              Horas
+            </div>
+          </div>
+          <div class="countdown-item bg-primary/5 px-3 py-4 rounded-lg">
+            <div class="text-2xl md:text-3xl font-bold text-primary" id="minutes">
+            </div>
+            <div class="text-xs text-gray-600 uppercase tracking-wider">
+              Minutos
+            </div>
+          </div>
+          <div class="countdown-item bg-primary/5 px-3 py-4 rounded-lg">
+            <div class="text-2xl md:text-3xl font-bold text-primary" id="seconds">
+            </div>
+            <div class="text-xs text-gray-600 uppercase tracking-wider">
+              Segundos
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="w-full rounded-lg overflow-hidden shadow-lg">
+        <img th:src="${event.coverUrl}" th:alt="${event.title}" class="w-full h-full object-cover" />
+      </div>
+    </div>
+  </header>
+  <main class="container mx-auto">
+    <section>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12 p-4">
+        <div th:if="${event.details == null}"></div> <!-- Placeholder for when there are no details -->
+        <div th:if="${event.details != null}">
+          <h2 class="text-3xl font-bold mb-6">Sobre o evento</h2>
+          <div class="prose max-w-none">
+            <div id="editor-readonly" class="text-gray-600 mt-4">
+              <div id="editor" class="text-gray-600 mt-4 font-['Montserrat'] text-base"></div>
+            </div>
+            <!-- Initialize Quill editor -->
+            <script th:inline="javascript">
               /*<![CDATA[*/
               const quill = new Quill("#editor", {
-                  theme: 'snow',
-                  readOnly: true,
-                  modules: {
-                      toolbar: false
-                  }
+                theme: 'snow',
+                readOnly: true,
+                modules: {
+                  toolbar: false
+                }
               });
               quill.setContents(/*[(${event.details})]*/);
 
               /*]]>*/
-					</script>
-					<style>
+            </script>
+            <style>
               .ql-container.ql-snow {
-                  border: none !important;
+                border: none !important;
               }
-					</style>
-				</div>
-			</div>
-			<div class="bg-white rounded-lg shadow-lg p-6 mb-8">
-				<h3 class="text-xl font-semibold mb-4">Detalhes</h3>
-				<div th:if="${event.details != null && event.details != ''}" class="flex items-start mb-4">
-					<div class="w-10 h-10 flex items-center justify-center bg-primary/10 rounded-full mr-4">
-						<i class="ri-file-text-line text-primary ri-lg"></i>
-					</div>
-					<div>
-						<h4 class="font-medium">Descrição</h4>
-						<p th:text="${event.description}" class="text-gray-600"></p>
-					</div>
-				</div>
-				<div class="flex items-start mb-4">
-					<div class="w-10 h-10 flex items-center justify-center bg-primary/10 rounded-full mr-4">
-						<i class="ri-calendar-line text-primary ri-lg"></i>
-					</div>
-					<div>
-						<h4 class="font-medium">Data</h4>
-						<p th:text="${event.descriptiveDate}" class="text-gray-600"></p>
-					</div>
-				</div>
-				<div class="flex items-start mb-4">
-					<div class="w-10 h-10 flex items-center justify-center bg-primary/10 rounded-full mr-4">
-						<i class="ri-map-pin-line text-primary ri-lg"></i>
-					</div>
-					<div>
-						<h4 class="font-medium">Endereço</h4>
-						<p th:text="${event.location}" class="text-gray-600"></p>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
-	<section id="pacotes" class="mb-20" th:if="${(packages != null and !#lists.isEmpty(packages))}">
-		<h2 class="text-3xl font-bold text-center mb-4">Escolha a sua experiência</h2>
-		<p class="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-			Escolha o pacote perfeito que combina com a sua jornada de dança.
-			Se você está aqui para as festas ou quer a experiência completa do evento.
-		</p>
-		<div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-			<div th:if="${event.comingUp}" th:each="pack : ${packages}"
-					 class="bg-white rounded-xl p-8 shadow-lg hover:shadow-xl transition-shadow border border-gray-100 gap-12 m-4">
-				<div class="flex items-center justify-between mb-4">
-					<h3 th:text="${pack.title}" class="text-2xl font-bold"></h3>
-					<div class="w-12 h-12 flex items-center justify-center bg-primary/10 rounded-full">
-						<i class="ri-award-line text-primary ri-lg"></i>
-					</div>
-				</div>
-				<p th:text="${pack.description}" class="text-gray-600 mb-6"></p>
-				<div class="flex items-baseline mb-6">
-					<!-- Assuming price is a number, format it to Brazilian currency -->
-					<span class="text-3xl font-bold text-primary">
+            </style>
+          </div>
+        </div>
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+          <h3 class="text-xl font-semibold mb-4">Detalhes</h3>
+          <div th:if="${event.details != null && event.details != ''}" class="flex items-start mb-4">
+            <div class="w-10 h-10 flex items-center justify-center bg-primary/10 rounded-full mr-4">
+              <i class="ri-file-text-line text-primary ri-lg"></i>
+            </div>
+            <div>
+              <h4 class="font-medium">Descrição</h4>
+              <p th:text="${event.description}" class="text-gray-600"></p>
+            </div>
+          </div>
+          <div class="flex items-start mb-4">
+            <div class="w-10 h-10 flex items-center justify-center bg-primary/10 rounded-full mr-4">
+              <i class="ri-calendar-line text-primary ri-lg"></i>
+            </div>
+            <div>
+              <h4 class="font-medium">Data</h4>
+              <p th:text="${event.descriptiveDate}" class="text-gray-600"></p>
+            </div>
+          </div>
+          <div class="flex items-start mb-4">
+            <div class="w-10 h-10 flex items-center justify-center bg-primary/10 rounded-full mr-4">
+              <i class="ri-map-pin-line text-primary ri-lg"></i>
+            </div>
+            <div>
+              <h4 class="font-medium">Endereço</h4>
+              <p th:text="${event.location}" class="text-gray-600"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <a href="#pacotes"></a>
+    <section id="pacotes" class="mb-20" th:if="${(packages != null and !#lists.isEmpty(packages))}">
+      <h2 class="text-3xl font-bold text-center mb-4">Escolha a sua experiência</h2>
+      <p class="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
+        Escolha o pacote perfeito que combina com a sua jornada de dança.
+        Se você está aqui para as festas ou quer a experiência completa do evento.
+      </p>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+        <div th:if="${event.comingUp}" th:each="pack : ${packages}"
+          class="bg-white rounded-xl p-8 shadow-lg hover:shadow-xl transition-shadow border border-gray-100 gap-12 m-4">
+          <div class="flex items-center justify-between mb-4">
+            <h3 th:text="${pack.title}" class="text-2xl font-bold"></h3>
+            <div class="w-12 h-12 flex items-center justify-center bg-primary/10 rounded-full">
+              <i class="ri-award-line text-primary ri-lg"></i>
+            </div>
+          </div>
+          <p th:text="${pack.description}" class="text-gray-600 mb-6"></p>
+          <div class="flex items-baseline mb-6">
+            <!-- Assuming price is a number, format it to Brazilian currency -->
+            <span class="text-3xl font-bold text-primary">
               R$ <span th:text="${#numbers.formatDecimal(pack.price, 1, 2, 'COMMA')}"></span>
             </span>
-					<span class="text-gray-500 ml-2">/ pessoa</span>
-				</div>
-				<a th:href="@{/packages?packId={packageId}(packageId=${pack.id})}"
-					 class="block text-center cursor-pointer w-full bg-primary hover:bg-primary/90 text-white py-3 !rounded-button font-semibold whitespace-nowrap transition-all">
-					Adquirir agora
-				</a>
-			</div>
-		</div>
-		<div id="happening-event" th:if="${!event.comingUp}"
-				 class="max-w-3xl mx-auto text-center bg-yellow-50 border border-yellow-200 rounded-xl p-4 mx-2 md:mx-auto">
-			<div class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
-				<i class="ri-timer-line text-yellow-600 text-2xl"></i>
-			</div>
-			<h2 class="text-2xl font-bold text-yellow-800 mb-3">Evento em andamento ou finalizado!</h2>
-			<p class="text-yellow-700">
-				Os pacotes para este evento não estão mais disponíveis para compra.
-			</p>
-		</div>
-	</section>
-	<div class="social-icons">
-		<a th:href="'https://wa.me/+55' + ${event.phoneNumber} + '?text=Olá, vim do zoukme.in e gostaria de saber mais informações sobre o *' + ${event.title} + '*. Consegue me ajudar?'"
-			 target="_blank" class="social-icon">
-			<i class="ri-whatsapp-line text-green-500 ri-lg"></i>
-		</a>
-		<a th:href="'https://www.instagram.com/' + ${event.instagram}" target="_blank" class="social-icon">
-			<i class="ri-instagram-line text-primary ri-lg"></i>
-		</a>
-	</div>
-	<section class="mb-20 p-4" th:if="${event.imagePath().size() > 0}">
-		<h2 class="text-3xl font-bold mb-8">Eventos anteriores</h2>
-		<div class="gallery-grid">
-			<div th:each="photo : ${event.imagePath}" class="gallery-item">
-				<img th:src="${photo}" th:alt="${event.title}"/>
-			</div>
-		</div>
-	</section>
-</main>
-<script th:inline="javascript">
+            <span class="text-gray-500 ml-2">/ pessoa</span>
+          </div>
+          <a th:href="@{/packages?packId={packageId}(packageId=${pack.id})}"
+            class="block text-center cursor-pointer w-full bg-primary hover:bg-primary/90 text-white py-3 !rounded-button font-semibold whitespace-nowrap transition-all">
+            Adquirir agora
+          </a>
+        </div>
+      </div>
+      <div id="happening-event" th:if="${!event.comingUp}"
+        class="max-w-3xl mx-auto text-center bg-yellow-50 border border-yellow-200 rounded-xl p-4 mx-2 md:mx-auto">
+        <div class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <i class="ri-timer-line text-yellow-600 text-2xl"></i>
+        </div>
+        <h2 class="text-2xl font-bold text-yellow-800 mb-3">Evento em andamento ou finalizado!</h2>
+        <p class="text-yellow-700">
+          Os pacotes para este evento não estão mais disponíveis para compra.
+        </p>
+      </div>
+    </section>
+    <div class="social-icons">
+      <a th:href="'https://wa.me/+55' + ${event.phoneNumber} + '?text=Olá, vim do zoukme.in e gostaria de saber mais informações sobre o *' + ${event.title} + '*. Consegue me ajudar?'"
+        target="_blank" class="social-icon">
+        <i class="ri-whatsapp-line text-green-500 ri-lg"></i>
+      </a>
+      <a th:href="'https://www.instagram.com/' + ${event.instagram}" target="_blank" class="social-icon">
+        <i class="ri-instagram-line text-primary ri-lg"></i>
+      </a>
+    </div>
+    <section class="mb-20 p-4" th:if="${event.imagePath().size() > 0}">
+      <h2 class="text-3xl font-bold mb-8">Eventos anteriores</h2>
+      <div class="gallery-grid">
+        <div th:each="photo : ${event.imagePath}" class="gallery-item">
+          <img th:src="${photo}" th:alt="${event.title}" />
+        </div>
+      </div>
+    </section>
+  </main>
+  <script th:inline="javascript">
     /*<![CDATA[*/
     document.addEventListener("DOMContentLoaded", function () {
-        // Set the date we're counting down to
-        var countDownDate = new Date(/*[[${event.date}]]*/); // This is a Date object
-        countDownDate.setHours(countDownDate.getHours() + 3); // Add 3 hours
-        // Update the countdown every 1 second
-        const x = setInterval(function () {
-            // Get today's date and time
-            const now = new Date().getTime();
-            // Find the distance between now and the count down date
-            const distance = countDownDate - now;
-            // Time calculations for days, hours, minutes and seconds
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-            // Display the result
-            document.getElementById("days").innerText = days;
-            document.getElementById("hours").innerText = hours;
-            document.getElementById("minutes").innerText = minutes;
-            document.getElementById("seconds").innerText = seconds;
-            // If the count down is finished, write some text
-            if (distance < 0) {
-                clearInterval(x);
-                document.getElementById("days").innerText = "0";
-                document.getElementById("hours").innerText = "0";
-                document.getElementById("minutes").innerText = "0";
-                document.getElementById("seconds").innerText = "0";
-            }
-        }, 1000);
+      // Set the date we're counting down to
+      var countDownDate = new Date(/*[[${event.date}]]*/); // This is a Date object
+      countDownDate.setHours(countDownDate.getHours() + 3); // Add 3 hours
+      // Update the countdown every 1 second
+      const x = setInterval(function () {
+        // Get today's date and time
+        const now = new Date().getTime();
+        // Find the distance between now and the count down date
+        const distance = countDownDate - now;
+        // Time calculations for days, hours, minutes and seconds
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        // Display the result
+        document.getElementById("days").innerText = days;
+        document.getElementById("hours").innerText = hours;
+        document.getElementById("minutes").innerText = minutes;
+        document.getElementById("seconds").innerText = seconds;
+        // If the count down is finished, write some text
+        if (distance < 0) {
+          clearInterval(x);
+          document.getElementById("days").innerText = "0";
+          document.getElementById("hours").innerText = "0";
+          document.getElementById("minutes").innerText = "0";
+          document.getElementById("seconds").innerText = "0";
+        }
+      }, 1000);
     });
-</script>
+  </script>
 
-<div th:insert="~{fragments/footer :: footer}"></div>
+  <div th:insert="~{fragments/footer :: footer}"></div>
 </body>
 
 </html>

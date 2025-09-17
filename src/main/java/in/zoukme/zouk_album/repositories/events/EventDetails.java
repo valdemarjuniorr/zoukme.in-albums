@@ -89,4 +89,8 @@ public final class EventDetails {
     var now = LocalDate.now();
     return date.isEqual(now) || date.isAfter(now);
   }
+
+  public String getEventUrl() {
+    return this.title.toLowerCase().replace(" ", "-");
+  }
 }

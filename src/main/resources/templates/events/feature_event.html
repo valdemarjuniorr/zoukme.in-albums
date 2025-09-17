@@ -1,0 +1,112 @@
+<section class="py-10 bg-white" th:if="${event != null}">
+  <div class="container mx-auto px-4">
+    <div class="bg-gray-50 rounded-xl overflow-hidden shadow-lg">
+      <div class="flex flex-col lg:flex-row">
+        <div class="lg:w-1/2">
+          <img th:src="${event.coverUrl}" th:alt="${event.title}" class="w-full h-full object-cover object-top" />
+        </div>
+        <div class="lg:w-1/2 p-8 lg:p-12">
+          <div class="mb-6">
+            <span class="bg-primary text-white px-4 py-1 rounded-full text-sm font-medium">Evento destaque</span>
+          </div>
+          <h2 th:text="${event.title}" class="text-3xl font-bold mb-4"></h2>
+          <div class="flex flex-col sm:flex-row items-start sm:items-center mb-6">
+            <div class="flex flex-row items-center">
+              <div class="w-6 h-6 flex items-center justify-center text-primary">
+                <i class="ri-calendar-line"></i>
+              </div>
+              <span th:text="${event.descriptiveDate}" class="ml-2 text-gray-700"></span>
+            </div>
+            <div class="flex flex-row items-center sm:ml-6 mt-2 sm:mt-0">
+              <div class="w-6 h-6 flex items-center justify-center text-primary">
+                <i class="ri-map-pin-line"></i>
+              </div>
+              <span th:text="${event.location}" class="ml-2 text-gray-700"></span>
+            </div>
+          </div>
+          <p th:text="${event.description}" class="text-gray-600 mb-6"></p>
+          <div class="grid grid-cols-2 gap-4 mb-8">
+            <div class="bg-white p-4 rounded-lg shadow-sm">
+              <div class="text-2xl font-bold text-primary" id="days">
+                00
+              </div>
+              <div class="text-gray-500 text-sm">Dias</div>
+            </div>
+            <div class="bg-white p-4 rounded-lg shadow-sm">
+              <div class="text-2xl font-bold text-primary" id="hours">
+                00
+              </div>
+              <div class="text-gray-500 text-sm">Horas</div>
+            </div>
+            <div class="bg-white p-4 rounded-lg shadow-sm">
+              <div class="text-2xl font-bold text-primary" id="minutes">
+                00
+              </div>
+              <div class="text-gray-500 text-sm">Minutos</div>
+            </div>
+            <div class="bg-white p-4 rounded-lg shadow-sm">
+              <div class="text-2xl font-bold text-primary" id="seconds">
+                00
+              </div>
+              <div class="text-gray-500 text-sm">Segundos</div>
+            </div>
+          </div>
+          <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
+            <a th:href="@{/events/{eventUrl}#pacotes(eventUrl=${event.eventUrl})}"
+              class="px-6 py-3 bg-primary text-white text-lg font-medium hover:bg-opacity-90 transition-colors !rounded-button whitespace-nowrap">
+              Compre agora
+            </a>
+            <a th:href="@{/events/{eventUrl}(eventUrl=${event.eventUrl})}"
+              class="px-6 py-3 bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors !rounded-button whitespace-nowrap">
+              Detalhes
+            </a>
+          </div>
+          <div class="mt-8">
+            <div class="flex items-center space-x-4">
+              <span class="text-gray-600">Informações:</span>
+              <a th:href="'https://wa.me/+55' + ${event.phoneNumber} + '?text=Olá, vim do zoukme.in e gostaria de saber mais informações sobre o *' + ${event.title} + '*. Consegue me ajudar?'"
+                target="_blank" class="w-8 h-8 flex items-center justify-center rounded-full bg-green-500 text-white">
+                <i class="ri-whatsapp-fill"></i>
+              </a>
+              <a th:href="@{https://www.instagram.com/{instagram}(instagram=${event.instagram})}" target="_blank"
+                class="w-8 h-8 flex items-center justify-center rounded-full bg-pink-600 text-white">
+                <i class="ri-instagram-fill"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script th:inline="javascript">
+    /*<![CDATA[*/
+    // Set the date we're counting down to
+    var countDownDate = new Date(/*[[${event.date}]]*/); // This is a Date object
+    countDownDate.setHours(countDownDate.getHours() + 3); // Add 3 hours
+    // Update the countdown every 1 second
+    const x = setInterval(function () {
+      // Get today's date and time
+      const now = new Date().getTime();
+      // Find the distance between now and the count down date
+      const distance = countDownDate - now;
+      // Time calculations for days, hours, minutes and seconds
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+      // Display the result
+      document.getElementById("days").innerText = days;
+      document.getElementById("hours").innerText = hours;
+      document.getElementById("minutes").innerText = minutes;
+      document.getElementById("seconds").innerText = seconds;
+      // If the count down is finished, write some text
+      if (distance < 0) {
+        clearInterval(x);
+        document.getElementById("days").innerText = "0";
+        document.getElementById("hours").innerText = "0";
+        document.getElementById("minutes").innerText = "0";
+        document.getElementById("seconds").innerText = "0";
+      }
+    }, 1000);
+  </script>
+</section>

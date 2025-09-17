@@ -1,3 +1,4 @@
+
 package in.zoukme.zouk_album.controllers.events;
 
 import in.zoukme.zouk_album.services.PackageService;
@@ -9,12 +10,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import org.slf4j.Logger;
+
 import in.zoukme.zouk_album.domains.Page;
 
 @Controller
 @RequestMapping("/events")
 public class EventController {
 
+  private static final Logger log = org.slf4j.LoggerFactory.getLogger(EventController.class);
   private final EventService service;
   private final PackageService packageService;
 
@@ -73,4 +78,13 @@ public class EventController {
 
     return "events/albums/list";
   }
+
+  @GetMapping("/featured")
+  String getFeaturedEvent(Model model) {
+    var event = service.getFeaturedEvent();
+    model.addAttribute("event", event.orElse(null));
+
+    return "events/feature_event";
+  }
+
 }

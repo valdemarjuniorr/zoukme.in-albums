@@ -16,6 +16,7 @@ public record Event(
     String location,
     LocalDate date,
     String coverUrl,
+    Boolean featureEvent,
     @MappedCollection(idColumn = "event_id") Set<Photo> photos,
     String eventUrl,
     String details,
@@ -31,7 +32,7 @@ public record Event(
       Set<Photo> photos,
       String eventUrl,
       String details) {
-    this(null, title, description, location, date, coverUrl, photos, eventUrl, details, null, null);
+    this(null, title, description, location, date, coverUrl, Boolean.FALSE, photos, eventUrl, details, null, null);
   }
 
   public Boolean isComingUp() {
