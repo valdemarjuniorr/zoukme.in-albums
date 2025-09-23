@@ -8,6 +8,8 @@ import in.zoukme.zouk_album.repositories.PackageRepository;
 import in.zoukme.zouk_album.repositories.events.PackageRequest;
 import in.zoukme.zouk_album.services.payments.PaymentService;
 import java.util.List;
+
+import org.springframework.data.jdbc.core.mapping.AggregateReference;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -38,16 +40,18 @@ public class PackageService {
   }
 
   public PagBankResponse savePendingPayment(PersonalDetailsRequest request) {
-    var pack =
-        this.repository.findById(request.packId()).orElseThrow(PackageNotFoundException::new);
+    var pack = this.repository.findById(request.packId()).orElseThrow(PackageNotFoundException::new);
     return paymentService.save(request, pack);
   }
 
   public void update(PackageRequest request) {
     var pack = this.repository.findById(request.id()).orElseThrow(PackageNotFoundException::new);
-    var updatedPack =
-        new Package(
-            pack.id(), pack.eventId(), request.title(), request.description(), request.price());
+    var updatedPack = new Package(
+        pack.id(), pack.eventId(), request.title(), request.description(), request.price());
     save(updatedPack);
+  }
+
+  public void create(Long id, PackageRequest request) {
+    this.repository.save(request.toEntity(id));
   }
 }

@@ -1,91 +1,147 @@
 <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
-	<div>
-		<h2 class="text-lg font-medium text-gray-900">Pacotes</h2>
-		<span class="text-sm text-gray-500">Selecione um evento para visualizar os pacotes disponíveis.</span>
-	</div>
-	<div class="mt-4 md:mt-0 flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
-		<div class="relative">
-			<select name="eventId" hx-target="#package-table" th:hx-get="@{/admin/events/packages/details}" hx-trigger="change"
-							class="appearance-none bg-gray-50 border border-gray-300 text-gray-700 py-2 pl-3 pr-8 rounded-button text-sm focus:outline-none focus:ring-2 focus:ring-primary">
-				<option value="" selected>Selecione um evento</option>
-				<option th:each="event : ${events}" th:text="${event.title}" th:value="${event.id}"></option>
-			</select>
-			<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-				<div class="w-4 h-4 flex items-center justify-center">
-					<i class="ri-arrow-down-s-line"></i>
-				</div>
-			</div>
-		</div>
-	</div>
+  <div>
+    <h2 class="text-lg font-medium text-gray-900">Pacotes</h2>
+    <span class="text-sm text-gray-500">Selecione um evento para visualizar os pacotes disponíveis.</span>
+  </div>
+  <div class="mt-4 md:mt-0 flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
+    <div class="relative">
+      <select name="eventId" hx-target="#package-table" th:hx-get="@{/admin/events/packages/details}"
+        hx-trigger="change"
+        class="appearance-none bg-gray-50 border border-gray-300 text-gray-700 py-2 pl-3 pr-8 rounded-button text-sm focus:outline-none focus:ring-2 focus:ring-primary">
+        <option value="" selected>Selecione um evento</option>
+        <option th:each="event : ${events}" th:text="${event.title}" th:value="${event.id}"></option>
+      </select>
+      <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+        <div class="w-4 h-4 flex items-center justify-center">
+          <i class="ri-arrow-down-s-line"></i>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-<!-- Transactions Table -->
+<!-- Transactions Table table.html -->
 <div id="package-table" class="bg-white rounded-lg shadow-sm"></div>
+
+<!-- modal add new packages -->
+<div id="modal-new" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+  <div class="bg-white rounded-lg shadow-xl w-full max-w-md">
+    <div class="px-6 py-4 border-b border-gray-200">
+      <h3 class="text-lg font-medium text-gray-900">Adicionar pacote</h3>
+    </div>
+    <form id="newForm" th:hx-post="@{/admin/events/{id}/packages/create(id=${eventId})}" hx-target="#main-table-content"
+      class="p-6">
+      <input type="hidden" id="id-modal-new" name="id" />
+      <div class="mb-4">
+        <label for="title-modal-new" class="block text-sm font-medium text-gray-700 mb-2">Título</label>
+        <input type="text" id="title-modal-new" name="title" required
+          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary" />
+      </div>
+      <div class="mb-4">
+        <label for="description-modal-new" class="block text-sm font-medium text-gray-700 mb-2">Descrição</label>
+        <textarea id="description-modal-new" rows="3" name="description" required
+          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"></textarea>
+      </div>
+      <div class="mb-6">
+        <label for="price-modal-new" class="block text-sm font-medium text-gray-700 mb-2">Preço</label>
+        <div class="relative">
+          <span class="absolute left-2 top-2 text-gray-500">R$</span>
+          <input id="price-modal-new" placeholder="0,00" name="price"
+            class="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary" />
+          <script type="text/javascript">
+            var cleave = new Cleave('#price-modal-new', {
+              numeral: true,
+              numeralDecimalMark: ',',
+              delimiter: '.',
+              numeralThousandsGroupStyle: 'thousand',
+              numeralPositiveOnly: true,
+              rawValueTrimPrefix: true,
+              numeralDecimalScale: 2
+            });
+          </script>
+        </div>
+      </div>
+      <div class="flex justify-end space-x-3">
+        <button type="button" id="cancel" onclick="closeModal('modal-new')"
+          class="px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-button !rounded-button whitespace-nowrap">
+          Cancelar
+        </button>
+        <button type="submit"
+          class="px-4 py-2 bg-primary text-white hover:bg-blue-600 rounded-button !rounded-button whitespace-nowrap">
+          Adicionar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
 <!-- Modal for Editing Package -->
+
 <div id="modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-	<div class="bg-white rounded-lg shadow-xl w-full max-w-md">
-		<div class="px-6 py-4 border-b border-gray-200">
-			<h3 class="text-lg font-medium text-gray-900">Atualizar Pacote</h3>
-		</div>
-		<form id="editForm" hx-post="/admin/events/packages/update" hx-target="#main-table-content" class="p-6">
-			<input type="hidden" id="id" name="id"/>
-			<div class="mb-4">
-				<label for="title" class="block text-sm font-medium text-gray-700 mb-2">Título</label>
-				<input type="text" id="title" name="title" required
-							 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"/>
-			</div>
-			<div class="mb-4">
-				<label for="description" class="block text-sm font-medium text-gray-700 mb-2">Descrição</label>
-				<textarea id="description" rows="3" name="description" required
-									class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"></textarea>
-			</div>
-			<div class="mb-6">
-				<label for="price" class="block text-sm font-medium text-gray-700 mb-2">Preço</label>
-				<div class="relative">
-					<span class="absolute left-2 top-2 text-gray-500">R$</span>
-					<input id="price" placeholder="0,00" name="price"
-								 class="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"/>
-					<script type="text/javascript">
-              var cleave = new Cleave('#price', {
-                  numeral: true,
-                  numeralDecimalMark: ',',
-                  delimiter: '.',
-                  numeralThousandsGroupStyle: 'thousand',
-                  numeralPositiveOnly: true,
-                  rawValueTrimPrefix: true,
-                  numeralDecimalScale: 2
-              });
-					</script>
-				</div>
-			</div>
-			<div class="flex justify-end space-x-3">
-				<button type="button" id="cancel" onclick="closeModal()"
-								class="px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-button !rounded-button whitespace-nowrap">
-					Cancelar
-				</button>
-				<button type="submit" class="px-4 py-2 bg-primary text-white hover:bg-blue-600 rounded-button !rounded-button whitespace-nowrap">
-					Atualizar
-				</button>
-			</div>
-		</form>
-	</div>
+  <div class="bg-white rounded-lg shadow-xl w-full max-w-md">
+    <div class="px-6 py-4 border-b border-gray-200">
+      <h3 class="text-lg font-medium text-gray-900">Atualizar Pacote</h3>
+    </div>
+    <form id="editForm" hx-post="/admin/events/packages/update" hx-target="#main-table-content" class="p-6">
+      <input type="hidden" id="id-modal" name="id" />
+      <div class="mb-4">
+        <label for="title-modal" class="block text-sm font-medium text-gray-700 mb-2">Título</label>
+        <input type="text" id="title-modal" name="title" required
+          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary" />
+      </div>
+      <div class="mb-4">
+        <label for="description-modal" class="block text-sm font-medium text-gray-700 mb-2">Descrição</label>
+        <textarea id="description-modal" rows="3" name="description" required
+          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"></textarea>
+      </div>
+      <div class="mb-6">
+        <label for="price-modal" class="block text-sm font-medium text-gray-700 mb-2">Preço</label>
+        <div class="relative">
+          <span class="absolute left-2 top-2 text-gray-500">R$</span>
+          <input id="price-modal" placeholder="0,00" name="price"
+            class="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary" />
+          <script type="text/javascript">
+            var cleave = new Cleave('#price-modal', {
+              numeral: true,
+              numeralDecimalMark: ',',
+              delimiter: '.',
+              numeralThousandsGroupStyle: 'thousand',
+              numeralPositiveOnly: true,
+              rawValueTrimPrefix: true,
+              numeralDecimalScale: 2
+            });
+          </script>
+        </div>
+      </div>
+      <div class="flex justify-end space-x-3">
+        <button type="button" id="cancel" onclick="closeModal('modal')"
+          class="px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-button !rounded-button whitespace-nowrap">
+          Cancelar
+        </button>
+        <button type="submit"
+          class="px-4 py-2 bg-primary text-white hover:bg-blue-600 rounded-button !rounded-button whitespace-nowrap">
+          Atualizar
+        </button>
+      </div>
+    </form>
+  </div>
 </div>
 <script>
-    function openModal(element) {
-        const packageData = {
-            id: element.getAttribute('data-id'),
-            title: element.getAttribute('data-title'),
-            description: element.getAttribute('data-description'),
-            price: element.getAttribute('data-price')
-        };
-        document.getElementById('id').value = packageData.id;
-        document.getElementById('title').value = packageData.title;
-        document.getElementById('description').value = packageData.description;
-        document.getElementById('price').value = packageData.price != null ? packageData.price.replace('.', ',') : '';
-        document.getElementById('modal').classList.remove('hidden');
-    }
+  function openModal(element, modalId) {
+    const packageData = {
+      id: element.getAttribute('data-id'),
+      title: element.getAttribute('data-title'),
+      description: element.getAttribute('data-description'),
+      price: element.getAttribute('data-price')
+    };
 
-    function closeModal() {
-        document.getElementById('modal').classList.add('hidden');
-        document.getElementById('editForm').reset();
-    }
+    document.getElementById('id-' + modalId).value = packageData.id;
+    document.getElementById('title-' + modalId).value = packageData.title;
+    document.getElementById('description-' + modalId).value = packageData.description;
+    document.getElementById('price-' + modalId).value = packageData.price != null ? packageData.price.replace('.', ',') : '';
+    document.getElementById(modalId).classList.remove('hidden');
+  }
+
+  function closeModal(modalId) {
+    document.getElementById(modalId).classList.add('hidden');
+    document.getElementById('editForm').reset();
+  }
 </script>

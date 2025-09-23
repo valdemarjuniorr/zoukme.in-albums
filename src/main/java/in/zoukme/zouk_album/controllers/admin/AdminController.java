@@ -155,7 +155,16 @@ public class AdminController {
   String getPackagesByEvent(@RequestParam(required = false) Long eventId, Model model) {
     var packages = this.packageService.findBy(eventId);
     model.addAttribute("packages", packages);
+    model.addAttribute("eventId", eventId);
     return "admin/dashboard/packages/table";
+  }
+
+  @PostMapping("/events/{id}/packages/create")
+  String createPackage(@PathVariable Long id, PackageRequest request, Model model) {
+    this.packageService.create(id, request);
+    model.addAttribute("message", "Pacote atualizado com sucesso");
+
+    return "/events/toast";
   }
 
   @PostMapping("/events/packages/update")

@@ -32,4 +32,8 @@ public record PackageRequest(Long id, String title, String description, BigDecim
         .map(pack -> new PackageRequest(pack.id(), pack.title(), pack.description(), pack.price()))
         .toList();
   }
+
+  public Package toEntity(Long eventId) {
+    return new Package(null, AggregateReference.to(eventId), title, description, price);
+  }
 }

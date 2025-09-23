@@ -2,139 +2,180 @@
 
 <head th:insert="~{fragments/header}"></head>
 <script>
-    tailwind.config = {
-        theme: {
-            extend: {
-                colors: {primary: "#e94057", secondary: "#8a2be2"},
-            },
-        },
-    };
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {primary: "#e94057", secondary: "#8a2be2"},
+      },
+    },
+  };
 </script>
 <style>
-    .image-container:hover .gallery-image {
-        transform: scale(1.02);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
+  .image-container:hover .gallery-image {
+    transform: scale(1.02);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
 
-    .image-container:hover .overlay {
-        opacity: 1;
-    }
+  .image-container:hover .overlay {
+    opacity: 1;
+  }
 
-    .image-container:hover .action-icons {
-        opacity: 1;
-    }
+  .image-container:hover .action-icons {
+    opacity: 1;
+  }
 </style>
 
 <body class="bg-gray-100">
-<!-- Header -->
-<div th:insert="~{fragments/top :: top}"></div>
+  <!-- Header -->
+  <div th:insert="~{fragments/top :: top}"></div>
 
-<!-- Content -->
-<main th:fragment="main" class="main container mx-auto p-4 py-10">
-	<div class="container mx-auto px-4">
-		<div class="min-w-0 grid grid-cols-2 items-center gap-2 py-2">
-			<a th:href="@{/events/{eventName}/albums(eventName=${eventUrl})}"
-				 class="gap-2 inline-flex items-center text-gray-500 hover:text-gray-900">
-				<i class="ri-arrow-left-circle-fill text-xl"></i>
-				<span class="truncate">Voltar</span>
-			</a>
-			<div class="justify-self-end inline-flex items-center bg-gray-200 px-3 py-1.5 rounded-full
+  <!-- Content -->
+  <main th:fragment="main" class="main container mx-auto p-4 py-10">
+    <div class="container mx-auto px-4">
+      <div class="min-w-0 grid grid-cols-2 items-center gap-2 py-2">
+        <a th:href="@{/events/{eventName}/albums(eventName=${eventUrl})}"
+          class="gap-2 inline-flex items-center text-gray-500 hover:text-gray-900">
+          <i class="ri-arrow-left-circle-fill text-xl"></i>
+          <span class="truncate">Voltar</span>
+        </a>
+        <div class="justify-self-end inline-flex items-center bg-gray-200 px-3 py-1.5 rounded-full
                 text-sm sm:text-base">
-				<i class="ri-image-line mr-2 text-gray-600"></i>
-				<span class="text-gray-600 font-medium"><span th:text="${photos.totalElements}"/> fotos</span>
-			</div>
-		</div>
-	</div>
-	<hr class="my-2 border-gray-300"/>
-	<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
-		<div th:each="photo : ${photos.content}" class="bg-white p-2 rounded-lg shadow-md">
-			<div class="image-container relative rounded-lg overflow-hidden shadow-sm group">
-				<img th:src="${photo.imagePath}" class="w-full h-auto rounded-lg"
-						 th:onclick="@{openModal({photoId})(photoId=${photo.id})}"/>
-				<div th:if="${authentication != null}">
-					<!-- change cover image section -->
-					<div class="overlay absolute inset-0"></div>
-					<div class="absolute top-2 right-2 z-10">
-						<div class="relative">
-							<input type="checkbox" class="peer absolute top-0 right-0 w-8 h-8 opacity-0 cursor-pointer z-10"/>
-							<button
-									class="w-8 h-8 flex items-center justify-center rounded-full bg-black/30 hover:bg-black/40 transition-colors">
-								<i class="ri-more-2-fill text-white"></i>
-							</button>
-							<div
-									class="invisible peer-checked:visible absolute right-0 mt-1 w-48 bg-white/90 backdrop-blur-sm rounded-lg shadow-lg py-1">
-								<button
-										th:hx-post="@{/admin/albums/{eventUrl}/photos/{photoId}/cover(eventUrl=${eventUrl},photoId=${photo.id})}"
-										hx-target="#toast"
-										class="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 active:bg-gray-200 transition-colors">
-									Definir Capa álbum
-								</button>
-								<button th:hx-post="@{/admin/subevents/{photoId}/cover(photoId=${photo.id})}" hx-target="#toast"
-												class="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 active:bg-gray-200 transition-colors">
-									Definir Capa Sub álbum
-								</button>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- modal content -->
-			</div>
-			<style>
+          <i class="ri-image-line mr-2 text-gray-600"></i>
+          <span class="text-gray-600 font-medium"><span th:text="${photos.totalElements}" /> fotos</span>
+        </div>
+      </div>
+    </div>
+    <hr class="my-2 border-gray-300" />
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+      <div th:each="photo : ${photos.content}" class="bg-white p-2 rounded-lg shadow-md">
+        <div class="image-container relative rounded-lg overflow-hidden shadow-sm group">
+          <img th:src="${photo.imagePath}" class="w-full h-auto rounded-lg"
+            th:onclick="@{openModal({photoId})(photoId=${photo.id})}" />
+          <div th:if="${authentication != null}">
+            <!-- change cover image section -->
+            <div class="overlay absolute inset-0"></div>
+            <div class="absolute top-2 right-2 z-10">
+              <div class="relative">
+                <input type="checkbox" class="peer absolute top-0 right-0 w-8 h-8 opacity-0 cursor-pointer z-10" />
+                <button
+                  class="w-8 h-8 flex items-center justify-center rounded-full bg-black/30 hover:bg-black/40 transition-colors">
+                  <i class="ri-more-2-fill text-white"></i>
+                </button>
+                <div
+                  class="invisible peer-checked:visible absolute right-0 mt-1 w-48 bg-white/90 backdrop-blur-sm rounded-lg shadow-lg py-1">
+                  <button
+                    th:hx-post="@{/admin/albums/{eventUrl}/photos/{photoId}/cover(eventUrl=${eventUrl},photoId=${photo.id})}"
+                    hx-target="#toast"
+                    class="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 active:bg-gray-200 transition-colors">
+                    Definir Capa álbum
+                  </button>
+                  <button th:hx-post="@{/admin/subevents/{photoId}/cover(photoId=${photo.id})}" hx-target="#toast"
+                    class="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 active:bg-gray-200 transition-colors">
+                    Definir Capa Sub álbum
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- modal content -->
+        </div>
+        <style>
           /* Custom CSS to change the modal size */
           .modal {
-              width: 100%;
-              max-width: 900px;
-              /* Adjust the max-width as needed */
-              padding: 0px;
+            width: 100%;
+            max-width: 900px;
+            /* Adjust the max-width as needed */
+            padding: 0px;
           }
-			</style>
-			<div th:id="${photo.id}" class="modal">
-				<img th:src="${photo.imagePath}"/>
-			</div>
-		</div>
-	</div>
-	<!-- Pagination -->
-	<div th:if="${photos.totalPages != 1}" class="flex justify-center mt-8">
-		<nav aria-label="Page navigation">
-			<ul class="inline-flex items-center -space-x-px">
-				<li th:if="${!photos.first}">
-					<a th:href="@{/events/{eventUrl}/albums/{albumName}?page={page}&size={size}(albumName=${albumName}, eventUrl=${eventUrl}, page=${photos.number}, size=${photos.size})}"
-						 class="px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700">
-						<i class="fa-solid fa-caret-left"></i>
-					</a>
-				</li>
-				<li th:each="page : ${pagination}">
+        </style>
+        <div th:id="${photo.id}" class="modal">
+          <img th:src="${photo.imagePath}" />
+        </div>
+      </div>
+    </div>
+    <!-- Pagination -->
+    <div th:if="${photos.totalPages != 1}" class="flex justify-center mt-8">
+      <nav aria-label="Page navigation">
+        <ul class="inline-flex items-center -space-x-px">
+          <li th:if="${!photos.first}">
+            <a th:href="@{/events/{eventUrl}/albums/{albumName}?page={page}&size={size}(albumName=${albumName}, eventUrl=${eventUrl}, page=${photos.number}, size=${photos.size})}"
+              class="px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700">
+              <i class="fa-solid fa-caret-left"></i>
+            </a>
+          </li>
+          <li th:each="page : ${pagination}">
             <span th:if="${page == '...'}" th:text="${page}"
-									class="px-3 py-2 leading-tight text-gray-500 bg-gray-100 border border-gray-300 hover:bg-gray-100 hover:text-gray-700"/>
-					<span th:if="${(photos.number + 1 + '') == page}" th:text="${page}"
-								class="px-3 py-2 leading-tight text-gray-500 bg-red-100 border border-gray-300 hover:bg-red-100 hover:text-gray-700"/>
-					<a th:if="${(photos.number + 1 + '') != page && page != '...'}"
-						 th:href="@{/events/{eventUrl}/albums/{albumName}?page={page}&size={size}(albumName=${albumName}, eventUrl=${eventUrl}, page=${page}, size=${photos.size})}"
-						 th:text="${page}"
-						 class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700"/>
-				</li>
-				<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-				<div id="toast"></div> <!-- Footer -->
-				<li th:if="${!photos.last}">
-					<a th:href="@{/events/{eventUrl}/albums/{albumName}?page={page}&size={size}(albumName=${albumName}, eventUrl=${eventUrl}, page=${photos.number + 2}, size=${photos.size})}"
-						 class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700">
-						<i class="fa-solid fa-caret-right"></i>
-					</a>
-				</li>
-			</ul>
-		</nav>
-	</div>
-</main>
-
-<script>
+              class="px-3 py-2 leading-tight text-gray-500 bg-gray-100 border border-gray-300 hover:bg-gray-100 hover:text-gray-700" />
+            <span th:if="${(photos.number + 1 + '') == page}" th:text="${page}"
+              class="px-3 py-2 leading-tight text-gray-500 bg-red-100 border border-gray-300 hover:bg-red-100 hover:text-gray-700" />
+            <a th:if="${(photos.number + 1 + '') != page && page != '...'}"
+              th:href="@{/events/{eventUrl}/albums/{albumName}?page={page}&size={size}(albumName=${albumName}, eventUrl=${eventUrl}, page=${page}, size=${photos.size})}"
+              th:text="${page}"
+              class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700" />
+          </li>
+          <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+          <div id="toast"></div> <!-- Footer -->
+          <li th:if="${!photos.last}">
+            <a th:href="@{/events/{eventUrl}/albums/{albumName}?page={page}&size={size}(albumName=${albumName}, eventUrl=${eventUrl}, page=${photos.number + 2}, size=${photos.size})}"
+              class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700">
+              <i class="fa-solid fa-caret-right"></i>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </main>
+  <!-- footer -->
+  <div id="fixed-footer"
+    class="fixed bottom-0 left-0 right-0 bg-gradient-to-t from-black/40 via-black/20 to-transparent backdrop-blur-[2px] z-50 transition-all duration-300 ease-in-out"
+    style="transform: translateY(0px); opacity: 1;">
+    <div class="container mx-auto px-4 py-3 flex justify-center items-center">
+      <div class="w-full max-w-[728px] h-[90px] bg-white/5 rounded-lg flex items-center justify-center">
+        <span class="text-white/40 text-sm">Anuncie seu evento aqui!</span>
+      </div>
+      <button onclick="this.parentElement.parentElement.remove()"
+        class="absolute -top-3 right-3 w-6 h-6 bg-white/5 hover:bg-white/10 rounded-full flex items-center justify-center transition-colors">
+        <i class="ri-close-line text-white/40"></i>
+      </button>
+    </div>
+  </div>
+  <script>
     function openModal(id) {
-        $('#' + id).modal({
-            fadeDuration: 250
-        });
+      $('#' + id).modal({
+        fadeDuration: 250
+      });
     }
-</script>
-<!-- footer -->
-<div th:replace="~{fragments/footer :: footer}"></div>
+  </script>
+  <script id="lazy-loading">
+    document.addEventListener('DOMContentLoaded', function () {
+      const footer = document.getElementById('fixed-footer');
+      let lastScrollY = window.scrollY;
+      let ticking = false;
+
+      window.addEventListener('scroll', () => {
+        if (!ticking) {
+          window.requestAnimationFrame(() => {
+            const currentScrollY = window.scrollY;
+            const windowHeight = window.innerHeight;
+            const documentHeight = document.documentElement.scrollHeight;
+            const bottomThreshold = documentHeight - windowHeight - 500;
+
+            if (currentScrollY > bottomThreshold) {
+              footer.style.transform = 'translateY(100%)';
+              footer.style.opacity = '0';
+            } else {
+              footer.style.transform = 'translateY(0)';
+              footer.style.opacity = '1';
+            }
+            lastScrollY = currentScrollY;
+            ticking = false;
+          });
+          ticking = true;
+        }
+      });
+    });
+  </script>
+  <div th:replace="~{fragments/footer :: footer}"></div>
 </body>
 
 </html>
