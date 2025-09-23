@@ -1,6 +1,5 @@
 package in.zoukme.zouk_album.services;
 
-import in.zoukme.zouk_album.clients.pagbank.PagBankResponse;
 import in.zoukme.zouk_album.controllers.packages.PersonalDetailsRequest;
 import in.zoukme.zouk_album.domains.payments.Package;
 import in.zoukme.zouk_album.exceptions.PackageNotFoundException;
@@ -8,9 +7,8 @@ import in.zoukme.zouk_album.repositories.PackageRepository;
 import in.zoukme.zouk_album.repositories.events.PackageRequest;
 import in.zoukme.zouk_album.services.payments.PaymentService;
 import java.util.List;
-
-import org.springframework.data.jdbc.core.mapping.AggregateReference;
 import org.springframework.stereotype.Service;
+import in.zoukme.zouk_album.clients.pagbank.PagBankResponse;
 
 @Service
 public class PackageService {
