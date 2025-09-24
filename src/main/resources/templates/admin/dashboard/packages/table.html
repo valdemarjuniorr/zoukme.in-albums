@@ -47,9 +47,9 @@
                 <i class="ri-edit-2-line" th:data-id="${package.id}" th:data-title="${package.title}" th:data-description="${package.description}" th:data-price="${package.price}" onclick="openModal(this, 'modal')"></i>
               </div>
             </button>
-            <button class="text-gray-500 hover:text-primary">
+            <button th:hx-post="@{/admin/packages/{id}/visible(id=${package.id})}" hx-confirm="Deseja alterar visibilidade desse pacote?" class="text-gray-500 hover:text-primary">
               <div class="w-5 h-5 flex items-center justify-center">
-                <i class="ri-printer-line"></i>
+                <i th:class="${package.visible ? 'ri-eye-line': 'ri-eye-off-line'}"></i>
               </div>
             </button>
           </div>

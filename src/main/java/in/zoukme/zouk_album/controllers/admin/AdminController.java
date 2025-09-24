@@ -1,9 +1,20 @@
 package in.zoukme.zouk_album.controllers.admin;
 
+import in.zoukme.zouk_album.domains.Album;
+import in.zoukme.zouk_album.domains.Page;
+import in.zoukme.zouk_album.domains.payments.PaymentStatus;
+import in.zoukme.zouk_album.repositories.events.CreateEventRequest;
+import in.zoukme.zouk_album.repositories.events.PackageRequest;
+import in.zoukme.zouk_album.repositories.events.UpdateEventRequest;
+import in.zoukme.zouk_album.services.AlbumService;
+import in.zoukme.zouk_album.services.PackageService;
+import in.zoukme.zouk_album.services.aws.BucketService;
+import in.zoukme.zouk_album.services.aws.EventService;
+import in.zoukme.zouk_album.services.payments.PaymentService;
+import in.zoukme.zouk_album.utils.DateUtils;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
@@ -17,20 +28,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-
 import in.zoukme.zouk_album.controllers.admin.dashboard.DashboardService;
-import in.zoukme.zouk_album.domains.Album;
-import in.zoukme.zouk_album.domains.Page;
-import in.zoukme.zouk_album.domains.payments.PaymentStatus;
-import in.zoukme.zouk_album.repositories.events.CreateEventRequest;
-import in.zoukme.zouk_album.repositories.events.PackageRequest;
-import in.zoukme.zouk_album.repositories.events.UpdateEventRequest;
-import in.zoukme.zouk_album.services.AlbumService;
-import in.zoukme.zouk_album.services.PackageService;
-import in.zoukme.zouk_album.services.aws.BucketService;
-import in.zoukme.zouk_album.services.aws.EventService;
-import in.zoukme.zouk_album.services.payments.PaymentService;
-import in.zoukme.zouk_album.utils.DateUtils;
 
 @Controller
 @RequestMapping("/admin")
@@ -153,7 +151,7 @@ public class AdminController {
 
   @GetMapping("/events/packages/details")
   String getPackagesByEvent(@RequestParam(required = false) Long eventId, Model model) {
-    var packages = this.packageService.findBy(eventId);
+    var packages = this.packageService.findAllBy(eventId);
     model.addAttribute("packages", packages);
     model.addAttribute("eventId", eventId);
     return "admin/dashboard/packages/table";
@@ -331,6 +329,14 @@ public class AdminController {
   String setUnFeaturedEvent(@PathVariable Long id, Model model) {
     this.eventService.setUnFeaturedEvent();
     model.addAttribute("message", "Removido destaque de evento");
+
+    return "/events/toast";
+  }
+
+  @PostMapping("/packages/{id}/visible")
+  String setPackageVisible(@PathVariable Long id, Model model) {
+    this.packageService.setVisibility(id);
+    model.addAttribute("message", "Visibilidade do pacote atualizado");
 
     return "/events/toast";
   }

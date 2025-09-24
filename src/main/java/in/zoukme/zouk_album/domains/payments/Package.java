@@ -14,7 +14,16 @@ public record Package(
     AggregateReference<Event, Long> eventId,
     String title,
     String description,
-    BigDecimal price) {
+    BigDecimal price, Boolean visible) {
+
+  public Package(
+      Long id,
+      AggregateReference<Event, Long> eventId,
+      String title,
+      String description,
+      BigDecimal price) {
+    this(id, eventId, title, description, price, true);
+  }
 
   public Package {
     if (!StringUtils.hasText(title)) {

@@ -29,6 +29,10 @@ public class PackageService {
     this.repository.save(pack);
   }
 
+  public List<Package> findAllBy(Long eventId) {
+    return this.repository.findAllByEventId(eventId);
+  }
+
   public List<Package> findBy(Long eventId) {
     return this.repository.findBy(eventId);
   }
@@ -51,5 +55,12 @@ public class PackageService {
 
   public void create(Long id, PackageRequest request) {
     this.repository.save(request.toEntity(id));
+  }
+
+  public void setVisibility(Long id) {
+    var pack = findById(id);
+    var updatedPack = new Package(
+        pack.id(), pack.eventId(), pack.title(), pack.description(), pack.price(), !pack.visible());
+    save(updatedPack);
   }
 }
