@@ -10,6 +10,7 @@ import org.springframework.data.jdbc.repository.query.Modifying;
 import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
+
 import in.zoukme.zouk_album.domains.Event;
 
 public interface EventRepository
@@ -63,5 +64,7 @@ public interface EventRepository
       WHERE feature_event = TRUE
       """)
   void unSetAllFeatureEvent();
+
+  List<Event> findAllByFeatureEventIsFalseAndDateIsGreaterThanEqualOrderByDate(LocalDate now);
 
 }

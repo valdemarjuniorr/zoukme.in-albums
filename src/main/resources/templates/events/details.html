@@ -305,8 +305,10 @@
         <i class="ri-instagram-line text-primary ri-lg"></i>
       </a>
     </div>
-    <section class="mb-20 p-4" th:if="${event.imagePath().size() > 0}">
-      <h2 class="text-3xl font-bold mb-8">Eventos anteriores</h2>
+    <section id="eventos-anteriores" class="mb-20 p-4" th:if="${event.imagePath().size() > 0}">
+      <a href="#eventos-anteriores">
+        <h2 class="text-3xl font-bold mb-8">Eventos anteriores</h2>
+      </a>
       <div class="gallery-grid">
         <div th:each="photo : ${event.imagePath}" class="gallery-item">
           <img th:src="${photo}" th:alt="${event.title}" />

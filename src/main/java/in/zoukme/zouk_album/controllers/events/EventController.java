@@ -1,8 +1,6 @@
 
 package in.zoukme.zouk_album.controllers.events;
 
-import in.zoukme.zouk_album.services.PackageService;
-import in.zoukme.zouk_album.services.aws.EventService;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,15 +9,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import org.slf4j.Logger;
-
 import in.zoukme.zouk_album.domains.Page;
+import in.zoukme.zouk_album.services.PackageService;
+import in.zoukme.zouk_album.services.aws.EventService;
 
 @Controller
 @RequestMapping("/events")
 public class EventController {
 
-  private static final Logger log = org.slf4j.LoggerFactory.getLogger(EventController.class);
   private final EventService service;
   private final PackageService packageService;
 
@@ -86,5 +83,4 @@ public class EventController {
 
     return "events/feature_event";
   }
-
 }

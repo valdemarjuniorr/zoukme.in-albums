@@ -1,6 +1,5 @@
 package in.zoukme.zouk_album.services.aws;
 
-import in.zoukme.zouk_album.domains.Event;
 import in.zoukme.zouk_album.domains.EventPhotos;
 import in.zoukme.zouk_album.domains.Page;
 import in.zoukme.zouk_album.domains.Photo;
@@ -27,7 +26,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
-import in.zoukme.zouk_album.domains.EventPhotos;
+import in.zoukme.zouk_album.domains.Event;
 
 @Service
 public class EventService {
@@ -196,5 +195,9 @@ public class EventService {
 
   public Optional<EventDetails> getFeaturedEvent() {
     return this.repository.findFeatureEvent();
+  }
+
+  public List<Event> getNotFeaturedAndIncomingEvents() {
+    return this.repository.findAllByFeatureEventIsFalseAndDateIsGreaterThanEqualOrderByDate(LocalDate.now());
   }
 }
