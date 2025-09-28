@@ -53,11 +53,13 @@
           </div>
           <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
             <a th:href="@{/events/{eventUrl}#pacotes(eventUrl=${event.eventUrl})}"
-              class="px-6 py-3 bg-primary text-white text-lg font-medium hover:bg-opacity-90 transition-colors !rounded-button whitespace-nowrap">
+              class="px-6 py-3 bg-primary text-white text-lg font-medium hover:bg-opacity-90 transition-colors !rounded-button whitespace-nowrap flex items-center gap-2">
+              <i class="ri-ticket-line text-xl"></i>
               Compre agora
             </a>
             <a th:href="@{/events/{eventUrl}(eventUrl=${event.eventUrl})}"
-              class="px-6 py-3 bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors !rounded-button whitespace-nowrap">
+              class="px-6 py-3 bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors !rounded-button whitespace-nowrap flex items-center gap-2">
+              <i class="ri-information-line text-lg text-gray-500"></i>
               Detalhes
             </a>
           </div>
