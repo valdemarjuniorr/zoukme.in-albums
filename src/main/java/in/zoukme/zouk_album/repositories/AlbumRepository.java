@@ -1,6 +1,5 @@
 package in.zoukme.zouk_album.repositories;
 
-import in.zoukme.zouk_album.domains.Album;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -9,6 +8,8 @@ import org.springframework.data.jdbc.repository.query.Modifying;
 import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.data.repository.ListPagingAndSortingRepository;
+
+import in.zoukme.zouk_album.domains.Album;
 
 public interface AlbumRepository
     extends ListCrudRepository<Album, Long>, ListPagingAndSortingRepository<Album, Long> {
@@ -24,6 +25,6 @@ public interface AlbumRepository
   long count();
 
   @Modifying
-  @Query("UPDATE albums SET thumb_url = :coverUrl WHERE url LIKE CONCAT('%', :eventUrl, '%'")
+  @Query("UPDATE albums SET thumb_url = :coverUrl WHERE url LIKE CONCAT('%', :eventUrl, '%')")
   Integer updateCover(String eventUrl, String coverUrl);
 }

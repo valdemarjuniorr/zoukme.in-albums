@@ -1,6 +1,5 @@
 package in.zoukme.zouk_album.services;
 
-import in.zoukme.zouk_album.domains.Album;
 import in.zoukme.zouk_album.domains.Page;
 import in.zoukme.zouk_album.exceptions.AlbumNotFoundException;
 import in.zoukme.zouk_album.exceptions.EventPhotoNotFoundException;

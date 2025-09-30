@@ -21,6 +21,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.jdbc.core.mapping.AggregateReference;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -38,6 +40,7 @@ public class EventService {
   private final SubEventRepository subEventRepository;
   private final EventPhotosRepository eventPhotosRepository;
   private final PackageService packageService;
+  private static final Logger log = LoggerFactory.getLogger(EventService.class);
 
   public EventService(
       EventRepository repository,
@@ -138,7 +141,8 @@ public class EventService {
     if (!CollectionUtils.isEmpty(subEventIds)) {
       this.eventPhotosRepository.deleteEventPhotosBy(
           subEventIds.stream().map(SubEvent::id).toList());
-      this.subEventRepository.deleteAll(subEventIds);
+      // its avoid subalbums to be deleted and cover albums to be set again
+      // this.subEventRepository.deleteAll(subEventIds);
     }
   }
 
@@ -149,18 +153,22 @@ public class EventService {
         .ifPresent(
             event -> {
               var prefix = "events/" + event.eventUrl();
-              var folders = this.bucketService.getFoldersNamesBy(prefix);
-              folders.forEach(
+              var foldersPath = this.bucketService.getFoldersNamesBy(prefix);
+              foldersPath.forEach(
                   folder -> {
-                    var subEvent = new SubEvent(
-                        AggregateReference.to(event.id()), getFolderNameFrom(folder, prefix));
-                    var fileNamesFromFolder = this.bucketService.getFilesNamesBy(folder);
+                    var subEventName = getFolderNameFrom(folder, prefix);
+                    // if subevent already exists, then use it or create a new one
+                    var subEvent = this.subEventRepository.findByName(subEventName, eventUrl)
+                        .orElseGet(() -> {
+                          var subEventNew = new SubEvent(AggregateReference.to(event.id()), subEventName);
+                          return this.subEventRepository.save(subEventNew);
+                        });
 
-                    var subEventId = this.subEventRepository.save(subEvent).id();
+                    var fileNamesFromFolder = this.bucketService.getFilesNamesBy(folder);
                     fileNamesFromFolder.forEach(
                         fileName -> this.eventPhotosRepository.save(
                             new EventPhotos(
-                                AggregateReference.to(subEventId),
+                                AggregateReference.to(subEvent.id()),
                                 bucketService.getBucketUri() + fileName)));
                   });
             });
