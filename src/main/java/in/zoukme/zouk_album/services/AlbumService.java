@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import in.zoukme.zouk_album.domains.Album;
 
 @Service
 public class AlbumService {
@@ -73,8 +74,7 @@ public class AlbumService {
   }
 
   public boolean updateAlbumCover(String eventUrl, Long photoId) {
-    var eventPhoto =
-        this.eventPhotosService.findBy(photoId).orElseThrow(EventPhotoNotFoundException::new);
+    var eventPhoto = this.eventPhotosService.findBy(photoId).orElseThrow(EventPhotoNotFoundException::new);
     var updatedLines = this.repository.updateCover(eventUrl, eventPhoto.imagePath());
     // TODO: delete photo updated in case in the next-events folder
     return updatedLines == 1;
