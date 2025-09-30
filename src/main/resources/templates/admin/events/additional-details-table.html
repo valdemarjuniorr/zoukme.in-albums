@@ -3,13 +3,7 @@
 	<div class="space-y-4">
 		<div>
 			<label for="description" class="block text-sm font-medium text-gray-700 mb-1">Descrição</label>
-			<textarea
-					id="description"
-					name="description"
-					th:text="${event.description}"
-					rows="4"
-					class="w-full px-4 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-					placeholder="Descreva brevemente sobre o evento"></textarea>
+			<textarea id="description" name="description" th:text="${event.description}" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="Descreva brevemente sobre o evento"></textarea>
 		</div>
 		<div class="mb-4">
 			<label for="editor" class="block text-sm font-medium text-gray-700 mb-1">Mais detalhes</label>
@@ -17,25 +11,22 @@
 			<div id="editor" style="height: 17% !important" class="bg-white border border-gray-300 rounded-md"></div>
 		</div>
 		<script th:inline="javascript">
-        /*<![CDATA[*/
-        const quill = new Quill("#editor", {
-            theme: 'snow',
-            modules: {
-                toolbar: false
-            }
-        });
-        quill.setContents(/*[(${event.details})]*/);
+			/*<![CDATA[*/
+			const quill = new Quill("#editor", {
+				theme: 'snow',
+				modules: {
+					toolbar: false
+				}
+				});
+				quill.setContents(/*[(${event.details})]*/);
 
-        /*]]>*/
+				/*]]>*/
 		</script>
 		<div>
 			<label class="block text-sm font-medium text-gray-700 mb-1">Capa do evento</label>
 			<div th:if="${event.cover == null}" class="flex items-center">
 				<label class="block">
-					<input type="file" accept="image/*"
-								 name="cover"
-								 class="custom-file-input sr-only"
-								 id="referenceImages"/>
+					<input type="file" accept="image/*" name="cover" class="custom-file-input sr-only" id="referenceImages">
 					<span class="text-sm text-gray-700 cursor-pointer">Upload</span>
 				</label>
 				<p class="text-xs text-gray-500 ml-4">Adicione imagem de capa</p>
@@ -43,8 +34,7 @@
 			<div id="imagePreviewContainer" class="flex flex-wrap gap-3 mt-3">
 				<!-- Image previews will be added here -->
 				<div th:if="${event.cover != null}" class="image-preview"><img th:src="${event.cover}" class="w-full h-full object-cover">
-					<div class="remove-btn"><i class="ri-close-line"></i></div>
-				</div>
+				<div class="remove-btn"><i class="ri-close-line"></i></div></div>
 			</div>
 		</div>
 		<!-- Uploaded Images Section -->
@@ -53,16 +43,14 @@
 			<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
 				<div th:each="pastEvent : ${event.pastEvents}" class="relative aspect-square rounded-lg overflow-hidden bg-gray-100 group">
 					<img th:src="${pastEvent}" class="w-full h-full object-cover">
-					<div
-							class="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+					<div class="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
 						<button class="p-2 bg-white rounded-full text-gray-700 hover:text-primary">
 							<i class="ri-delete-bin-line"></i>
 						</button>
 					</div>
 				</div>
-				<div
-						class="border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center p-4 hover:border-primary transition-colors cursor-pointer">
-					<input type="file" name="pastEvents" id="uploadEventImage" multiple accept="image/*" class="hidden"/>
+				<div class="border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center p-4 hover:border-primary transition-colors cursor-pointer">
+					<input type="file" name="pastEvents" id="uploadEventImage" multiple accept="image/*" class="hidden">
 					<label for="uploadEventImage" class="w-full h-full flex flex-col items-center justify-center cursor-pointer">
 						<i class="ri-upload-cloud-line text-2xl text-gray-400 mb-2"></i>
 						<span class="text-sm text-gray-500">Upload</span>

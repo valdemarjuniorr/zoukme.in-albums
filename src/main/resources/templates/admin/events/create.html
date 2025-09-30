@@ -1,247 +1,250 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org" lang="pt-br">
-  <head th:insert="~{fragments/header}"></head>
-  <style>
-    :where([class^="ri-"])::before {
-    content: "\f3c2";
-  }
 
-  body {
-    font-family: 'Inter', sans-serif;
-  }
+	<head th:insert="~{fragments/header}"></head>
+	<style>
+		:where([class^="ri-"])::before {
+			content: "\f3c2";
+		}
 
-  .custom-select {
-    appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 0.5rem center;
-    background-size: 1.5em 1.5em;
-  }
+		body {
+			font-family: 'Inter', sans-serif;
+		}
 
-  .custom-file-input::-webkit-file-upload-button {
-    visibility: hidden;
-    display: none;
-  }
+		.custom-select {
+			appearance: none;
+			background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+			background-repeat: no-repeat;
+			background-position: right 0.5rem center;
+			background-size: 1.5em 1.5em;
+		}
 
-  .custom-file-input::before {
-    content: 'Select files';
-    display: inline-block;
-    background: #f9fafb;
-    border: 1px solid #d1d5db;
-    border-radius: 8px;
-    padding: 8px 12px;
-    outline: none;
-    white-space: nowrap;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 500;
-    color: #374151;
-  }
+		.custom-file-input::-webkit-file-upload-button {
+			visibility: hidden;
+			display: none;
+		}
 
-  .custom-file-input:hover::before {
-    background-color: #f3f4f6;
-  }
+		.custom-file-input::before {
+			content: 'Select files';
+			display: inline-block;
+			background: #f9fafb;
+			border: 1px solid #d1d5db;
+			border-radius: 8px;
+			padding: 8px 12px;
+			outline: none;
+			white-space: nowrap;
+			cursor: pointer;
+			font-size: 14px;
+			font-weight: 500;
+			color: #374151;
+		}
 
-  .custom-file-input:active::before {
-    background-color: #e5e7eb;
-  }
+		.custom-file-input:hover::before {
+			background-color: #f3f4f6;
+		}
 
-  .image-preview {
-    position: relative;
-    width: 100px;
-    height: 100px;
-    border-radius: 8px;
-    overflow: hidden;
-  }
+		.custom-file-input:active::before {
+			background-color: #e5e7eb;
+		}
 
-  .image-preview .remove-btn {
-    position: absolute;
-    top: 4px;
-    right: 4px;
-    background-color: rgba(255, 255, 255, 0.8);
-    border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    display: flex;
-    align-item: center;
-    justify-content: center;
-    cursor: pointer;
-  }
+		.image-preview {
+			position: relative;
+			width: 100px;
+			height: 100px;
+			border-radius: 8px;
+			overflow: hidden;
+		}
 
-  .custom-switch {
-    position: relative;
-    display: inline-block;
-    width: 44px;
-    height: 24px;
-  }
+		.image-preview .remove-btn {
+			position: absolute;
+			top: 4px;
+			right: 4px;
+			background-color: rgba(255, 255, 255, 0.8);
+			border-radius: 50%;
+			width: 20px;
+			height: 20px;
+			display: flex;
+			align-item: center;
+			justify-content: center;
+			cursor: pointer;
+		}
 
-  .custom-switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-  }
-  </style>
-  <!-- Header -->
-  <div th:insert="~{fragments/top :: top}"></div>
-  <body class="bg-gray-50 min-h-screen flex">
-    <main class="flex-1 overflow-x-hidden pb-16 md:pb-0">
-      <!-- Form content -->
-      <div class="px-4 py-6 md:px-6 lg:px-8 max-w-4xl mx-auto">
-        <form id="newEventForm" action="/admin/events/create" method="post" enctype="multipart/form-data">
-          <!-- Basic Information Section -->
-          <section th:insert="~{admin/events/basic-information-table}"></section>
-          <!-- Event Packages Section -->
-          <div th:insert="~{admin/events/packages :: render(${event.packages})}"></div>
-          <!-- Additional Details Section -->
-          <section th:insert="~{admin/events/additional-details-table}"></section>
-          <!-- Action Buttons -->
-          <div class="bg-white border-t border-gray-200 p-4 flex justify-end space-x-4 z-10">
-            <a href="/admin/home" class="px-6 py-2 border border-gray-300 rounded-button text-sm font-medium text-gray-700 hover:bg-gray-50 whitespace-nowrap">
-              Cancelar
-            </a>
-            <button type="submit" class="px-6 py-2 bg-primary text-white rounded-button text-sm font-medium hover:opacity-90 transition whitespace-nowrap">Criar</button>
-          </div>
-        </form>
-      </div>
-    </main>
-    <script id="formHandlers">
-      document.addEventListener("DOMContentLoaded", function () {
-      // Handle event image upload
-      const uploadEventImage = document.getElementById("uploadEventImage");
-      uploadEventImage.addEventListener("change", function (e) {
-        for (const file of this.files) {
-          if (file.type.startsWith("image/")) {
-            const reader = new FileReader();
-            reader.onload = function (e) {
-              const newImageContainer = document.createElement("div");
-              newImageContainer.className =
-                "relative aspect-square rounded-lg overflow-hidden bg-gray-100 group";
-              newImageContainer.innerHTML = `
-      <img src="${e.target.result}" class="w-full h-full object-cover">
-      <div class="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
-      <button class="p-2 bg-white rounded-full text-gray-700 hover:text-primary">
-      <i class="ri-download-line"></i>
-      </button>
-      <button class="p-2 bg-white rounded-full text-gray-700 hover:text-primary">
-      <i class="ri-delete-bin-line"></i>
-      </button>
-      </div>
-      `;
-              const uploadButton = document.querySelector(".border-dashed").parentElement;
-              uploadButton.insertBefore(newImageContainer, uploadButton.lastElementChild,);
-            };
-            reader.readAsDataURL(file);
-          }
-        }
-      });
-      // Handle image uploads
-      const imageInput = document.getElementById("referenceImages");
-      const previewContainer = document.getElementById("imagePreviewContainer");
-      imageInput.addEventListener("change", function () {
-        for (const file of this.files) {
-          if (file.type.startsWith("image/")) {
-            const reader = new FileReader();
-            reader.onload = function (e) {
-              const previewDiv = document.createElement("div");
-              previewDiv.className = "image-preview";
-              const img = document.createElement("img");
-              img.src = e.target.result;
-              img.className = "w-full h-full object-cover";
-              const removeBtn = document.createElement("div");
-              removeBtn.className = "remove-btn";
-              removeBtn.innerHTML = '<i class="ri-close-line"></i>';
-              removeBtn.addEventListener("click", function () {
-                previewDiv.remove();
-              });
-              previewDiv.appendChild(img);
-              previewDiv.appendChild(removeBtn);
-              previewContainer.appendChild(previewDiv);
-            };
-            reader.readAsDataURL(file);
-          }
-        }
-      });
-      // Handle uploaded images actions
-      document.querySelectorAll(".group").forEach((group) => {
-        const downloadBtn = group.querySelector(".ri-download-line")?.parentElement;
-        const deleteBtn = group.querySelector(".ri-delete-bin-line")?.parentElement;
-        const img = group.querySelector("img");
-        if (!downloadBtn || !deleteBtn || !img) return;
-        downloadBtn.addEventListener("click", function (e) {
-          e.preventDefault();
-          const link = document.createElement("a");
-          link.href = img.src;
-          link.download = "event-image.jpg";
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-        });
-        deleteBtn.addEventListener("click", function (e) {
-          e.preventDefault();
-          group.remove();
-        });
-      });
-      // Format Instagram handle input
-      const instagramInput = document.getElementById("instagram");
-      instagramInput.addEventListener("input", function (e) {
-        let value = e.target.value.replace(/\s/g, "");
-        if (value && !value.startsWith("@")) {
-          value = "@" + value;
-        }
-        e.target.value = value;
-      });
-      // Initialize Quill editor
-      const quill = new Quill("#editor", {
-        theme: "snow",
-        placeholder: "Adicione mais detalhes sobre o evento...",
-        modules: {
-          toolbar: [
-            ["bold", "italic", "underline"],
-            [{list: "ordered"}, {list: "bullet"}],
-            ["link"],
-            ["clean"],
-          ],
-        },
-      });
-      quill.root.addEventListener('focusout', () => {
-        var quillContent = quill.getContents();
-        // Convert the Delta object to a JSON string-->
-        document.getElementById('details').value = JSON.stringify(quillContent);
-      });
-      // add a before submit to get packages values and add into the request in packages attributes
-      const newEventForm = document.getElementById("newEventForm");
-      newEventForm.addEventListener("submit", function (e) {
-        e.preventDefault();
-        const packages = [];
-        document.querySelectorAll("#packageTableBody tr").forEach((item) => {
-          // get the title, description and price from the td row
-          const title = item.querySelector("td:nth-child(1)").textContent.trim();
-          const description = item.querySelector("td:nth-child(2)").textContent.trim();
-          let price = item.querySelector("td:nth-child(3)").textContent.trim();
-          price = price.replace(".", "").replace(",", "."); // Convert to a valid decimal format
-          packages.push({title, description, price});
-        });
-        const formData = new FormData(this);
-        formData.append("packages", JSON.stringify(packages));
-        fetch(this.action, {
-          method: "POST",
-          body: formData,
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            if (data.success) {
-              window.location.href = "/admin/home";
-            } else {
-              alert(data.message || "Erro ao criar evento.");
-            }
-          })
-          .catch((error) => {
-            console.warn("Error:", error);
-            window.location.href = "/events";
-          });
-      });
-    });
-    </script>
-    <div th:insert="~{fragments/footer :: footer}"></div>
-  </body>
+		.custom-switch {
+			position: relative;
+			display: inline-block;
+			width: 44px;
+			height: 24px;
+		}
+
+		.custom-switch input {
+			opacity: 0;
+			width: 0;
+			height: 0;
+		}
+	</style>
+	<!-- Header -->
+	<div th:insert="~{fragments/top :: top}"></div>
+
+	<body class="bg-gray-50 min-h-screen flex">
+		<main class="flex-1 overflow-x-hidden pb-16 md:pb-0">
+			<!-- Form content -->
+			<div class="px-4 py-6 md:px-6 lg:px-8 max-w-4xl mx-auto">
+				<form id="newEventForm" action="/admin/events/create" method="post" enctype="multipart/form-data">
+					<!-- Basic Information Section -->
+					<section th:insert="~{admin/events/basic-information-table}"></section>
+					<!-- Event Packages Section -->
+					<div th:insert="~{admin/events/packages :: render(${event.packages})}"></div>
+					<!-- Additional Details Section -->
+					<section th:insert="~{admin/events/additional-details-table}"></section>
+					<!-- Action Buttons -->
+					<div class="bg-white border-t border-gray-200 p-4 flex justify-end space-x-4 z-10">
+						<a href="/admin/home" class="px-6 py-2 border border-gray-300 rounded-button text-sm font-medium text-gray-700 hover:bg-gray-50 whitespace-nowrap">
+							Cancelar
+						</a>
+						<button type="submit" class="px-6 py-2 bg-primary text-white rounded-button text-sm font-medium hover:opacity-90 transition whitespace-nowrap">Criar</button>
+					</div>
+				</form>
+			</div>
+			<div th:replace="~{fragments/footer :: footer}"></div>
+		</main>
+
+		<script id="formHandlers" type="text/javascript">
+			document.addEventListener("DOMContentLoaded", function () {
+				// Handle event image upload
+				const uploadEventImage = document.getElementById("uploadEventImage");
+				uploadEventImage.addEventListener("change", function (e) {
+					for (const file of this.files) {
+						if (file.type.startsWith("image/")) {
+							const reader = new FileReader();
+							reader.onload = function (e) {
+								const newImageContainer = document.createElement("div");
+								newImageContainer.className =
+								"relative aspect-square rounded-lg overflow-hidden bg-gray-100 group";
+								newImageContainer.innerHTML = `
+								<img src="${e.target.result}" class="w-full h-full object-cover">
+								<div class="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+								<button class="p-2 bg-white rounded-full text-gray-700 hover:text-primary">
+								<i class="ri-download-line"></i>
+								</button>
+								<button class="p-2 bg-white rounded-full text-gray-700 hover:text-primary">
+								<i class="ri-delete-bin-line"></i>
+								</button>
+								</div>
+								`;
+								const uploadButton = document.querySelector(".border-dashed").parentElement;
+								uploadButton.insertBefore(newImageContainer, uploadButton.lastElementChild,);
+								};
+								reader.readAsDataURL(file);
+							}
+						}
+						});
+						// Handle image uploads
+						const imageInput = document.getElementById("referenceImages");
+						const previewContainer = document.getElementById("imagePreviewContainer");
+						imageInput.addEventListener("change", function () {
+							for (const file of this.files) {
+								if (file.type.startsWith("image/")) {
+									const reader = new FileReader();
+									reader.onload = function (e) {
+										const previewDiv = document.createElement("div");
+										previewDiv.className = "image-preview";
+										const img = document.createElement("img");
+										img.src = e.target.result;
+										img.className = "w-full h-full object-cover";
+										const removeBtn = document.createElement("div");
+										removeBtn.className = "remove-btn";
+										removeBtn.innerHTML = '<i class="ri-close-line"></i>';
+										removeBtn.addEventListener("click", function () {
+											previewDiv.remove();
+											});
+											previewDiv.appendChild(img);
+											previewDiv.appendChild(removeBtn);
+											previewContainer.appendChild(previewDiv);
+											};
+											reader.readAsDataURL(file);
+										}
+									}
+									});
+									// Handle uploaded images actions
+									document.querySelectorAll(".group").forEach((group) => {
+										const downloadBtn = group.querySelector(".ri-download-line")?.parentElement;
+										const deleteBtn = group.querySelector(".ri-delete-bin-line")?.parentElement;
+										const img = group.querySelector("img");
+										if (!downloadBtn || !deleteBtn || !img) return;
+										downloadBtn.addEventListener("click", function (e) {
+											e.preventDefault();
+											const link = document.createElement("a");
+											link.href = img.src;
+											link.download = "event-image.jpg";
+											document.body.appendChild(link);
+											link.click();
+											document.body.removeChild(link);
+											});
+											deleteBtn.addEventListener("click", function (e) {
+												e.preventDefault();
+												group.remove();
+												});
+												});
+												// Format Instagram handle input
+												const instagramInput = document.getElementById("instagram");
+												instagramInput.addEventListener("input", function (e) {
+													let value = e.target.value.replace(/\s/g, "");
+													if (value && !value.startsWith("@")) {
+														value = "@" + value;
+													}
+													e.target.value = value;
+													});
+													// Initialize Quill editor
+													const quill = new Quill("#editor", {
+														theme: "snow",
+														placeholder: "Adicione mais detalhes sobre o evento...",
+														modules: {
+															toolbar: [
+															["bold", "italic", "underline"],
+															[{list: "ordered"}, {list: "bullet"}],
+															["link"],
+															["clean"],
+															],
+															},
+															});
+															quill.root.addEventListener('focusout', () => {
+																var quillContent = quill.getContents();
+																// Convert the Delta object to a JSON string-->
+																document.getElementById('details').value = JSON.stringify(quillContent);
+																});
+																// add a before submit to get packages values and add into the request in packages attributes
+																const newEventForm = document.getElementById("newEventForm");
+																newEventForm.addEventListener("submit", function (e) {
+																	e.preventDefault();
+																	const packages = [];
+																	document.querySelectorAll("#packageTableBody tr").forEach((item) => {
+																		// get the title, description and price from the td row
+																		const title = item.querySelector("td:nth-child(1)").textContent.trim();
+																		const description = item.querySelector("td:nth-child(2)").textContent.trim();
+																		let price = item.querySelector("td:nth-child(3)").textContent.trim();
+																		price = price.replace(".", "").replace(",", "."); // Convert to a valid decimal format
+																		packages.push({title, description, price});
+																		});
+																		const formData = new FormData(this);
+																		formData.append("packages", JSON.stringify(packages));
+																		fetch(this.action, {
+																			method: "POST",
+																			body: formData,
+																			})
+																			.then((response) => response.json())
+																			.then((data) => {
+																				if (data.success) {
+																					window.location.href = "/admin/home";
+																					} else {
+																						alert(data.message || "Erro ao criar evento.");
+																					}
+																					})
+																					.catch((error) => {
+																						console.warn("Error:", error);
+																						window.location.href = "/events";
+																						});
+																						});
+																						});
+		</script>
+	</body>
 </html>

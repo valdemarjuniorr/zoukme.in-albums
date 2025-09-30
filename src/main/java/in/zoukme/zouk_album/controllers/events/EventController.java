@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import in.zoukme.zouk_album.controllers.meta.MetaTags;
 import in.zoukme.zouk_album.domains.Page;
 import in.zoukme.zouk_album.services.PackageService;
 import in.zoukme.zouk_album.services.aws.EventService;
@@ -52,8 +53,12 @@ public class EventController {
 
   @GetMapping("/{eventUrl}/albums")
   String getSubEvents(@PathVariable String eventUrl, Model model, Authentication authentication) {
-    model.addAttribute("event", service.getEventAlbumsBy(eventUrl));
+    var event = service.getEventAlbumsBy(eventUrl);
+    model.addAttribute("event", event);
     model.addAttribute("authentication", authentication);
+    model.addAttribute("seo",
+        new MetaTags(event.event().title(), event.event().description(), event.event().coverUrl()));
+
     return "events/subevents/list";
   }
 
