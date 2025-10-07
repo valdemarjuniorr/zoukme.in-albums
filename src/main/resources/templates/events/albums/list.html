@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org">
 
 <head th:insert="~{fragments/header}"></head>
@@ -23,37 +22,6 @@
 
   .image-container:hover .action-icons {
     opacity: 1;
-  }
-
-  .overlay {
-    background: rgba(0, 0, 0, 0.1);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-
-  .download-button {
-    opacity: 0;
-    transform: scale(0.8);
-    transition: all 0.3s ease;
-  }
-
-  .image-container:hover .download-button {
-    opacity: 1;
-    transform: scale(1);
-  }
-
-  .download-button:hover {
-    transform: scale(1.1);
-    background-color: rgba(255, 255, 255, 0.95) !important;
-  }
-
-  .download-button:active {
-    transform: scale(0.95);
-  }
-
-  .download-button.downloading {
-    opacity: 0;
-    transform: scale(0.8);
   }
 </style>
 
@@ -82,16 +50,8 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
       <div th:each="photo : ${photos.content}" class="bg-white p-2 rounded-lg shadow-md">
         <div class="image-container relative rounded-lg overflow-hidden shadow-sm group">
-          <img th:src="${photo.imagePath}" class="gallery-image w-full h-auto rounded-lg">
-          <div class="overlay absolute inset-0"></div>
-          <!-- Download Button -->
-          <button
-            class="download-button absolute inset-0 w-12 h-12 sm:w-14 sm:h-14 bg-white/50 backdrop-blur-sm !rounded-md shadow-lg flex items-center justify-center z-20 hover:shadow-xl"
-            style="top: 50%; left: 50%; transform: translate(-50%, -50%);">
-            <div class="w-6 h-6 flex items-center justify-center">
-              <i class="ri-download-2-line text-gray-700 text-lg sm:text-xl"></i>
-            </div>
-          </button>
+          <img th:src="${photo.imagePath}" class="w-full h-auto rounded-lg"
+            th:onclick="@{openModal({photoId})(photoId=${photo.id})}">
           <div th:if="${authentication != null}">
             <!-- change cover image section -->
             <div class="overlay absolute inset-0"></div>
@@ -118,6 +78,19 @@
               </div>
             </div>
           </div>
+          <!-- modal content -->
+        </div>
+        <style>
+          /* Custom CSS to change the modal size */
+          .modal {
+            width: 100%;
+            max-width: 900px;
+            /* Adjust the max-width as needed */
+            padding: 0px;
+          }
+        </style>
+        <div th:id="${photo.id}" class="modal">
+          <img th:src="${photo.imagePath}">
         </div>
       </div>
     </div>
@@ -179,6 +152,13 @@
     </div>
   </div>
 
+  <script>
+    function openModal(id) {
+      $('#' + id).modal({
+        fadeDuration: 250
+      });
+    }
+  </script>
   <script type="text/javascript">
     document.addEventListener('DOMContentLoaded', function () {
       const footer = document.getElementById('fixed-footer');
@@ -245,41 +225,6 @@
           });
           ticking = true;
         }
-      });
-    });
-  </script>
-  <script id="downloading-photo" type="text/javascript">
-    document.addEventListener('DOMContentLoaded', function () {
-      // Download functionality
-      const downloadButtons = document.querySelectorAll(".download-button");
-      downloadButtons.forEach((button, index) => {
-        button.addEventListener("click", async function (e) {
-          e.stopPropagation();
-          this.classList.add("downloading");
-          const img = this.closest(".image-container").querySelector(".gallery-image");
-          const imgSrc = img.src;
-          const fileName = `zoukme-in-photo-${index + 1}.jpg`;
-
-          try {
-            const response = await fetch(imgSrc, {mode: 'cors'});
-            const blob = await response.blob();
-            const url = window.URL.createObjectURL(blob);
-
-            const link = document.createElement("a");
-            link.href = url;
-            link.download = fileName;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            window.URL.revokeObjectURL(url);
-          } catch (err) {
-            console.log("Failed to download image." + err);
-          }
-
-          setTimeout(() => {
-            this.classList.remove("downloading");
-          }, 1000);
-        });
       });
     });
   </script>
