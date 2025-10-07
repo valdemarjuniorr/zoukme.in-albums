@@ -1,143 +1,150 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org" lang="pt-br">
 
-	<head th:replace="~{fragments/header}"></head>
+<head th:replace="~{fragments/header}"></head>
 
-	<body class=" bg-gray-100">
-		<!-- Header -->
-		<div th:insert="~{fragments/top :: top}"></div>
+<body class=" bg-gray-100">
+  <!-- Header -->
+  <div th:insert="~{fragments/top :: top}"></div>
 
-		<!-- Content -->
-		<main th:fragment="main" class="main container mx-auto p-4 py-8">
-			<h1 class="text-3xl font-bold text-center">Onde estaremos!</h1>
+  <!-- Content -->
+  <main th:fragment="main" class="main container mx-auto p-4 py-8">
+    <h1 class="text-3xl font-bold text-center">Onde estaremos!</h1>
 
-			<div th:insert="~{events/caroussel}"></div>
+    <div th:insert="~{events/caroussel}"></div>
 
-			<section th:fragment="albums" class="bg-white">
-				<div class="container mx-auto px-4">
-					<!-- feature event section -->
-					<div id="featured_event" hx-get="/events/featured" hx-trigger="load"></div>
+    <section th:fragment="albums" class="bg-white">
+      <div class="container mx-auto px-4">
+        <!-- feature event section -->
+        <div id="featured_event" hx-get="/events/featured" hx-trigger="load"></div>
 
-					<div class="text-center mb-12">
-						<h2 class="text-3xl md:text-4xl font-bold mb-4">Eventos anteriores</h2>
-						<p class="font-['Montserrat'] text-gray-600 max-w-2xl mx-auto">
-							Reveja o que rolou nos eventos anteriores através da nossa coleção de álbuns
-						</p>
-					</div>
-					<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-						<!-- Album 1 -->
-						<div th:each="album : ${albums}" class="album-card group" data-category="festival">
-							<a th:href="${album.url}" th:title="${album.title}">
-								<div class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300">
-									<div class="relative h-64 overflow-hidden">
-										<img th:src="${album.thumbUrl}" th:alt="${album.title}" class="w-full h-full object-cover object-top transform group-hover:scale-105 transition-transform duration-500">
-										<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-										<div th:if="${album.isNew}" class="absolute top-4 right-4 bg-gradient-to-r from-primary to-secondary text-white text-xs font-bold py-1 px-3 rounded-lg shadow-md flex items-center gap-1 rotate-12">
-											<i class="ri-flashlight-line"></i>
-											<span>Novo</span>
-										</div>
-										<span th:text="${album.descriptiveDate}" class="font-['Montserrat'] absolute top-4 left-4 bg-black/50 text-white px-3 py-1 rounded-full text-sm"></span>
-									</div>
-									<div class="p-6">
-										<h3 th:text="${album.title}" class="font-['Montserrat'] text-xl font-bold mb-2"></h3>
-										<p class="text-gray-600 mb-4">Veja as fotos acessando o álbum do evento</p>
-										<div class="flex items-center justify-between">
-											<div class="flex items-center text-gray-500">
-												<i class="ri-map-pin-line mr-2"></i>
-												<span th:text="${album.city}" class="font-['Poppins'] text-sm"></span>
-											</div>
-										</div>
-									</div>
-								</div>
-							</a>
-						</div>
-					</div>
-				</div>
-			</section>
-		</main>
-		<div id="browser-modal" class="browser-modal fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-40 p-4" style="display: none;">
-			<div class="browser-modal-content bg-white rounded-lg shadow-lg p-4 sm:p-6 mx-auto max-w-lg w-full">
-				<!-- Modal content here -->
-				<div class="browser-modal-content">
-					<div class="flex items-center justify-between mb-4 sm:mb-6">
-						<div class="flex items-center">
-							<i class="ri-error-warning-line text-yellow-500 ri-2x"></i>
-							<h3 class="text-lg sm:text-xl font-bold ml-3 text-black">Aviso sobre Compatibilidade de Navegador</h3>
-						</div>
-						<button id="close-browser-modal" class="text-gray-400 hover:text-gray-600">
-							<i class="ri-close-line ri-lg"></i>
-						</button>
-					</div>
-					<p class="text-gray-600 mb-4 sm:mb-6 text-sm sm:text-base">Detectamos que você está usando um navegador não
-						recomendado <span class="font-bold">(como o navegador interno de aplicativos, ex: Instagram).</span></p>
-					<p class="text-gray-600 mb-4 sm:mb-6 text-sm sm:text-base">Para melhor desempenho e acesso a todos os
-						recursos, abra este link em um navegador compatível, como Chrome, Safari, Firefox ou Edge.</p>
-					<div class="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-4">
-						<button id="dismiss-browser-modal" class="px-4 py-2 bg-primary text-white hover:bg-opacity-90 transition-colors !rounded-button whitespace-nowrap text-sm sm:text-base">Entendi!</button>
-					</div>
-				</div>
-			</div>
-		</div>
-		<script>
-			function openModal(id) {
-				const modal = document.getElementById(id);
-				if (!modal) return;
+        <div class="text-center mb-12">
+          <h2 class="text-3xl md:text-4xl font-bold mb-4">Eventos anteriores</h2>
+          <p class="font-['Montserrat'] text-gray-600 max-w-2xl mx-auto">
+            Reveja o que rolou nos eventos anteriores através da nossa coleção de álbuns
+          </p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Album 1 -->
+          <div th:each="album : ${albums}" class="album-card group" data-category="festival">
+            <a th:href="${album.url}" th:title="${album.title}">
+              <div class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300">
+                <div class="relative h-64 overflow-hidden">
+                  <img th:src="${album.thumbUrl}" th:alt="${album.title}"
+                    class="w-full h-full object-cover object-top transform group-hover:scale-105 transition-transform duration-500">
+                  <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                  <div th:if="${album.isNew}"
+                    class="absolute top-4 right-4 bg-gradient-to-r from-primary to-secondary text-white text-xs font-bold py-1 px-3 rounded-lg shadow-md flex items-center gap-1 rotate-12">
+                    <i class="ri-flashlight-line"></i>
+                    <span>Novo</span>
+                  </div>
+                  <span th:text="${album.descriptiveDate}"
+                    class="font-['Montserrat'] absolute top-4 left-4 bg-black/50 text-white px-3 py-1 rounded-full text-sm"></span>
+                </div>
+                <div class="p-6">
+                  <h3 th:text="${album.title}" class="font-['Montserrat'] text-xl font-bold mb-2"></h3>
+                  <p class="text-gray-600 mb-4">Veja as fotos acessando o álbum do evento</p>
+                  <div class="flex items-center justify-between">
+                    <div class="flex items-center text-gray-500">
+                      <i class="ri-map-pin-line mr-2"></i>
+                      <span th:text="${album.city}" class="font-['Poppins'] text-sm"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <div id="browser-modal"
+    class="browser-modal fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-40 p-4"
+    style="display: none;">
+    <div class="browser-modal-content bg-white rounded-lg shadow-lg p-4 sm:p-6 mx-auto max-w-lg w-full">
+      <!-- Modal content here -->
+      <div class="browser-modal-content">
+        <div class="flex items-center justify-between mb-4 sm:mb-6">
+          <div class="flex items-center">
+            <i class="ri-error-warning-line text-yellow-500 ri-2x"></i>
+            <h3 class="text-lg sm:text-xl font-bold ml-3 text-black">Aviso sobre Compatibilidade de Navegador</h3>
+          </div>
+          <button id="close-browser-modal" class="text-gray-400 hover:text-gray-600">
+            <i class="ri-close-line ri-lg"></i>
+          </button>
+        </div>
+        <p class="text-gray-600 mb-4 sm:mb-6 text-sm sm:text-base">Detectamos que você está usando um navegador não
+          recomendado <span class="font-bold">(como o navegador interno de aplicativos, ex: Instagram).</span></p>
+        <p class="text-gray-600 mb-4 sm:mb-6 text-sm sm:text-base">Para melhor desempenho e acesso a todos os
+          recursos, abra este link em um navegador compatível, como Chrome, Safari, Firefox ou Edge.</p>
+        <div class="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-4">
+          <button id="dismiss-browser-modal"
+            class="px-4 py-2 bg-primary text-white hover:bg-opacity-90 transition-colors !rounded-button whitespace-nowrap text-sm sm:text-base">Entendi!</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    function openModal(id) {
+      const modal = document.getElementById(id);
+      if (!modal) return;
 
-				// Show the modal and prevent body scrolling
-				modal.style.display = 'flex';
-				document.body.style.overflow = 'hidden';
+      // Show the modal and prevent body scrolling
+      modal.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
 
-				// Helper to close modal and clean up
-				function handleClose() {
-					closeModal(id);
-					removeListeners();
-				}
+      // Helper to close modal and clean up
+      function handleClose() {
+        closeModal(id);
+        removeListeners();
+      }
 
-				// Event listeners
-				const closeBtn = document.getElementById('close-browser-modal');
-				const dismissBtn = document.getElementById('dismiss-browser-modal');
-				const continueBtn = document.getElementById('continue-anyway');
+      // Event listeners
+      const closeBtn = document.getElementById('close-browser-modal');
+      const dismissBtn = document.getElementById('dismiss-browser-modal');
+      const continueBtn = document.getElementById('continue-anyway');
 
-				function removeListeners() {
-					closeBtn?.removeEventListener('click', handleClose);
-					dismissBtn?.removeEventListener('click', handleClose);
-					continueBtn?.removeEventListener('click', handleClose);
-					modal.removeEventListener('click', outsideClick);
-				}
+      function removeListeners() {
+        closeBtn?.removeEventListener('click', handleClose);
+        dismissBtn?.removeEventListener('click', handleClose);
+        continueBtn?.removeEventListener('click', handleClose);
+        modal.removeEventListener('click', outsideClick);
+      }
 
-				function outsideClick(event) {
-					if (event.target === modal) {
-						handleClose();
-					}
-				}
+      function outsideClick(event) {
+        if (event.target === modal) {
+          handleClose();
+        }
+      }
 
-				closeBtn?.addEventListener('click', handleClose);
-				dismissBtn?.addEventListener('click', handleClose);
-				continueBtn?.addEventListener('click', handleClose);
-				modal.addEventListener('click', outsideClick);
-			}
+      closeBtn?.addEventListener('click', handleClose);
+      dismissBtn?.addEventListener('click', handleClose);
+      continueBtn?.addEventListener('click', handleClose);
+      modal.addEventListener('click', outsideClick);
+    }
 
-			function closeModal(id) {
-				const modal = document.getElementById(id);
-				if (modal) modal.style.display = 'none';
-				document.body.style.overflow = '';
-			}
+    function closeModal(id) {
+      const modal = document.getElementById(id);
+      if (modal) modal.style.display = 'none';
+      document.body.style.overflow = '';
+    }
 
-			function checkBrowserCompatibility() {
-				// Detect Instagram or Facebook in-app browsers
-				const ua = navigator.userAgent || navigator.vendor || window.opera;
-				const isInAppBrowser =
-				/Instagram|FBAN|FBAV|FB_IAB|FBAN\/FBIOS|FBAV\/[0-9\.]+/i.test(ua);
+    function checkBrowserCompatibility() {
+      // Detect Instagram or Facebook in-app browsers
+      const ua = navigator.userAgent || navigator.vendor || window.opera;
+      const isInAppBrowser =
+        /Instagram|FBAN|FBAV|FB_IAB|FBAN\/FBIOS|FBAV\/[0-9\.]+/i.test(ua);
 
-				if (isInAppBrowser) {
-					openModal('browser-modal');
-				}
-			}
+      if (isInAppBrowser) {
+        openModal('browser-modal');
+      }
+    }
 
-			// Run compatibility check on page load
-			checkBrowserCompatibility();
-		</script>
-		<!-- footer -->
-		<div th:insert="~{fragments/footer :: footer}"></div>
-	</body>
+    // Run compatibility check on page load
+    checkBrowserCompatibility();
+  </script>
+  <!-- footer -->
+  <div th:insert="~{fragments/footer :: footer}"></div>
+</body>
+
 </html>

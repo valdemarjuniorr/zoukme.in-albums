@@ -61,7 +61,6 @@ public class AdminController {
   @GetMapping
   String home(Model model, Authentication authentication) {
     model.addAttribute("authentication", authentication);
-
     return "admin/home";
   }
 

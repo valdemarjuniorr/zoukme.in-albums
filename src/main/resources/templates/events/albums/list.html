@@ -1,213 +1,289 @@
+<!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org">
 
-	<head th:insert="~{fragments/header}"></head>
-	<script>
-		tailwind.config = {
-			theme: {
-				extend: {
-					colors: {primary: "#e94057", secondary: "#8a2be2"},
-					},
-					},
-					};
-	</script>
-	<style>
-		.image-container:hover .gallery-image {
-			transform: scale(1.02);
-			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-		}
+<head th:insert="~{fragments/header}"></head>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {primary: "#e94057", secondary: "#8a2be2"},
+      },
+    },
+  };
+</script>
+<style>
+  .image-container:hover .gallery-image {
+    transform: scale(1.02);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
 
-		.image-container:hover .overlay {
-			opacity: 1;
-		}
+  .image-container:hover .overlay {
+    opacity: 1;
+  }
 
-		.image-container:hover .action-icons {
-			opacity: 1;
-		}
-	</style>
+  .image-container:hover .action-icons {
+    opacity: 1;
+  }
 
-	<body class="bg-gray-100">
-		<!-- Header -->
-		<div th:insert="~{fragments/top :: top}"></div>
+  .overlay {
+    background: rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
 
-		<!-- Content -->
-		<main th:fragment="main" class="main container mx-auto p-4 py-10">
-			<div class="container mx-auto px-4">
-				<div class="min-w-0 grid grid-cols-2 items-center gap-2 py-2">
-					<a th:href="@{/events/{eventName}/albums(eventName=${eventUrl})}" class="gap-2 inline-flex items-center text-gray-500 hover:text-gray-900">
-						<i class="ri-arrow-left-circle-fill text-xl"></i>
-						<span class="truncate">Voltar</span>
-					</a>
-					<div class="justify-self-end inline-flex items-center bg-gray-200 px-3 py-1.5 rounded-full
+  .download-button {
+    opacity: 0;
+    transform: scale(0.8);
+    transition: all 0.3s ease;
+  }
+
+  .image-container:hover .download-button {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .download-button:hover {
+    transform: scale(1.1);
+    background-color: rgba(255, 255, 255, 0.95) !important;
+  }
+
+  .download-button:active {
+    transform: scale(0.95);
+  }
+
+  .download-button.downloading {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+</style>
+
+<body class="bg-gray-100">
+  <!-- Header -->
+  <div th:insert="~{fragments/top :: top}"></div>
+
+  <!-- Content -->
+  <main th:fragment="main" class="main container mx-auto p-4 py-10">
+    <div class="container mx-auto px-4">
+      <div class="min-w-0 grid grid-cols-2 items-center gap-2 py-2">
+        <a th:href="@{/events/{eventName}/albums(eventName=${eventUrl})}"
+          class="gap-2 inline-flex items-center text-gray-500 hover:text-gray-900">
+          <i class="ri-arrow-left-circle-fill text-xl"></i>
+          <span class="truncate">Voltar</span>
+        </a>
+        <div class="justify-self-end inline-flex items-center bg-gray-200 px-3 py-1.5 rounded-full
                 text-sm sm:text-base">
-						<i class="ri-image-line mr-2 text-gray-600"></i>
-						<span class="text-gray-600 font-medium"><span th:text="${photos.totalElements}"/>
-						fotos</span>
-					</div>
-				</div>
-			</div>
-			<hr class="my-2 border-gray-300">
-			<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
-				<div th:each="photo : ${photos.content}" class="bg-white p-2 rounded-lg shadow-md">
-					<div class="image-container relative rounded-lg overflow-hidden shadow-sm group">
-						<img th:src="${photo.imagePath}" class="w-full h-auto rounded-lg" th:onclick="@{openModal({photoId})(photoId=${photo.id})}">
-						<div th:if="${authentication != null}">
-							<!-- change cover image section -->
-							<div class="overlay absolute inset-0"></div>
-							<div class="absolute top-2 right-2 z-10">
-								<div class="relative">
-									<input type="checkbox" class="peer absolute top-0 right-0 w-8 h-8 opacity-0 cursor-pointer z-10">
-									<button class="w-8 h-8 flex items-center justify-center rounded-full bg-black/30 hover:bg-black/40 transition-colors">
-										<i class="ri-more-2-fill text-white"></i>
-									</button>
-									<div class="invisible peer-checked:visible absolute right-0 mt-1 w-48 bg-white/90 backdrop-blur-sm rounded-lg shadow-lg py-1">
-										<button th:hx-post="@{/admin/albums/{eventUrl}/photos/{photoId}/cover(eventUrl=${eventUrl},photoId=${photo.id})}" hx-target="#toast" class="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 active:bg-gray-200 transition-colors">
-											Definir Capa álbum
-										</button>
-										<button th:hx-post="@{/admin/subevents/{photoId}/cover(photoId=${photo.id})}" hx-target="#toast" class="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 active:bg-gray-200 transition-colors">
-											Definir Capa Sub álbum
-										</button>
-									</div>
-								</div>
-							</div>
-						</div>
-						<!-- modal content -->
-					</div>
-					<style>
-						/* Custom CSS to change the modal size */
-						.modal {
-							width: 100%;
-							max-width: 900px;
-							/* Adjust the max-width as needed */
-							padding: 0px;
-						}
-					</style>
-					<div th:id="${photo.id}" class="modal">
-						<img th:src="${photo.imagePath}">
-					</div>
-				</div>
-			</div>
-			<!-- Pagination -->
-			<div th:if="${photos.totalPages != 1}" class="flex justify-center mt-8">
-				<nav aria-label="Page navigation">
-					<ul class="inline-flex items-center -space-x-px">
-						<li th:if="${!photos.first}">
-							<a th:href="@{/events/{eventUrl}/albums/{albumName}?page={page}&size={size}(albumName=${albumName}, eventUrl=${eventUrl}, page=${photos.number}, size=${photos.size})}" class="px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700">
-								<i class="fa-solid fa-caret-left"></i>
-							</a>
-						</li>
-						<li th:each="page : ${pagination}">
-							<span th:if="${page == '...'}" th:text="${page}" class="px-3 py-2 leading-tight text-gray-500 bg-gray-100 border border-gray-300 hover:bg-gray-100 hover:text-gray-700"/>
-							<span th:if="${(photos.number + 1 + '') == page}" th:text="${page}" class="px-3 py-2 leading-tight text-gray-500 bg-red-100 border border-gray-300 hover:bg-red-100 hover:text-gray-700"/>
-							<a th:if="${(photos.number + 1 + '') != page && page != '...'}" th:href="@{/events/{eventUrl}/albums/{albumName}?page={page}&size={size}(albumName=${albumName}, eventUrl=${eventUrl}, page=${page}, size=${photos.size})}" th:text="${page}" class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700"/>
-						</li>
-						<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-						<div id="toast"></div>
-						<!-- Footer -->
-						<li th:if="${!photos.last}">
-							<a th:href="@{/events/{eventUrl}/albums/{albumName}?page={page}&size={size}(albumName=${albumName}, eventUrl=${eventUrl}, page=${photos.number + 2}, size=${photos.size})}" class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700">
-								<i class="fa-solid fa-caret-right"></i>
-							</a>
-						</li>
-					</ul>
-				</nav>
-			</div>
-		</main>
-		<!-- Scroll to top button: top right OUTSIDE of footer, responsive -->
-		<button id="scroll-to-top" class="fixed z-[60] right-6 bottom-[110px] w-10 h-10 sm:w-12 sm:h-12 bg-red-500 hover:bg-red-600 text-white rounded-full shadow-lg hover:shadow-xl flex items-center justify-center transition-all duration-300 ease-in-out opacity-80 hover:opacity-90" style="transform: translateY(16px); opacity: 0;">
-			<div class="w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center">
-				<i class="ri-arrow-up-line text-lg"></i>
-			</div>
-		</button>
-		<!-- footer -->
-		<div id="fixed-footer" class="fixed bottom-0 left-0 right-0 bg-gradient-to-t from-black/40 via-black/20 to-transparent backdrop-blur-[2px] z-50 transition-all duration-300 ease-in-out" style="transform: translateY(0px);">
-			<div class="container mx-auto px-4 py-3 flex justify-center items-center relative">
-				<div class="w-full max-w-[728px] h-[90px] bg-white/5 rounded-lg flex items-center justify-center relative">
-					<span class="text-white/40 text-sm">
-						<img src="/anuncie-aqui.png" class="h-12 object-contain">
-					</span>
-				</div>
-				<button onclick="this.parentElement.parentElement.remove()" class="absolute -top-3 right-3 w-6 h-6 bg-white/5 hover:bg-white/10 rounded-full flex items-center justify-center transition-colors">
-					<i class="ri-close-line text-white/40"></i>
-				</button>
-			</div>
-		</div>
+          <i class="ri-image-line mr-2 text-gray-600"></i>
+          <span class="text-gray-600 font-medium"><span th:text="${photos.totalElements}" />
+            fotos</span>
+        </div>
+      </div>
+    </div>
+    <hr class="my-2 border-gray-300">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+      <div th:each="photo : ${photos.content}" class="bg-white p-2 rounded-lg shadow-md">
+        <div class="image-container relative rounded-lg overflow-hidden shadow-sm group">
+          <img th:src="${photo.imagePath}" class="gallery-image w-full h-auto rounded-lg">
+          <div class="overlay absolute inset-0"></div>
+          <!-- Download Button -->
+          <button
+            class="download-button absolute inset-0 w-12 h-12 sm:w-14 sm:h-14 bg-white/50 backdrop-blur-sm !rounded-md shadow-lg flex items-center justify-center z-20 hover:shadow-xl"
+            style="top: 50%; left: 50%; transform: translate(-50%, -50%);">
+            <div class="w-6 h-6 flex items-center justify-center">
+              <i class="ri-download-2-line text-gray-700 text-lg sm:text-xl"></i>
+            </div>
+          </button>
+          <div th:if="${authentication != null}">
+            <!-- change cover image section -->
+            <div class="overlay absolute inset-0"></div>
+            <div class="absolute top-2 right-2 z-10">
+              <div class="relative">
+                <input type="checkbox" class="peer absolute top-0 right-0 w-8 h-8 opacity-0 cursor-pointer z-10">
+                <button
+                  class="w-8 h-8 flex items-center justify-center rounded-full bg-black/30 hover:bg-black/40 transition-colors">
+                  <i class="ri-more-2-fill text-white"></i>
+                </button>
+                <div
+                  class="invisible peer-checked:visible absolute right-0 mt-1 w-48 bg-white/90 backdrop-blur-sm rounded-lg shadow-lg py-1">
+                  <button
+                    th:hx-post="@{/admin/albums/{eventUrl}/photos/{photoId}/cover(eventUrl=${eventUrl},photoId=${photo.id})}"
+                    hx-target="#toast"
+                    class="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 active:bg-gray-200 transition-colors">
+                    Definir Capa álbum
+                  </button>
+                  <button th:hx-post="@{/admin/subevents/{photoId}/cover(photoId=${photo.id})}" hx-target="#toast"
+                    class="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 active:bg-gray-200 transition-colors">
+                    Definir Capa Sub álbum
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Pagination -->
+    <div th:if="${photos.totalPages != 1}" class="flex justify-center mt-8">
+      <nav aria-label="Page navigation">
+        <ul class="inline-flex items-center -space-x-px">
+          <li th:if="${!photos.first}">
+            <a th:href="@{/events/{eventUrl}/albums/{albumName}?page={page}&size={size}(albumName=${albumName}, eventUrl=${eventUrl}, page=${photos.number}, size=${photos.size})}"
+              class="px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700">
+              <i class="fa-solid fa-caret-left"></i>
+            </a>
+          </li>
+          <li th:each="page : ${pagination}">
+            <span th:if="${page == '...'}" th:text="${page}"
+              class="px-3 py-2 leading-tight text-gray-500 bg-gray-100 border border-gray-300 hover:bg-gray-100 hover:text-gray-700" />
+            <span th:if="${(photos.number + 1 + '') == page}" th:text="${page}"
+              class="px-3 py-2 leading-tight text-gray-500 bg-red-100 border border-gray-300 hover:bg-red-100 hover:text-gray-700" />
+            <a th:if="${(photos.number + 1 + '') != page && page != '...'}"
+              th:href="@{/events/{eventUrl}/albums/{albumName}?page={page}&size={size}(albumName=${albumName}, eventUrl=${eventUrl}, page=${page}, size=${photos.size})}"
+              th:text="${page}"
+              class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700" />
+          </li>
+          <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+          <div id="toast"></div>
+          <!-- Footer -->
+          <li th:if="${!photos.last}">
+            <a th:href="@{/events/{eventUrl}/albums/{albumName}?page={page}&size={size}(albumName=${albumName}, eventUrl=${eventUrl}, page=${photos.number + 2}, size=${photos.size})}"
+              class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700">
+              <i class="fa-solid fa-caret-right"></i>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </main>
+  <!-- Scroll to top button: top right OUTSIDE of footer, responsive -->
+  <button id="scroll-to-top"
+    class="fixed z-[60] right-6 bottom-[110px] w-10 h-10 sm:w-12 sm:h-12 bg-red-500 hover:bg-red-600 text-white rounded-full shadow-lg hover:shadow-xl flex items-center justify-center transition-all duration-300 ease-in-out opacity-80 hover:opacity-90"
+    style="transform: translateY(16px); opacity: 0;">
+    <div class="w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center">
+      <i class="ri-arrow-up-line text-lg"></i>
+    </div>
+  </button>
+  <!-- footer -->
+  <div id="fixed-footer"
+    class="fixed bottom-0 left-0 right-0 bg-gradient-to-t from-black/40 via-black/20 to-transparent backdrop-blur-[2px] z-50 transition-all duration-300 ease-in-out"
+    style="transform: translateY(0px);">
+    <div class="container mx-auto px-4 py-3 flex justify-center items-center relative">
+      <div class="w-full max-w-[728px] h-[90px] bg-white/5 rounded-lg flex items-center justify-center relative">
+        <span class="text-white/40 text-sm">
+          <img src="/anuncie-aqui.png" class="h-12 object-contain">
+        </span>
+      </div>
+      <button onclick="this.parentElement.parentElement.remove()"
+        class="absolute -top-3 right-3 w-6 h-6 bg-white/5 hover:bg-white/10 rounded-full flex items-center justify-center transition-colors">
+        <i class="ri-close-line text-white/40"></i>
+      </button>
+    </div>
+  </div>
 
-		<script>
-			function openModal(id) {
-				$('#' + id).modal({
-					fadeDuration: 250
-					});
-				}
-		</script>
-		<script type="text/javascript">
-			document.addEventListener('DOMContentLoaded', function () {
-				const footer = document.getElementById('fixed-footer');
-				const scrollToTopBtn = document.getElementById('scroll-to-top');
-				let lastScrollY = window.scrollY;
-				let ticking = false;
-				window.addEventListener('scroll', () => {
-					if (!ticking) {
-						window.requestAnimationFrame(() => {
-							const currentScrollY = window.scrollY;
-							const windowHeight = window.innerHeight;
-							const documentHeight = document.documentElement.scrollHeight;
-							const bottomThreshold = documentHeight - windowHeight - 100;
-							if (currentScrollY > bottomThreshold) {
-								footer.style.transform = 'translateY(100%)';
-								footer.style.opacity = '0';
-								} else {
-									footer.style.transform = 'translateY(0)';
-									footer.style.opacity = '1';
-								}
-								// Show/hide scroll to top button
-								if (currentScrollY > 300) {
-									scrollToTopBtn.style.transform = 'translateY(0)';
-									scrollToTopBtn.style.opacity = '1';
-									} else {
-										scrollToTopBtn.style.transform = 'translateY(16px)';
-										scrollToTopBtn.style.opacity = '0';
-									}
-									lastScrollY = currentScrollY;
-									ticking = false;
-									});
-									ticking = true;
-								}
-								});
-								// Scroll to top functionality with smooth animation
-								scrollToTopBtn.addEventListener('click', () => {
-									window.scrollTo({top: 0, behavior: 'smooth'});
-									});
-									});
-		</script>
-		<script id="lazy-loading">
-			document.addEventListener('DOMContentLoaded', function () {
-				const footer = document.getElementById('fixed-footer');
-				let lastScrollY = window.scrollY;
-				let ticking = false;
+  <script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function () {
+      const footer = document.getElementById('fixed-footer');
+      const scrollToTopBtn = document.getElementById('scroll-to-top');
+      let lastScrollY = window.scrollY;
+      let ticking = false;
+      window.addEventListener('scroll', () => {
+        if (!ticking) {
+          window.requestAnimationFrame(() => {
+            const currentScrollY = window.scrollY;
+            const windowHeight = window.innerHeight;
+            const documentHeight = document.documentElement.scrollHeight;
+            const bottomThreshold = documentHeight - windowHeight - 100;
+            if (currentScrollY > bottomThreshold) {
+              footer.style.transform = 'translateY(100%)';
+              footer.style.opacity = '0';
+            } else {
+              footer.style.transform = 'translateY(0)';
+              footer.style.opacity = '1';
+            }
+            // Show/hide scroll to top button
+            if (currentScrollY > 300) {
+              scrollToTopBtn.style.transform = 'translateY(0)';
+              scrollToTopBtn.style.opacity = '1';
+            } else {
+              scrollToTopBtn.style.transform = 'translateY(16px)';
+              scrollToTopBtn.style.opacity = '0';
+            }
+            lastScrollY = currentScrollY;
+            ticking = false;
+          });
+          ticking = true;
+        }
+      });
+      // Scroll to top functionality with smooth animation
+      scrollToTopBtn.addEventListener('click', () => {
+        window.scrollTo({top: 0, behavior: 'smooth'});
+      });
+    });
+  </script>
+  <script id="lazy-loading">
+    document.addEventListener('DOMContentLoaded', function () {
+      const footer = document.getElementById('fixed-footer');
+      let lastScrollY = window.scrollY;
+      let ticking = false;
 
-				window.addEventListener('scroll', () => {
-					if (!ticking) {
-						window.requestAnimationFrame(() => {
-							const currentScrollY = window.scrollY;
-							const windowHeight = window.innerHeight;
-							const documentHeight = document.documentElement.scrollHeight;
-							const bottomThreshold = documentHeight - windowHeight - 500;
+      window.addEventListener('scroll', () => {
+        if (!ticking) {
+          window.requestAnimationFrame(() => {
+            const currentScrollY = window.scrollY;
+            const windowHeight = window.innerHeight;
+            const documentHeight = document.documentElement.scrollHeight;
+            const bottomThreshold = documentHeight - windowHeight - 500;
 
-							if (currentScrollY > bottomThreshold) {
-								footer.style.transform = 'translateY(100%)';
-								footer.style.opacity = '0';
-								} else {
-									footer.style.transform = 'translateY(0)';
-									footer.style.opacity = '1';
-								}
-								lastScrollY = currentScrollY;
-								ticking = false;
-								});
-								ticking = true;
-							}
-							});
-							});
-		</script>
-		<div th:replace="~{fragments/footer :: footer}"></div>
-	</body>
+            if (currentScrollY > bottomThreshold) {
+              footer.style.transform = 'translateY(100%)';
+              footer.style.opacity = '0';
+            } else {
+              footer.style.transform = 'translateY(0)';
+              footer.style.opacity = '1';
+            }
+            lastScrollY = currentScrollY;
+            ticking = false;
+          });
+          ticking = true;
+        }
+      });
+    });
+  </script>
+  <script id="downloading-photo" type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function () {
+      // Download functionality
+      const downloadButtons = document.querySelectorAll(".download-button");
+      downloadButtons.forEach((button, index) => {
+        button.addEventListener("click", async function (e) {
+          e.stopPropagation();
+          this.classList.add("downloading");
+          const img = this.closest(".image-container").querySelector(".gallery-image");
+          const imgSrc = img.src;
+          const fileName = `zoukme-in-photo-${index + 1}.jpg`;
+
+          try {
+            const response = await fetch(imgSrc, {mode: 'cors'});
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = fileName;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(url);
+          } catch (err) {
+            console.log("Failed to download image." + err);
+          }
+
+          setTimeout(() => {
+            this.classList.remove("downloading");
+          }, 1000);
+        });
+      });
+    });
+  </script>
+  <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+
 </html>
