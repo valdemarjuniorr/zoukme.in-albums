@@ -259,7 +259,6 @@
           const img = this.closest(".image-container").querySelector(".gallery-image");
           const imgSrc = img.src;
           const fileName = this.getAttribute('data-filename') + `-${index + 1}.jpg`;
-          alert(fileName);
 
           try {
             const response = await fetch(imgSrc, {mode: 'cors'});
