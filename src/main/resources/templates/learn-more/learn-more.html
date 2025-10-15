@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" lang="pt-br">
+
+<head th:insert="~{fragments/header}"></head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
+<style>
+  :where([class^="ri-"])::before {
+    content: "\f3c2";
+  }
+
+  .gradient-bg {
+    background: linear-gradient(135deg, #e94057 0%, #8a2be2 100%);
+  }
+
+  .gradient-text {
+    background: linear-gradient(135deg, #e94057 0%, #8a2be2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+</style>
+
+<body class="bg-gray-100">
+  <!-- Header -->
+  <div th:insert="~{fragments/top :: top}"></div>
+
+  <!-- Content -->
+  <main th:fragment="main" class="main container mx-auto p-4 py-8">
+    <section class="py-6 bg-gray-50">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-bold text-gray-900 mb-4">
+            Motivos e Vantagens
+          </h2>
+          <p class="text-lg text-gray-600">
+            Por que escolher o <a href="/" class="text-primary font-semibold hover:underline">ZoukMe.in</a> para
+            divulgar seus eventos
+          </p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div class="bg-white p-8 rounded-lg border-2 border-primary/20 hover:border-primary/40 transition-colors">
+            <div class="flex items-center mb-4 gap-3">
+              <div class="w-12 h-12 flex items-center justify-center bg-primary/10 rounded-lg">
+                <i class="ri-crosshair-2-line text-primary text-2xl"></i>
+              </div>
+              <h3 class="text-xl font-semibold text-gray-900">
+                Público-Alvo Específico
+              </h3>
+            </div>
+            <p class="text-gray-600">
+              Alcance direto aos apaixonados por zouk e dança de salão, garantindo
+              que seu evento chegue às pessoas certas.
+            </p>
+          </div>
+          <div class="bg-white p-8 rounded-lg border-2 border-secondary/20 hover:border-secondary/40 transition-colors">
+            <div class="flex items-center mb-4 gap-3">
+              <div class="w-12 h-12 flex items-center justify-center bg-secondary/10 rounded-lg">
+                <i class="ri-share-line text-secondary text-2xl"></i>
+              </div>
+              <h3 class="text-xl font-semibold text-gray-900">
+                Visibilidade Multiplataforma
+              </h3>
+            </div>
+            <p class="text-gray-600">Divulgação simultânea no site e redes sociais, maximizando o alcance e engajamento
+              do seu evento.
+            </p>
+          </div>
+          <div class="bg-white p-8 rounded-lg border-2 border-primary/20 hover:border-primary/40 transition-colors">
+            <div class="flex items-center mb-4 gap-3">
+              <div class="w-12 h-12 flex items-center justify-center bg-primary/10 rounded-lg">
+                <i class="ri-camera-line text-primary text-2xl"></i>
+              </div>
+              <h3 class="text-xl font-semibold text-gray-900">
+                Cobertura Profissional
+              </h3>
+            </div>
+            <p class="text-gray-600">
+              Fotografia e cobertura completa dos eventos, criando conteúdo de
+              qualidade para futuras divulgações.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="py-6 bg-white">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-bold text-gray-900 mb-4">
+            Relatórios de Acesso - Instagram
+          </h2>
+          <p class="text-lg text-gray-600">
+            Performance e engajamento nas redes sociais
+          </p>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-1 gap-8 mb-12">
+          <div class="bg-white p-4 md:p-6 rounded-lg border border-gray-200 shadow-sm">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">
+              Crescimento de Seguidores
+            </h3>
+            <div id="instagramFollowers" class="h-64 md:h-80"></div>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6">
+          <div class="bg-white p-4 md:p-6 rounded-lg border-2 border-secondary/20 text-center">
+            <div class="flex items-center justify-center gap-3 mb-4">
+              <div class="w-12 h-12 flex items-center justify-center bg-secondary/10 rounded-lg">
+                <i class="ri-user-follow-line text-secondary text-2xl"></i>
+              </div>
+              <div class="text-2xl md:text-3xl font-bold text-secondary">
+                402
+              </div>
+            </div>
+            <div class="text-gray-600 text-sm md:text-base text-center">Seguidores</div>
+          </div>
+          <div class="bg-white p-4 md:p-6 rounded-lg border-2 border-secondary/20 text-center">
+            <div class="flex items-center justify-center gap-3 mb-4">
+              <div class="w-12 h-12 flex items-center justify-center bg-secondary/10 rounded-lg">
+                <i class="ri-eye-line text-secondary text-2xl"></i>
+              </div>
+              <div class="text-2xl md:text-3xl font-bold text-secondary">
+                50.7K
+              </div>
+            </div>
+            <div class="text-gray-600 text-sm md:text-base text-center">Alcance Mensal</div>
+          </div>
+          <div class="bg-white p-4 md:p-6 rounded-lg border-2 border-primary/20 text-center">
+            <div class="flex items-center justify-center gap-3 mb-4">
+              <div class="w-12 h-12 flex items-center justify-center bg-primary/10 rounded-lg">
+                <i class="ri-folder-chart-line text-primary text-2xl"></i>
+              </div>
+              <div class="text-2xl md:text-3xl font-bold text-primary">
+                454
+              </div>
+            </div>
+            <div class="text-gray-600 text-sm md:text-base text-center">
+              Interações Mensais
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="py-6 bg-gray-50">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-bold text-gray-900 mb-4">
+            Relatórios de Acesso - Site </h2>
+          <p class="text-lg text-gray-600">
+            Analytics e performance do site <a href="https://zoukme.in"
+              class="text-primary font-semibold hover:underline" title="Zoukme In">Zoukme.in</a>
+          </p>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+          <div class="bg-white p-4 md:p-6 rounded-lg border border-gray-200 shadow-sm">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">
+              Origem do Tráfego
+            </h3>
+            <div id="trafficSources" class="h-64 md:h-80"></div>
+            <span class="flex items-center justify-center text-gray-500 italic text-xs">Dados referentes aos últimos 30
+              dias</span>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-6">
+          <div class="bg-white p-4 md:p-6 rounded-lg border-2 border-primary/20 text-center">
+            <div class="flex items-center justify-center gap-3 mb-3 md:mb-4">
+              <div class="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center bg-primary/10 rounded-lg">
+                <i class="ri-user-line text-primary text-lg md:text-2xl"></i>
+              </div>
+              <div class="text-xl md:text-3xl font-bold text-primary">
+                18.5K
+              </div>
+            </div>
+            <div class="text-gray-600 text-xs md:text-base">
+              Visitantes Mensais
+            </div>
+          </div>
+          <div class="bg-white p-4 md:p-6 rounded-lg border-2 border-secondary/20 text-center">
+            <div class="flex items-center justify-center gap-3 mb-3 md:mb-4">
+              <div class="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center bg-secondary/10 rounded-lg">
+                <i class="ri-time-line text-secondary text-lg md:text-2xl"></i>
+              </div>
+              <div class="text-xl md:text-3xl font-bold text-secondary">
+                5:11
+              </div>
+            </div>
+            <div class="text-gray-600 text-xs md:text-base">Tempo Médio</div>
+          </div>
+          <div class="bg-white p-4 md:p-6 rounded-lg border-2 border-secondary/20 text-center">
+            <div class="flex items-center justify-center gap-3 mb-3 md:mb-4">
+              <div class="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center bg-secondary/10 rounded-lg">
+                <i class="ri-eye-line text-secondary text-lg md:text-2xl"></i>
+              </div>
+              <div class="text-xl md:text-3xl font-bold text-secondary">
+                9.5K
+              </div>
+            </div>
+            <div class="text-gray-600 text-xs md:text-base">
+              Views
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="py-6 bg-gray-50">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-bold text-gray-900 mb-4">
+            Eventos Cobertos e Galeria
+          </h2>
+          <p class="text-lg text-gray-600">
+            Estatísticas de eventos e acervo fotográfico
+          </p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+          <div class="bg-white p-6 rounded-lg border-2 border-primary/20 text-center">
+            <div class="flex items-center justify-center gap-3 mb-4">
+              <div class="w-12 h-12 flex items-center justify-center bg-primary/10 rounded-lg">
+                <i class="ri-calendar-event-line text-primary text-2xl"></i>
+              </div>
+              <div class="text-3xl font-bold text-primary">
+                20
+              </div>
+            </div>
+            <div class="text-gray-600">Eventos Cobertos</div>
+          </div>
+          <div class="bg-white p-6 rounded-lg border-2 border-secondary/20 text-center">
+            <div class="flex items-center justify-center gap-3 mb-4">
+              <div class="w-12 h-12 flex items-center justify-center bg-secondary/10 rounded-lg">
+                <i class="ri-camera-line text-secondary text-2xl"></i>
+              </div>
+              <div class="text-3xl font-bold text-secondary">
+                30.6K
+              </div>
+            </div>
+            <div class="text-gray-600">Fotos Publicadas</div>
+          </div>
+          <div class="bg-white p-6 rounded-lg border-2 border-primary/20 text-center">
+            <div class="flex items-center justify-center gap-3 mb-4">
+              <div class="w-12 h-12 flex items-center justify-center bg-primary/10 rounded-lg">
+                <i class="ri-map-pin-line text-primary text-2xl"></i>
+              </div>
+              <div class="text-3xl font-bold text-primary">
+                5
+              </div>
+            </div>
+            <div class="text-gray-600">Cidades Atendidas</div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div class="aspect-square rounded-lg overflow-hidden">
+            <img
+              src="https://s3.sa-east-1.amazonaws.com/zoukme.in/events/coneczouk-2025/Baile%20capivara%20zouk%20festival/DSC_1653.jpg"
+              alt="Coneczouk 2025" class="w-full h-full object-cover object-top" />
+          </div>
+          <div class="aspect-square rounded-lg overflow-hidden">
+            <img
+              src="https://s3.sa-east-1.amazonaws.com/zoukme.in/events/baila-litoral-2025/Grande%20baile%20sexta-feira/DSC_6463.jpg"
+              alt="Baila Litoral 2025" class="w-full h-full object-cover object-top" />
+          </div>
+          <div class="aspect-square rounded-lg overflow-hidden">
+            <img
+              src="https://s3.sa-east-1.amazonaws.com/zoukme.in/events/elite-samba-congress-2025/Baile%20Nosso%20samba%20tem%20pagode/DSC_5412.jpg"
+              alt="Elite Samba Congress 2025" class="w-full h-full object-cover object-top" />
+          </div>
+          <div class="aspect-square rounded-lg overflow-hidden">
+            <img
+              src="https://s3.sa-east-1.amazonaws.com/zoukme.in/events/zathus-zouk-congress/Baile%20Zathus/DSC_3310.jpg"
+              alt="Zathus Zouk Congress 2025" class="w-full h-full object-cover object-top" />
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="py-6 bg-primary">
+      <div class="max-w-4xl mx-auto px-6 text-center">
+        <h2 class="text-3xl font-bold text-white mb-6">
+          Comece a divulgar seus eventos agora
+        </h2>
+        <p class="text-xl text-white/90 mb-8 leading-relaxed">
+          Junte-se a vários organizadores que já confiam no <a href="/" class="font-bold">Zoukme.in</a> para
+          divulgar seus eventos com resultados comprovados.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a href="/prices"
+            class="bg-white text-primary px-8 py-4 !rounded-button hover:bg-gray-100 transition-colors text-lg font-semibold whitespace-nowrap">Veja
+            Planos e Preços</a>
+          <a href="/about#contato"
+            class="bg-secondary text-white px-8 py-4 !rounded-button hover:bg-secondary/90 transition-colors text-lg font-semibold whitespace-nowrap">Entre
+            em Contato</a>
+        </div>
+      </div>
+    </section>
+  </main>
+  <script id="instagramCharts">
+    document.addEventListener("DOMContentLoaded", function () {
+      const followersChart = echarts.init(
+        document.getElementById("instagramFollowers"),
+      );
+      const followersOption = {
+        animation: false,
+        grid: {top: 20, right: 20, bottom: 40, left: 60},
+        xAxis: {
+          type: "category",
+          data: [
+            "Jan",
+            "Fev",
+            "Mar",
+            "Abr",
+            "Mai",
+            "Jun",
+            "Jul",
+            "Ago",
+            "Set",
+            "Out",
+            "Nov",
+            "Dez",
+          ],
+          axisLine: {lineStyle: {color: "#e5e7eb"}},
+          axisTick: {show: false},
+          axisLabel: {color: "#6b7280"},
+        },
+        yAxis: {
+          type: "value",
+          axisLine: {show: false},
+          axisTick: {show: false},
+          axisLabel: {color: "#6b7280"},
+          splitLine: {lineStyle: {color: "#f3f4f6"}},
+        },
+        series: [
+          {
+            data: [
+              230, 252, 270, 290, 311, 320, 335, 370, 402, null, null, null,
+            ],
+            type: "line",
+            smooth: true,
+            lineStyle: {color: "#e94057", width: 3},
+            itemStyle: {color: "#e94057"},
+            areaStyle: {
+              color: {
+                type: "linear",
+                x: 2,
+                y: 0,
+                x2: 0,
+                y2: 1,
+                colorStops: [
+                  {offset: 0, color: "rgba(233, 64, 87, 0.1)"},
+                  {offset: 1, color: "rgba(233, 64, 87, 0.01)"},
+                ],
+              },
+            },
+            showSymbol: false,
+          },
+        ],
+        tooltip: {
+          trigger: "axis",
+          backgroundColor: "rgba(255, 255, 255, 0.9)",
+          borderColor: "#e5e7eb",
+          textStyle: {color: "#1f2937"},
+        },
+      };
+      followersChart.setOption(followersOption);
+    });
+  </script>
+  <script id="websiteCharts">
+    document.addEventListener("DOMContentLoaded", function () {
+      const trafficChart = echarts.init(document.getElementById("trafficSources"));
+      const trafficOption = {
+        animation: false,
+        grid: {top: 20, right: 20, bottom: 20, left: 20},
+        series: [
+          {
+            type: "pie",
+            radius: ["40%", "70%"],
+            center: ["50%", "50%"],
+            data: [
+              {
+                value: 12,
+                name: "Busca Orgânica",
+                itemStyle: {color: "#e94057"},
+              },
+              {value: 12, name: "Redes Sociais", itemStyle: {color: "#8a2be2"}},
+              {
+                value: 54,
+                name: "Direto",
+                itemStyle: {color: "rgba(233, 64, 87, 0.7)"},
+              },
+            ],
+            label: {color: "#1f2937", fontSize: 12},
+            labelLine: {lineStyle: {color: "#6b7280"}},
+          },
+        ],
+        tooltip: {
+          trigger: "item",
+          backgroundColor: "rgba(255, 255, 255, 0.9)",
+          borderColor: "#e5e7eb",
+          textStyle: {color: "#1f2937"},
+        },
+      };
+      trafficChart.setOption(trafficOption);
+    });
+  </script>
+
+  <!-- footer -->
+  <div th:insert="~{fragments/footer :: footer}"></div>
+</body>
+
+</html>

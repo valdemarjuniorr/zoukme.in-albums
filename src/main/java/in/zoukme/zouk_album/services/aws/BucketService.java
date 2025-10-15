@@ -1,6 +1,5 @@
 package in.zoukme.zouk_album.services.aws;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -16,6 +15,9 @@ import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.CommonPrefix;
 import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.S3Object;
+import java.io.File;
+
+
 
 @Service
 public class BucketService {
@@ -63,37 +65,38 @@ public class BucketService {
   }
 
   public void deleteFolder(String eventTitle) {
-    var objects =
-        s3Client
-            .listObjectsV2(
-                b ->
-                    b.bucket(EventUtils.BUCKET_NAME)
-                        .prefix(EventUtils.getEventFolderName(eventTitle)))
-            .contents();
+    var objects = s3Client
+        .listObjectsV2(
+            b -> b.bucket(EventUtils.BUCKET_NAME)
+                .prefix(EventUtils.getEventFolderName(eventTitle)))
+        .contents();
     objects.forEach(
-        object ->
-            s3Client.deleteObject(
-                DeleteObjectRequest.builder()
-                    .bucket(EventUtils.BUCKET_NAME)
-                    .key(object.key())
-                    .build()));
+        object -> s3Client.deleteObject(
+            DeleteObjectRequest.builder()
+                .bucket(EventUtils.BUCKET_NAME)
+                .key(object.key())
+                .build()));
   }
 
-  /** Get the list of folders from a given path. For example, "events/zoukme-in/" */
+  /**
+   * Get the list of folders from a given path. For example, "events/zoukme-in/"
+   */
   public List<String> getFoldersNamesBy(String folderPath) {
     return s3Client
         .listObjectsV2(
-            b ->
-                b.bucket(EventUtils.BUCKET_NAME)
-                    .prefix(folderPath + File.separator)
-                    .delimiter(File.separator))
+            b -> b.bucket(EventUtils.BUCKET_NAME)
+                .prefix(folderPath + File.separator)
+                .delimiter(File.separator))
         .commonPrefixes()
         .stream()
         .map(CommonPrefix::prefix)
         .toList();
   }
 
-  /** Get the list of files from a given path. For example, "events/zoukme-in/2021-09-25" */
+  /**
+   * Get the list of files from a given path. For example,
+   * "events/zoukme-in/2021-09-25"
+   */
   public List<String> getFilesNamesBy(String folderPath) {
     return s3Client
         .listObjectsV2(
