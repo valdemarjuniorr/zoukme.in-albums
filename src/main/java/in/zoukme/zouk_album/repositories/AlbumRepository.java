@@ -27,4 +27,7 @@ public interface AlbumRepository
   @Modifying
   @Query("UPDATE albums SET thumb_url = :coverUrl WHERE url LIKE CONCAT('%', :eventUrl, '%')")
   Integer updateCover(String eventUrl, String coverUrl);
+
+  @Query("SELECT COUNT(DISTINCT city) FROM albums WHERE city IS NOT NULL")
+  Integer findDistinctCitiesCount();
 }

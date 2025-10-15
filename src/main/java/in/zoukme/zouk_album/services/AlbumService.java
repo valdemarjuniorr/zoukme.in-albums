@@ -79,4 +79,8 @@ public class AlbumService {
     // TODO: delete photo updated in case in the next-events folder
     return updatedLines == 1;
   }
+
+  public Integer getDistinctCitiesCount() {
+    return this.repository.findDistinctCitiesCount();
+  }
 }

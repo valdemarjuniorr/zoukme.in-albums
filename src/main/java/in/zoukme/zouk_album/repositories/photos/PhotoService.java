@@ -2,9 +2,9 @@ package in.zoukme.zouk_album.repositories.photos;
 
 import in.zoukme.zouk_album.repositories.PhotoRepository;
 import in.zoukme.zouk_album.repositories.events.EventPhotosRepository;
-import org.springframework.stereotype.Service;
-
 import java.util.Set;
+import org.springframework.stereotype.Service;
+import in.zoukme.zouk_album.repositories.events.EventPhotosRepository;
 
 @Service
 public class PhotoService {
@@ -19,7 +19,7 @@ public class PhotoService {
   }
 
   public long count() {
-    return photoRepository.count();
+    return eventPhotosRepository.count();
   }
 
   public Set<String> findPhotoByEventId(Long eventId) {

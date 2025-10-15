@@ -166,11 +166,11 @@
                 <i class="ri-user-line text-primary text-lg md:text-2xl"></i>
               </div>
               <div class="text-xl md:text-3xl font-bold text-primary">
-                18.5K
+                356
               </div>
             </div>
             <div class="text-gray-600 text-xs md:text-base">
-              Visitantes Mensais
+              Usuários Únicos
             </div>
           </div>
           <div class="bg-white p-4 md:p-6 rounded-lg border-2 border-secondary/20 text-center">
@@ -216,8 +216,7 @@
               <div class="w-12 h-12 flex items-center justify-center bg-primary/10 rounded-lg">
                 <i class="ri-calendar-event-line text-primary text-2xl"></i>
               </div>
-              <div class="text-3xl font-bold text-primary">
-                20
+              <div th:text="${albumCount}" class="text-3xl font-bold text-primary">
               </div>
             </div>
             <div class="text-gray-600">Eventos Cobertos</div>
@@ -227,8 +226,7 @@
               <div class="w-12 h-12 flex items-center justify-center bg-secondary/10 rounded-lg">
                 <i class="ri-camera-line text-secondary text-2xl"></i>
               </div>
-              <div class="text-3xl font-bold text-secondary">
-                30.6K
+              <div th:text="${photoCount}" class="text-3xl font-bold text-secondary">
               </div>
             </div>
             <div class="text-gray-600">Fotos Publicadas</div>
@@ -238,7 +236,7 @@
               <div class="w-12 h-12 flex items-center justify-center bg-primary/10 rounded-lg">
                 <i class="ri-map-pin-line text-primary text-2xl"></i>
               </div>
-              <div class="text-3xl font-bold text-primary">
+              <div th:text="${cityCount}" class="text-3xl font-bold text-primary">
                 5
               </div>
             </div>

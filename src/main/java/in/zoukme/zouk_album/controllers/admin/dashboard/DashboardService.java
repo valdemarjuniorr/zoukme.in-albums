@@ -52,6 +52,10 @@ public class DashboardService {
     return getValueOrZero(paymentService.getTotalPending(afterDateTime));
   }
 
+  public Integer getDistinctCitiesCount() {
+    return albumService.getDistinctCitiesCount();
+  }
+
   private SumPriceTotalTransaction getValueOrZero(SumPriceTotalTransaction total) {
     return total.isZero() ? total.createZeroValues() : total;
   }
