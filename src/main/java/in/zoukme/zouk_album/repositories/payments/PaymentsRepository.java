@@ -1,10 +1,10 @@
 package in.zoukme.zouk_album.repositories.payments;
 
-import in.zoukme.zouk_album.domains.SumPriceTotalTransaction;
 import in.zoukme.zouk_album.domains.payments.Payment;
 import in.zoukme.zouk_album.domains.payments.PaymentStatus;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
@@ -14,6 +14,7 @@ import org.springframework.data.jdbc.repository.query.Modifying;
 import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.data.repository.ListPagingAndSortingRepository;
+import in.zoukme.zouk_album.domains.SumPriceTotalTransaction;
 
 public interface PaymentsRepository
     extends ListPagingAndSortingRepository<Payment, Long>, ListCrudRepository<Payment, Long> {
@@ -25,28 +26,40 @@ public interface PaymentsRepository
   @Query("UPDATE payments SET status = :status, payment_date = NOW() WHERE id = :id")
   void updateStatus(Long id, PaymentStatus status);
 
-  @Query(
-      """
-          select pay.id, ev.title as event_title, ev.location as event_location, ev.date as event_date, ev.cover_url as event_cover_url,
-          pack.title as pack_title, pack.description as pack_description, pack.price as pack_price, pay.full_name, pay.amount, pay.email, pay.transaction_id,
-          pay.payment_date
-          FROM packages pack
-                   INNER JOIN events ev ON pack.event_id = ev.id
-                   INNER JOIN payments pay ON pay.package_id = pack.id
-          where pay.reference_id = :referenceId;
-          """)
+  @Query("""
+      select pay.id, ev.title as event_title, ev.location as event_location, ev.date as event_date, ev.cover_url as event_cover_url,
+      pack.title as pack_title, pack.description as pack_description, pack.price as pack_price, pay.full_name, pay.amount, pay.email, pay.transaction_id,
+      pay.payment_date
+      FROM packages pack
+               INNER JOIN events ev ON pack.event_id = ev.id
+               INNER JOIN payments pay ON pay.package_id = pack.id
+      where pay.reference_id = :referenceId
+      """)
   Optional<PaymentEmailDetails> findPaymentDetailsByReferenceId(UUID referenceId);
 
-  @Query("SELECT SUM(amount) FROM payments WHERE payment_date > :afterDateTime")
-  BigDecimal getTotalAmount(LocalDateTime afterDateTime);
+  @Query("""
+          SELECT SUM(pay.amount) as sum_price, COUNT(pay.id) as total FROM events ev
+           inner join packages pack on ev.id = pack.event_id
+           inner join payments pay on pack.id = pay.package_id
+          WHERE ev.id = :eventId and payment_date > :afterDateTime and status = 'EXPIRED'
+      """)
+  SumPriceTotalTransaction getTotalExpired(Long eventId, LocalDateTime afterDateTime);
 
-  @Query(
-      "SELECT SUM(amount) as sum_price, COUNT(id) as total FROM payments WHERE status = 'PAID' AND payment_date > :afterDateTime")
-  SumPriceTotalTransaction getTotalCompleted(LocalDateTime afterDateTime);
+  @Query("""
+          SELECT SUM(pay.amount) as sum_price, COUNT(pay.id) as total FROM events ev
+           inner join packages pack on ev.id = pack.event_id
+           inner join payments pay on pack.id = pay.package_id
+          WHERE ev.id = :eventId and status = 'PAID' AND payment_date > :afterDateTime
+      """)
+  SumPriceTotalTransaction getTotalCompleted(Long eventId, LocalDateTime afterDateTime);
 
-  @Query(
-      "SELECT SUM(amount) as sum_price, COUNT(id) as total FROM payments WHERE status = 'WAITING' AND payment_date > :afterDateTime")
-  SumPriceTotalTransaction getTotalPending(LocalDateTime afterDateTime);
+  @Query("""
+          SELECT SUM(pay.amount) as sum_price, COUNT(pay.id) as total FROM events ev
+           inner join packages pack on ev.id = pack.event_id
+           inner join payments pay on pack.id = pay.package_id
+          WHERE ev.id = :eventId  and status = 'WAITING' AND payment_date > :afterDateTime
+      """)
+  SumPriceTotalTransaction getTotalPending(Long eventId, LocalDateTime afterDateTime);
 
   Page<Payment> findAllByStatus(PaymentStatus status, PageRequest pageRequest);
 
@@ -63,4 +76,13 @@ public interface PaymentsRepository
   @Modifying
   @Query("UPDATE payments SET status = :status WHERE transaction_id = :transactionId")
   void updatePaymentStatusByReferenceId(String transactionId, PaymentStatus status);
+
+  // create a query to find all payments by event id
+  @Query("""
+      select pay.*
+      from payments pay
+               inner join packages pack on pay.package_id = pack.id
+      where pack.event_id = :eventId
+      """)
+  List<Payment> findAllByEventId(Long eventId);
 }

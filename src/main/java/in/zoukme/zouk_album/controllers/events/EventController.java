@@ -88,4 +88,5 @@ public class EventController {
 
     return "events/feature_event";
   }
+
 }

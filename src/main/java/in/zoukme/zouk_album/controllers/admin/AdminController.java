@@ -236,19 +236,8 @@ public class AdminController {
 
   @GetMapping("/payments/list")
   String getPaymentsPanel(
-      @RequestParam(required = false) String status,
-      @RequestParam(required = false) Integer rangeDays,
       Model model) {
-    var paymentStatus = Objects.nonNull(status) ? PaymentStatus.valueOf(status) : null;
-    var afterDateTime = Objects.nonNull(rangeDays)
-        ? DateUtils.endDateTime(LocalDate.now().minusDays(rangeDays))
-        : null;
-    model.addAttribute(
-        "payments", paymentService.findAllBy(paymentStatus, afterDateTime, Page.defaultPage()));
-    model.addAttribute("totalPending", dashboardService.getTotalPending(afterDateTime));
-    model.addAttribute("totalCompleted", dashboardService.getTotalCompleted(afterDateTime));
-    model.addAttribute("total", dashboardService.getTotalAmount(afterDateTime));
-    model.addAttribute("paymentsStatus", PaymentStatus.values());
+    model.addAttribute("events", this.eventService.findAllEvents());
 
     return "admin/dashboard/payments/list";
   }
@@ -338,5 +327,24 @@ public class AdminController {
     model.addAttribute("message", "Visibilidade do pacote atualizado");
 
     return "/events/toast";
+  }
+
+  @GetMapping("/events/payments/details")
+  String getPaymentsByEvent(@RequestParam Long eventId, @RequestParam(required = false) String status,
+      @RequestParam(required = false) Integer rangeDays,
+      Model model) {
+    var payments = this.paymentService.findAllByEventId(eventId);
+    var paymentStatus = Objects.nonNull(status) ? PaymentStatus.valueOf(status) : null;
+    var afterDateTime = Objects.nonNull(rangeDays)
+        ? DateUtils.endDateTime(LocalDate.now().minusDays(rangeDays))
+        : null;
+    model.addAttribute("totalPending", dashboardService.getTotalPending(eventId, afterDateTime));
+    model.addAttribute("totalCompleted", dashboardService.getTotalCompleted(eventId, afterDateTime));
+    model.addAttribute("totalExpired", dashboardService.getTotalExpired(eventId, afterDateTime));
+    model.addAttribute("paymentsStatus", PaymentStatus.values());
+    model.addAttribute("eventId", eventId);
+    model.addAttribute("payments", payments);
+
+    return "admin/dashboard/payments/table";
   }
 }

@@ -1,13 +1,14 @@
 package in.zoukme.zouk_album.controllers.admin.dashboard;
 
+import java.time.LocalDateTime;
+
+import org.springframework.stereotype.Service;
+
 import in.zoukme.zouk_album.domains.SumPriceTotalTransaction;
 import in.zoukme.zouk_album.repositories.photos.PhotoService;
 import in.zoukme.zouk_album.services.AlbumService;
 import in.zoukme.zouk_album.services.aws.EventService;
 import in.zoukme.zouk_album.services.payments.PaymentService;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import org.springframework.stereotype.Service;
 
 @Service
 public class DashboardService {
@@ -40,16 +41,16 @@ public class DashboardService {
     return photoService.count();
   }
 
-  public BigDecimal getTotalAmount(LocalDateTime afterDateTime) {
-    return paymentService.getTotalAmount(afterDateTime);
+  public SumPriceTotalTransaction getTotalExpired(Long eventId, LocalDateTime afterDateTime) {
+    return getValueOrZero(paymentService.getTotalExpired(eventId, afterDateTime));
   }
 
-  public SumPriceTotalTransaction getTotalCompleted(LocalDateTime afterDateTime) {
-    return getValueOrZero(paymentService.getTotalCompleted(afterDateTime));
+  public SumPriceTotalTransaction getTotalCompleted(Long eventId, LocalDateTime afterDateTime) {
+    return getValueOrZero(paymentService.getTotalCompleted(eventId, afterDateTime));
   }
 
-  public SumPriceTotalTransaction getTotalPending(LocalDateTime afterDateTime) {
-    return getValueOrZero(paymentService.getTotalPending(afterDateTime));
+  public SumPriceTotalTransaction getTotalPending(Long eventId, LocalDateTime afterDateTime) {
+    return getValueOrZero(paymentService.getTotalPending(eventId, afterDateTime));
   }
 
   public Integer getDistinctCitiesCount() {

@@ -1,178 +1,40 @@
 <style>
-    #DECLINED, #EXPIRED {
-        background-color: #fef2f3;
-        color: #b91c1c;
-    }
+  #DECLINED,
+  #EXPIRED {
+    background-color: #fef2f3;
+    color: #b91c1c;
+  }
 
-    #IN_ANALYSIS, #WAITING {
-        background-color: #fef3c7;
-        color: #ca8a04;
-    }
+  #IN_ANALYSIS,
+  #WAITING {
+    background-color: #fef3c7;
+    color: #ca8a04;
+  }
 
-    #PAID {
-        background-color: #bbf7d0;
-        color: #166534;
-    }
+  #PAID {
+    background-color: #bbf7d0;
+    color: #166534;
+  }
 </style>
-
 <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
-	<h2 class="text-lg font-medium text-gray-900">Pagamentos</h2>
-	<div class="mt-4 md:mt-0 flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
-		<div class="relative">
-			<select name="status" hx-target="#main-table-content" th:hx-get="@{/admin/payments/list}" hx-trigger="change"
-							class="appearance-none bg-gray-50 border border-gray-300 text-gray-700 py-2 pl-3 pr-8 rounded-button text-sm focus:outline-none focus:ring-2 focus:ring-primary">
-				<option>Todos os status</option>
-				<option th:each="status : ${paymentsStatus}" th:text="${status.status}" th:value="${status}"></option>
-			</select>
-			<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-				<div class="w-4 h-4 flex items-center justify-center">
-					<i class="ri-arrow-down-s-line"></i>
-				</div>
-			</div>
-		</div>
-		<div class="relative">
-			<select name="rangeDays" hx-target="#main-table-content" th:hx-get="@{/admin/payments/list}" hx-trigger="change"
-							class="appearance-none bg-gray-50 border border-gray-300 text-gray-700 py-2 pl-3 pr-8 rounded-button text-sm focus:outline-none focus:ring-2 focus:ring-primary">
-				<option>Todos</option>
-				<option value="30">Últimos 30 dias</option>
-				<option value="60">Últimos 60 dias</option>
-				<option value="90">Últimos 90 meses</option>
-			</select>
-			<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-				<div class="w-4 h-4 flex items-center justify-center">
-					<i class="ri-arrow-down-s-line"></i>
-				</div>
-			</div>
-		</div>
-	</div>
+  <div class="flex flex-col">
+    <h2 class="text-lg font-medium text-gray-900">Pagamentos</h2>
+    <span class="text-sm text-gray-500">Selecione um evento para visualizar os pagamentos disponíveis.</span>
+  </div>
+  <div class="mt-4 md:mt-0 flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3 md:items-center">
+    <div class="relative">
+      <select name="eventId" hx-target="#payments-table" th:hx-get="@{/admin/events/payments/details}"
+        hx-trigger="change"
+        class="appearance-none bg-gray-50 border border-gray-300 text-gray-700 py-2 pl-3 pr-8 rounded-button text-sm focus:outline-none focus:ring-2 focus:ring-primary">
+        <option value="" selected>Selecione um evento</option>
+        <option th:each="event : ${events}" th:text="${event.title}" th:value="${event.id}"></option>
+      </select>
+      <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+        <div class="w-4 h-4 flex items-center justify-center">
+          <i class="ri-arrow-down-s-line"></i>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-<!-- Payment Summary Cards -->
-<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-	<div class="bg-white rounded-lg shadow-sm p-6">
-		<div class="flex items-center justify-between">
-			<div>
-				<p class="text-sm font-medium text-gray-500">Total</p>
-				<h3 class="text-2xl font-bold text-gray-900 mt-1">R$ <span th:text="${#numbers.formatDecimal(total, 1, 2, 'COMMA')}"></span></h3>
-			</div>
-			<div class="w-12 h-12 rounded-full bg-[#fef2f3] flex items-center justify-center">
-				<div class="w-6 h-6 flex items-center justify-center text-primary">
-					<i class="ri-money-dollar-circle-line"></i>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="bg-white rounded-lg shadow-sm p-6">
-		<div class="flex items-center justify-between">
-			<div>
-				<p class="text-sm font-medium text-gray-500">Pagamentos pendentes</p>
-				<h3 th:text="${#numbers.formatDecimal(totalPending.sumPrice, 1, 2, 'COMMA')}" class="text-2xl font-bold text-gray-900 mt-1"></h3>
-			</div>
-			<div class="w-12 h-12 rounded-full bg-yellow-50 flex items-center justify-center">
-				<div class="w-6 h-6 flex items-center justify-center text-yellow-500">
-					<i class="ri-time-line"></i>
-				</div>
-			</div>
-		</div>
-		<div class="mt-4 flex items-center text-sm">
-			<span class="text-yellow-500"><span th:text="${totalPending.total}"></span> Pagamentos pendentes</span>
-		</div>
-	</div>
-	<div class="bg-white rounded-lg shadow-sm p-6">
-		<div class="flex items-center justify-between">
-			<div>
-				<p class="text-sm font-medium text-gray-500">Finalizados</p>
-				<h3 class="text-2xl font-bold text-gray-900 mt-1">R$ <span
-						th:text="${#numbers.formatDecimal(totalCompleted.sumPrice(), 1, 2, 'COMMA')}"></span></h3>
-			</div>
-			<div class="w-12 h-12 rounded-full bg-green-50 flex items-center justify-center">
-				<div class="w-6 h-6 flex items-center justify-center text-green-500">
-					<i class="ri-checkbox-circle-line"></i>
-				</div>
-			</div>
-		</div>
-		<div class="mt-4 flex items-center text-sm">
-			<span class="text-green-500"><span th:text="${totalCompleted.total}"></span> Transações finalizadas</span>
-		</div>
-	</div>
-</div>
-<!-- Transactions Table -->
-<div class="bg-white rounded-lg shadow-sm">
-	<div class="overflow-x-auto">
-		<table id="payments-table" class="min-w-full divide-y divide-gray-200">
-			<thead class="bg-[#fef2f3]">
-			<tr>
-				<th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-					ID
-				</th>
-				<th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-					Cliente
-				</th>
-				<th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-					Valor(R$)
-				</th>
-				<th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-					Status
-				</th>
-				<th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-					Data
-				</th>
-				<th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-					Ações
-				</th>
-			</tr>
-			</thead>
-			<tbody class="bg-white divide-y divide-gray-200">
-			<tr th:if="${!#lists.isEmpty(payments)}" th:each="payment : ${payments}" class="hover:bg-gray-50">
-				<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-					<a th:href="@{https://sandbox.api.pagseguro.com/checkouts/{transactionId}(transactionId=${payment.transactionId})}" target="_blank">
-						<span th:text="${payment.shortTransactionId}" th:title="${payment.transactionId}"></span>
-					</a>
-				</td>
-				<td class="px-6 py-4 whitespace-nowrap">
-					<div class="flex flex-col">
-						<div th:text="${payment.fullName}" class="text-sm capitalize font-medium text-gray-700"></div>
-						<div th:text="${payment.email}" class="text-sm text-gray-500"></div>
-					</div>
-				</td>
-				<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-					R$ <span th:text="${#numbers.formatDecimal(payment.amount, 1, 2, 'COMMA')}"></span>
-				</td>
-				<td class="px-6 py-4 whitespace-nowrap">
-					<span th:id="${payment.status}" th:text="${payment.status.status}"
-								class="px-2 flex text-xs leading-5 font-semibold rounded-full items-center justify-center"></span>
-				</td>
-				<td th:text="${payment.descriptiveDate}" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"></td>
-				<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-					<div class="flex justify-end space-x-2">
-						<button th:hx-get="@{/admin/payments/{id}/details(id=${payment.id})}" hx-target="#payment-details-modal" hx-swap="afterbegin"
-										class="text-gray-500 hover:text-primary">
-							<div class="w-5 h-5 flex items-center justify-center">
-								<i class="ri-file-list-line"></i>
-							</div>
-						</button>
-						<button class="text-gray-500 hover:text-primary">
-							<div class="w-5 h-5 flex items-center justify-center">
-								<i class="ri-printer-line"></i>
-							</div>
-						</button>
-						<button title="Inativar" th:hx-delete="@{/admin/payments/{transactionId}/inactivate(transactionId=${payment.transactionId})}"
-										hx-confirm="Tem certeza que deseja inativar este pagamento?"
-										hx-trigger="click"
-										class="text-gray-500 hover:text-primary">
-							<div class="w-5 h-5 flex items-center justify-center">
-								<i class="ri-close-circle-line"></i>
-							</div>
-						</button>
-					</div>
-				</td>
-			</tr>
-			<tr th:if="${payments.totalElements == 0}" class="hover:bg-gray-50">
-				<td colspan="6" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
-					Nenhum pagamento encontrado.
-				</td>
-			</tbody>
-		</table>
-	</div>
-	<!-- render the payment details modal -->
-	<div id="payment-details-modal"></div>
-</div>
+<div id="payments-table"></div>

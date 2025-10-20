@@ -3,6 +3,7 @@ package in.zoukme.zouk_album.repositories.events;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -43,6 +44,8 @@ public interface EventRepository
   Optional<Event> findByEventUrl(String eventUrl);
 
   Page<Event> findAllByOrderByDateDesc(Pageable pageable);
+
+  List<Event> findAllByOrderByDateDesc();
 
   Page<Event> findAllByDateIsGreaterThanEqualOrderByDate(
       LocalDate dateIsGreaterThan, PageRequest pageRequest);

@@ -1,5 +1,16 @@
 package in.zoukme.zouk_album.services.payments;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.jdbc.core.mapping.AggregateReference;
+import org.springframework.stereotype.Service;
+
 import in.zoukme.zouk_album.clients.pagbank.CreateCheckoutRequest;
 import in.zoukme.zouk_album.clients.pagbank.PagBankResponse;
 import in.zoukme.zouk_album.clients.pagbank.PagBankService;
@@ -18,16 +29,6 @@ import in.zoukme.zouk_album.repositories.payments.PaymentEmailDetails;
 import in.zoukme.zouk_album.repositories.payments.PaymentsRepository;
 import in.zoukme.zouk_album.services.aws.ses.EmailService;
 import in.zoukme.zouk_album.utils.DateUtils;
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.data.jdbc.core.mapping.AggregateReference;
-import org.springframework.stereotype.Service;
 
 @Service
 public class PaymentService {
@@ -54,31 +55,27 @@ public class PaymentService {
   }
 
   public PagBankResponse save(PersonalDetailsRequest payment, Package pack) {
-    var event =
-        eventRepository.findById(pack.eventId().getId()).orElseThrow(EventNotFoundException::new);
-    var customer =
-        new Customer(
-            payment.firstName() + " " + payment.lastName(),
-            payment.email(),
-            payment.document(),
-            new Customer.Phone(payment.phone()));
-    var item =
-        new Item(
-            payment.packId().toString(),
-            pack.title(),
-            pack.description(),
-            payment.amount(),
-            event.coverUrl());
+    var event = eventRepository.findById(pack.eventId().getId()).orElseThrow(EventNotFoundException::new);
+    var customer = new Customer(
+        payment.firstName() + " " + payment.lastName(),
+        payment.email(),
+        payment.document(),
+        new Customer.Phone(payment.phone()));
+    var item = new Item(
+        payment.packId().toString(),
+        pack.title(),
+        pack.description(),
+        payment.amount(),
+        event.coverUrl());
     var referenceId = UUID.randomUUID();
-    var request =
-        new CreateCheckoutRequest(
-            referenceId,
-            customer,
-            item,
-            "%s/events/%s".formatted(HOST_URL, event.eventUrl()),
-            "%s/payments/confirmation/%s/paid".formatted(HOST_URL, referenceId),
-            HOST_URL + "/payments/pagbank/webhook/checkout",
-            HOST_URL + "/payments/pagbank/webhook");
+    var request = new CreateCheckoutRequest(
+        referenceId,
+        customer,
+        item,
+        "%s/events/%s".formatted(HOST_URL, event.eventUrl()),
+        "%s/payments/confirmation/%s/paid".formatted(HOST_URL, referenceId),
+        HOST_URL + "/payments/pagbank/webhook/checkout",
+        HOST_URL + "/payments/pagbank/webhook");
 
     var response = pagBankService.createCheckOut(request);
 
@@ -96,10 +93,9 @@ public class PaymentService {
   }
 
   public PaymentEmailDetails updateStatus(UUID referenceId, PaymentStatus status) {
-    var payment =
-        this.repository
-            .findPaymentDetailsByReferenceId(referenceId)
-            .orElseThrow(PaymentNotFoundException::new);
+    var payment = this.repository
+        .findPaymentDetailsByReferenceId(referenceId)
+        .orElseThrow(PaymentNotFoundException::new);
     repository.updateStatus(payment.id(), status);
     switch (status) {
       case PAID -> {
@@ -130,16 +126,16 @@ public class PaymentService {
     return repository.findAll();
   }
 
-  public BigDecimal getTotalAmount(LocalDateTime afterDateTime) {
-    return repository.getTotalAmount(getDefaultDateTime(afterDateTime));
+  public SumPriceTotalTransaction getTotalExpired(Long eventId, LocalDateTime afterDateTime) {
+    return repository.getTotalExpired(eventId, getDefaultDateTime(afterDateTime));
   }
 
-  public SumPriceTotalTransaction getTotalCompleted(LocalDateTime afterDateTime) {
-    return repository.getTotalCompleted(getDefaultDateTime(afterDateTime));
+  public SumPriceTotalTransaction getTotalCompleted(Long eventId, LocalDateTime afterDateTime) {
+    return repository.getTotalCompleted(eventId, getDefaultDateTime(afterDateTime));
   }
 
-  public SumPriceTotalTransaction getTotalPending(LocalDateTime afterDateTime) {
-    return repository.getTotalPending(getDefaultDateTime(afterDateTime));
+  public SumPriceTotalTransaction getTotalPending(Long eventId, LocalDateTime afterDateTime) {
+    return repository.getTotalPending(eventId, getDefaultDateTime(afterDateTime));
   }
 
   /*
@@ -163,12 +159,15 @@ public class PaymentService {
   }
 
   public void inactivate(String transactionId) {
-    var payment =
-        paymentsRepository
-            .findByTransactionId(transactionId)
-            .orElseThrow(PaymentNotFoundException::new);
+    var payment = paymentsRepository
+        .findByTransactionId(transactionId)
+        .orElseThrow(PaymentNotFoundException::new);
     pagBankService.inactivateCheckout(transactionId);
     paymentsRepository.updatePaymentStatusByReferenceId(transactionId, PaymentStatus.EXPIRED);
     log.info("Payment with reference ID {} has been inactivated.", transactionId);
+  }
+
+  public List<Payment> findAllByEventId(Long eventId) {
+    return repository.findAllByEventId(eventId);
   }
 }

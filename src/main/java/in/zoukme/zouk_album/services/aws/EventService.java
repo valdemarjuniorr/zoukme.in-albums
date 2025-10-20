@@ -21,8 +21,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.jdbc.core.mapping.AggregateReference;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -40,7 +38,6 @@ public class EventService {
   private final SubEventRepository subEventRepository;
   private final EventPhotosRepository eventPhotosRepository;
   private final PackageService packageService;
-  private static final Logger log = LoggerFactory.getLogger(EventService.class);
 
   public EventService(
       EventRepository repository,
@@ -61,6 +58,10 @@ public class EventService {
 
   public Event findBy(Long id) {
     return repository.findById(id).orElseThrow(EventNotFoundException::new);
+  }
+
+  public List<Event> findAllEvents() {
+    return this.repository.findAllByOrderByDateDesc();
   }
 
   public EventDetails findByEventUrl(String eventUrl) {
