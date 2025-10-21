@@ -2,6 +2,7 @@ package in.zoukme.zouk_album.controllers.admin;
 
 import in.zoukme.zouk_album.domains.Album;
 import in.zoukme.zouk_album.domains.Page;
+import in.zoukme.zouk_album.domains.payments.Payment;
 import in.zoukme.zouk_album.domains.payments.PaymentStatus;
 import in.zoukme.zouk_album.repositories.events.CreateEventRequest;
 import in.zoukme.zouk_album.repositories.events.PackageRequest;
@@ -17,6 +18,8 @@ import java.util.List;
 import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.Resource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -341,10 +344,23 @@ public class AdminController {
     model.addAttribute("totalPending", dashboardService.getTotalPending(eventId, afterDateTime));
     model.addAttribute("totalCompleted", dashboardService.getTotalCompleted(eventId, afterDateTime));
     model.addAttribute("totalExpired", dashboardService.getTotalExpired(eventId, afterDateTime));
+    model.addAttribute("hasPaid", payments.stream().filter(Payment::isStatusPaid).findAny().isPresent());
+
     model.addAttribute("paymentsStatus", PaymentStatus.values());
     model.addAttribute("eventId", eventId);
     model.addAttribute("payments", payments);
 
     return "admin/dashboard/payments/table";
+  }
+
+  @GetMapping("/events/{id}/payments/report")
+  ResponseEntity<Resource> getPaymentsReport(@PathVariable Long id) {
+    var paymentsReportBy = this.paymentService.generatePaymentsReportBy(id);
+    return ResponseEntity
+        .ok()
+        .header(
+            "Content-Disposition",
+            "attachment; filename=relatorio_venda_pacotes_" + id + ".xlsx")
+        .body(new org.springframework.core.io.ByteArrayResource(paymentsReportBy));
   }
 }

@@ -77,7 +77,6 @@ public interface PaymentsRepository
   @Query("UPDATE payments SET status = :status WHERE transaction_id = :transactionId")
   void updatePaymentStatusByReferenceId(String transactionId, PaymentStatus status);
 
-  // create a query to find all payments by event id
   @Query("""
       select pay.*
       from payments pay
@@ -85,4 +84,12 @@ public interface PaymentsRepository
       where pack.event_id = :eventId
       """)
   List<Payment> findAllByEventId(Long eventId);
+
+  @Query("""
+        select * from packages pack
+           inner join payments pay on pack.id = pay.package_id
+        WHERE pack.event_id = :eventId and status = :status
+      """)
+  List<Payment> findAllByEventIdAndStatus(Long eventId, PaymentStatus status);
+
 }

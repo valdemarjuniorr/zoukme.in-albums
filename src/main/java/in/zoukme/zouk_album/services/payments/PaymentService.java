@@ -1,5 +1,6 @@
 package in.zoukme.zouk_album.services.payments;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -159,7 +160,7 @@ public class PaymentService {
   }
 
   public void inactivate(String transactionId) {
-    var payment = paymentsRepository
+    paymentsRepository
         .findByTransactionId(transactionId)
         .orElseThrow(PaymentNotFoundException::new);
     pagBankService.inactivateCheckout(transactionId);
@@ -169,5 +170,17 @@ public class PaymentService {
 
   public List<Payment> findAllByEventId(Long eventId) {
     return repository.findAllByEventId(eventId);
+  }
+
+  public byte[] generatePaymentsReportBy(Long eventId) {
+    var payments = paymentsRepository.findAllByEventIdAndStatus(eventId, PaymentStatus.PAID);
+    var lines = new StringBuilder();
+    payments.forEach(payment -> {
+      var line = String.format("%s;%s;%s;%s;%s", payment.fullName(), payment.email(), payment.document(),
+          payment.amount(), Objects.nonNull(payment.paymentDate()) ? payment.getDescriptiveDate() : "");
+      lines.append(line);
+    });
+
+    return lines.toString().getBytes(StandardCharsets.UTF_8);
   }
 }

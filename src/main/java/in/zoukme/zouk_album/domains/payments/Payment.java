@@ -49,6 +49,10 @@ public record Payment(
     return DateUtils.getDescriptiveDate(this.paymentDate.toLocalDate());
   }
 
+  public Boolean isStatusPaid() {
+    return PaymentStatus.PAID.equals(this.status);
+  }
+
   public String getShortTransactionId() {
     return transactionId.substring(transactionId.length() - 6);
   }

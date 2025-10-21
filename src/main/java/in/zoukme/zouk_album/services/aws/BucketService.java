@@ -17,8 +17,6 @@ import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.S3Object;
 import java.io.File;
 
-
-
 @Service
 public class BucketService {
 
