@@ -255,6 +255,7 @@
         </div>
       </div>
     </section>
+    <div id="calendario"></div>
     <section class="mb-20 px-2 sm:px-0">
       <h2 class="text-3xl font-bold text-center mb-4">Adicione ao seu calendário</h2>
       <p class="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
@@ -391,28 +392,19 @@
       });
       function generateICSFile() {
         const icsContent = `BEGIN:VCALENDAR
-      VERSION:2.0
-PRODID:-//${eventDetails.title}//${eventDetails.title}//PT
-      BEGIN:VEVENT
-      UID:contato@zoukme.in
-      DTSTAMP:${new Date().toISOString().replace(/[-:]/g, "").split(".")[0]}Z
-      DTSTART:${eventDetails.startDate}Z
-      DTEND:${eventDetails.endDate}Z
-      SUMMARY:${eventDetails.title}
-      DESCRIPTION:${eventDetails.description}
-      LOCATION:${eventDetails.location}
-      BEGIN:VALARM
-      TRIGGER:-P1W
-      ACTION:DISPLAY
-      DESCRIPTION:${eventDetails.description}
-      END:VALARM
-      BEGIN:VALARM
-      TRIGGER:-P1D
-      ACTION:DISPLAY
-      DESCRIPTION:${eventDetails.description}
-      END:VALARM
-      END:VEVENT
-      END:VCALENDAR`;
+VERSION:2.0
+PRODID:-//${eventDetails.title}//${eventDetails.title}//EN
+BEGIN:VEVENT
+UID:contato@zoukme.in
+DTSTAMP:${new Date().toISOString().replace(/[-:]/g, "").split(".")[0]}Z
+DTSTART;TZID=America/Sao_Paulo:${eventDetails.startDate}Z
+DTEND;TZID=America/Sao_Paulo:${eventDetails.endDate}Z
+SUMMARY:${eventDetails.title}
+DESCRIPTION:${eventDetails.description}
+LOCATION:${eventDetails.location}
+STATUS: CONFIRMED
+END:VEVENT
+END:VCALENDAR`;
         const blob = new Blob([icsContent], {
           type: "text/calendar;charset=utf-8",
         });
