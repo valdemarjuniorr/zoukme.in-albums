@@ -268,22 +268,22 @@
           <h3 class="text-xl font-semibold mb-6">Esolha seu calendário</h3>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <button id="addToGoogle"
-              class="flex items-center justify-center px-4 py-3 bg-red-50 hover:bg-red-100 text-red-700 !rounded-button border border-red-200 transition-colors whitespace-nowrap">
+              class="rounded-md flex items-center justify-center px-4 py-3 bg-red-50 hover:bg-red-100 text-red-700 !rounded-button border border-red-200 transition-colors whitespace-nowrap">
               <i class="ri-google-line mr-2"></i>
               Google Calendar
             </button>
             <button id="addToOutlook"
-              class="flex items-center justify-center px-4 py-3 bg-blue-50 hover:bg-blue-100 text-blue-700 !rounded-button border border-blue-200 transition-colors whitespace-nowrap">
+              class="rounded-md flex items-center justify-center px-4 py-3 bg-blue-50 hover:bg-blue-100 text-blue-700 !rounded-button border border-blue-200 transition-colors whitespace-nowrap">
               <i class="ri-microsoft-line mr-2"></i>
               Outlook
             </button>
             <button id="addToApple"
-              class="flex items-center justify-center px-4 py-3 bg-gray-50 hover:bg-gray-100 text-gray-700 !rounded-button border border-gray-200 transition-colors whitespace-nowrap">
+              class="rounded-md flex items-center justify-center px-4 py-3 bg-gray-50 hover:bg-gray-100 text-gray-700 !rounded-button border border-gray-200 transition-colors whitespace-nowrap">
               <i class="ri-apple-line mr-2"></i>
               Apple Calendar
             </button>
             <button id="downloadICS"
-              class="flex items-center justify-center px-4 py-3 bg-green-50 hover:bg-green-100 text-green-700 !rounded-button border border-green-200 transition-colors whitespace-nowrap">
+              class="rounded-md flex items-center justify-center px-4 py-3 bg-green-50 hover:bg-green-100 text-green-700 !rounded-button border border-green-200 transition-colors whitespace-nowrap">
               <i class="ri-download-line mr-2"></i>
               Download .ics
             </button>
@@ -301,8 +301,8 @@
     </section>
     <a href="#pacotes"></a>
     <section id="pacotes" class="mb-20" th:if="${(packages != null and !#lists.isEmpty(packages))}">
-      <h2 class="text-3xl font-bold text-center mb-4">Escolha a sua experiência</h2>
-      <p class="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
+      <h2 class="text-3xl font-bold text-center mb-4 px-4 sm:px-0">Escolha a sua experiência</h2>
+      <p class="text-gray-600 text-center mb-12 max-w-2xl mx-auto px-4 sm:px-0">
         Escolha o pacote perfeito que combina com a sua jornada de dança.
         Se você está aqui para as festas ou quer a experiência completa do evento.
       </p>
