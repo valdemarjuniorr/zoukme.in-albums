@@ -1,7 +1,7 @@
 clients:
   pagbank:
     base-url: https://api.pagseguro.com
-    token: ${PAGBANK_TOKEN}
+    token: ${SANDBOX_PAGBANK_TOKEN}
 
 server:
   compression:
@@ -9,7 +9,7 @@ server:
     mime-types: text/html,text/xml,text/plain,text/css,text/javascript,application/javascript,application/json
   http2:
     enabled: true
-  port: 443
+  port: 8443
   ssl:
     key-store: classpath:ssl/keystore.p12
     key-store-password: ${KEY_STORE_PASSWORD}

@@ -255,6 +255,49 @@
         </div>
       </div>
     </section>
+    <section class="mb-20 px-2 sm:px-0">
+      <h2 class="text-3xl font-bold text-center mb-4">Adicione ao seu calendário</h2>
+      <p class="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
+        Não perca o <span class="font-bold" th:text="${event.title}" />! Adicione esse evento ao seu calendário favorito
+        com apenas um
+        clique.
+      </p>
+      <div class="bg-white rounded-xl p-8 shadow-lg max-w-2xl mx-auto">
+        <div class="text-center">
+          <h3 class="text-xl font-semibold mb-6">Esolha seu calendário</h3>
+          <div class="grid grid-cols-2 gap-3">
+            <button id="addToGoogle"
+              class="flex items-center justify-center px-4 py-3 bg-red-50 hover:bg-red-100 text-red-700 !rounded-button border border-red-200 transition-colors whitespace-nowrap">
+              <i class="ri-google-line mr-2"></i>
+              Google Calendar
+            </button>
+            <button id="addToOutlook"
+              class="flex items-center justify-center px-4 py-3 bg-blue-50 hover:bg-blue-100 text-blue-700 !rounded-button border border-blue-200 transition-colors whitespace-nowrap">
+              <i class="ri-microsoft-line mr-2"></i>
+              Outlook
+            </button>
+            <button id="addToApple"
+              class="flex items-center justify-center px-4 py-3 bg-gray-50 hover:bg-gray-100 text-gray-700 !rounded-button border border-gray-200 transition-colors whitespace-nowrap">
+              <i class="ri-apple-line mr-2"></i>
+              Apple Calendar
+            </button>
+            <button id="downloadICS"
+              class="flex items-center justify-center px-4 py-3 bg-green-50 hover:bg-green-100 text-green-700 !rounded-button border border-green-200 transition-colors whitespace-nowrap">
+              <i class="ri-download-line mr-2"></i>
+              Download .ics
+            </button>
+          </div>
+          <div class="mt-6 p-4 bg-primary/5 rounded-lg">
+            <p class="text-sm text-primary font-medium mb-2 font-bold">
+              <i class="ri-lightbulb-line mr-1"></i>
+              <span class="font-bold">Fica a dica!</span>
+            </p>
+            <p class="text-sm text-gray-600">Ative notificações para ser lembrado uma semana e um dia antes do evento —
+              assim você não perde nada!</p>
+          </div>
+        </div>
+      </div>
+    </section>
     <a href="#pacotes"></a>
     <section id="pacotes" class="mb-20" th:if="${(packages != null and !#lists.isEmpty(packages))}">
       <h2 class="text-3xl font-bold text-center mb-4">Escolha a sua experiência</h2>
@@ -316,6 +359,72 @@
       </div>
     </section>
   </main>
+  <script id="calendarScript" th:inline="javascript">
+    /*<![CDATA[*/
+    document.addEventListener("DOMContentLoaded", function () {
+      const eventDetails = {
+        title: /*[[${event.title}]]*/,
+        startDate: /*[['' + ${#temporals.format(event.date, 'yyyyMMdd')} + 'T180000']]*/,
+        endDate: /*[['' + ${#temporals.format(event.date, 'yyyyMMdd')} + 'T230000']]*/,
+        defaultStartDate: /*[['' + ${#temporals.format(event.date, 'yyyy-MM-dd')} + 'T18:00:00-03:00']]*/,
+        defaultEndDate: /*[['' + ${#temporals.format(event.date, 'yyyy-MM-dd')} + 'T23:00:00-03:00']]*/,
+        location: /*[[${event.location}]]*/,
+        eventUrl: /*[[${event.eventUrl}]]*/,
+        description:
+          [[${event.description}]] + " - Mais informações em: https://zoukme.in/events/" + [[${event.eventUrl}]]
+      };
+      document.getElementById("addToGoogle").addEventListener("click", function () {
+        const googleUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(eventDetails.title)}&dates=${eventDetails.startDate}/${eventDetails.endDate}&location=${encodeURIComponent(eventDetails.location)}&details=${encodeURIComponent(eventDetails.description)}`;
+        window.open(googleUrl, "_blank");
+      });
+      document
+        .getElementById("addToOutlook")
+        .addEventListener("click", function () {
+          const outlookUrl = `https://outlook.live.com/calendar/0/deeplink/compose?subject=${encodeURIComponent(eventDetails.title)}&startdt=${eventDetails.defaultStartDate}&enddt=${eventDetails.defaultEndDate}&location=${encodeURIComponent(eventDetails.location)}&body=${encodeURIComponent(eventDetails.description)}`;
+          window.open(outlookUrl, "_blank");
+        });
+      document.getElementById("addToApple").addEventListener("click", function () {
+        generateICSFile();
+      });
+      document.getElementById("downloadICS").addEventListener("click", function () {
+        generateICSFile();
+      });
+      function generateICSFile() {
+        const icsContent = `BEGIN:VCALENDAR
+      VERSION:2.0
+PRODID:-//${eventDetails.title}//${eventDetails.title}//PT
+      BEGIN:VEVENT
+      UID:contato@zoukme.in
+      DTSTAMP:${new Date().toISOString().replace(/[-:]/g, "").split(".")[0]}Z
+      DTSTART:${eventDetails.startDate}Z
+      DTEND:${eventDetails.endDate}Z
+      SUMMARY:${eventDetails.title}
+      DESCRIPTION:${eventDetails.description}
+      LOCATION:${eventDetails.location}
+      BEGIN:VALARM
+      TRIGGER:-P1W
+      ACTION:DISPLAY
+      DESCRIPTION:${eventDetails.description}
+      END:VALARM
+      BEGIN:VALARM
+      TRIGGER:-P1D
+      ACTION:DISPLAY
+      DESCRIPTION:${eventDetails.description}
+      END:VALARM
+      END:VEVENT
+      END:VCALENDAR`;
+        const blob = new Blob([icsContent], {
+          type: "text/calendar;charset=utf-8",
+        });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = `${eventDetails.eventUrl}.ics`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+    });
+  </script>
   <script th:inline="javascript">
     /*<![CDATA[*/
     document.addEventListener("DOMContentLoaded", function () {
