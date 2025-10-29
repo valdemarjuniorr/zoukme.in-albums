@@ -48,10 +48,10 @@
       </div>
     </div>
     <hr class="my-2 border-gray-300">
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
-      <div th:each="photo : ${photos.content}" class="bg-white p-2 rounded-lg shadow-md">
-        <div class="image-container relative rounded-lg overflow-hidden shadow-sm group">
-          <img th:src="${photo.imagePath}" class="w-full h-auto rounded-lg"
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1">
+      <div th:each="photo : ${photos.content}">
+        <div class="image-container relative rounded-md overflow-hidden shadow-sm group">
+          <img th:src="${photo.imagePath}" class="w-full h-auto rounded-md"
             th:onclick="@{openModal({photoId})(photoId=${photo.id})}">
           <div th:if="${authentication != null}">
             <!-- change cover image section -->
@@ -130,10 +130,10 @@
   </main>
   <!-- Scroll to top button: top right OUTSIDE of footer, responsive -->
   <button id="scroll-to-top"
-    class="fixed z-[60] right-6 bottom-[110px] w-10 h-10 sm:w-12 sm:h-12 bg-red-500 hover:bg-red-600 text-white rounded-full shadow-lg hover:shadow-xl flex items-center justify-center transition-all duration-300 ease-in-out opacity-80 hover:opacity-90"
+    class="fixed z-[60] right-6 bottom-[110px] w-6 h-6 sm:w-8 sm:h-8 bg-red-500 hover:bg-red-600 text-white rounded-full shadow-lg hover:shadow-xl flex items-center justify-center transition-all duration-300 ease-in-out opacity-80 hover:opacity-90"
     style="transform: translateY(16px); opacity: 0;">
-    <div class="w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center">
-      <i class="ri-arrow-up-line text-lg"></i>
+    <div class="w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center">
+      <i class="ri-arrow-up-s-line"></i>
     </div>
   </button>
   <!-- footer -->
@@ -155,7 +155,7 @@
           </div>
         </div>
         <a href="/learnmore"
-          class="bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 whitespace-nowrap relative z-10 inline-flex items-center justify-center">
+          class="bg-white/20 hover:bg-white/30 text-white px-3 py-1 rounded-full text-xs font-medium transition-all duration-200 whitespace-nowrap relative z-10 inline-flex items-center justify-center">
           Saiba mais
         </a>
       </div>

@@ -35,10 +35,10 @@
         </div>
       </div>
     </div>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2">
       <a th:each="subEvents : ${event.subEvents}"
         th:href="@{/events/{eventUrl}/albums/{subEventName}(eventUrl=${event.event.eventUrl}, subEventName=${subEvents.name})}"
-        class="folder-card bg-white rounded-lg shadow-sm overflow-hidden transition-all duration-300">
+        class="folder-card bg-white rounded-md shadow-sm overflow-hidden transition-all duration-300">
         <div class="relative aspect- overflow-hidden">
           <img th:src="${subEvents.coverUrl != null ? subEvents.coverUrl: '/album-image.jpg'}"
             class="w-full h-full object-cover object-top" />
