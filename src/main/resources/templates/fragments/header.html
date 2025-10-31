@@ -1,9 +1,15 @@
 <head>
   <!-- Google AdSense -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5194570866016381"
-    crossorigin="anonymous"></script>
+  <script
+    async
+    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5194570866016381"
+    crossorigin="anonymous"
+  ></script>
   <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZTLEWPD9HY"></script>
+  <script
+    async
+    src="https://www.googletagmanager.com/gtag/js?id=G-ZTLEWPD9HY"
+  ></script>
   <script>
     window.dataLayer = window.dataLayer || [];
 
@@ -11,38 +17,68 @@
       dataLayer.push(arguments);
     }
 
-    gtag('js', new Date());
-    gtag('config', 'G-ZTLEWPD9HY');
+    gtag("js", new Date());
+    gtag("config", "G-ZTLEWPD9HY");
   </script>
-  <link href="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.snow.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css?family=Pacifico|Montserrat|Poppins" rel="stylesheet">
-  <link rel="icon" type="image/png" href="/favicon.ico">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.2/jquery.modal.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
-  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+  <link
+    href="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.snow.css"
+    rel="stylesheet"
+  />
+  <link
+    href="https://fonts.googleapis.com/css?family=Pacifico|Montserrat|Poppins"
+    rel="stylesheet"
+  />
+  <link rel="icon" type="image/png" href="/favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.2/jquery.modal.min.css"
+  />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css"
+  />
+  <link
+    rel="stylesheet"
+    type="text/css"
+    href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"
+  />
 
-  <meta charset="UTF-8">
-  <meta name="description" th:content="${seo?.description} ?: 'Veja todas as fotos das coberturas dos nossos eventos'">
-  <meta name="keywords" content="zouk,zouk brasileiro,samba,dança de salão,dançar,bailes,congressos de dança de salão">
-  <meta name="author" content="Zouk Me In">
-  <meta name="robots" content="index, follow">
-  <meta name="language" content="pt-BR">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta property="og:description"
-    th:content="${seo?.description} ?: 'Veja todas as fotos das coberturas dos nossos eventos'">
-  <meta property="og:image" th:content="${seo?.imageUrl} ?: 'https://zoukme.in/logo-dark.png'">
-  <meta property="og:locale" content="pt_BR">
-  <meta property="og:title" content="Zoukme In">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://zoukme.in/">
-  <meta property="og:site_name" content="Zouk Me In">
+  <meta charset="UTF-8" />
+  <meta
+    name="description"
+    th:content="${seo?.description} ?: 'Veja todas as fotos das coberturas dos nossos eventos'"
+  />
+  <meta
+    name="keywords"
+    content="zouk,zouk brasileiro,samba,dança de salão,dançar,bailes,congressos de dança de salão"
+  />
+  <meta name="author" content="Zouk Me In" />
+  <meta name="robots" content="index, follow" />
+  <meta name="language" content="pt-BR" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta
+    property="og:description"
+    th:content="${seo?.description} ?: 'Veja todas as fotos das coberturas dos nossos eventos'"
+  />
+  <meta
+    property="og:image"
+    th:content="${seo?.imageUrl} ?: 'https://zoukme.in/logo-dark.png'"
+  />
+  <meta property="og:locale" content="pt_BR" />
+  <meta property="og:title" content="Zoukme In" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://zoukme.in/" />
+  <meta property="og:site_name" content="Zouk Me In" />
 
   <!-- Include the Quill library -->
   <script src="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://kit.fontawesome.com/b431e00b38.js" crossorigin="anonymous"></script>
+  <script
+    src="https://kit.fontawesome.com/b431e00b38.js"
+    crossorigin="anonymous"
+  ></script>
   <script src="https://unpkg.com/htmx.org@2.0.6/dist/htmx.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/cleave.js@1.6.0/dist/cleave-phone.br.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/cleave.js@1.6.0/dist/cleave.min.js"></script>
@@ -50,7 +86,7 @@
     tailwind.config = {
       theme: {
         extend: {
-          colors: {primary: "#e94057", secondary: "#8a2be2"},
+          colors: { primary: "#e94057", secondary: "#8a2be2" },
           borderRadius: {
             none: "0px",
             sm: "4px",
@@ -72,5 +108,32 @@
       scroll-behavior: smooth;
     }
   </style>
-  <title th:text="${seo?.title} ? 'Zouk Me In - ' + ${seo.title} : 'Zouk Me In'">Zouk Me In</title>
+  <title
+    th:text="${seo?.title} ? 'Zouk Me In - ' + ${seo.title} : 'Zouk Me In'"
+  >
+    Zouk Me In
+  </title>
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Zouk Me In",
+      "url": "https://www.zoukme.in",
+      "logo": "https://www.flamencoemjoinville.com.br/logo.png",
+      "image": "https://www.flamencoemjoinville.com.br/capa.jpg",
+      "description": "Veja todas as fotos das coberturas dos nossos eventos de zouk e dança de salão.",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+55 47 988594002",
+        "contactType": "Informações gerais",
+        "areaServed": "BR",
+        "availableLanguage": ["Portuguese"]
+      },
+      "sameAs": [
+        "https://www.instagram.com/zoukme.in",
+        "https://www.instagram.com/vjrfotografia",
+        "https://www.instagram.com/valdemarjuniorr"
+      ]
+    }
+  </script>
 </head>
