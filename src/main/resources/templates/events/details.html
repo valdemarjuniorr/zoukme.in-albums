@@ -1,457 +1,559 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+  <head>
+    <!-- Google tag (gtag.js) -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-ZTLEWPD9HY"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
 
-<head>
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZTLEWPD9HY"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
 
-    function gtag() {
-      dataLayer.push(arguments);
-    }
+      gtag("js", new Date());
+      gtag("config", "G-ZTLEWPD9HY");
+    </script>
+    <!-- Include the Quill library -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.snow.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Pacifico|Montserrat|Poppins"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css"
+    />
+    <meta charset="UTF-8" />
+    <meta name="description" th:content="${event.description}" />
+    <meta
+      name="keywords"
+      th:content="'zouk,zouk brasileiro,samba,dança de salão,dançar,bailes,congressos de dança de salão,' + ${event.title}"
+    />
+    <meta name="author" content="Zouk Me In" />
+    <meta name="robots" content="index, follow" />
+    <meta name="language" content="pt-BR" />
 
-    gtag('js', new Date());
-    gtag('config', 'G-ZTLEWPD9HY');
-  </script>
-  <!-- Include the Quill library -->
-  <link href="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.snow.css" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css?family=Pacifico|Montserrat|Poppins" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css" />
-  <meta charset="UTF-8">
-  <meta name="description" th:content="${event.description}" />
-  <meta name="keywords"
-    th:content="'zouk,zouk brasileiro,samba,dança de salão,dançar,bailes,congressos de dança de salão,' + ${event.title}">
-  <meta name="author" content="Zouk Me In">
-  <meta name="robots" content="index, follow">
-  <meta name="language" content="pt-BR">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta property="og:type" content="website" />
+    <meta property="og:description" th:content="${event.description}" />
+    <meta property="og:image" th:content="${event.coverUrl}" />
+    <meta property="og:title" th:content="'Zoukme In - ' + ${event.title}" />
+    <meta property="og:url" content="https://zoukme.in/" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:site_name" content="Zouk Me In" />
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta property="og:type" content="website">
-  <meta property="og:description" th:content="${event.description}" />
-  <meta property="og:image" th:content="${event.coverUrl}" />
-  <meta property="og:title" th:content="'Zoukme In - ' + ${event.title}" />
-  <meta property="og:url" content="https://zoukme.in/" />
-  <meta property="og:locale" content="pt_BR">
-  <meta property="og:site_name" content="Zouk Me In">
-
-  <script src="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.js"></script>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://kit.fontawesome.com/b431e00b38.js" crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/htmx.org@2.0.4/dist/htmx.min.js"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {primary: "#e94057", secondary: "#8a2be2"},
+    <script src="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script
+      src="https://kit.fontawesome.com/b431e00b38.js"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://unpkg.com/htmx.org@2.0.4/dist/htmx.min.js"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: { primary: "#e94057", secondary: "#8a2be2" },
+          },
         },
-      },
-    };
-  </script>
-  <style>
-    :where([class^="ri-"])::before {
-      content: "\f3c2";
-    }
+      };
+    </script>
+    <style>
+      :where([class^="ri-"])::before {
+        content: "\f3c2";
+      }
 
-    body {
-      font-family: 'Montserrat', sans-serif;
-    }
+      body {
+        font-family: "Montserrat", sans-serif;
+      }
 
-    .countdown-item {
-      position: relative;
-    }
+      .countdown-item {
+        position: relative;
+      }
 
-    .countdown-item:not(:last-child):after {
-      content: ":";
-      position: absolute;
-      right: -5px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 2rem;
-      font-weight: 700;
-      color: white;
-    }
+      .countdown-item:not(:last-child):after {
+        content: ":";
+        position: absolute;
+        right: -5px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 2rem;
+        font-weight: 700;
+        color: white;
+      }
 
-    .gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1rem;
-    }
-
-    .gallery-item {
-      position: relative;
-      overflow: hidden;
-      border-radius: 8px;
-      height: 0;
-      padding-bottom: 100%;
-    }
-
-    .gallery-item img {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.3s ease;
-    }
-
-    .gallery-item:hover img {
-      transform: scale(1.05);
-    }
-
-    .social-icons {
-      position: fixed;
-      right: 1.5rem;
-      top: 50%;
-      transform: translateY(-50%);
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      z-index: 50;
-    }
-
-    .social-icon {
-      width: 3rem;
-      height: 3rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: white;
-      border-radius: 50%;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .social-icon:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-    }
-
-    @media (max-width: 768px) {
       .gallery-grid {
-        grid-template-columns: repeat(1, 1fr);
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+      }
+
+      .gallery-item {
+        position: relative;
+        overflow: hidden;
+        border-radius: 8px;
+        height: 0;
+        padding-bottom: 100%;
+      }
+
+      .gallery-item img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+      }
+
+      .gallery-item:hover img {
+        transform: scale(1.05);
       }
 
       .social-icons {
-        position: static;
-        flex-direction: row;
+        position: fixed;
+        right: 1.5rem;
+        top: 50%;
+        transform: translateY(-50%);
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        z-index: 50;
+      }
+
+      .social-icon {
+        width: 3rem;
+        height: 3rem;
+        display: flex;
+        align-items: center;
         justify-content: center;
-        transform: none;
-        margin: 1.5rem 0;
+        background: white;
+        border-radius: 50%;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transition:
+          transform 0.3s ease,
+          box-shadow 0.3s ease;
       }
-    }
-  </style>
-  <title th:text="${event.title} + ' - Zouk Me In'"></title>
-</head>
 
-<body class="bg-gray-50">
-  <div th:insert="~{fragments/top :: top}"></div>
-  <header class="container mx-auto px-4 py-14">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
-      <div class="text-center md:text-left">
-        <h1 th:text="${event.title}" class="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
-        </h1>
-        <div class="text-xl text-gray-600 mb-8 space-y-2">
-          <div><i class="ri-calendar-line mr-2"></i><span th:text="${event.descriptiveDate}" /></div>
-          <div><i class="ri-map-pin-line mr-2"></i><span th:text="${event.location}" /></div>
-        </div>
-        <div class="grid grid-cols-4 gap-4 mb-8 max-w-lg">
-          <div class="countdown-item bg-primary/5 px-3 py-4 rounded-lg">
-            <div class="text-2xl md:text-3xl font-bold text-primary" id="days">
-            </div>
-            <div class="text-xs text-gray-600 uppercase tracking-wider">
-              Days
-            </div>
-          </div>
-          <div class="countdown-item bg-primary/5 px-3 py-4 rounded-lg">
-            <div class="text-2xl md:text-3xl font-bold text-primary" id="hours">
-            </div>
-            <div class="text-xs text-gray-600 uppercase tracking-wider">
-              Horas
-            </div>
-          </div>
-          <div class="countdown-item bg-primary/5 px-3 py-4 rounded-lg">
-            <div class="text-2xl md:text-3xl font-bold text-primary" id="minutes">
-            </div>
-            <div class="text-xs text-gray-600 uppercase tracking-wider">
-              Minutos
-            </div>
-          </div>
-          <div class="countdown-item bg-primary/5 px-3 py-4 rounded-lg">
-            <div class="text-2xl md:text-3xl font-bold text-primary" id="seconds">
-            </div>
-            <div class="text-xs text-gray-600 uppercase tracking-wider">
-              Segundos
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="w-full rounded-lg overflow-hidden shadow-lg">
-        <img th:src="${event.coverUrl}" th:alt="${event.title}" class="w-full h-full object-cover" />
-      </div>
-    </div>
-  </header>
-  <main class="container mx-auto">
-    <section>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-12 p-4">
-        <div th:if="${event.details == null}"></div> <!-- Placeholder for when there are no details -->
-        <div th:if="${event.details != null}">
-          <h2 class="text-3xl font-bold mb-6">Sobre o evento</h2>
-          <div class="prose max-w-none">
-            <div id="editor-readonly" class="text-gray-600 mt-4">
-              <div id="editor" class="text-gray-600 mt-4 font-['Montserrat'] text-base"></div>
-            </div>
-            <!-- Initialize Quill editor -->
-            <script th:inline="javascript">
-              /*<![CDATA[*/
-              const quill = new Quill("#editor", {
-                theme: 'snow',
-                readOnly: true,
-                modules: {
-                  toolbar: false
-                }
-              });
-              quill.setContents(/*[(${event.details})]*/);
-
-              /*]]>*/
-            </script>
-            <style>
-              .ql-container.ql-snow {
-                border: none !important;
-              }
-            </style>
-          </div>
-        </div>
-        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
-          <h3 class="text-xl font-semibold mb-4">Detalhes</h3>
-          <div th:if="${event.details != null && event.details != ''}" class="flex items-start mb-4">
-            <div class="w-10 h-10 flex items-center justify-center bg-primary/10 rounded-full mr-4">
-              <i class="ri-file-text-line text-primary ri-lg"></i>
-            </div>
-            <div>
-              <h4 class="font-medium">Descrição</h4>
-              <p th:text="${event.description}" class="text-gray-600"></p>
-            </div>
-          </div>
-          <div class="flex items-start mb-4">
-            <div class="w-10 h-10 flex items-center justify-center bg-primary/10 rounded-full mr-4">
-              <i class="ri-calendar-line text-primary ri-lg"></i>
-            </div>
-            <div>
-              <h4 class="font-medium">Data</h4>
-              <p th:text="${event.descriptiveDate}" class="text-gray-600"></p>
-            </div>
-          </div>
-          <div class="flex items-start mb-4">
-            <div class="w-10 h-10 flex items-center justify-center bg-primary/10 rounded-full mr-4">
-              <i class="ri-map-pin-line text-primary ri-lg"></i>
-            </div>
-            <div>
-              <h4 class="font-medium">Endereço</h4>
-              <p th:text="${event.location}" class="text-gray-600"></p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    <div id="calendario"></div>
-    <section class="mb-20 px-2 sm:px-0">
-      <h2 class="text-3xl font-bold text-center mb-4">Adicione ao seu calendário</h2>
-      <p class="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-        Não perca o <span class="font-bold" th:text="${event.title}" />! Adicione esse evento ao seu calendário favorito
-        com apenas um
-        clique.
-      </p>
-      <div class="bg-white rounded-xl p-8 shadow-lg max-w-2xl mx-auto">
-        <div class="text-center">
-          <h3 class="text-xl font-semibold mb-6">Esolha seu calendário</h3>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <button id="addToGoogle"
-              class="rounded-md flex items-center justify-center px-4 py-3 bg-red-50 hover:bg-red-100 text-red-700 !rounded-button border border-red-200 transition-colors whitespace-nowrap">
-              <i class="ri-google-line mr-2"></i>
-              Google Calendar
-            </button>
-            <button id="addToOutlook"
-              class="rounded-md flex items-center justify-center px-4 py-3 bg-blue-50 hover:bg-blue-100 text-blue-700 !rounded-button border border-blue-200 transition-colors whitespace-nowrap">
-              <i class="ri-microsoft-line mr-2"></i>
-              Outlook
-            </button>
-            <button id="addToApple"
-              class="rounded-md flex items-center justify-center px-4 py-3 bg-gray-50 hover:bg-gray-100 text-gray-700 !rounded-button border border-gray-200 transition-colors whitespace-nowrap">
-              <i class="ri-apple-line mr-2"></i>
-              Apple Calendar
-            </button>
-            <button id="downloadICS"
-              class="rounded-md flex items-center justify-center px-4 py-3 bg-green-50 hover:bg-green-100 text-green-700 !rounded-button border border-green-200 transition-colors whitespace-nowrap">
-              <i class="ri-download-line mr-2"></i>
-              Download .ics
-            </button>
-          </div>
-          <div class="mt-6 p-4 bg-primary/5 rounded-lg">
-            <p class="text-sm text-primary font-medium mb-2 font-bold">
-              <i class="ri-lightbulb-line mr-1"></i>
-              <span class="font-bold">Fica a dica!</span>
-            </p>
-            <p class="text-sm text-gray-600">Ative notificações para ser lembrado uma semana e um dia antes do evento —
-              assim você não perde nada!</p>
-          </div>
-        </div>
-      </div>
-    </section>
-    <a href="#pacotes"></a>
-    <section id="pacotes" class="mb-20" th:if="${(packages != null and !#lists.isEmpty(packages))}">
-      <h2 class="text-3xl font-bold text-center mb-4 px-4 sm:px-0">Escolha a sua experiência</h2>
-      <p class="text-gray-600 text-center mb-12 max-w-2xl mx-auto px-4 sm:px-0">
-        Escolha o pacote perfeito que combina com a sua jornada de dança.
-        Se você está aqui para as festas ou quer a experiência completa do evento.
-      </p>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-        <div th:if="${event.comingUp}" th:each="pack : ${packages}"
-          class="bg-white rounded-xl p-8 shadow-lg hover:shadow-xl transition-shadow border border-gray-100 gap-12 m-4">
-          <div class="flex items-center justify-between mb-4">
-            <h3 th:text="${pack.title}" class="text-2xl font-bold"></h3>
-            <div class="w-12 h-12 flex items-center justify-center bg-primary/10 rounded-full">
-              <i class="ri-award-line text-primary ri-lg"></i>
-            </div>
-          </div>
-          <p th:text="${pack.description}" class="text-gray-600 mb-6"></p>
-          <div class="flex items-baseline mb-6">
-            <!-- Assuming price is a number, format it to Brazilian currency -->
-            <span class="text-3xl font-bold text-primary">
-              R$ <span th:text="${#numbers.formatDecimal(pack.price, 1, 2, 'COMMA')}"></span>
-            </span>
-            <span class="text-gray-500 ml-2">/ pessoa</span>
-          </div>
-          <a th:href="@{/packages?packId={packageId}(packageId=${pack.id})}"
-            class="block text-center cursor-pointer w-full bg-primary hover:bg-primary/90 text-white py-3 !rounded-button font-semibold whitespace-nowrap transition-all">
-            Adquirir agora
-          </a>
-        </div>
-      </div>
-      <div id="happening-event" th:if="${!event.comingUp}"
-        class="max-w-3xl mx-auto text-center bg-yellow-50 border border-yellow-200 rounded-xl p-4 mx-2 md:mx-auto">
-        <div class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
-          <i class="ri-timer-line text-yellow-600 text-2xl"></i>
-        </div>
-        <h2 class="text-2xl font-bold text-yellow-800 mb-3">Evento em andamento ou finalizado!</h2>
-        <p class="text-yellow-700">
-          Os pacotes para este evento não estão mais disponíveis para compra.
-        </p>
-      </div>
-    </section>
-    <div class="social-icons">
-      <a th:href="'https://wa.me/+55' + ${event.phoneNumber} + '?text=Olá, vim do zoukme.in e gostaria de saber mais informações sobre o *' + ${event.title} + '*. Consegue me ajudar?'"
-        target="_blank" class="social-icon">
-        <i class="ri-whatsapp-line text-green-500 ri-lg"></i>
-      </a>
-      <a th:href="'https://www.instagram.com/' + ${event.instagram}" target="_blank" class="social-icon">
-        <i class="ri-instagram-line text-primary ri-lg"></i>
-      </a>
-    </div>
-    <section id="eventos-anteriores" class="mb-20 p-4" th:if="${event.imagePath().size() > 0}">
-      <a href="#eventos-anteriores">
-        <h2 class="text-3xl font-bold mb-8">Eventos anteriores</h2>
-      </a>
-      <div class="gallery-grid">
-        <div th:each="photo : ${event.imagePath}" class="gallery-item">
-          <img th:src="${photo}" th:alt="${event.title}" />
-        </div>
-      </div>
-    </section>
-  </main>
-  <script id="calendarScript" th:inline="javascript">
-    /*<![CDATA[*/
-    document.addEventListener("DOMContentLoaded", function () {
-      const eventDetails = {
-        title: /*[[${event.title}]]*/,
-        startDate: /*[['' + ${#temporals.format(event.date, 'yyyyMMdd')} + 'T180000']]*/,
-        endDate: /*[['' + ${#temporals.format(event.date, 'yyyyMMdd')} + 'T230000']]*/,
-        defaultStartDate: /*[['' + ${#temporals.format(event.date, 'yyyy-MM-dd')} + 'T18:00:00-03:00']]*/,
-        defaultEndDate: /*[['' + ${#temporals.format(event.date, 'yyyy-MM-dd')} + 'T23:00:00-03:00']]*/,
-        location: /*[[${event.location}]]*/,
-        eventUrl: /*[[${event.eventUrl}]]*/,
-        description:
-          [[${event.description}]] + " - Mais informações em: https://zoukme.in/events/" + [[${event.eventUrl}]]
-      };
-      document.getElementById("addToGoogle").addEventListener("click", function () {
-        const googleUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(eventDetails.title)}&dates=${eventDetails.startDate}/${eventDetails.endDate}&location=${encodeURIComponent(eventDetails.location)}&details=${encodeURIComponent(eventDetails.description)}`;
-        window.open(googleUrl, "_blank");
-      });
-      document
-        .getElementById("addToOutlook")
-        .addEventListener("click", function () {
-          const outlookUrl = `https://outlook.live.com/calendar/0/deeplink/compose?subject=${encodeURIComponent(eventDetails.title)}&startdt=${eventDetails.defaultStartDate}&enddt=${eventDetails.defaultEndDate}&location=${encodeURIComponent(eventDetails.location)}&body=${encodeURIComponent(eventDetails.description)}`;
-          window.open(outlookUrl, "_blank");
-        });
-      document.getElementById("addToApple").addEventListener("click", function () {
-        generateICSFile();
-      });
-      document.getElementById("downloadICS").addEventListener("click", function () {
-        generateICSFile();
-      });
-      function generateICSFile() {
-        const icsContent = `BEGIN:VCALENDAR
-VERSION:2.0
-PRODID:-//${eventDetails.title}//${eventDetails.title}//EN
-BEGIN:VEVENT
-UID:contato@zoukme.in
-DTSTAMP:${new Date().toISOString().replace(/[-:]/g, "").split(".")[0]}Z
-DTSTART;TZID=America/Sao_Paulo:${eventDetails.startDate}Z
-DTEND;TZID=America/Sao_Paulo:${eventDetails.endDate}Z
-SUMMARY:${eventDetails.title}
-DESCRIPTION:${eventDetails.description}
-LOCATION:${eventDetails.location}
-STATUS: CONFIRMED
-END:VEVENT
-END:VCALENDAR`;
-        const blob = new Blob([icsContent], {
-          type: "text/calendar;charset=utf-8",
-        });
-        const link = document.createElement("a");
-        link.href = URL.createObjectURL(blob);
-        link.download = `${eventDetails.eventUrl}.ics`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+      .social-icon:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
       }
-    });
-  </script>
-  <script th:inline="javascript">
-    /*<![CDATA[*/
-    document.addEventListener("DOMContentLoaded", function () {
-      // Set the date we're counting down to
-      var countDownDate = new Date(/*[[${event.date}]]*/); // This is a Date object
-      countDownDate.setHours(countDownDate.getHours() + 3); // Add 3 hours
-      // Update the countdown every 1 second
-      const x = setInterval(function () {
-        // Get today's date and time
-        const now = new Date().getTime();
-        // Find the distance between now and the count down date
-        const distance = countDownDate - now;
-        // Time calculations for days, hours, minutes and seconds
-        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-        // Display the result
-        document.getElementById("days").innerText = days;
-        document.getElementById("hours").innerText = hours;
-        document.getElementById("minutes").innerText = minutes;
-        document.getElementById("seconds").innerText = seconds;
-        // If the count down is finished, write some text
-        if (distance < 0) {
-          clearInterval(x);
-          document.getElementById("days").innerText = "0";
-          document.getElementById("hours").innerText = "0";
-          document.getElementById("minutes").innerText = "0";
-          document.getElementById("seconds").innerText = "0";
+
+      @media (max-width: 768px) {
+        .gallery-grid {
+          grid-template-columns: repeat(1, 1fr);
         }
-      }, 1000);
-    });
-  </script>
 
-  <div th:insert="~{fragments/footer :: footer}"></div>
-</body>
+        .social-icons {
+          position: static;
+          flex-direction: row;
+          justify-content: center;
+          transform: none;
+          margin: 1.5rem 0;
+        }
+      }
+    </style>
+    <title th:text="${event.title} + ' - Zouk Me In'"></title>
+  </head>
 
+  <body class="bg-gray-50">
+    <div th:insert="~{fragments/top :: top}"></div>
+    <header class="container mx-auto px-4 py-14">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+        <div class="text-center md:text-left">
+          <h1
+            th:text="${event.title}"
+            class="text-4xl md:text-6xl font-bold text-gray-900 mb-6"
+          ></h1>
+          <div class="text-xl text-gray-600 mb-8 space-y-2">
+            <div>
+              <i class="ri-calendar-line mr-2"></i
+              ><span th:text="${event.descriptiveDate}" />
+            </div>
+            <div>
+              <i class="ri-map-pin-line mr-2"></i
+              ><span th:text="${event.location}" />
+            </div>
+          </div>
+          <div class="grid grid-cols-4 gap-4 mb-8 max-w-lg">
+            <div class="countdown-item bg-primary/5 px-3 py-4 rounded-lg">
+              <div
+                class="text-2xl md:text-3xl font-bold text-primary"
+                id="days"
+              ></div>
+              <div class="text-xs text-gray-600 uppercase tracking-wider">
+                Days
+              </div>
+            </div>
+            <div class="countdown-item bg-primary/5 px-3 py-4 rounded-lg">
+              <div
+                class="text-2xl md:text-3xl font-bold text-primary"
+                id="hours"
+              ></div>
+              <div class="text-xs text-gray-600 uppercase tracking-wider">
+                Horas
+              </div>
+            </div>
+            <div class="countdown-item bg-primary/5 px-3 py-4 rounded-lg">
+              <div
+                class="text-2xl md:text-3xl font-bold text-primary"
+                id="minutes"
+              ></div>
+              <div class="text-xs text-gray-600 uppercase tracking-wider">
+                Minutos
+              </div>
+            </div>
+            <div class="countdown-item bg-primary/5 px-3 py-4 rounded-lg">
+              <div
+                class="text-2xl md:text-3xl font-bold text-primary"
+                id="seconds"
+              ></div>
+              <div class="text-xs text-gray-600 uppercase tracking-wider">
+                Segundos
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="w-full rounded-lg overflow-hidden shadow-lg">
+          <img
+            th:src="${event.coverUrl}"
+            th:alt="${event.title}"
+            class="w-full h-full object-cover"
+          />
+        </div>
+      </div>
+    </header>
+    <main class="container mx-auto">
+      <section>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 p-4">
+          <div th:if="${event.details == null}"></div>
+          <!-- Placeholder for when there are no details -->
+          <div th:if="${event.details != null}">
+            <h2 class="text-3xl font-bold mb-6">Sobre o evento</h2>
+            <div class="prose max-w-none">
+              <div id="editor-readonly" class="text-gray-600 mt-4">
+                <div
+                  id="editor"
+                  class="text-gray-600 mt-4 font-['Montserrat'] text-base"
+                ></div>
+              </div>
+              <!-- Initialize Quill editor -->
+              <script th:inline="javascript">
+                /*<![CDATA[*/
+                const quill = new Quill("#editor", {
+                  theme: "snow",
+                  readOnly: true,
+                  modules: {
+                    toolbar: false,
+                  },
+                });
+                quill.setContents(/*[(${event.details})]*/);
+
+                /*]]>*/
+              </script>
+              <style>
+                .ql-container.ql-snow {
+                  border: none !important;
+                }
+              </style>
+            </div>
+          </div>
+          <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <h3 class="text-xl font-semibold mb-4">Detalhes</h3>
+            <div
+              th:if="${event.details != null && event.details != ''}"
+              class="flex items-start mb-4"
+            >
+              <div
+                class="w-10 h-10 flex items-center justify-center bg-primary/10 rounded-full mr-4"
+              >
+                <i class="ri-file-text-line text-primary ri-lg"></i>
+              </div>
+              <div>
+                <h4 class="font-medium">Descrição</h4>
+                <p th:text="${event.description}" class="text-gray-600"></p>
+              </div>
+            </div>
+            <div class="flex items-start mb-4">
+              <div
+                class="w-10 h-10 flex items-center justify-center bg-primary/10 rounded-full mr-4"
+              >
+                <i class="ri-calendar-line text-primary ri-lg"></i>
+              </div>
+              <div>
+                <h4 class="font-medium">Data</h4>
+                <p th:text="${event.descriptiveDate}" class="text-gray-600"></p>
+              </div>
+            </div>
+            <div class="flex items-start mb-4">
+              <div
+                class="w-10 h-10 flex items-center justify-center bg-primary/10 rounded-full mr-4"
+              >
+                <i class="ri-map-pin-line text-primary ri-lg"></i>
+              </div>
+              <div>
+                <h4 class="font-medium">Endereço</h4>
+                <p th:text="${event.location}" class="text-gray-600"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <div id="calendario"></div>
+      <section class="mb-20 px-2 sm:px-0">
+        <h2 class="text-3xl font-bold text-center mb-4">
+          Adicione ao seu calendário
+        </h2>
+        <p class="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
+          Não perca o <span class="font-bold" th:text="${event.title}" />!
+          Adicione esse evento ao seu calendário favorito com apenas um clique.
+        </p>
+        <div class="bg-white rounded-xl p-8 shadow-lg max-w-2xl mx-auto">
+          <div class="text-center">
+            <h3 class="text-xl font-semibold mb-6">Esolha seu calendário</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <button
+                id="addToGoogle"
+                class="rounded-md flex items-center justify-center px-4 py-3 bg-red-50 hover:bg-red-100 text-red-700 !rounded-button border border-red-200 transition-colors whitespace-nowrap"
+              >
+                <i class="ri-google-line mr-2"></i>
+                Google Calendar
+              </button>
+              <button
+                id="addToOutlook"
+                class="rounded-md flex items-center justify-center px-4 py-3 bg-blue-50 hover:bg-blue-100 text-blue-700 !rounded-button border border-blue-200 transition-colors whitespace-nowrap"
+              >
+                <i class="ri-microsoft-line mr-2"></i>
+                Outlook
+              </button>
+              <button
+                id="addToApple"
+                class="rounded-md flex items-center justify-center px-4 py-3 bg-gray-50 hover:bg-gray-100 text-gray-700 !rounded-button border border-gray-200 transition-colors whitespace-nowrap"
+              >
+                <i class="ri-apple-line mr-2"></i>
+                Apple Calendar
+              </button>
+              <button
+                id="downloadICS"
+                class="rounded-md flex items-center justify-center px-4 py-3 bg-green-50 hover:bg-green-100 text-green-700 !rounded-button border border-green-200 transition-colors whitespace-nowrap"
+              >
+                <i class="ri-download-line mr-2"></i>
+                Download .ics
+              </button>
+            </div>
+            <div class="mt-6 p-4 bg-primary/5 rounded-lg">
+              <p class="text-sm text-primary font-medium mb-2 font-bold">
+                <i class="ri-lightbulb-line mr-1"></i>
+                <span class="font-bold">Fica a dica!</span>
+              </p>
+              <p class="text-sm text-gray-600">
+                Ative notificações para ser lembrado uma semana e um dia antes
+                do evento — assim você não perde nada!
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <a href="#pacotes"></a>
+      <section
+        id="pacotes"
+        class="mb-20"
+        th:if="${(packages != null and !#lists.isEmpty(packages))}"
+      >
+        <h2 class="text-3xl font-bold text-center mb-4 px-4 sm:px-0">
+          Escolha a sua experiência
+        </h2>
+        <p
+          class="text-gray-600 text-center mb-12 max-w-2xl mx-auto px-4 sm:px-0"
+        >
+          Escolha o pacote perfeito que combina com a sua jornada de dança. Se
+          você está aqui para as festas ou quer a experiência completa do
+          evento.
+        </p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+          <div
+            th:if="${event.comingUp}"
+            th:each="pack : ${packages}"
+            class="bg-white rounded-xl p-8 shadow-lg hover:shadow-xl transition-shadow border border-gray-100 gap-12 m-4"
+          >
+            <div class="flex items-center justify-between mb-4">
+              <h3 th:text="${pack.title}" class="text-2xl font-bold"></h3>
+              <div
+                class="w-12 h-12 flex items-center justify-center bg-primary/10 rounded-full"
+              >
+                <i class="ri-award-line text-primary ri-lg"></i>
+              </div>
+            </div>
+            <p th:text="${pack.description}" class="text-gray-600 mb-6"></p>
+            <div class="flex items-baseline mb-6">
+              <!-- Assuming price is a number, format it to Brazilian currency -->
+              <span class="text-3xl font-bold text-primary">
+                R$
+                <span
+                  th:text="${#numbers.formatDecimal(pack.price, 1, 2, 'COMMA')}"
+                ></span>
+              </span>
+              <span class="text-gray-500 ml-2">/ pessoa</span>
+            </div>
+            <a
+              th:href="@{/packages?packId={packageId}(packageId=${pack.id})}"
+              class="block text-center cursor-pointer w-full bg-primary hover:bg-primary/90 text-white py-3 !rounded-button font-semibold whitespace-nowrap transition-all"
+            >
+              Adquirir agora
+            </a>
+          </div>
+        </div>
+        <div
+          id="happening-event"
+          th:if="${!event.comingUp}"
+          class="max-w-3xl mx-auto text-center bg-yellow-50 border border-yellow-200 rounded-xl p-4 mx-2 md:mx-auto"
+        >
+          <div
+            class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4"
+          >
+            <i class="ri-timer-line text-yellow-600 text-2xl"></i>
+          </div>
+          <h2 class="text-2xl font-bold text-yellow-800 mb-3">
+            Evento em andamento ou finalizado!
+          </h2>
+          <p class="text-yellow-700">
+            Os pacotes para este evento não estão mais disponíveis para compra.
+          </p>
+        </div>
+      </section>
+      <div class="social-icons">
+        <a
+          th:href="'https://wa.me/+55' + ${event.phoneNumber} + '?text=Olá, vim do zoukme.in e gostaria de saber mais informações sobre o *' + ${event.title} + '*. Consegue me ajudar?'"
+          target="_blank"
+          class="social-icon"
+        >
+          <i class="ri-whatsapp-line text-green-500 ri-lg"></i>
+        </a>
+        <a
+          th:href="'https://www.instagram.com/' + ${event.instagram}"
+          target="_blank"
+          class="social-icon"
+        >
+          <i class="ri-instagram-line text-primary ri-lg"></i>
+        </a>
+      </div>
+      <section
+        id="eventos-anteriores"
+        class="mb-20 p-4"
+        th:if="${event.imagePath().size() > 0}"
+      >
+        <a href="#eventos-anteriores">
+          <h2 class="text-3xl font-bold mb-8">Eventos anteriores</h2>
+        </a>
+        <div class="gallery-grid">
+          <div th:each="photo : ${event.imagePath}" class="gallery-item">
+            <img th:src="${photo}" th:alt="${event.title}" />
+          </div>
+        </div>
+      </section>
+    </main>
+    <script id="calendarScript" th:inline="javascript">
+          /*<![CDATA[*/
+          document.addEventListener("DOMContentLoaded", function () {
+            const eventDetails = {
+              title: /*[[${event.title}]]*/,
+              startDate: /*[['' + ${#temporals.format(event.date, 'yyyyMMdd')} + 'T180000']]*/,
+              endDate: /*[['' + ${#temporals.format(event.date, 'yyyyMMdd')} + 'T230000']]*/,
+              defaultStartDate: /*[['' + ${#temporals.format(event.date, 'yyyy-MM-dd')} + 'T18:00:00-03:00']]*/,
+              defaultEndDate: /*[['' + ${#temporals.format(event.date, 'yyyy-MM-dd')} + 'T23:00:00-03:00']]*/,
+              location: /*[[${event.location}]]*/,
+              eventUrl: /*[[${event.eventUrl}]]*/,
+              description:
+                [[${event.description}]] + " - Mais informações em: https://zoukme.in/events/" + [[${event.eventUrl}]]
+            };
+            document.getElementById("addToGoogle").addEventListener("click", function () {
+              const googleUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(eventDetails.title)}&dates=${eventDetails.startDate}/${eventDetails.endDate}&location=${encodeURIComponent(eventDetails.location)}&details=${encodeURIComponent(eventDetails.description)}`;
+              window.open(googleUrl, "_blank");
+            });
+            document
+              .getElementById("addToOutlook")
+              .addEventListener("click", function () {
+                const outlookUrl = `https://outlook.live.com/calendar/0/deeplink/compose?subject=${encodeURIComponent(eventDetails.title)}&startdt=${eventDetails.defaultStartDate}&enddt=${eventDetails.defaultEndDate}&location=${encodeURIComponent(eventDetails.location)}&body=${encodeURIComponent(eventDetails.description)}`;
+                window.open(outlookUrl, "_blank");
+              });
+            document.getElementById("addToApple").addEventListener("click", function () {
+              generateICSFile();
+            });
+            document.getElementById("downloadICS").addEventListener("click", function () {
+              generateICSFile();
+            });
+            function generateICSFile() {
+              const icsContent = `BEGIN:VCALENDAR
+      VERSION:2.0
+      PRODID:-//${eventDetails.title}//${eventDetails.title}//EN
+      BEGIN:VEVENT
+      UID:contato@zoukme.in
+      DTSTAMP:${new Date().toISOString().replace(/[-:]/g, "").split(".")[0]}Z
+      DTSTART;TZID=America/Sao_Paulo:${eventDetails.startDate}Z
+      DTEND;TZID=America/Sao_Paulo:${eventDetails.endDate}Z
+      SUMMARY:${eventDetails.title}
+      DESCRIPTION:${eventDetails.description}
+      LOCATION:${eventDetails.location}
+      STATUS: CONFIRMED
+      END:VEVENT
+      END:VCALENDAR`;
+              const blob = new Blob([icsContent], {
+                type: "text/calendar;charset=utf-8",
+              });
+              const link = document.createElement("a");
+              link.href = URL.createObjectURL(blob);
+              link.download = `${eventDetails.eventUrl}.ics`;
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+            }
+          });
+    </script>
+    <script th:inline="javascript">
+      /*<![CDATA[*/
+      document.addEventListener("DOMContentLoaded", function () {
+        // Set the date we're counting down to
+        var countDownDate = new Date(/*[[${event.date}]]*/); // This is a Date object
+        countDownDate.setHours(countDownDate.getHours() + 3); // Add 3 hours
+        // Update the countdown every 1 second
+        const x = setInterval(function () {
+          // Get today's date and time
+          const now = new Date().getTime();
+          // Find the distance between now and the count down date
+          const distance = countDownDate - now;
+          // Time calculations for days, hours, minutes and seconds
+          const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+          const hours = Math.floor(
+            (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
+          );
+          const minutes = Math.floor(
+            (distance % (1000 * 60 * 60)) / (1000 * 60),
+          );
+          const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+          // Display the result
+          document.getElementById("days").innerText = days;
+          document.getElementById("hours").innerText = hours;
+          document.getElementById("minutes").innerText = minutes;
+          document.getElementById("seconds").innerText = seconds;
+          // If the count down is finished, write some text
+          if (distance < 0) {
+            clearInterval(x);
+            document.getElementById("days").innerText = "0";
+            document.getElementById("hours").innerText = "0";
+            document.getElementById("minutes").innerText = "0";
+            document.getElementById("seconds").innerText = "0";
+          }
+        }, 1000);
+      });
+    </script>
+
+    <div th:insert="~{fragments/footer :: footer}"></div>
+  </body>
 </html>
