@@ -1,5 +1,6 @@
 package in.zoukme.zouk_album.controllers.admin;
 
+import in.zoukme.zouk_album.controllers.admin.dashboard.DashboardService;
 import in.zoukme.zouk_album.domains.Album;
 import in.zoukme.zouk_album.domains.Page;
 import in.zoukme.zouk_album.domains.payments.Payment;
@@ -31,7 +32,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import in.zoukme.zouk_album.controllers.admin.dashboard.DashboardService;
+import in.zoukme.zouk_album.domains.Album;
 
 @Controller
 @RequestMapping("/admin")
@@ -80,7 +81,8 @@ public class AdminController {
   }
 
   @GetMapping("/albums/create")
-  String createAlbum() {
+  String createAlbum(Album album, Model model) {
+    model.addAttribute("album", album);
     return "admin/albums/create";
   }
 
@@ -362,5 +364,12 @@ public class AdminController {
             "Content-Disposition",
             "attachment; filename=relatorio_venda_pacotes_" + id + ".xlsx")
         .body(new org.springframework.core.io.ByteArrayResource(paymentsReportBy));
+  }
+
+  @GetMapping("/events/{id}/prepare-album")
+  String prepareAlbum(@PathVariable Long id, Model model) {
+    var event = this.eventService.findBy(id);
+    return this.createAlbum(new Album(event.id(), event.title(), event.location(), event.date()), model);
+
   }
 }

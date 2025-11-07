@@ -389,7 +389,7 @@
           <div class="p-6">
             <div class="space-y-4">
               <div class="bg-gray-50 rounded-lg p-4">
-                <div th:each="event : ${events}" th:if="${event.isComingUp}" class="flex flex-col space-y-4">
+                <div th:each="event : ${events}" th:if="${!event.isComingUp}" class="flex flex-col space-y-4">
                   <!-- Event info -->
                   <div class="flex items-start">
                     <div class="flex-shrink-0">
@@ -422,11 +422,11 @@
                       <i class="ri-eye-line mr-2"></i>
                       Ver Detalhes
                     </a>
-                    <button
+                    <a th:href="@{/admin/events/{id}/prepare-album(id=${event.id})}"
                       class="flex-1 bg-secondary hover:opacity-90 text-white px-4 py-2 rounded-button text-xs font-medium transition-colors duration-200 flex items-center justify-center">
                       <i class="ri-image-add-line mr-2"></i>
                       Preparar Álbuns
-                    </button>
+                    </a>
                   </div>
                   <!-- Divider -->
                   <div class="border-b border-gray-200 -mx-4 last:border-0 last:mb-0"></div>

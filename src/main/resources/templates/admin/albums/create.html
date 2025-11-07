@@ -112,7 +112,8 @@
                 Título <span class="text-red-500">*</span>
               </label>
               <div class="mt-1">
-                <input type="text" id="album-title" name="title" placeholder="Baile Zoukme In 2025"
+                <input type="text" id="album-title" name="title" placeholder="Baile Zoukme In 2026"
+                  th:value="${album?.title}"
                   class="block w-full border-gray-300 border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm"
                   required />
                 <p class="mt-1 text-xs text-gray-500">
@@ -136,7 +137,7 @@
                 Cidade/Estado <span class="text-red-500">*</span>
               </label>
               <div class="mt-1">
-                <input type="text" id="album-location" name="city" placeholder="Joinville/SC"
+                <input type="text" id="album-location" name="city" placeholder="Joinville/SC" th:value="${album?.city}"
                   class="block w-full border-gray-300 border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm" />
               </div>
             </div>
@@ -150,7 +151,7 @@
                     <i class="ri-calendar-line"></i>
                   </div>
                 </div>
-                <input type="date" id="date" name="eventDate" value="2025-06-18"
+                <input type="date" id="date" name="eventDate" th:value="${album?.eventDate}"
                   class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm" />
               </div>
             </div>
