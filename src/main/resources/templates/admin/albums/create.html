@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html xmlns:th="https://www.thymeleaf.org" lang="pt-br">
 
 <head th:insert="~{fragments/header}"></head>
@@ -12,7 +12,7 @@
     }
 
     body {
-      font-family: 'Inter', sans-serif;
+      font-family: "Inter", sans-serif;
     }
 
     input[type="number"]::-webkit-inner-spin-button,
@@ -38,7 +38,7 @@
     }
 
     .custom-checkbox:checked::after {
-      content: '';
+      content: "";
       position: absolute;
       left: 5px;
       top: 2px;
@@ -70,9 +70,12 @@
     <form action="/admin/albums/create" method="post" enctype="multipart/form-data">
       <div class="bg-white rounded-lg shadow-sm overflow-hidden mb-8">
         <div class="p-6 border-b border-gray-200">
-          <h2 class="text-lg font-medium text-gray-900">Informações do Álbum</h2>
+          <h2 class="text-lg font-medium text-gray-900">
+            Informações do Álbum
+          </h2>
           <p class="mt-1 text-sm text-gray-500">
-            Forneça as informações necessárias para criar um novo álbum de fotos.
+            Forneça as informações necessárias para criar um novo álbum de
+            fotos.
           </p>
         </div>
         <!-- Cover photo upload section -->
@@ -117,7 +120,8 @@
                   class="block w-full border-gray-300 border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm"
                   required />
                 <p class="mt-1 text-xs text-gray-500">
-                  A URL será o titulo do evento separado por hifens ao inves de espacos. Por exemplo:
+                  A URL será o titulo do evento separado por hifens ao inves
+                  de espacos. Por exemplo:
                   zoukme.in/events/corporate-retreat-2025/albums
                 </p>
               </div>
@@ -156,6 +160,7 @@
               </div>
             </div>
           </div>
+          <input type="hidden" name="eventId" th:value="${album?.eventId?.id}" />
           <!-- Action buttons -->
           <div class="mt-8 flex items-center justify-end space-x-4">
             <a href="/admin/home" data-readdy="true"
@@ -163,7 +168,8 @@
               Cancelar
             </a>
             <button type="submit"
-              class="bg-primary hover:opacity-90 transition text-white px-6 py-2 rounded-button text-sm font-medium whitespace-nowrap">Criar
+              class="bg-primary hover:opacity-90 transition text-white px-6 py-2 rounded-button text-sm font-medium whitespace-nowrap">
+              Criar
             </button>
           </div>
         </div>

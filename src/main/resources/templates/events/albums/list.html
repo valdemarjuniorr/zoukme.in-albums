@@ -75,6 +75,12 @@
                     class="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 active:bg-gray-200 transition-colors">
                     Definir Capa Sub álbum
                   </button>
+                  <button
+                    th:hx-delete="@{/admin/events/{eventUrl}/subevents/photos/{photoId}(photoId=${photo.id}, eventUrl=${eventUrl})}"
+                    hx-target="#toast" hx-confirm="Tem certeza que deseja excluir esta foto?"
+                    class="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 active:bg-gray-200 transition-colors">
+                    Excluir Foto
+                  </button>
                 </div>
               </div>
             </div>

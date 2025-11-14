@@ -16,14 +16,14 @@ public record Album(
     String thumbUrl,
     String url) {
 
-  public Album(Long eventId, String title, String city, LocalDate eventDate) {
+  public Album(AggregateReference<Event, Long> eventId, String title, String city, LocalDate eventDate, String cover) {
     this(
         null,
-        AggregateReference.to(eventId),
+        eventId,
         title,
         city,
         eventDate,
-        null,
+        cover,
         "/events/%s/albums".formatted(title.toLowerCase().replace(" ", "-")));
   }
 
@@ -32,7 +32,7 @@ public record Album(
         null,
         title,
         city,
-        eventDate);
+        eventDate, cover);
   }
 
   public String getDescriptiveDate() {

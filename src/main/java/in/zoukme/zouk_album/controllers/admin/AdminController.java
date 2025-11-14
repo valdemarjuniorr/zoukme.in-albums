@@ -1,6 +1,5 @@
 package in.zoukme.zouk_album.controllers.admin;
 
-import in.zoukme.zouk_album.controllers.admin.dashboard.DashboardService;
 import in.zoukme.zouk_album.domains.Album;
 import in.zoukme.zouk_album.domains.Page;
 import in.zoukme.zouk_album.domains.payments.Payment;
@@ -20,6 +19,7 @@ import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
+import org.springframework.data.jdbc.core.mapping.AggregateReference;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import in.zoukme.zouk_album.domains.Album;
+import in.zoukme.zouk_album.controllers.admin.dashboard.DashboardService;
 
 @Controller
 @RequestMapping("/admin")
@@ -92,9 +92,10 @@ public class AdminController {
       String description,
       String city,
       LocalDate eventDate,
+      Long eventId,
       @RequestParam("file-upload") MultipartFile cover,
       Model model) {
-    this.albumService.save(title, description, city, eventDate, cover);
+    this.albumService.save(eventId, title, description, city, eventDate, cover);
     var albums = this.albumService.findAll(Page.defaultPage());
     model.addAttribute("albums", albums);
 
@@ -193,21 +194,6 @@ public class AdminController {
   String updateEvent(@PathVariable Long eventId, UpdateEventRequest request, Model model) {
     this.eventService.update(eventId, request);
     return "";
-  }
-
-  @DeleteMapping("/events/{eventUrl}/photos/{fileName}")
-  String deletePhoto(
-      @PathVariable String fileName,
-      @PathVariable String eventUrl,
-      Model model,
-      Authentication authentication) {
-    this.bucketService.deletePhotoBy(eventUrl, fileName);
-    model.addAttribute("events", this.eventService.findAll(Page.defaultPage()));
-    model.addAttribute("authentication", authentication);
-
-    model.addAttribute("message", "Foto removida com sucesso");
-
-    return "/events/toast";
   }
 
   @PostMapping("/events/{eventUrl}/process")
@@ -369,7 +355,17 @@ public class AdminController {
   @GetMapping("/events/{id}/prepare-album")
   String prepareAlbum(@PathVariable Long id, Model model) {
     var event = this.eventService.findBy(id);
-    return this.createAlbum(new Album(event.id(), event.title(), event.location(), event.date()), model);
+    return this.createAlbum(
+        new Album(AggregateReference.to(event.id()), event.title(), event.location(), event.date(), null), model);
 
+  }
+
+  @DeleteMapping("/events/{eventUrl}/subevents/photos/{id}")
+  String deleteSubEventPhoto(@PathVariable Long id, @PathVariable String eventUrl, Model model) {
+    this.albumService.deletePhotoBy(eventUrl, id);
+
+    model.addAttribute("message", "Foto removida com sucesso");
+
+    return "/events/toast";
   }
 }

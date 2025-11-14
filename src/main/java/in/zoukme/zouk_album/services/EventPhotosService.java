@@ -17,4 +17,8 @@ public class EventPhotosService {
   public Optional<EventPhotos> findBy(Long id) {
     return this.repository.findById(id);
   }
+
+  public void deleteBy(Long id) {
+    this.repository.deleteById(id);
+  }
 }

@@ -12,8 +12,9 @@
       <div class="space-y-4">
         <a href="/" class="text-3xl font-['Pacifico'] text-white inline-block">Zoukme.in</a>
         <p class="text-gray-400">
-          Site dedicado a promover o Zouk Brasileiro e eventos de dança de salão no geral, com informações sobre
-          eventos, congressos, venda de pacotes, bailes e muito mais.
+          Site dedicado a promover o Zouk Brasileiro e eventos de dança de salão
+          no geral, com informações sobre eventos, congressos, venda de pacotes,
+          bailes e muito mais.
         </p>
         <div class="flex space-x-4">
           <a href="https://instagram.com/zoukme.in" target="_blank"
@@ -67,8 +68,11 @@
       </div>
     </div>
     <div class="pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center">
-      <p class="text-gray-400 text-sm">&copy; <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}" /> Zouk Me
-        In. All rights reserved.</p>
+      <p class="text-gray-400 text-sm">
+        &copy;
+        <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}" /> Zouk Me
+        In. All rights reserved.
+      </p>
     </div>
   </div>
 </footer>

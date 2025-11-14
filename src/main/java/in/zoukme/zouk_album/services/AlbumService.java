@@ -4,14 +4,20 @@ import in.zoukme.zouk_album.domains.Page;
 import in.zoukme.zouk_album.exceptions.AlbumNotFoundException;
 import in.zoukme.zouk_album.exceptions.EventPhotoNotFoundException;
 import in.zoukme.zouk_album.repositories.AlbumRepository;
+import in.zoukme.zouk_album.services.aws.BucketImage;
 import in.zoukme.zouk_album.services.aws.BucketService;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.jdbc.core.mapping.AggregateReference;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import in.zoukme.zouk_album.domains.Album;
+import in.zoukme.zouk_album.domains.Event;
+import in.zoukme.zouk_album.domains.EventPhotos;
 
 @Service
 public class AlbumService {
@@ -43,9 +49,11 @@ public class AlbumService {
   }
 
   public void save(
-      String title, String description, String city, LocalDate eventDate, MultipartFile cover) {
+      Long eventId, String title, String description, String city, LocalDate eventDate, MultipartFile cover) {
+    AggregateReference<Event, Long> eventIdAgg = Objects.isNull(eventId) ? null : AggregateReference.to(eventId);
     var uploadedCover = this.bucketService.upload(title, cover);
-    var saved = this.repository.save(new Album(title, city, eventDate, uploadedCover.path()));
+    var saved = this.repository
+        .save(new Album(eventIdAgg, title, city, eventDate, uploadedCover.path()));
     log.info("Album with id {} and title {} has been saved", saved.id(), saved.title());
   }
 
@@ -82,5 +90,12 @@ public class AlbumService {
 
   public Integer getDistinctCitiesCount() {
     return this.repository.findDistinctCitiesCount();
+  }
+
+  public void deletePhotoBy(String eventUrl, Long photoId) {
+    var eventPhoto = this.eventPhotosService.findBy(photoId).orElseThrow(EventPhotoNotFoundException::new);
+    this.eventPhotosService.deleteBy(photoId);
+    this.bucketService.deletePhotoBy(new BucketImage(eventUrl, eventPhoto.imagePath()));
+    log.info("Photo with id {} has been deleted from album {}", photoId, eventUrl);
   }
 }

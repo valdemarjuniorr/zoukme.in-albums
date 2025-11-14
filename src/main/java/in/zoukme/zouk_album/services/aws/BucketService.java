@@ -111,11 +111,12 @@ public class BucketService {
   }
 
   /** delete photo from event which is in the next-events folder */
-  public void deletePhotoBy(String eventUrl, String fileName) {
+  public void deletePhotoBy(BucketImage bucketImage) {
+    log.info("{}", bucketImage.getPathFromEventIndex());
     s3Client.deleteObject(
         DeleteObjectRequest.builder()
             .bucket(EventUtils.BUCKET_NAME)
-            .key(EventUtils.getEventFolderName(eventUrl) + File.separator + fileName)
+            .key(bucketImage.getPathFromEventIndex())
             .build());
   }
 }
