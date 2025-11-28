@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>3.5.7</version>
+    <version>3.5.8</version>
     <relativePath></relativePath>
     <!-- lookup parent from repository -->
   </parent>
@@ -13,7 +13,7 @@
   <version>0.0.1</version>
   <name>zoukme.in-albums</name>
   <properties>
-    <java.version>23</java.version>
+    <java.version>25</java.version>
     <awspring.cloud.version>3.3.1</awspring.cloud.version>
   </properties>
   <dependencies>
