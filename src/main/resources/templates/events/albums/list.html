@@ -50,8 +50,8 @@
     <hr class="my-2 border-gray-300">
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1">
       <div th:each="photo : ${photos.content}">
-        <div class="image-container relative rounded-md overflow-hidden shadow-sm group">
-          <img th:src="${photo.imagePath}" class="w-full h-auto rounded-md"
+        <div class="image-container relative rounded-md overflow-hidden shadow-sm group bg-gray-200">
+          <img th:src="${photo.imagePath}" class="w-full h-full object-cover rounded-md"
             th:onclick="@{openModal({photoId})(photoId=${photo.id})}">
           <div th:if="${authentication != null}">
             <!-- change cover image section -->
