@@ -48,54 +48,59 @@
       </div>
     </div>
     <hr class="my-2 border-gray-300">
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1">
-      <div th:each="photo : ${photos.content}">
-        <div class="image-container relative rounded-md overflow-hidden shadow-sm group bg-gray-200">
-          <img th:src="${photo.imagePath}" class="w-full h-full object-cover rounded-md"
-            th:onclick="@{openModal({photoId})(photoId=${photo.id})}">
-          <div th:if="${authentication != null}">
-            <!-- change cover image section -->
-            <div class="overlay absolute inset-0"></div>
-            <div class="absolute top-2 right-2 z-10">
-              <div class="relative">
-                <input type="checkbox" class="peer absolute top-0 right-0 w-8 h-8 opacity-0 cursor-pointer z-10">
-                <button
-                  class="w-8 h-8 flex items-center justify-center rounded-full bg-black/30 hover:bg-black/40 transition-colors">
-                  <i class="ri-more-2-fill text-white"></i>
-                </button>
-                <div
-                  class="invisible peer-checked:visible absolute right-0 mt-1 w-48 bg-white/90 backdrop-blur-sm rounded-lg shadow-lg py-1">
+      <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-1">
+        <div th:each="photo : ${photos.content}">
+          <div class="image-container relative rounded-md overflow-hidden shadow-lg group bg-gray-100 aspect-[4/3] flex items-center justify-center transition-transform duration-300 hover:scale-105">
+            <img th:src="${photo.imagePath}" class="w-full h-full object-cover rounded-sm transition-transform duration-300 group-hover:scale-105"
+              th:onclick="@{openModal({photoId})(photoId=${photo.id})}">
+            <div th:if="${authentication != null}">
+              <!-- change cover image section -->
+              <div class="overlay absolute inset-0"></div>
+              <div class="absolute top-2 right-2 z-10">
+                <div class="relative">
+                  <input type="checkbox" class="peer absolute top-0 right-0 w-8 h-8 opacity-0 cursor-pointer z-10">
                   <button
-                    th:hx-post="@{/admin/albums/{eventUrl}/photos/{photoId}/cover(eventUrl=${eventUrl},photoId=${photo.id})}"
-                    hx-target="#toast"
-                    class="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 active:bg-gray-200 transition-colors">
-                    Definir Capa álbum
+                    class="w-8 h-8 flex items-center justify-center rounded-full bg-black/30 hover:bg-black/40 transition-colors">
+                    <i class="ri-more-2-fill text-white"></i>
                   </button>
-                  <button th:hx-post="@{/admin/subevents/{photoId}/cover(photoId=${photo.id})}" hx-target="#toast"
-                    class="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 active:bg-gray-200 transition-colors">
-                    Definir Capa Sub álbum
-                  </button>
-                  <button
-                    th:hx-delete="@{/admin/events/{eventUrl}/subevents/photos/{photoId}(photoId=${photo.id}, eventUrl=${eventUrl})}"
-                    hx-target="#toast" hx-confirm="Tem certeza que deseja excluir esta foto?"
-                    class="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 active:bg-gray-200 transition-colors">
-                    Excluir Foto
-                  </button>
+                  <div
+                    class="invisible peer-checked:visible absolute right-0 mt-1 w-48 bg-white/90 backdrop-blur-sm rounded-lg shadow-lg py-1">
+                    <button
+                      th:hx-post="@{/admin/albums/{eventUrl}/photos/{photoId}/cover(eventUrl=${eventUrl},photoId=${photo.id})}"
+                      hx-target="#toast"
+                      class="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 active:bg-gray-200 transition-colors">
+                      Definir Capa álbum
+                    </button>
+                    <button th:hx-post="@{/admin/subevents/{photoId}/cover(photoId=${photo.id})}" hx-target="#toast"
+                      class="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 active:bg-gray-200 transition-colors">
+                      Definir Capa Sub álbum
+                    </button>
+                    <button
+                      th:hx-delete="@{/admin/events/{eventUrl}/subevents/photos/{photoId}(photoId=${photo.id}, eventUrl=${eventUrl})}"
+                      hx-target="#toast" hx-confirm="Tem certeza que deseja excluir esta foto?"
+                      class="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 active:bg-gray-200 transition-colors">
+                      Excluir Foto
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
           <!-- modal content -->
         </div>
-        <style>
-          /* Custom CSS to change the modal size */
-          .modal {
-            width: 100%;
-            max-width: 900px;
-            /* Adjust the max-width as needed */
-            padding: 0px;
-          }
-        </style>
+<style>
+  /* Custom CSS to change the modal size */
+  .modal {
+    width: 100%;
+    max-width: 900px;
+    padding: 0px;
+  }
+  /* Responsive grid tweaks */
+  @media (max-width: 640px) {
+    .grid-cols-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+  }
+</style>
         <div th:id="${photo.id}" class="modal">
           <img th:src="${photo.imagePath}">
         </div>
