@@ -1,0 +1,80 @@
+<DOCTYPE html>
+  <html xmlns:th="https://www.thymeleaf.org" lang="pt-br">
+    <head th:insert="~{fragments/header}"></head>
+
+    <body class="bg-gray-100">
+      <!-- Header -->
+      <div th:insert="~{fragments/top :: top}"></div>
+
+      <!-- Content -->
+      <main th:fragment="main" class="main container mx-auto p-4 py-8">
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+          <div class="p-8 lg:p-12 text-center">
+            <div class="max-w-2xl mx-auto">
+              <div
+                class="w-20 h-20 flex items-center justify-center bg-green-100 rounded-full mx-auto mb-6"
+              >
+                <i class="ri-mail-check-line text-3xl text-green-600"></i>
+              </div>
+              <h2 class="text-2xl font-bold text-gray-900 mb-4">
+                Verifique seu e-mail
+              </h2>
+              <p class="text-gray-600 mb-6">
+                Enviamos um e-mail de confirmação. Acesse sua caixa de entrada e
+                clique no link para concluir seu cadastro.
+              </p>
+              <div
+                class="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8"
+              >
+                <div class="flex items-start">
+                  <div class="flex-shrink-0">
+                    <div class="w-6 h-6 flex items-center justify-center">
+                      <i class="ri-information-line text-blue-600"></i>
+                    </div>
+                  </div>
+                  <div class="ml-3 text-left">
+                    <h4 class="text-sm font-semibold text-blue-800 mb-2">
+                      O que fazer agora?
+                    </h4>
+                    <ul class="text-sm text-blue-700 space-y-1">
+                      <li>
+                        • Verifique sua caixa de entrada (e a pasta de spam)
+                      </li>
+                      <li>• Clique no link de verificação no e-mail</li>
+                      <li>• Sua conta será ativada automaticamente</li>
+                      <li>
+                        • Você poderá acessar todos os recursos da comunidade
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="flex justify-center">
+                <button
+                  onclick="resendEmail()"
+                  id="resend-btn"
+                  class="px-6 py-3 bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors !rounded-button whitespace-nowrap"
+                >
+                  <i class="ri-refresh-line mr-2"></i>
+                  Reenviar e-mail
+                </button>
+              </div>
+              <p class="text-sm text-gray-500 mt-6">
+                Não recebeu o e-mail? Verifique sua pasta de spam ou
+                <a
+                  href="#"
+                  class="text-primary hover:underline"
+                  onclick="resendEmail()"
+                  >reenvie o e-mail de confirmação</a
+                >
+              </p>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <!-- footer -->
+      <div th:insert="~{fragments/footer :: footer}"></div>
+    </body>
+  </html>
+</DOCTYPE>

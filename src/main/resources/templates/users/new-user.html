@@ -1,0 +1,381 @@
+<DOCTYPE html>
+  <html xmlns:th="https://www.thymeleaf.org" lang="pt-br">
+    <head th:insert="~{fragments/header}"></head>
+
+    <style>
+      body {
+        font-family: "Poppins", sans-serif;
+      }
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        font-family: "Montserrat", sans-serif;
+      }
+      .form-step {
+        display: none;
+      }
+      .form-step.active {
+        display: block;
+      }
+      .password-strength {
+        height: 4px;
+        border-radius: 2px;
+        transition: all 0.3s ease;
+      }
+      .password-strength.weak {
+        background-color: #ef4444;
+        width: 25%;
+      }
+      .password-strength.fair {
+        background-color: #f59e0b;
+        width: 50%;
+      }
+      .password-strength.good {
+        background-color: #10b981;
+        width: 75%;
+      }
+      .password-strength.strong {
+        background-color: #059669;
+        width: 100%;
+      }
+    </style>
+
+    <body class="bg-gray-100">
+      <!-- Header -->
+      <div th:insert="~{fragments/top :: top}"></div>
+
+      <!-- Content -->
+      <main th:fragment="main" class="main container mx-auto p-4 py-8">
+        <div id="container" class="container mx-auto px-4">
+          <div class="max-w-4xl mx-auto">
+            <!-- Header Section -->
+            <div class="text-center mb-12">
+              <h1 class="text-2xl font-bold text-gray-900 mb-4">
+                Junte-se à Comunidade da Dança!
+              </h1>
+              <p class="text-gray-600 max-w-2xl mx-auto">
+                Crie sua conta e faça parte da nossa comunidade e tenha acessos
+                a descontos e novas funcionalidades.
+              </p>
+            </div>
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+              <div class="flex">
+                <!-- Form Section -->
+                <div class="flex-1 p-5 lg:p-12">
+                  <form
+                    id="registration-form"
+                    hx-target="#container"
+                    hx-post="/users/new"
+                  >
+                    <!-- Step 1: Personal Information -->
+                    <div class="form-step active" id="step-1">
+                      <h2 class="text-2xl font-bold text-gray-900 mb-6">
+                        Informações Pessoais
+                      </h2>
+                      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                          <label
+                            for="firstName"
+                            class="block text-sm font-medium text-gray-700 mb-2"
+                            >Primeiro nome</label
+                          >
+                          <input
+                            type="text"
+                            id="firstName"
+                            name="firstName"
+                            required
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-sm"
+                            placeholder="Digite seu primeiro nome"
+                          />
+                        </div>
+                        <div>
+                          <label
+                            for="lastName"
+                            class="block text-sm font-medium text-gray-700 mb-2"
+                            >Sobrenome</label
+                          >
+                          <input
+                            type="text"
+                            id="lastName"
+                            name="lastName"
+                            required
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-sm"
+                            placeholder="Digite seu sobrenome"
+                          />
+                        </div>
+                      </div>
+                      <div class="mb-6">
+                        <label
+                          for="email"
+                          class="block text-sm font-medium text-gray-700 mb-2"
+                          >Email</label
+                        >
+                        <input
+                          type="email"
+                          id="email"
+                          name="email"
+                          required
+                          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-sm"
+                          placeholder="Digite seu email"
+                        />
+                      </div>
+                      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                          <label
+                            for="password"
+                            class="block text-sm font-medium text-gray-700 mb-2"
+                            >Senha</label
+                          >
+                          <div class="relative">
+                            <input
+                              type="password"
+                              id="password"
+                              name="password"
+                              required
+                              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-sm pr-12"
+                              placeholder="Crie uma senha segura"
+                            />
+                            <button
+                              type="button"
+                              id="toggle-password"
+                              class="absolute right-3 top-1/2 transform -translate-y-1/2 w-6 h-6 flex items-center justify-center text-gray-400 hover:text-gray-600"
+                            >
+                              <i class="ri-eye-off-line"></i>
+                            </button>
+                          </div>
+                          <div class="mt-2">
+                            <div
+                              class="password-strength weak"
+                              id="password-strength"
+                            ></div>
+                            <p
+                              class="text-xs text-gray-500 mt-1"
+                              id="password-hint"
+                            >
+                              A senha deve ter pelo menos 8 caracteres.
+                            </p>
+                          </div>
+                        </div>
+                        <div>
+                          <label
+                            for="confirmPassword"
+                            class="block text-sm font-medium text-gray-700 mb-2"
+                            >Confirmar Senha</label
+                          >
+                          <input
+                            type="password"
+                            id="confirmPassword"
+                            name="confirmPassword"
+                            required
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-sm"
+                            placeholder="Confirme sua senha"
+                          />
+                        </div>
+                      </div>
+                      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                        <div>
+                          <label
+                            for="phone"
+                            class="block text-sm font-medium text-gray-700 mb-2"
+                            >Celular</label
+                          >
+                          <input
+                            type="tel"
+                            id="phone"
+                            name="phone"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-sm"
+                            placeholder="(99) 9-9999-9999"
+                          />
+                        </div>
+                        <div>
+                          <label
+                            for="instagram"
+                            class="block text-sm font-medium text-gray-700 mb-2"
+                            >Instagram</label
+                          >
+                          <div class="relative">
+                            <span
+                              class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm"
+                              >@</span
+                            >
+                            <input
+                              type="text"
+                              id="instagram"
+                              name="instagram"
+                              class="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-sm"
+                              placeholder="Seu usuário do Instagram"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="flex justify-end">
+                        <button
+                          type="submit"
+                          id="next-step-1"
+                          class="px-8 py-3 bg-primary text-white hover:bg-opacity-90 transition-colors !rounded-button whitespace-nowrap"
+                        >
+                          Cadastrar
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+                <!-- Sidebar -->
+                <div
+                  class="hidden lg:block lg:w-96 bg-gradient-to-br from-primary to-secondary p-8 text-white"
+                >
+                  <div class="mb-8">
+                    <h3 class="text-2xl font-bold mb-4">
+                      Junte-se à Nossa Comunidade
+                    </h3>
+                    <p class="text-white/90 mb-6">
+                      Conecte-se com dançarinos apaixonados de todo o mundo e
+                      leve sua jornada na dança para o próximo nível.
+                    </p>
+                  </div>
+                  <div class="space-y-6 mb-8">
+                    <div class="flex items-start space-x-4">
+                      <div
+                        class="w-8 h-8 flex items-center justify-center bg-white/20 rounded-full flex-shrink-0"
+                      >
+                        <i class="ri-calendar-event-line"></i>
+                      </div>
+                      <div>
+                        <h4 class="font-semibold mb-1">Eventos Exclusivos</h4>
+                        <p class="text-white/80 text-sm">
+                          Acesso a workshops, competições e eventos sociais
+                        </p>
+                      </div>
+                    </div>
+                    <div class="flex items-start space-x-4">
+                      <div
+                        class="w-8 h-8 flex items-center justify-center bg-white/20 rounded-full flex-shrink-0"
+                      >
+                        <i class="ri-group-line"></i>
+                      </div>
+                      <div>
+                        <h4 class="font-semibold mb-1">
+                          Conecte-se com Dançarinos
+                        </h4>
+                        <p class="text-white/80 text-sm">
+                          Encontre parceiros de dança e construa amizades
+                          duradouras
+                        </p>
+                      </div>
+                    </div>
+                    <div class="flex items-start space-x-4">
+                      <div
+                        class="w-8 h-8 flex items-center justify-center bg-white/20 rounded-full flex-shrink-0"
+                      >
+                        <i class="ri-play-circle-line"></i>
+                      </div>
+                      <div>
+                        <h4 class="font-semibold mb-1">
+                          Recursos de Aprendizado
+                        </h4>
+                        <p class="text-white/80 text-sm">
+                          Tutoriais em vídeo e materiais de prática
+                        </p>
+                      </div>
+                    </div>
+                    <div class="flex items-start space-x-4">
+                      <div
+                        class="w-8 h-8 flex items-center justify-center bg-white/20 rounded-full flex-shrink-0"
+                      >
+                        <i class="ri-trophy-line"></i>
+                      </div>
+                      <div>
+                        <h4 class="font-semibold mb-1">Competições</h4>
+                        <p class="text-white/80 text-sm">
+                          Participe de competições locais e internacionais
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="bg-white/10 rounded-lg p-6">
+                    <h4 class="font-semibold mb-3">
+                      Estatísticas da Comunidade
+                    </h4>
+                    <div class="grid grid-cols-2 gap-4 text-center">
+                      <div>
+                        <div class="text-2xl font-bold">2.500+</div>
+                        <div class="text-white/80 text-sm">Membros Ativos</div>
+                      </div>
+                      <div>
+                        <div class="text-2xl font-bold">150+</div>
+                        <div class="text-white/80 text-sm">Eventos Mensais</div>
+                      </div>
+                      <div>
+                        <div class="text-2xl font-bold">50+</div>
+                        <div class="text-white/80 text-sm">Países</div>
+                      </div>
+                      <div>
+                        <div class="text-2xl font-bold">4.9★</div>
+                        <div class="text-white/80 text-sm">Avaliação</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <!-- footer -->
+      <div th:insert="~{fragments/footer :: footer}"></div>
+      <!-- Password Strength Script -->
+      <script id="password-strength-script">
+        document.addEventListener("DOMContentLoaded", function () {
+          const passwordInput = document.getElementById("password");
+          const strengthBar = document.getElementById("password-strength");
+          const strengthHint = document.getElementById("password-hint");
+          const togglePassword = document.getElementById("toggle-password");
+          passwordInput.addEventListener("input", function () {
+            const password = this.value;
+            const strength = calculatePasswordStrength(password);
+            strengthBar.className = `password-strength ${strength.class}`;
+            strengthHint.textContent = strength.message;
+          });
+          togglePassword.addEventListener("click", function () {
+            const type =
+              passwordInput.getAttribute("type") === "password"
+                ? "text"
+                : "password";
+            passwordInput.setAttribute("type", type);
+            this.querySelector("i").className =
+              type === "password" ? "ri-eye-off-line" : "ri-eye-line";
+          });
+          function calculatePasswordStrength(password) {
+            let score = 0;
+            if (password.length >= 8) score++;
+            if (password.match(/[a-z]/)) score++;
+            if (password.match(/[A-Z]/)) score++;
+            if (password.match(/[0-9]/)) score++;
+            if (password.match(/[^a-zA-Z0-9]/)) score++;
+            switch (score) {
+              case 0:
+              case 1:
+                return { class: "weak", message: "Senha é muito fraca" };
+              case 2:
+                return { class: "fair", message: "Senha é justa" };
+              case 3:
+              case 4:
+                return { class: "good", message: "Senha é boa" };
+              case 5:
+                return { class: "strong", message: "Senha é forte" };
+              default:
+                return {
+                  class: "weak",
+                  message: "A senha deve ter pelo menos 8 caracteres",
+                };
+            }
+          }
+        });
+      </script>
+    </body>
+  </html>
+</DOCTYPE>

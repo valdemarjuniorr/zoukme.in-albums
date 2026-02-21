@@ -1,122 +1,206 @@
-<header th:fragment="top" class="fixed top-0 left-0 right-0 bg-gray-800 p-4 transition-all duration-300 z-50" id="main-header">
-	<style>
-      #main-header {
-          position: fixed;
-          top: 0;
-          left: 0;
-          right: 0;
-          z-index: 50;
-          transition: all 0.3s ease;
-      }
+<header
+  th:fragment="top"
+  class="fixed top-0 left-0 right-0 bg-gray-800 p-4 transition-all duration-300 z-50"
+  id="main-header"
+>
+  <style>
+    #main-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 50;
+      transition: all 0.3s ease;
+    }
 
-      #main-header.scrolled {
-          padding: 0.5rem 1rem;
-          background-color: rgba(31, 41, 55, 0.95);
-          backdrop-filter: blur(5px);
-          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-      }
+    #main-header.scrolled {
+      padding: 0.5rem 1rem;
+      background-color: rgba(31, 41, 55, 0.95);
+      backdrop-filter: blur(5px);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
 
-      #main-header.scrolled #header-logo {
-          height: 2.5rem;
-      }
+    #main-header.scrolled #header-logo {
+      height: 2.5rem;
+    }
 
-      body {
-          padding-top: 5rem;
-      }
+    body {
+      padding-top: 5rem;
+    }
 
-      .sticky-header {
-          display: none;
-      }
+    .sticky-header {
+      display: none;
+    }
 
-      #main-header.scrolled {
-          @apply bg-opacity-95 backdrop-blur-sm shadow-md py-2;
-      }
+    #main-header.scrolled {
+      @apply bg-opacity-95 backdrop-blur-sm shadow-md py-2;
+    }
 
-      #main-header.scrolled #header-logo {
-          @apply h-10;
-      }
+    #main-header.scrolled #header-logo {
+      @apply h-10;
+    }
 
-      body {
-          @apply pt-20;
-      }
-	</style>
+    body {
+      @apply pt-20;
+    }
+  </style>
 
-	<div class="container mx-auto flex justify-between items-center">
-		<div class="flex-shrink-0 transition-all duration-300">
-			<a th:href="@{/}">
-				<img src="/logo-light.png" alt="Zoukme In" class="h-16 w-auto transition-all duration-300" id="header-logo">
-			</a>
-		</div>
+  <div class="container mx-auto flex justify-between items-center">
+    <div class="flex-shrink-0 transition-all duration-300">
+      <a th:href="@{/}">
+        <img
+          src="/logo-light.png"
+          alt="Zoukme In"
+          class="h-16 w-auto transition-all duration-300"
+          id="header-logo"
+        />
+      </a>
+    </div>
 
-		<!-- Desktop Menu -->
-		<nav class="hidden md:block">
-			<ul class="flex space-x-4">
-				<li th:if="${authentication != null}">
-					<a href="/admin/home" class="text-white hover:text-gray-400 transition-colors">Admin</a>
-				</li>
-				<li>
-					<a th:href="@{/events}" class="text-white hover:text-gray-400 transition-colors">Eventos</a>
-				</li>
-				<li>
-					<a th:href="@{/prices}" class="text-white hover:text-gray-400 transition-colors">Preços</a>
-				</li>
-				<li>
-					<a href="/about" class="text-white hover:text-gray-400 transition-colors">Sobre Nós</a>
-				</li>
-			</ul>
-		</nav>
-		<!-- Mobile Menu Button -->
-		<button class="md:hidden text-white focus:outline-none" id="mobile-menu-button">
-			<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-			</svg>
-		</button>
+    <!-- Desktop Menu -->
+    <nav class="hidden md:block">
+      <ul class="flex space-x-4">
+        <li sec:authorize="hasRole('ADMIN')">
+          <a
+            href="/admin/home"
+            class="text-white hover:text-gray-400 transition-colors"
+            >Admin</a
+          >
+        </li>
+        <li>
+          <a
+            th:href="@{/events}"
+            class="text-white hover:text-gray-400 transition-colors"
+            >Eventos</a
+          >
+        </li>
+        <li sec:authorize="!isAuthenticated()">
+          <a
+            th:href="@{/login}"
+            class="text-white hover:text-gray-400 transition-colors"
+            >Login</a
+          >
+        </li>
+        <li>
+          <a
+            th:href="@{/prices}"
+            class="text-white hover:text-gray-400 transition-colors"
+            >Preços</a
+          >
+        </li>
+        <li>
+          <a
+            href="/about"
+            class="text-white hover:text-gray-400 transition-colors"
+            >Sobre Nós</a
+          >
+        </li>
+        <li sec:authorize="isAuthenticated()">
+          <a
+            th:href="@{/logout}"
+            class="block text-white hover:text-gray-400 transition-colors text-center px-4 flex items-center gap-2"
+            >Sair <i class="ri-logout-box-r-line"></i></a
+          >
+        </li>
+      </ul>
+    </nav>
+    <!-- Mobile Menu Button -->
+    <button
+      class="md:hidden text-white focus:outline-none"
+      id="mobile-menu-button"
+    >
+      <svg
+        class="w-6 h-6"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M4 6h16M4 12h16M4 18h16"
+        ></path>
+      </svg>
+    </button>
 
-		<!-- Mobile Menu -->
-		<div class="hidden md:hidden absolute top-full left-0 right-0 bg-gray-800 bg-opacity-95 backdrop-blur-sm shadow-md" id="mobile-menu">
-			<nav class="container mx-auto py-4">
-				<ul class="flex flex-col space-y-4">
-					<li th:if="${authentication != null}">
-						<a href="/admin/home" class="block text-white hover:text-gray-400 transition-colors text-center px-4">Admin</a>
-					</li>
-					<li>
-						<a th:href="@{/events}" class="block text-white hover:text-gray-400 transition-colors text-center px-4">Eventos</a>
-					</li>
-					<li>
-						<a th:href="@{/prices}" class="block text-white hover:text-gray-400 transition-colors text-center px-4">Preços</a>
-					</li>
-					<li>
-						<a href="/about" class="block text-white hover:text-gray-400 transition-colors text-center px-4">Sobre Nós</a>
-					</li>
-				</ul>
-			</nav>
-		</div>
-	</div>
+    <!-- Mobile Menu -->
+    <div
+      class="hidden md:hidden absolute top-full left-0 right-0 bg-gray-800 bg-opacity-95 backdrop-blur-sm shadow-md"
+      id="mobile-menu"
+    >
+      <nav class="container mx-auto py-4">
+        <ul class="flex flex-col space-y-4">
+          <li sec:authorize="hasRole('ADMIN')">
+            <a
+              href="/admin/home"
+              class="block text-white hover:text-gray-400 transition-colors text-center px-4"
+              >Admin</a
+            >
+          </li>
+          <li>
+            <a
+              th:href="@{/events}"
+              class="block text-white hover:text-gray-400 transition-colors text-center px-4"
+              >Eventos</a
+            >
+          </li>
+          <li sec:authorize="!isAuthenticated()">
+            <a
+              th:href="@{/login}"
+              class="block text-white hover:text-gray-400 transition-colors text-center px-4"
+              >Login</a
+            >
+          </li>
+          <li>
+            <a
+              th:href="@{/prices}"
+              class="block text-white hover:text-gray-400 transition-colors text-center px-4"
+              >Preços</a
+            >
+          </li>
+          <li>
+            <a
+              href="/about"
+              class="block text-white hover:text-gray-400 transition-colors text-center px-4"
+              >Sobre Nós</a
+            >
+          </li>
+          <li sec:authorize="isAuthenticated()">
+            <a
+              th:href="@{/logout}"
+              class="block text-white hover:text-gray-400 transition-colors text-center px-4"
+            >Sair <i class="ri-logout-box-r-line"></i></a
+            >
+          </li>
+      </nav>
+    </div>
+  </div>
 
-	<script type="text/javascript">
-      document.addEventListener("DOMContentLoaded", function () {
-          const header = document.getElementById("main-header");
-          const mobileMenuButton = document.getElementById("mobile-menu-button");
-          const mobileMenu = document.getElementById("mobile-menu");
+  <script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function () {
+      const header = document.getElementById("main-header");
+      const mobileMenuButton = document.getElementById("mobile-menu-button");
+      const mobileMenu = document.getElementById("mobile-menu");
 
-          window.addEventListener("scroll", function () {
-              if (window.scrollY > 100) {
-                  header.classList.add("scrolled");
-              } else {
-                  header.classList.remove("scrolled");
-              }
-          });
-
-          mobileMenuButton.addEventListener("click", function (e) {
-              e.stopPropagation();
-              mobileMenu.classList.toggle("hidden");
-          });
-
-          document.addEventListener("click", function (event) {
-              if (!header.contains(event.target)) {
-                  mobileMenu.classList.add("hidden");
-              }
-          });
+      window.addEventListener("scroll", function () {
+        if (window.scrollY > 100) {
+          header.classList.add("scrolled");
+        } else {
+          header.classList.remove("scrolled");
+        }
       });
-	</script>
+
+      mobileMenuButton.addEventListener("click", function (e) {
+        e.stopPropagation();
+        mobileMenu.classList.toggle("hidden");
+      });
+
+      document.addEventListener("click", function (event) {
+        if (!header.contains(event.target)) {
+          mobileMenu.classList.add("hidden");
+        }
+      });
+    });
+  </script>
 </header>
