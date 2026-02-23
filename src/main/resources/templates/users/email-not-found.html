@@ -1,0 +1,76 @@
+<DOCTYPE html>
+  <html xmlns:th="https://www.thymeleaf.org" lang="pt-br">
+    <head th:insert="~{fragments/header}"></head>
+
+    <body class="bg-gray-100">
+      <!-- Header -->
+      <div th:insert="~{fragments/top :: top}"></div>
+
+      <!-- Content -->
+      <main th:fragment="main" class="main container mx-auto p-4 py-8">
+        <div class="container mx-auto max-w-6xl">
+          <div
+            class="max-w-md sm:max-w-lg w-full mx-auto space-y-6 sm:space-y-8"
+          >
+            <div class="text-center">
+              <div
+                class="mx-auto flex items-center justify-center h-16 w-16 sm:h-20 sm:w-20 rounded-full bg-red-100 mb-4 sm:mb-6"
+              >
+                <i
+                  class="ri-mail-close-line text-2xl sm:text-3xl text-red-600"
+                ></i>
+              </div>
+              <h2
+                class="text-2xl sm:text-3xl font-bold text-gray-900 mb-3 sm:mb-4 px-2"
+              >
+                E-mail não encontrado
+              </h2>
+              <div
+                class="bg-white rounded-lg shadow-sm p-4 sm:p-6 lg:p-8 border border-gray-200"
+              >
+                <p
+                  class="text-gray-600 text-base sm:text-lg mb-4 sm:mb-6 leading-relaxed"
+                >
+                  O endereço de e-mail que você inseriu não está cadastrado em
+                  nosso sistema. Para continuar, você precisa criar uma conta
+                  primeiro.
+                </p>
+                <div class="space-y-3 sm:space-y-4">
+                  <a
+                    href="/users/new"
+                    class="w-full bg-primary text-white py-2.5 sm:py-3 px-4 sm:px-6 !rounded-button font-semibold text-base sm:text-lg hover:bg-red-600 transition-colors duration-200 whitespace-nowrap"
+                    title="Criar Conta"
+                  >
+                    Criar Conta
+                  </a>
+                  <div class="text-center">
+                    <a
+                      href="/login"
+                      class="text-primary hover:text-red-600 text-sm font-medium transition-colors duration-200"
+                    >
+                      Já possui conta? Faça login
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <div class="mt-6 sm:mt-8 text-center px-2">
+                <p class="text-xs sm:text-sm text-gray-500">
+                  Precisa de ajuda?
+                  <a
+                    href="/about#contato"
+                    class="text-primary hover:text-red-600 font-medium"
+                  >
+                    Entre em contato conosco
+                  </a>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <!-- footer -->
+      <div th:insert="~{fragments/footer :: footer}"></div>
+    </body>
+  </html>
+</DOCTYPE>

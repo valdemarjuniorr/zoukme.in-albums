@@ -1,0 +1,87 @@
+<DOCTYPE html>
+  <html xmlns:th="https://www.thymeleaf.org" lang="pt-br">
+    <head th:insert="~{fragments/header}"></head>
+
+    <body class="bg-gray-100">
+      <!-- Header -->
+      <div th:insert="~{fragments/top :: top}"></div>
+
+      <!-- Content -->
+      <main th:fragment="main" class="main container mx-auto p-4 py-8">
+        <div
+          class="max-w-lg mx-auto text-center bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8 lg:p-12"
+        >
+          <div class="mb-8">
+            <div
+              class="w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center mx-auto mb-6 bg-orange-100 rounded-full"
+            >
+              <i class="ri-time-line text-2xl sm:text-3xl text-orange-500"></i>
+            </div>
+            <h1
+              class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4 px-4"
+            >
+              Token de Confirmação Expirado
+            </h1>
+            <p
+              class="text-gray-600 text-base sm:text-lg leading-relaxed mb-8 px-2"
+            >
+              Seu link de confirmação de registro expirou. Por favor, solicite
+              um novo email de verificação para ativar sua conta e continuar
+              usando nossos serviços.
+            </p>
+          </div>
+          <div class="space-y-6">
+            <a
+              href="/login/reset"
+              title="Ir para página de recuperação de senha"
+              id="resendBtn"
+              class="w-full bg-primary text-white py-3 sm:py-4 px-6 !rounded-button font-semibold text-base sm:text-lg hover:bg-red-600 transition-colors whitespace-nowrap flex items-center justify-center gap-3"
+            >
+              <div class="w-5 h-5 flex items-center justify-center">
+                <i class="ri-mail-send-line text-lg"></i>
+              </div>
+              <span class="hidden sm:inline"
+                >Reenviar Email de Confirmação</span
+              >
+              <span class="sm:hidden">Reenviar Email</span>
+            </a>
+            <div class="text-sm text-gray-500 space-y-3">
+              <p class="flex items-center justify-center gap-2 flex-wrap">
+                <span class="flex items-center gap-1.5">
+                  <i class="ri-information-line text-sm"></i>
+                  <span>Verifique sua caixa de spam após o reenvio</span>
+                </span>
+              </p>
+            </div>
+            <div class="mt-8 sm:mt-12 p-4 sm:p-6 bg-gray-50 rounded-xl">
+              <h3
+                class="font-semibold text-gray-900 mb-3 flex items-center justify-center gap-2 flex-wrap"
+              >
+                <div
+                  class="w-5 h-5 flex items-center justify-center flex-shrink-0"
+                >
+                  <i class="ri-question-line text-lg"></i>
+                </div>
+                <span>Precisa de ajuda?</span>
+              </h3>
+              <p class="text-sm text-gray-600 mb-4 leading-relaxed">
+                Se você continuar enfrentando problemas com a confirmação do seu
+                registro, entre em
+                <a
+                  href="/about#contato"
+                  title="Ir para seção de contato"
+                  class="inline-flex items-center gap-2 text-primary hover:text-red-600 font-medium text-sm justify-center w-full sm:w-auto"
+                >
+                  contato.</a
+                >
+              </p>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <!-- footer -->
+      <div th:insert="~{fragments/footer :: footer}"></div>
+    </body>
+  </html>
+</DOCTYPE>
