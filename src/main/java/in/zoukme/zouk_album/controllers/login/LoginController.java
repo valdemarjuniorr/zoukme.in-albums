@@ -7,9 +7,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import in.zoukme.zouk_album.services.users.UserService;
+
 @Controller
 @RequestMapping("/login")
 public class LoginController {
+
+  private final UserService service;
+
+  public LoginController(UserService service) {
+    this.service = service;
+  }
 
   @GetMapping
   String login(@RequestParam(required = false) Boolean error, Model model) {
@@ -29,8 +37,11 @@ public class LoginController {
 
   @PostMapping("/password-reset")
   String passwordRedefine(@RequestParam String email, Model model) {
-    model.addAttribute("email", email);
+    var error = service.resend(email);
+    return switch (error) {
+      case EMAIL_NOT_FOUND -> "users/email-not-found";
 
-    return "users/password-reset";
+      default -> "users/password-reset";
+    };
   }
 }

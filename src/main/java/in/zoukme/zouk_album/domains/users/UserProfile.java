@@ -11,4 +11,17 @@ public record UserProfile(@Id Long id, String fullName, String phone, String ins
   public UserProfile(String fullName, String phone, String instagram, User user) {
     this(null, fullName, phone, instagram, AggregateReference.to(user.id()));
   }
+
+  public String phone() {
+    return phone.isBlank() ? null : phone.replaceAll("[^0-9]", "");
+  }
+
+  public String firstName() {
+    return fullName.split(" ")[0];
+  }
+
+  public String surname() {
+    var parts = fullName.split(" ");
+    return parts.length > 1 ? parts[parts.length - 1] : "";
+  }
 }

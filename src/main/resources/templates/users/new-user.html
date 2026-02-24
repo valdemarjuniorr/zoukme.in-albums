@@ -80,8 +80,10 @@
                           <label
                             for="firstName"
                             class="block text-sm font-medium text-gray-700 mb-2"
-                            >Primeiro nome</label
                           >
+                            <i class="ri-user-line mr-2"></i>Primeiro nome *
+                          </label>
+
                           <input
                             type="text"
                             id="firstName"
@@ -95,8 +97,9 @@
                           <label
                             for="lastName"
                             class="block text-sm font-medium text-gray-700 mb-2"
-                            >Sobrenome</label
                           >
+                            <i class="ri-user-line mr-2"></i>Sobrenome *
+                          </label>
                           <input
                             type="text"
                             id="lastName"
@@ -111,8 +114,9 @@
                         <label
                           for="email"
                           class="block text-sm font-medium text-gray-700 mb-2"
-                          >Email</label
                         >
+                          <i class="ri-mail-line mr-2"></i>E-mail *
+                        </label>
                         <input
                           type="email"
                           id="email"
@@ -127,8 +131,9 @@
                           <label
                             for="password"
                             class="block text-sm font-medium text-gray-700 mb-2"
-                            >Senha</label
                           >
+                            <i class="ri-lock-2-line"></i> Senha *
+                          </label>
                           <div class="relative">
                             <input
                               type="password"
@@ -163,7 +168,8 @@
                           <label
                             for="confirmPassword"
                             class="block text-sm font-medium text-gray-700 mb-2"
-                            >Confirmar Senha</label
+                            ><i class="ri-lock-2-line"></i> Confirmar
+                            Senha</label
                           >
                           <input
                             type="password"
@@ -180,8 +186,9 @@
                           <label
                             for="phone"
                             class="block text-sm font-medium text-gray-700 mb-2"
-                            >Celular</label
                           >
+                            <i class="ri-phone-line mr-2"></i>Celular
+                          </label>
                           <input
                             type="tel"
                             id="phone"
@@ -189,12 +196,19 @@
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-sm"
                             placeholder="(99) 9-9999-9999"
                           />
+                          <script type="text/javascript">
+                            var cleave = new Cleave("#phone", {
+                              blocks: [0, 2, 5, 4],
+                              delimiters: ["(", ") ", " - "],
+                              numeral: false,
+                            });
+                          </script>
                         </div>
                         <div>
                           <label
                             for="instagram"
                             class="block text-sm font-medium text-gray-700 mb-2"
-                            >Instagram</label
+                            ><i class="ri-instagram-line"></i> Instagram</label
                           >
                           <div class="relative">
                             <span

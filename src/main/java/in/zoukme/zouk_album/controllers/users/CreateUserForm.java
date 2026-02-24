@@ -8,4 +8,5 @@ record CreateUserForm(
     String confirmPassword,
     String phone,
     String instagram) {
+
 }

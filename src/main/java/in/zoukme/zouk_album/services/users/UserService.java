@@ -50,6 +50,10 @@ public class UserService {
     return repository.findByEmail(username);
   }
 
+  public Optional<UserProfile> findProfileByEmail(String email) {
+    return profileRepository.findByEmail(email);
+  }
+
   public UserVerificationError confirmUserBy(String token) {
     var verificationToken = tokenRepository.findByToken(token);
     if (Objects.isNull(verificationToken)) {
@@ -67,6 +71,16 @@ public class UserService {
       log.info("Email verified for user with email: {}", user.email());
     });
 
+    return null;
+  }
+
+  public UserVerificationError resend(String email) {
+    var user = repository.findByEmail(email);
+    if (Objects.isNull(user)) {
+      log.warn("User not found for email: {}", email);
+      return UserVerificationError.EMAIL_NOT_FOUND;
+    }
+    // send email
     return null;
   }
 }
