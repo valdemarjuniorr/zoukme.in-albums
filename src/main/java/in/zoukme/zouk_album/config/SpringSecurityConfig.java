@@ -19,25 +19,13 @@ public class SpringSecurityConfig {
         .authorizeHttpRequests(
             authorizeRequests -> authorizeRequests
                 .requestMatchers("/admin/**")
-                .authenticated()
+                .hasRole("ADMIN")
                 .anyRequest()
                 .permitAll())
         .formLogin(formLogin -> formLogin.loginPage("/login").failureUrl("/login?error=true"))
         .logout(LogoutConfigurer::permitAll);
     return http.build();
   }
-
-  // @Bean
-  // UserDetailsService userDetailsService() {
-  // var manager = new InMemoryUserDetailsManager();
-  // manager.createUser(
-  // User.withDefaultPasswordEncoder()
-  // .username("admin")
-  // .password("password")
-  // .roles("ADMIN")
-  // .build());
-  // return manager;
-  // }
 
   @Bean
   PasswordEncoder passwordEncoder() {
