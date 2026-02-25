@@ -15,6 +15,7 @@ import in.zoukme.zouk_album.domains.users.UserProfile;
 import in.zoukme.zouk_album.repositories.users.EmailVerificationTokenRepository;
 import in.zoukme.zouk_album.repositories.users.UserProfileRepository;
 import in.zoukme.zouk_album.repositories.users.UserRepository;
+import in.zoukme.zouk_album.services.aws.ses.EmailService;
 
 @Service
 public class UserService {
@@ -25,13 +26,15 @@ public class UserService {
   private final UserProfileRepository profileRepository;
   private final PasswordEncoder passwordEncoder;
   private final EmailVerificationTokenRepository tokenRepository;
+  private final EmailService emailService;
 
   public UserService(UserRepository repository, UserProfileRepository profileRepository,
-      PasswordEncoder passwordEncoder, EmailVerificationTokenRepository tokenRepository) {
+      PasswordEncoder passwordEncoder, EmailVerificationTokenRepository tokenRepository, EmailService emailService) {
     this.repository = repository;
     this.profileRepository = profileRepository;
     this.passwordEncoder = passwordEncoder;
     this.tokenRepository = tokenRepository;
+    this.emailService = emailService;
   }
 
   @Transactional
@@ -41,9 +44,12 @@ public class UserService {
     var newUser = repository.save(user);
     var profile = new UserProfile(fullName, phone, instagram, newUser);
     profileRepository.save(profile);
-    tokenRepository.save(new EmailVerificationToken(newUser));
+    var verificationToken = new EmailVerificationToken(newUser);
+    tokenRepository.save(verificationToken);
 
-    log.info("Created new user with email: {}", email);
+    emailService.send(
+        new UserPendingEmailTemplate(email, verificationToken.token()));
+    log.info("User created with email: {}", email);
   }
 
   public Optional<User> findByUsername(String username) {
