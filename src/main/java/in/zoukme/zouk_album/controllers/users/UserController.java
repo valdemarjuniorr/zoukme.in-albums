@@ -39,6 +39,7 @@ public class UserController {
     return "users/check-email";
   }
 
+  // After user clicks the link in the email
   @GetMapping("/confirmed")
   String confirmed(@RequestParam("token") String token) {
     var error = service.confirmUserBy(token);
@@ -50,5 +51,4 @@ public class UserController {
       case EMAIL_NOT_FOUND -> "users/email-not-found";
     };
   }
-
 }

@@ -11,9 +11,17 @@ import org.springframework.data.relational.core.mapping.Table;
 public record EmailVerificationToken(@Id Long id, String token, AggregateReference<User, Long> userId,
     LocalDateTime expiryDate) {
 
+  public EmailVerificationToken(UserProfile profile) {
+    this(profile.userId().getId());
+  }
+
   public EmailVerificationToken(User user) {
+    this(user.id());
+  }
+
+  private EmailVerificationToken(Long userId) {
     var generatedToken = UUID.randomUUID().toString();
-    this(null, generatedToken, AggregateReference.to(user.id()), LocalDateTime.now().plusDays(3));
+    this(null, generatedToken, AggregateReference.to(userId), LocalDateTime.now().plusDays(3));
   }
 
   public Boolean isExpired() {

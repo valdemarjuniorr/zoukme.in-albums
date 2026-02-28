@@ -1,5 +1,9 @@
 package in.zoukme.zouk_album.controllers.login;
 
+import java.util.Objects;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +17,7 @@ import in.zoukme.zouk_album.services.users.UserService;
 @RequestMapping("/login")
 public class LoginController {
 
+  private final Logger log = LoggerFactory.getLogger(LoginController.class);
   private final UserService service;
 
   public LoginController(UserService service) {
@@ -30,18 +35,34 @@ public class LoginController {
     return "users/password-reset";
   }
 
-  @GetMapping("/redefine")
-  String passwordRedefine() {
-    return "users/password-redefine";
-  }
-
   @PostMapping("/password-reset")
-  String passwordRedefine(@RequestParam String email, Model model) {
+  String passwordRedefine(@RequestParam String email) {
     var error = service.resend(email);
+    if (Objects.isNull(error)) {
+      return "users/password-reset";
+    }
+
     return switch (error) {
       case EMAIL_NOT_FOUND -> "users/email-not-found";
-
       default -> "users/password-reset";
     };
   }
+
+  @GetMapping("/redefine")
+  String passwordRedefineValidate(@RequestParam("token") String token, Model model) {
+    service.findTokenBy(token);
+
+    return "users/password-redefine";
+  }
+
+  @PostMapping("/redefine")
+  String passwordRedefine(String token, String password, String confirmPassword,
+      Model model) {
+
+    log.info("Redefining password for token: {} {} {}", token, password, confirmPassword);
+    service.redefinePasswordValidate(token, password, confirmPassword);
+
+    return "users/password-updated-success";
+  }
+
 }

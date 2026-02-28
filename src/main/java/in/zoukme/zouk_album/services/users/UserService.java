@@ -12,10 +12,10 @@ import org.springframework.transaction.annotation.Transactional;
 import in.zoukme.zouk_album.domains.users.EmailVerificationToken;
 import in.zoukme.zouk_album.domains.users.User;
 import in.zoukme.zouk_album.domains.users.UserProfile;
-import in.zoukme.zouk_album.repositories.users.EmailVerificationTokenRepository;
 import in.zoukme.zouk_album.repositories.users.UserProfileRepository;
 import in.zoukme.zouk_album.repositories.users.UserRepository;
 import in.zoukme.zouk_album.services.aws.ses.EmailService;
+import in.zoukme.zouk_album.services.token.EmailVerificationTokenService;
 
 @Service
 public class UserService {
@@ -25,15 +25,15 @@ public class UserService {
   private final UserRepository repository;
   private final UserProfileRepository profileRepository;
   private final PasswordEncoder passwordEncoder;
-  private final EmailVerificationTokenRepository tokenRepository;
+  private final EmailVerificationTokenService tokenService;
   private final EmailService emailService;
 
   public UserService(UserRepository repository, UserProfileRepository profileRepository,
-      PasswordEncoder passwordEncoder, EmailVerificationTokenRepository tokenRepository, EmailService emailService) {
+      PasswordEncoder passwordEncoder, EmailVerificationTokenService tokenService, EmailService emailService) {
     this.repository = repository;
     this.profileRepository = profileRepository;
     this.passwordEncoder = passwordEncoder;
-    this.tokenRepository = tokenRepository;
+    this.tokenService = tokenService;
     this.emailService = emailService;
   }
 
@@ -45,7 +45,7 @@ public class UserService {
     var profile = new UserProfile(fullName, phone, instagram, newUser);
     profileRepository.save(profile);
     var verificationToken = new EmailVerificationToken(newUser);
-    tokenRepository.save(verificationToken);
+    tokenService.create(verificationToken);
 
     emailService.send(
         new UserPendingEmailTemplate(email, verificationToken.token()));
@@ -61,7 +61,7 @@ public class UserService {
   }
 
   public UserVerificationError confirmUserBy(String token) {
-    var verificationToken = tokenRepository.findByToken(token);
+    var verificationToken = tokenService.findBy(token);
     if (Objects.isNull(verificationToken)) {
       log.warn("Email verification token not found for token: {}", token);
       return UserVerificationError.EMAIL_NOT_FOUND;
@@ -73,20 +73,44 @@ public class UserService {
 
     repository.findById(verificationToken.userId().getId()).ifPresent(user -> {
       repository.enableUser(user.email());
-      tokenRepository.delete(verificationToken);
+      tokenService.delete(verificationToken);
       log.info("Email verified for user with email: {}", user.email());
     });
 
     return null;
   }
 
+  // Method responisible to resend the email with a new token to redefine password
   public UserVerificationError resend(String email) {
-    var user = repository.findByEmail(email);
-    if (Objects.isNull(user)) {
-      log.warn("User not found for email: {}", email);
+    var profile = profileRepository.findByEmail(email);
+    if (profile.isEmpty()) {
+      log.warn("Profile not found for email: {}", email);
       return UserVerificationError.EMAIL_NOT_FOUND;
     }
-    // send email
+    var token = new EmailVerificationToken(profile.get());
+    tokenService.create(token);
+    emailService.send(
+        new UserResetPasswordEmailTemplate(profile.get().fullName(), email, token.token()));
+    log.info("Resent email verification token to email: {}", email);
+
     return null;
+  }
+
+  public EmailVerificationToken findTokenBy(String token) {
+    return tokenService.findBy(token);
+  }
+
+  public void redefinePasswordValidate(String token, String password, String confirmPassword) {
+    var tokenFound = tokenService.findBy(token);
+    if (tokenFound.isExpired()) {
+      log.warn("Email verification token expired for token: {}", token);
+      throw new IllegalArgumentException("Token expired");
+    }
+
+    repository.findById(tokenFound.userId().getId()).ifPresent(user -> {
+      repository.updateBy(user.email(), passwordEncoder.encode(password));
+      // tokenService.delete(tokenFound);
+      log.info("Password redefined for user with email: {}", user.email());
+    });
   }
 }
