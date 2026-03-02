@@ -4,7 +4,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -12,6 +11,8 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 public class SpringSecurityConfig {
+
+  private static final int TOKEN_VALIDITY_SECONDS = 7 * 24 * 60 * 60; // 1 week
 
   @Bean
   SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -22,8 +23,10 @@ public class SpringSecurityConfig {
                 .hasRole("ADMIN")
                 .anyRequest()
                 .permitAll())
-        .formLogin(formLogin -> formLogin.loginPage("/login").failureUrl("/login?error=true"))
-        .logout(LogoutConfigurer::permitAll);
+        .formLogin(formLogin -> formLogin.loginPage("/login").failureUrl("/login?error=true").defaultSuccessUrl("/")
+            .permitAll())
+        .rememberMe(rememberMe -> rememberMe.tokenValiditySeconds(TOKEN_VALIDITY_SECONDS))
+        .logout(logout -> logout.logoutUrl("/logout").deleteCookies("remember-me").logoutSuccessUrl("/").permitAll());
     return http.build();
   }
 

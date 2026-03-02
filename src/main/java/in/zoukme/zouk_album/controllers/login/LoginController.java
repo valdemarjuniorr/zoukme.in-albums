@@ -2,8 +2,7 @@ package in.zoukme.zouk_album.controllers.login;
 
 import java.util.Objects;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +16,6 @@ import in.zoukme.zouk_album.services.users.UserService;
 @RequestMapping("/login")
 public class LoginController {
 
-  private final Logger log = LoggerFactory.getLogger(LoginController.class);
   private final UserService service;
 
   public LoginController(UserService service) {
@@ -25,7 +23,10 @@ public class LoginController {
   }
 
   @GetMapping
-  String login(@RequestParam(required = false) Boolean error, Model model) {
+  String login(@RequestParam(required = false) Boolean error, Authentication authentication, Model model) {
+    if (Objects.nonNull(authentication) && authentication.isAuthenticated()) {
+      return "redirect:/";
+    }
     model.addAttribute("error", error);
     return "login";
   }
@@ -58,8 +59,6 @@ public class LoginController {
   @PostMapping("/redefine")
   String passwordRedefine(String token, String password, String confirmPassword,
       Model model) {
-
-    log.info("Redefining password for token: {} {} {}", token, password, confirmPassword);
     service.redefinePasswordValidate(token, password, confirmPassword);
 
     return "users/password-updated-success";
