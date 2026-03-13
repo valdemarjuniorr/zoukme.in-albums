@@ -23,7 +23,9 @@ public class CustomUserDetailsService implements UserDetailsService {
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
     log.info("Loading user by username: " + username);
     var user = service.findByUsername(username)
-        .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        .filter(u -> u.enabled()).orElseThrow(() -> {
+          return new UsernameNotFoundException("User not found or pending: " + username);
+        });
     return org.springframework.security.core.userdetails.User
         .withUsername(user.email())
         .password(user.password())
