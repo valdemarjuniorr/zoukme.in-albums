@@ -9,4 +9,5 @@ public record User(@Id Long id, String email, String password, String role, Bool
   public User(String email, String password) {
     this(null, email, password, "USER", Boolean.FALSE);
   }
+
 }

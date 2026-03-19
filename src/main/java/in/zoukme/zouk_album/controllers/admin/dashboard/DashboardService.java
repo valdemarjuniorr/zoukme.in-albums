@@ -5,10 +5,10 @@ import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 
 import in.zoukme.zouk_album.domains.SumPriceTotalTransaction;
-import in.zoukme.zouk_album.repositories.photos.PhotoService;
 import in.zoukme.zouk_album.services.AlbumService;
 import in.zoukme.zouk_album.services.aws.EventService;
 import in.zoukme.zouk_album.services.payments.PaymentService;
+import in.zoukme.zouk_album.services.photos.PhotoService;
 
 @Service
 public class DashboardService {

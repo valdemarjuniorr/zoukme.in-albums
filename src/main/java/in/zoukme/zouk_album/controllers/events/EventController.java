@@ -71,7 +71,8 @@ public class EventController {
       Model model,
       Authentication authentication) {
     var pageObj = new Page(page, size);
-    var photos = service.getPhotosBy(eventUrl, albumName, pageObj);
+
+    var photos = service.getPhotosWithLikesBy(eventUrl, albumName, pageObj);
     model.addAttribute("photos", photos);
     model.addAttribute("pagination", pageObj.generatePagination(photos.getTotalPages()));
     model.addAttribute("albumName", albumName);

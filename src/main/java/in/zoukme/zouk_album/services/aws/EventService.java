@@ -1,5 +1,20 @@
 package in.zoukme.zouk_album.services.aws;
 
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Predicate;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.jdbc.core.mapping.AggregateReference;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
+
+import in.zoukme.zouk_album.domains.Event;
 import in.zoukme.zouk_album.domains.EventPhotos;
 import in.zoukme.zouk_album.domains.Page;
 import in.zoukme.zouk_album.domains.Photo;
@@ -12,23 +27,13 @@ import in.zoukme.zouk_album.repositories.PhotoRepository;
 import in.zoukme.zouk_album.repositories.SocialMediaRepository;
 import in.zoukme.zouk_album.repositories.events.CreateEventRequest;
 import in.zoukme.zouk_album.repositories.events.EventDetails;
+import in.zoukme.zouk_album.repositories.events.EventPhotoWithLike;
 import in.zoukme.zouk_album.repositories.events.EventPhotosRepository;
 import in.zoukme.zouk_album.repositories.events.EventRepository;
 import in.zoukme.zouk_album.repositories.events.SubEventRepository;
 import in.zoukme.zouk_album.repositories.events.UpdateEventRequest;
 import in.zoukme.zouk_album.services.PackageService;
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
-import java.util.function.Predicate;
-
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.data.jdbc.core.mapping.AggregateReference;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
-import in.zoukme.zouk_album.domains.Event;
+import in.zoukme.zouk_album.services.users.UserService;
 
 @Service
 public class EventService {
@@ -40,6 +45,9 @@ public class EventService {
   private final SubEventRepository subEventRepository;
   private final EventPhotosRepository eventPhotosRepository;
   private final PackageService packageService;
+  private final UserService userService;
+
+  private static final Logger log = LoggerFactory.getLogger(EventService.class);
 
   public EventService(
       EventRepository repository,
@@ -48,7 +56,7 @@ public class EventService {
       BucketService bucketService,
       SubEventRepository subEventRepository,
       EventPhotosRepository eventPhotosRepository,
-      PackageService packageService) {
+      PackageService packageService, UserService userService) {
     this.repository = repository;
     this.socialMediaRepository = socialMediaRepository;
     this.photoRepository = photoRepository;
@@ -56,6 +64,7 @@ public class EventService {
     this.subEventRepository = subEventRepository;
     this.eventPhotosRepository = eventPhotosRepository;
     this.packageService = packageService;
+    this.userService = userService;
   }
 
   public Event findBy(Long id) {
@@ -113,12 +122,9 @@ public class EventService {
   }
 
   public org.springframework.data.domain.Page<Event> findAll(Page page) {
-    var authentication = SecurityContextHolder.getContext().getAuthentication();
-    if (authentication != null && authentication.getName().equals("admin")) {
-      return this.repository.findAllByOrderByDateDesc(page.toPageRequest());
-    }
-    return this.repository.findAllByDateIsGreaterThanEqualOrderByDate(
-        LocalDate.now(), page.toPageRequest());
+    return userService.hasRole("ROLE_ADMIN")
+        ? this.repository.findAllByOrderByDateDesc(page.toPageRequest())
+        : this.repository.findAllByDateIsGreaterThanEqualOrderByDate(LocalDate.now(), page.toPageRequest());
   }
 
   public List<Event> findAllActiveEvents() {
@@ -130,6 +136,21 @@ public class EventService {
     var subEvents = this.subEventRepository.findSubEventsBy(eventUrl);
 
     return new SubEventWithEvent(event, subEvents);
+  }
+
+  public org.springframework.data.domain.Page<EventPhotoWithLike> getPhotosWithLikesBy(
+      String eventUrl, String albumName, Page page) {
+    Long userId = null;
+    var userLogged = userService.getUserLogged();
+    if (userLogged.isPresent()) {
+      userId = userLogged.get().id();
+    }
+    var subEvent = this.subEventRepository
+        .findByName(albumName, eventUrl)
+        .orElseThrow(SubEventNotFoundException::new);
+    var result = eventPhotosRepository.findBy(subEvent.id(), userId, page.size(), page.offset());
+
+    return new PageImpl<>(result, page.toPageRequest(), eventPhotosRepository.countBySubEventId(subEvent.id()));
   }
 
   public org.springframework.data.domain.Page<EventPhotos> getPhotosBy(

@@ -19,7 +19,11 @@ public record Page(Integer page, Integer size) {
   }
 
   public PageRequest toPageRequest() {
-    return PageRequest.of(this.page - 1, this.size);
+    return PageRequest.of(page - 1, this.size);
+  }
+
+  public Integer offset() {
+    return (page - 1) * size;
   }
 
   public List<String> generatePagination(Integer totalPages) {

@@ -5,6 +5,8 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -113,4 +115,24 @@ public class UserService {
       log.info("Password redefined for user with email: {}", user.email());
     });
   }
+
+  public Optional<User> getUserLogged() {
+    var authentication = SecurityContextHolder.getContext().getAuthentication();
+    return findByUsername(authentication.getName());
+  }
+
+  public Optional<UserDetails> getCurrentUser() {
+    var authentication = SecurityContextHolder.getContext().getAuthentication();
+    if (Objects.nonNull(authentication) && authentication.getPrincipal() instanceof UserDetails) {
+      return Optional.of((UserDetails) authentication.getPrincipal());
+    }
+    return Optional.empty();
+  }
+
+  public Boolean hasRole(String role) {
+    var user = getCurrentUser();
+    return user.isPresent() && user.get().getAuthorities().stream()
+        .anyMatch(a -> a.getAuthority().equals(role));
+  }
+
 }

@@ -1,9 +1,10 @@
-package in.zoukme.zouk_album.repositories.photos;
+package in.zoukme.zouk_album.services.photos;
+
+import java.util.Set;
+
+import org.springframework.stereotype.Service;
 
 import in.zoukme.zouk_album.repositories.PhotoRepository;
-import in.zoukme.zouk_album.repositories.events.EventPhotosRepository;
-import java.util.Set;
-import org.springframework.stereotype.Service;
 import in.zoukme.zouk_album.repositories.events.EventPhotosRepository;
 
 @Service
