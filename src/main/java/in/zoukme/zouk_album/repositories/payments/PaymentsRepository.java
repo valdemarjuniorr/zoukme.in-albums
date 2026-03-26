@@ -1,12 +1,10 @@
 package in.zoukme.zouk_album.repositories.payments;
 
-import in.zoukme.zouk_album.domains.payments.Payment;
-import in.zoukme.zouk_album.domains.payments.PaymentStatus;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -14,7 +12,10 @@ import org.springframework.data.jdbc.repository.query.Modifying;
 import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.data.repository.ListPagingAndSortingRepository;
+
 import in.zoukme.zouk_album.domains.SumPriceTotalTransaction;
+import in.zoukme.zouk_album.domains.payments.Payment;
+import in.zoukme.zouk_album.domains.payments.PaymentStatus;
 
 public interface PaymentsRepository
     extends ListPagingAndSortingRepository<Payment, Long>, ListCrudRepository<Payment, Long> {

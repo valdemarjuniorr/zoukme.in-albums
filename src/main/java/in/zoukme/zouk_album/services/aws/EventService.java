@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.jdbc.core.mapping.AggregateReference;
@@ -46,8 +44,6 @@ public class EventService {
   private final EventPhotosRepository eventPhotosRepository;
   private final PackageService packageService;
   private final UserService userService;
-
-  private static final Logger log = LoggerFactory.getLogger(EventService.class);
 
   public EventService(
       EventRepository repository,

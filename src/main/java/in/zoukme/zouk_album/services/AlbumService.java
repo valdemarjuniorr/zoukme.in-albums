@@ -1,11 +1,5 @@
 package in.zoukme.zouk_album.services;
 
-import in.zoukme.zouk_album.domains.Page;
-import in.zoukme.zouk_album.exceptions.AlbumNotFoundException;
-import in.zoukme.zouk_album.exceptions.EventPhotoNotFoundException;
-import in.zoukme.zouk_album.repositories.AlbumRepository;
-import in.zoukme.zouk_album.services.aws.BucketImage;
-import in.zoukme.zouk_album.services.aws.BucketService;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
@@ -15,9 +9,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.jdbc.core.mapping.AggregateReference;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
 import in.zoukme.zouk_album.domains.Album;
 import in.zoukme.zouk_album.domains.Event;
-import in.zoukme.zouk_album.domains.EventPhotos;
+import in.zoukme.zouk_album.domains.Page;
+import in.zoukme.zouk_album.exceptions.AlbumNotFoundException;
+import in.zoukme.zouk_album.exceptions.EventPhotoNotFoundException;
+import in.zoukme.zouk_album.repositories.AlbumRepository;
+import in.zoukme.zouk_album.services.aws.BucketImage;
+import in.zoukme.zouk_album.services.aws.BucketService;
 
 @Service
 public class AlbumService {
