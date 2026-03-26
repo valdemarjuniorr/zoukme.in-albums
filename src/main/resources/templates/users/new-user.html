@@ -284,21 +284,6 @@
                       <div
                         class="w-8 h-8 flex items-center justify-center bg-white/20 rounded-full flex-shrink-0"
                       >
-                        <i class="ri-play-circle-line"></i>
-                      </div>
-                      <div>
-                        <h4 class="font-semibold mb-1">
-                          Recursos de Aprendizado
-                        </h4>
-                        <p class="text-white/80 text-sm">
-                          Tutoriais em vídeo e materiais de prática
-                        </p>
-                      </div>
-                    </div>
-                    <div class="flex items-start space-x-4">
-                      <div
-                        class="w-8 h-8 flex items-center justify-center bg-white/20 rounded-full flex-shrink-0"
-                      >
                         <i class="ri-trophy-line"></i>
                       </div>
                       <div>
@@ -315,16 +300,21 @@
                     </h4>
                     <div class="grid grid-cols-2 gap-4 text-center">
                       <div>
-                        <div class="text-2xl font-bold">2.500+</div>
-                        <div class="text-white/80 text-sm">Membros Ativos</div>
+                        <div
+                          th:text="${count} + '+'"
+                          class="text-2xl font-bold"
+                        ></div>
+                        <div class="text-white/80 text-sm">Usuários Ativos</div>
                       </div>
                       <div>
-                        <div class="text-2xl font-bold">150+</div>
-                        <div class="text-white/80 text-sm">Eventos Mensais</div>
+                        <div class="text-2xl font-bold">27+</div>
+                        <div class="text-white/80 text-sm">
+                          Total de eventos
+                        </div>
                       </div>
                       <div>
-                        <div class="text-2xl font-bold">50+</div>
-                        <div class="text-white/80 text-sm">Países</div>
+                        <div class="text-2xl font-bold">5+</div>
+                        <div class="text-white/80 text-sm">Cidades</div>
                       </div>
                       <div>
                         <div class="text-2xl font-bold">4.9★</div>

@@ -135,4 +135,7 @@ public class UserService {
         .anyMatch(a -> a.getAuthority().equals(role));
   }
 
+  public Long count() {
+    return repository.count();
+  }
 }

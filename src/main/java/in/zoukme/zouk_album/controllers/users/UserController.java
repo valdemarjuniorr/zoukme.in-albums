@@ -22,7 +22,9 @@ public class UserController {
   }
 
   @GetMapping("/new")
-  String newUser() {
+  String newUser(Model model) {
+    model.addAttribute("count", service.count());
+
     return "users/new-user";
   }
 

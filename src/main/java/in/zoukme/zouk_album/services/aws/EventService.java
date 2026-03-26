@@ -234,4 +234,8 @@ public class EventService {
   public List<Event> getNotFeaturedAndIncomingEvents() {
     return this.repository.findAllByFeatureEventIsFalseAndDateIsGreaterThanEqualOrderByDate(LocalDate.now());
   }
+
+  public Boolean hasVisiblePackage(Long eventId) {
+    return this.packageService.hasVisiblePackage(eventId);
+  }
 }

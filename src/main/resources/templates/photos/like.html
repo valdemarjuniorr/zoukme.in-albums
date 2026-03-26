@@ -5,7 +5,7 @@
   >
     <button
       class="like-btn flex items-center space-x-2 bg-white/95 hover:bg-white backdrop-blur-sm rounded-full px-2 py-1 transition-all duration-200 cursor-pointer group shadow-lg border border-gray-200"
-      title="Logue para curtir"
+      title="Login necessário"
       onclick="
         showLoginRequired(this);
         return false;
@@ -23,7 +23,7 @@
         btn.querySelector(".icon-container").innerHTML =
           '<i class="ri-heart-line text-red-400 text-base"></i>';
         const label = btn.querySelector(".text-container");
-        label.textContent = "Log para curtir";
+        label.textContent = "Login necessário";
         label.classList.remove("hidden");
       }
     </script>

@@ -85,7 +85,10 @@ public class EventController {
   @GetMapping("/featured")
   String getFeaturedEvent(Model model) {
     var event = service.getFeaturedEvent();
-    model.addAttribute("event", event.orElse(null));
+    event.ifPresent(e -> {
+      model.addAttribute("event", e);
+      model.addAttribute("hasPackage", service.hasVisiblePackage(e.getId()));
+    });
 
     return "events/feature_event";
   }

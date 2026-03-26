@@ -63,4 +63,8 @@ public class PackageService {
         pack.id(), pack.eventId(), pack.title(), pack.description(), pack.price(), !pack.visible());
     save(updatedPack);
   }
+
+  public Boolean hasVisiblePackage(Long eventId) {
+    return this.repository.findFirstByEventIdAndVisibleTrue(eventId).isPresent();
+  }
 }

@@ -14,9 +14,11 @@ public interface UserRepository extends ListCrudRepository<User, Long> {
 
   @Modifying
   @Query("UPDATE users SET enabled = true WHERE email = :email")
-  public void enableUser(String email);
+  void enableUser(String email);
 
   @Modifying
   @Query("UPDATE users SET password = :password WHERE email = :email")
-  public void updateBy(String email, String password);
+  void updateBy(String email, String password);
+
+  long count();
 }
