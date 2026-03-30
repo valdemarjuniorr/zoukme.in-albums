@@ -5,6 +5,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import in.zoukme.zouk_album.domains.users.User;
 import in.zoukme.zouk_album.services.users.UserService;
 
 @Service
@@ -19,7 +20,7 @@ public class CustomUserDetailsService implements UserDetailsService {
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
     var user = service.findByUsername(username)
-        .filter(u -> u.enabled()).orElseThrow(() -> {
+        .filter(User::enabled).orElseThrow(() -> {
           return new UsernameNotFoundException("User not found or pending: " + username);
         });
     return org.springframework.security.core.userdetails.User

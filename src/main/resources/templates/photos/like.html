@@ -15,16 +15,18 @@
         <i class="ri-heart-line text-gray-400 text-base"></i>
       </div>
       <span
-        class="text-red-400 text-xs font-medium text-container hidden"
+        th:text="${count}"
+        class="text-gray-400 text-xs font-medium text-container"
       ></span>
     </button>
     <script>
       function showLoginRequired(btn) {
-        btn.querySelector(".icon-container").innerHTML =
-          '<i class="ri-heart-line text-red-400 text-base"></i>';
+        btn
+          .querySelector(".icon-container i")
+          .classList.replace("text-gray-400", "text-red-400");
         const label = btn.querySelector(".text-container");
         label.textContent = "Login necessário";
-        label.classList.remove("hidden");
+        label.classList.replace("text-gray-400", "text-red-400");
       }
     </script>
   </div>
