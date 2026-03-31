@@ -19,8 +19,8 @@ public class SpringSecurityConfig {
     http.csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(
             authorizeRequests -> authorizeRequests
-                .requestMatchers("/admin/**")
-                .hasRole("ADMIN")
+                .requestMatchers("/admin/**").hasRole("ADMIN")
+                .requestMatchers("/users/account/**").authenticated()
                 .anyRequest()
                 .permitAll())
         .formLogin(formLogin -> formLogin.loginPage("/login").failureUrl("/login?error=true").defaultSuccessUrl("/")

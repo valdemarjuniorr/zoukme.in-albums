@@ -60,6 +60,13 @@
     <!-- Desktop Menu -->
     <nav class="hidden md:block">
       <ul class="flex space-x-4">
+        <li sec:authorize="hasRole('USER')">
+          <a
+            href="/users/account"
+            class="text-white hover:text-gray-400 transition-colors"
+            >Conta</a
+          >
+        </li>
         <li sec:authorize="hasRole('ADMIN')">
           <a
             href="/admin/home"
@@ -131,6 +138,13 @@
     >
       <nav class="container mx-auto py-4">
         <ul class="flex flex-col space-y-4">
+          <li sec:authorize="hasRole('USER')">
+            <a
+              href="/users/account"
+              class="block text-white hover:text-gray-400 transition-colors text-center px-4"
+              >Conta</a
+            >
+          </li>
           <li sec:authorize="hasRole('ADMIN')">
             <a
               href="/admin/home"

@@ -138,4 +138,15 @@ public class UserService {
   public Long count() {
     return repository.count();
   }
+
+  public void update(UserProfile profile, String email) {
+    repository.findByEmail(email).ifPresent(user -> {
+      profileRepository.save(profile);
+    });
+  }
+
+  public void updatePassword(User user) {
+    var encode = passwordEncoder.encode(user.password());
+    repository.findByEmail(user.email()).ifPresent(u -> repository.updateBy(u.email(), encode));
+  }
 }
