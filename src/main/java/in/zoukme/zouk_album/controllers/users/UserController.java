@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import in.zoukme.zouk_album.domains.users.User;
+import in.zoukme.zouk_album.exceptions.users.UserPasswordDoesNotMatchException;
 import in.zoukme.zouk_album.services.users.UserService;
 
 @Controller
@@ -79,12 +80,8 @@ public class UserController {
 
   @PostMapping("/account/password")
   String updatePassword(@AuthenticationPrincipal UserDetails userDetails, UserPasswordUpdateForm request, Model model) {
-    log.info("Updating password for user {}", request.newPassword());
-    log.info("Confirming password for user {}", request.confirmNewPassword());
-    log.info("Passwords match: {}", request.matches());
     if (!request.matches()) {
-      model.addAttribute("message", "As senhas não coincidem!");
-      return "/events/toast";
+      throw new UserPasswordDoesNotMatchException();
     }
     service.updatePassword(new User(userDetails.getUsername(), request.newPassword()));
     model.addAttribute("message", "Senha atualizada!");
