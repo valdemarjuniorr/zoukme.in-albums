@@ -1,14 +1,15 @@
 <div
   id="interest-buttons-container"
   th:fragment="interest-buttons"
-  class="flex flex-col sm:flex-row gap-3 min-w-fit"
+  class="w-full"
 >
+  <!-- Login message - shown only when not authenticated -->
   <div
     sec:authorize="!isAuthenticated()"
-    class="w-full text-center text-gray-600 py-3 px-4 bg-gray-50 rounded-md mb-2"
+    class="w-full text-center text-gray-600 py-3 px-4 bg-gray-50 rounded-md mb-4 border border-gray-200"
   >
     <i class="ri-information-line mr-2"></i>
-    <span
+    <span class="text-sm sm:text-base"
       >Faça
       <a th:href="@{/login}" class="text-primary font-medium hover:underline"
         >login</a
@@ -17,75 +18,82 @@
     >
   </div>
 
-  <button
-    sec:authorize="isAuthenticated()"
-    th:hx-post="@{/events/{eventId}/interests/toggle(eventId=${eventId})}"
-    hx-vals='{"type": "interested"}'
-    hx-target="#interest-buttons-container"
-    hx-swap="outerHTML"
-    th:classappend="${userInterest != null && userInterest.interest().name() == 'INTERESTED'} ? 'bg-primary text-white' : 'bg-white text-primary border border-primary'"
-    class="rounded-md flex items-center justify-center px-6 py-3 font-medium transition-all whitespace-nowrap hover:opacity-80"
-  >
-    <i
-      th:classappend="${userInterest != null && userInterest.interest().name() == 'INTERESTED'} ? 'ri-star-fill' : 'ri-star-line'"
-      class="mr-2"
-    ></i>
-    <span>Interessado</span>
-    <span
-      th:if="${interestedCount > 0}"
-      th:classappend="${userInterest != null && userInterest.interest().name() == 'INTERESTED'} ? 'bg-white text-primary' : 'bg-primary text-white'"
-      class="ml-2 rounded-full px-2 py-0.5 text-sm"
-      th:text="${interestedCount}"
-    ></span>
-  </button>
+  <!-- Buttons container - stacked vertically on mobile, horizontal on larger screens -->
+  <div class="flex flex-col sm:flex-row gap-3 w-full">
+    <!-- Interessado Button - Authenticated -->
+    <button
+      sec:authorize="isAuthenticated()"
+      th:hx-post="@{/events/{eventId}/interests/toggle(eventId=${eventId})}"
+      hx-vals='{"type": "interested"}'
+      hx-target="#interest-buttons-container"
+      hx-swap="outerHTML"
+      th:classappend="${userInterest != null && userInterest.interest().name() == 'INTERESTED'} ? 'bg-primary text-white' : 'bg-white text-primary border border-primary'"
+      class="rounded-md flex items-center justify-center px-6 py-3 font-medium transition-all whitespace-nowrap hover:opacity-80 w-full sm:w-auto"
+    >
+      <i
+        th:classappend="${userInterest != null && userInterest.interest().name() == 'INTERESTED'} ? 'ri-star-fill' : 'ri-star-line'"
+        class="mr-2"
+      ></i>
+      <span>Interessado</span>
+      <span
+        th:if="${interestedCount > 0}"
+        th:classappend="${userInterest != null && userInterest.interest().name() == 'INTERESTED'} ? 'bg-white text-primary' : 'bg-primary text-white'"
+        class="ml-2 rounded-full px-2 py-0.5 text-sm"
+        th:text="${interestedCount}"
+      ></span>
+    </button>
 
-  <button
-    sec:authorize="!isAuthenticated()"
-    disabled
-    class="rounded-md flex items-center justify-center px-6 py-3 font-medium transition-all whitespace-nowrap bg-white text-primary border border-primary opacity-50 cursor-not-allowed"
-  >
-    <i class="ri-star-line mr-2"></i>
-    <span>Interessado</span>
-    <span
-      th:if="${interestedCount > 0}"
-      class="ml-2 rounded-full px-2 py-0.5 text-sm bg-primary text-white"
-      th:text="${interestedCount}"
-    ></span>
-  </button>
+    <!-- Interessado Button - Not Authenticated -->
+    <button
+      sec:authorize="!isAuthenticated()"
+      disabled
+      class="rounded-md flex items-center justify-center px-6 py-3 font-medium transition-all whitespace-nowrap bg-white text-primary border border-primary opacity-50 cursor-not-allowed w-full sm:w-auto"
+    >
+      <i class="ri-star-line mr-2"></i>
+      <span>Interessado</span>
+      <span
+        th:if="${interestedCount > 0}"
+        class="ml-2 rounded-full px-2 py-0.5 text-sm bg-primary text-white"
+        th:text="${interestedCount}"
+      ></span>
+    </button>
 
-  <button
-    sec:authorize="isAuthenticated()"
-    th:hx-post="@{/events/{eventId}/interests/toggle(eventId=${eventId})}"
-    hx-vals='{"type": "going"}'
-    hx-target="#interest-buttons-container"
-    hx-swap="outerHTML"
-    th:classappend="${userInterest != null && userInterest.interest().name() == 'GOING'} ? 'bg-green-600 text-white' : 'bg-white text-green-600 border border-green-600'"
-    class="rounded-md flex items-center justify-center px-6 py-3 font-medium transition-all whitespace-nowrap hover:opacity-80"
-  >
-    <i
-      th:classappend="${userInterest != null && userInterest.interest().name() == 'GOING'} ? 'ri-check-fill' : 'ri-check-line'"
-      class="mr-2"
-    ></i>
-    <span>Vou comparecer</span>
-    <span
-      th:if="${goingCount > 0}"
-      th:classappend="${userInterest != null && userInterest.interest().name() == 'GOING'} ? 'bg-white text-green-600' : 'bg-green-600 text-white'"
-      class="ml-2 rounded-full px-2 py-0.5 text-sm"
-      th:text="${goingCount}"
-    ></span>
-  </button>
+    <!-- Vou Comparecer Button - Authenticated -->
+    <button
+      sec:authorize="isAuthenticated()"
+      th:hx-post="@{/events/{eventId}/interests/toggle(eventId=${eventId})}"
+      hx-vals='{"type": "going"}'
+      hx-target="#interest-buttons-container"
+      hx-swap="outerHTML"
+      th:classappend="${userInterest != null && userInterest.interest().name() == 'GOING'} ? 'bg-green-600 text-white' : 'bg-white text-green-600 border border-green-600'"
+      class="rounded-md flex items-center justify-center px-6 py-3 font-medium transition-all whitespace-nowrap hover:opacity-80 w-full sm:w-auto"
+    >
+      <i
+        th:classappend="${userInterest != null && userInterest.interest().name() == 'GOING'} ? 'ri-check-fill' : 'ri-check-line'"
+        class="mr-2"
+      ></i>
+      <span>Vou comparecer</span>
+      <span
+        th:if="${goingCount > 0}"
+        th:classappend="${userInterest != null && userInterest.interest().name() == 'GOING'} ? 'bg-white text-green-600' : 'bg-green-600 text-white'"
+        class="ml-2 rounded-full px-2 py-0.5 text-sm"
+        th:text="${goingCount}"
+      ></span>
+    </button>
 
-  <button
-    sec:authorize="!isAuthenticated()"
-    disabled
-    class="rounded-md flex items-center justify-center px-6 py-3 font-medium transition-all whitespace-nowrap bg-white text-green-600 border border-green-600 opacity-50 cursor-not-allowed"
-  >
-    <i class="ri-check-line mr-2"></i>
-    <span>Vou comparecer</span>
-    <span
-      th:if="${goingCount > 0}"
-      class="ml-2 rounded-full px-2 py-0.5 text-sm bg-green-600 text-white"
-      th:text="${goingCount}"
-    ></span>
-  </button>
+    <!-- Vou Comparecer Button - Not Authenticated -->
+    <button
+      sec:authorize="!isAuthenticated()"
+      disabled
+      class="rounded-md flex items-center justify-center px-6 py-3 font-medium transition-all whitespace-nowrap bg-white text-green-600 border border-green-600 opacity-50 cursor-not-allowed w-full sm:w-auto"
+    >
+      <i class="ri-check-line mr-2"></i>
+      <span>Vou comparecer</span>
+      <span
+        th:if="${goingCount > 0}"
+        class="ml-2 rounded-full px-2 py-0.5 text-sm bg-green-600 text-white"
+        th:text="${goingCount}"
+      ></span>
+    </button>
+  </div>
 </div>
