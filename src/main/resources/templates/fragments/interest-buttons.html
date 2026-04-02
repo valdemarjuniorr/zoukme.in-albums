@@ -1,0 +1,47 @@
+<div
+  id="interest-buttons-container"
+  th:fragment="interest-buttons"
+  class="flex flex-col sm:flex-row gap-3 min-w-fit"
+>
+  <button
+    th:hx-post="@{/events/interest/{eventId}/toggle(eventId=${eventId})}"
+    hx-vals='{"type": "interested"}'
+    hx-target="#interest-buttons-container"
+    hx-swap="outerHTML"
+    th:classappend="${userInterest != null && userInterest.interest().name() == 'INTERESTED'} ? 'bg-primary text-white' : 'bg-white text-primary border border-primary'"
+    class="rounded-md flex items-center justify-center px-6 py-3 font-medium transition-all whitespace-nowrap hover:opacity-80"
+  >
+    <i
+      th:classappend="${userInterest != null && userInterest.interest().name() == 'INTERESTED'} ? 'ri-star-fill' : 'ri-star-line'"
+      class="mr-2"
+    ></i>
+    <span>Interessado</span>
+    <span
+      th:if="${interestedCount > 0}"
+      th:classappend="${userInterest != null && userInterest.interest().name() == 'INTERESTED'} ? 'bg-white text-primary' : 'bg-primary text-white'"
+      class="ml-2 rounded-full px-2 py-0.5 text-sm"
+      th:text="${interestedCount}"
+    ></span>
+  </button>
+
+  <button
+    th:hx-post="@{/events/interest/{eventId}/toggle(eventId=${eventId})}"
+    hx-vals='{"type": "going"}'
+    hx-target="#interest-buttons-container"
+    hx-swap="outerHTML"
+    th:classappend="${userInterest != null && userInterest.interest().name() == 'GOING'} ? 'bg-green-600 text-white' : 'bg-white text-green-600 border border-green-600'"
+    class="rounded-md flex items-center justify-center px-6 py-3 font-medium transition-all whitespace-nowrap hover:opacity-80"
+  >
+    <i
+      th:classappend="${userInterest != null && userInterest.interest().name() == 'GOING'} ? 'ri-check-fill' : 'ri-check-line'"
+      class="mr-2"
+    ></i>
+    <span>Vou comparecer</span>
+    <span
+      th:if="${goingCount > 0}"
+      th:classappend="${userInterest != null && userInterest.interest().name() == 'GOING'} ? 'bg-white text-green-600' : 'bg-green-600 text-white'"
+      class="ml-2 rounded-full px-2 py-0.5 text-sm"
+      th:text="${goingCount}"
+    ></span>
+  </button>
+</div>

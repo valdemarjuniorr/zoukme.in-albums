@@ -306,6 +306,26 @@
           </div>
         </div>
       </section>
+      <section class="mb-20 px-2 sm:px-0">
+        <div class="bg-white rounded-xl p-6 shadow-lg max-w-4xl mx-auto mb-12">
+          <div
+            class="flex flex-col md:flex-row items-center justify-between gap-6"
+          >
+            <div class="text-center md:text-left">
+              <h3 class="text-xl font-semibold mb-2">
+                Demonstre seu interesse neste evento
+              </h3>
+              <p class="text-gray-600">
+                Mostre que você está interessado ou confirmado para este evento
+              </p>
+            </div>
+            <div
+              th:insert="~{fragments/interest-buttons :: interest-buttons}"
+            ></div>
+          </div>
+        </div>
+      </section>
+
       <div id="calendario"></div>
       <section class="mb-20 px-2 sm:px-0">
         <h2 class="text-3xl font-bold text-center mb-4">
