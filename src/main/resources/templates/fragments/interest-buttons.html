@@ -3,7 +3,22 @@
   th:fragment="interest-buttons"
   class="flex flex-col sm:flex-row gap-3 min-w-fit"
 >
+  <div
+    sec:authorize="!isAuthenticated()"
+    class="w-full text-center text-gray-600 py-3 px-4 bg-gray-50 rounded-md mb-2"
+  >
+    <i class="ri-information-line mr-2"></i>
+    <span
+      >Faça
+      <a th:href="@{/login}" class="text-primary font-medium hover:underline"
+        >login</a
+      >
+      para marcar seu interesse ou presença no evento</span
+    >
+  </div>
+
   <button
+    sec:authorize="isAuthenticated()"
     th:hx-post="@{/events/interest/{eventId}/toggle(eventId=${eventId})}"
     hx-vals='{"type": "interested"}'
     hx-target="#interest-buttons-container"
@@ -25,6 +40,21 @@
   </button>
 
   <button
+    sec:authorize="!isAuthenticated()"
+    disabled
+    class="rounded-md flex items-center justify-center px-6 py-3 font-medium transition-all whitespace-nowrap bg-white text-primary border border-primary opacity-50 cursor-not-allowed"
+  >
+    <i class="ri-star-line mr-2"></i>
+    <span>Interessado</span>
+    <span
+      th:if="${interestedCount > 0}"
+      class="ml-2 rounded-full px-2 py-0.5 text-sm bg-primary text-white"
+      th:text="${interestedCount}"
+    ></span>
+  </button>
+
+  <button
+    sec:authorize="isAuthenticated()"
     th:hx-post="@{/events/interest/{eventId}/toggle(eventId=${eventId})}"
     hx-vals='{"type": "going"}'
     hx-target="#interest-buttons-container"
@@ -41,6 +71,20 @@
       th:if="${goingCount > 0}"
       th:classappend="${userInterest != null && userInterest.interest().name() == 'GOING'} ? 'bg-white text-green-600' : 'bg-green-600 text-white'"
       class="ml-2 rounded-full px-2 py-0.5 text-sm"
+      th:text="${goingCount}"
+    ></span>
+  </button>
+
+  <button
+    sec:authorize="!isAuthenticated()"
+    disabled
+    class="rounded-md flex items-center justify-center px-6 py-3 font-medium transition-all whitespace-nowrap bg-white text-green-600 border border-green-600 opacity-50 cursor-not-allowed"
+  >
+    <i class="ri-check-line mr-2"></i>
+    <span>Vou comparecer</span>
+    <span
+      th:if="${goingCount > 0}"
+      class="ml-2 rounded-full px-2 py-0.5 text-sm bg-green-600 text-white"
       th:text="${goingCount}"
     ></span>
   </button>

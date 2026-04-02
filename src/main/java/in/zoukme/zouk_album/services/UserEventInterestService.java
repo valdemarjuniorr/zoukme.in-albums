@@ -1,10 +1,12 @@
 package in.zoukme.zouk_album.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import in.zoukme.zouk_album.domains.TextValueCount;
 import in.zoukme.zouk_album.domains.UserEventInterest;
 import in.zoukme.zouk_album.domains.UserEventInterest.Interest;
 import in.zoukme.zouk_album.repositories.events.UserEventInterestRepository;
@@ -43,11 +45,7 @@ public class UserEventInterestService {
     return repository.findByUserIdAndEventId(user.id(), eventId);
   }
 
-  public Long getInterestedCount(Long eventId) {
-    return repository.countByEventIdAndInterestType(eventId, Interest.INTERESTED.name());
-  }
-
-  public Long getGoingCount(Long eventId) {
-    return repository.countByEventIdAndInterestType(eventId, Interest.GOING.name());
+  public List<TextValueCount> getInterestCounts(Long eventId) {
+    return repository.countInterestsByEventId(eventId);
   }
 }

@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import in.zoukme.zouk_album.controllers.meta.MetaTags;
 import in.zoukme.zouk_album.domains.Page;
-import in.zoukme.zouk_album.repositories.users.UserRepository;
 import in.zoukme.zouk_album.services.PackageService;
 import in.zoukme.zouk_album.services.UserEventInterestService;
 import in.zoukme.zouk_album.services.aws.EventService;
+import in.zoukme.zouk_album.services.users.UserService;
 
 @Controller
 @RequestMapping("/events")
@@ -24,14 +24,12 @@ public class EventController {
   private final EventService service;
   private final PackageService packageService;
   private final UserEventInterestService interestService;
-  private final UserRepository userRepository;
 
   public EventController(EventService service, PackageService packageService,
-      UserEventInterestService interestService, UserRepository userRepository) {
+      UserEventInterestService interestService, UserService userService) {
     this.service = service;
     this.packageService = packageService;
     this.interestService = interestService;
-    this.userRepository = userRepository;
   }
 
   @GetMapping
@@ -51,22 +49,24 @@ public class EventController {
   @GetMapping("/{title}")
   String findByEventUrl(@PathVariable String title, Model model, Authentication authentication) {
     var event = service.findByEventUrl(title);
+    model.addAttribute("eventId", event.getId());
+    model.addAttribute("event", event);
+
+    var interestsCount = interestService.getInterestCounts(event.getId());
+    for (var interestCount : interestsCount) {
+      switch (interestCount.text().toUpperCase()) {
+        case "INTERESTED" -> model.addAttribute("interestedCount", interestCount.count());
+        case "GOING" -> model.addAttribute("goingCount", interestCount.count());
+      }
+    }
 
     model.addAttribute("packages", packageService.findBy(event.getId()));
-    model.addAttribute("event", event);
     model.addAttribute("authentication", authentication);
 
     if (Objects.nonNull(authentication) && authentication.isAuthenticated()) {
-      var user = userRepository.findByEmail(authentication.getName());
-      user.ifPresent(u -> {
-        var userInterest = interestService.getUserInterest(event.getId());
-        model.addAttribute("userInterest", userInterest.orElse(null));
-      });
+      var userInterest = interestService.getUserInterest(event.getId());
+      model.addAttribute("userInterest", userInterest.orElse(null));
     }
-
-    model.addAttribute("eventId", event.getId());
-    model.addAttribute("interestedCount", interestService.getInterestedCount(event.getId()));
-    model.addAttribute("goingCount", interestService.getGoingCount(event.getId()));
 
     return "events/details";
   }
