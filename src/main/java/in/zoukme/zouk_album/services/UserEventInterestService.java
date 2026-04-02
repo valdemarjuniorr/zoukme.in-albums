@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import in.zoukme.zouk_album.domains.AttendeeInfo;
 import in.zoukme.zouk_album.domains.TextValueCount;
 import in.zoukme.zouk_album.domains.UserEventInterest;
 import in.zoukme.zouk_album.domains.UserEventInterest.Interest;
@@ -47,5 +48,16 @@ public class UserEventInterestService {
 
   public List<TextValueCount> getInterestCounts(Long eventId) {
     return repository.countInterestsByEventId(eventId);
+  }
+
+  public List<AttendeeInfo> getAttendees(Long eventId) {
+    return repository.findAttendeesByEventId(eventId);
+  }
+
+  public List<AttendeeInfo> getAttendeesByInterest(Long eventId, String interest) {
+    if (interest.equalsIgnoreCase("ALL")) {
+      return getAttendees(eventId);
+    }
+    return repository.findAttendeesByEventIdAndInterest(eventId, interest);
   }
 }

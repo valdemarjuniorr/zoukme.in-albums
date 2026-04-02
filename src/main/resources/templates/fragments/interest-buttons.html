@@ -19,7 +19,7 @@
 
   <button
     sec:authorize="isAuthenticated()"
-    th:hx-post="@{/events/interest/{eventId}/toggle(eventId=${eventId})}"
+    th:hx-post="@{/events/{eventId}/interests/toggle(eventId=${eventId})}"
     hx-vals='{"type": "interested"}'
     hx-target="#interest-buttons-container"
     hx-swap="outerHTML"
@@ -55,7 +55,7 @@
 
   <button
     sec:authorize="isAuthenticated()"
-    th:hx-post="@{/events/interest/{eventId}/toggle(eventId=${eventId})}"
+    th:hx-post="@{/events/{eventId}/interests/toggle(eventId=${eventId})}"
     hx-vals='{"type": "going"}'
     hx-target="#interest-buttons-container"
     hx-swap="outerHTML"

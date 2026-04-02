@@ -54,7 +54,7 @@
       src="https://kit.fontawesome.com/b431e00b38.js"
       crossorigin="anonymous"
     ></script>
-    <script src="https://unpkg.com/htmx.org@2.0.4/dist/htmx.min.js"></script>
+    <script src="https://unpkg.com/htmx.org@2.0.8/dist/htmx.min.js"></script>
     <script>
       tailwind.config = {
         theme: {
@@ -322,6 +322,16 @@
             <div
               th:insert="~{fragments/interest-buttons :: interest-buttons}"
             ></div>
+          </div>
+          <hr class="my-4 border-t border-gray-200" />
+          <div class="flex justify-end">
+            <a
+              th:href="@{/events/{eventId}/interests/attendees(eventId=${eventId})}"
+            >
+              <button class="text-primary hover:text-primary/80 font-medium">
+                Ver todos
+              </button>
+            </a>
           </div>
         </div>
       </section>

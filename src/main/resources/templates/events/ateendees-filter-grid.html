@@ -1,0 +1,44 @@
+<div>
+  <div class="flex flex-wrap items-center gap-4 mb-6">
+    <div class="flex bg-white rounded-lg p-1 shadow-sm border border-gray-200">
+      <button
+        th:hx-get="@{/events/{eventId}/interests/attendees(eventId=${eventId})}"
+        hx-target="#attendeesGrid"
+        th:classappend="${currentFilter == null  || currentFilter == 'ALL' ? 'active' : 'text-gray-600 hover:text-gray-900'}"
+        class="filter-button px-4 py-2 !rounded-button text-sm font-medium transition-all whitespace-nowrap cursor-pointer"
+      >
+        Todos
+      </button>
+      <button
+        th:classappend="${currentFilter == 'INTERESTED' ? 'active' : 'text-gray-600 hover:text-gray-900'}"
+        class="filter-button px-4 py-2 !rounded-button text-sm font-medium transition-all whitespace-nowrap cursor-pointer"
+        th:hx-get="@{/events/{eventId}/interests/attendees(eventId=${eventId})}"
+        hx-target="#attendeesGrid"
+        hx-vals='{"filter": "INTERESTED"}'
+      >
+        Interessados
+      </button>
+      <button
+        th:classappend="${currentFilter == 'GOING' ? 'active' : 'text-gray-600 hover:text-gray-900'}"
+        th:hx-get="@{/events/{eventId}/interests/attendees(eventId=${eventId})}"
+        hx-target="#attendeesGrid"
+        hx-vals='{"filter": "GOING"}'
+        class="filter-button px-4 py-2 !rounded-button text-sm font-medium transition-all whitespace-nowrap cursor-pointer"
+      >
+        Confirmados
+      </button>
+    </div>
+    <div class="text-sm text-gray-600">
+      <span id="totalCount" th:text="${totalCount}">0</span> total •
+      <span class="text-primary font-medium"
+        ><span id="interestedCount" th:text="${interestedCount}">0</span>
+        interessados</span
+      >
+      •
+      <span class="text-green-600 font-medium"
+        ><span id="goingCount" th:text="${goingCount}">0</span>
+        confirmados</span
+      >
+    </div>
+  </div>
+</div>

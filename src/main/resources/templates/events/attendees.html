@@ -1,0 +1,213 @@
+<DOCTYPE html>
+  <html xmlns:th="https://www.thymeleaf.org" lang="pt-br">
+    <head th:insert="~{fragments/header}"></head>
+    <style>
+      :where([class^="ri-"])::before {
+        content: "\f3c2";
+      }
+      .filter-button.active {
+        background-color: #e94057;
+        color: white;
+      }
+      .attendee-card {
+        transition:
+          transform 0.2s ease,
+          box-shadow 0.2s ease;
+      }
+      .attendee-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+      }
+      .status-badge {
+        font-size: 0.75rem;
+        padding: 0.25rem 0.5rem;
+        border-radius: 9999px;
+        font-weight: 500;
+      }
+      .status-interested {
+        background-color: #fef2f2;
+        color: #dc2626;
+        border: 1px solid #fecaca;
+      }
+      .status-going {
+        background-color: #f0fdf4;
+        color: #16a34a;
+        border: 1px solid #bbf7d0;
+      }
+      .search-container {
+        position: relative;
+      }
+      .search-container .ri-search-line {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #9ca3af;
+        pointer-events: none;
+      }
+      .search-input {
+        padding-left: 2.5rem;
+      }
+      .avatar-placeholder {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 600;
+        font-size: 1.25rem;
+      }
+    </style>
+    <body class="bg-gray-100">
+      <!-- Header -->
+      <div th:insert="~{fragments/top :: top}"></div>
+
+      <!-- Content -->
+      <main th:fragment="main" class="main container mx-auto p-4 py-8">
+        <div class="mb-8">
+          <div class="mb-4">
+            <a
+              th:href="@{/events/{eventUrl}(eventUrl=${eventUrl})}"
+              class="gap-2 inline-flex items-center text-gray-500 hover:text-gray-900"
+            >
+              <i class="ri-arrow-left-circle-fill text-xl"></i>
+              <span>Voltar</span>
+            </a>
+          </div>
+          <h2
+            class="text-3xl font-bold text-gray-900 mb-2"
+            th:text="${eventTitle}"
+          ></h2>
+          <h3 class="text-xl font-semibold text-gray-600 mb-4">
+            Participantes
+          </h3>
+          <div id="attendeesFilterAndGrid" th:fragment="filter-and-grid">
+            <div class="flex flex-wrap items-center gap-4 mb-6">
+              <div
+                id="filterButtons"
+                class="flex bg-white rounded-lg p-1 shadow-sm border border-gray-200"
+              >
+                <button
+                  id="btn-all"
+                  th:classappend="${currentFilter == null || currentFilter == 'ALL' ? 'active' : 'text-gray-600 hover:text-gray-900'}"
+                  class="filter-button px-4 py-2 !rounded-button text-sm font-medium transition-all whitespace-nowrap cursor-pointer"
+                  hx-get="/events/${eventId}/interests/attendees"
+                  th:attr="hx-get=@{/events/{eventId}/interests/attendees(eventId=${eventId})}"
+                  hx-target="#attendeesFilterAndGrid"
+                  hx-swap="outerHTML"
+                  onclick="setActiveButton('btn-all')"
+                >
+                  Todos
+                </button>
+                <button
+                  id="btn-interested"
+                  th:classappend="${currentFilter == 'INTERESTED' ? 'active' : 'text-gray-600 hover:text-gray-900'}"
+                  class="filter-button px-4 py-2 !rounded-button text-sm font-medium transition-all whitespace-nowrap cursor-pointer"
+                  hx-get="/events/${eventId}/interests/attendees?interest=INTERESTED"
+                  th:attr="hx-get=@{/events/{eventId}/interests/attendees(eventId=${eventId},filter='INTERESTED')}"
+                  hx-target="#attendeesFilterAndGrid"
+                  hx-swap="outerHTML"
+                  onclick="setActiveButton('btn-interested')"
+                >
+                  Interessados
+                </button>
+                <button
+                  id="btn-going"
+                  th:classappend="${currentFilter == 'GOING' ? 'active' : 'text-gray-600 hover:text-gray-900'}"
+                  class="filter-button px-4 py-2 !rounded-button text-sm font-medium transition-all whitespace-nowrap cursor-pointer"
+                  hx-get="/events/${eventId}/interests/attendees?interest=GOING"
+                  th:attr="hx-get=@{/events/{eventId}/interests/attendees(eventId=${eventId},filter='GOING')}"
+                  hx-target="#attendeesFilterAndGrid"
+                  hx-swap="outerHTML"
+                  onclick="setActiveButton('btn-going')"
+                >
+                  Confirmados
+                </button>
+              </div>
+              <div id="attendeesCounts" class="text-sm text-gray-600">
+                <span id="totalCount" th:text="${totalCount}">0</span> total •
+                <span class="text-primary font-medium"
+                  ><span id="interestedCount" th:text="${interestedCount}"
+                    >0</span
+                  >
+                  interessados</span
+                >
+                •
+                <span class="text-green-600 font-medium"
+                  ><span id="goingCount" th:text="${goingCount}">0</span>
+                  confirmados</span
+                >
+              </div>
+            </div>
+            <div
+              id="attendeesGrid"
+              class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12"
+            >
+              <div
+                th:each="attendee : ${attendees}"
+                class="attendee-card bg-white rounded-xl p-6 shadow-sm border border-gray-100 cursor-pointer"
+                th:data-status="${attendee.interest().toLowerCase()}"
+                th:data-name="${attendee.fullName}"
+              >
+                <div class="text-center">
+                  <div
+                    class="w-16 h-16 mx-auto mb-4 rounded-full avatar-placeholder"
+                    th:text="${#strings.substring(attendee.fullName, 0, 2).toUpperCase()}"
+                  ></div>
+                  <h3
+                    class="font-semibold text-gray-900 mb-1"
+                    th:text="${attendee.fullName}"
+                  ></h3>
+                  <div
+                    th:classappend="${attendee.interest() == 'INTERESTED' ? 'status-interested' : 'status-going'}"
+                    class="status-badge"
+                    th:text="${attendee.interest() == 'INTERESTED' ? 'Interessado' : 'Confirmado'}"
+                  ></div>
+                </div>
+              </div>
+            </div>
+            <div
+              id="emptyState"
+              th:if="${attendees.isEmpty()}"
+              class="text-center py-16"
+            >
+              <div
+                class="w-16 h-16 flex items-center justify-center bg-gray-100 rounded-full mx-auto mb-4"
+              >
+                <i class="ri-user-search-line text-gray-400 ri-2x"></i>
+              </div>
+              <h3 class="text-xl font-semibold text-gray-900 mb-2">
+                Nenhum participante encontrado
+              </h3>
+              <p class="text-gray-600 mb-6">
+                Ainda não há participantes para este evento
+              </p>
+            </div>
+          </div>
+
+        <script>
+          function setActiveButton(buttonId) {
+            // Remove active class from all buttons
+            document.querySelectorAll(".filter-button").forEach((btn) => {
+              btn.classList.remove("active", "bg-primary", "text-white");
+              btn.classList.add("text-gray-600", "hover:text-gray-900");
+            });
+
+            // Add active class to clicked button
+            const activeBtn = document.getElementById(buttonId);
+            if (activeBtn) {
+              activeBtn.classList.add("active");
+              activeBtn.classList.remove(
+                "text-gray-600",
+                "hover:text-gray-900",
+              );
+            }
+          }
+        </script>
+      </main>
+
+      <!-- footer -->
+      <div th:insert="~{fragments/footer :: footer}"></div>
+    </body>
+  </html>
+</DOCTYPE>
