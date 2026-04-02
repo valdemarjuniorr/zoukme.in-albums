@@ -1,7 +1,5 @@
 package in.zoukme.zouk_album.controllers.events;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import in.zoukme.zouk_album.domains.TextValueCount;
 import in.zoukme.zouk_album.domains.UserEventInterest.Interest;
 import in.zoukme.zouk_album.services.UserEventInterestService;
 import in.zoukme.zouk_album.services.aws.EventService;
@@ -20,7 +19,6 @@ import in.zoukme.zouk_album.services.aws.EventService;
 @RequestMapping("/events")
 public class UserEventInterestController {
 
-  private final Logger log = LoggerFactory.getLogger(UserEventInterestController.class);
   private final UserEventInterestService service;
   private final EventService eventService;
 
@@ -58,33 +56,25 @@ public class UserEventInterestController {
       @RequestParam(required = false, defaultValue = "ALL") String filter,
       @RequestHeader(value = "HX-Request", required = false) String hxRequest,
       Model model) {
-    log.info("Getting attendees for eventId: {} with filter: {}", eventId, filter);
 
     var event = eventService.findBy(eventId);
-    var attendees = filter.equals("ALL")
-        ? service.getAttendees(eventId)
-        : service.getAttendeesByInterest(eventId, filter);
+    var attendees = service.getAttendeesByInterest(eventId, filter);
 
     var interestsCount = service.getInterestCounts(eventId);
-    long interestedCount = 0;
-    long goingCount = 0;
-
     for (var interestCount : interestsCount) {
       switch (interestCount.text().toUpperCase()) {
-        case "INTERESTED" -> interestedCount = interestCount.count();
-        case "GOING" -> goingCount = interestCount.count();
+        case "INTERESTED" -> model.addAttribute("interestedCount", interestCount.count());
+        case "GOING" -> model.addAttribute("goingCount", interestCount.count());
       }
     }
 
-    var totalCount = interestedCount + goingCount;
+    var totalCount = interestsCount.stream().mapToLong(TextValueCount::count).sum();
 
     model.addAttribute("eventId", eventId);
     model.addAttribute("eventUrl", event.eventUrl());
     model.addAttribute("eventTitle", event.title());
     model.addAttribute("attendees", attendees);
     model.addAttribute("totalCount", totalCount);
-    model.addAttribute("interestedCount", interestedCount);
-    model.addAttribute("goingCount", goingCount);
     model.addAttribute("currentFilter", filter);
 
     if ("true".equals(hxRequest)) {
