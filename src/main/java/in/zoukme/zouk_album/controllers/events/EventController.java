@@ -5,6 +5,7 @@ import java.util.Objects;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +17,8 @@ import in.zoukme.zouk_album.services.PackageService;
 import in.zoukme.zouk_album.services.UserEventInterestService;
 import in.zoukme.zouk_album.services.aws.EventService;
 import in.zoukme.zouk_album.services.users.UserService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
 @RequestMapping("/events")
@@ -83,13 +86,11 @@ public class EventController {
   }
 
   @GetMapping("/{eventUrl}/albums/{albumName}")
-  String getEventPhotosBy(
-      @PathVariable String eventUrl,
-      @PathVariable String albumName,
+  String getEventPhotosBy(@PathVariable String eventUrl, @PathVariable String albumName,
       @RequestParam(defaultValue = "1") Integer page,
       @RequestParam(defaultValue = "50") Integer size,
-      Model model,
-      Authentication authentication) {
+      @CookieValue(value = "layout", defaultValue = "twoCol") String layout,
+      Model model, Authentication authentication, HttpServletResponse response) {
     var pageObj = new Page(page, size);
 
     var photos = service.getPhotosWithLikesBy(eventUrl, albumName, pageObj);
@@ -98,6 +99,11 @@ public class EventController {
     model.addAttribute("albumName", albumName);
     model.addAttribute("eventUrl", eventUrl);
     model.addAttribute("authentication", authentication);
+    // set layout configuration in cookie
+    var cookie = new Cookie("layout", layout);
+    cookie.setPath("/");
+    response.addCookie(cookie);
+    model.addAttribute("layout", layout);
 
     return "events/albums/list";
   }

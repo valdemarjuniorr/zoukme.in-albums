@@ -44,27 +44,51 @@
     <!-- Content -->
     <main th:fragment="main" class="main container mx-auto p-4 py-10">
       <div class="container mx-auto px-4">
-        <div class="min-w-0 grid grid-cols-2 items-center gap-2 py-2">
+        <div class="min-w-0 flex items-center justify-between gap-2 py-2">
           <a
             th:href="@{/events/{eventName}/albums(eventName=${eventUrl})}"
-            class="gap-2 inline-flex items-center text-gray-500 hover:text-gray-900"
+            class="gap-2 inline-flex items-center text-gray-500 hover:text-gray-900 shrink-0"
           >
             <i class="ri-arrow-left-circle-fill text-xl"></i>
             <span class="truncate">Voltar</span>
           </a>
-          <div
-            class="justify-self-end inline-flex items-center bg-gray-200 px-3 py-1.5 rounded-full text-sm sm:text-base"
-          >
-            <i class="ri-image-line mr-2 text-gray-600"></i>
-            <span class="text-gray-600 font-medium"
-              ><span th:text="${photos.totalElements}" /> fotos</span
+          <div class="inline-flex items-center gap-2 min-w-0">
+            <div
+              class="inline-flex items-center bg-gray-200 px-2 py-1 rounded-full text-sm shrink-0"
             >
+              <i class="ri-image-line mr-1 text-gray-600"></i>
+              <span class="text-gray-600 font-medium whitespace-nowrap"
+                ><span th:text="${photos.totalElements}" /> fotos</span
+              >
+            </div>
+            <div
+              class="flex items-center gap-1 bg-gray-100 rounded-full border border-gray-300 shrink-0"
+            >
+              <button
+                id="layout-one-col"
+                th:classappend="${#strings.equals(layout, 'oneCol') ? 'bg-white shadow border border-gray-300 text-gray-800 active' : ''}"
+                class="layout-btn inline-flex items-center px-2 py-1 rounded-full transition-all duration-200 cursor-pointer text-gray-600 hover:text-gray-800 text-sm font-medium"
+              >
+                <i class="ri-layout-row-line"></i>
+              </button>
+              <button
+                id="layout-two-col"
+                th:classappend="${#strings.equals(layout, 'twoCol') ? 'bg-white shadow border border-gray-300 text-gray-800 active' : ''}"
+                class="layout-btn inline-flex items-center px-2 py-1 rounded-full transition-all duration-200 cursor-pointer text-gray-600 hover:text-gray-800 text-sm font-medium"
+              >
+                <i class="ri-layout-grid-line"></i>
+              </button>
+            </div>
           </div>
         </div>
       </div>
-      <hr class="my-2 border-gray-300" />
+      <hr class="my-2 mx-3 border-gray-300 sm:hidden" />
       <div
-        class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-6 gap-1"
+        id="photo-grid"
+        th:classappend="${#strings.equals(layout, 'oneCol')
+          ? 'grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3'
+          : 'grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-6 gap-1'}"
+        class="grid"
       >
         <div th:each="photo : ${photos.content}">
           <div
@@ -301,6 +325,95 @@
             ticking = true;
           }
         });
+      });
+    </script>
+    <script id="layout-selection">
+      document.addEventListener("DOMContentLoaded", function () {
+        const photoGrid = document.getElementById("photo-grid");
+        const oneColBtn = document.getElementById("layout-one-col");
+        const twoColBtn = document.getElementById("layout-two-col");
+
+        // Layout configurations
+        const layouts = {
+          oneCol: {
+            classes:
+              "grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3",
+          },
+          twoCol: {
+            classes:
+              "grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-6 gap-1",
+          },
+        };
+
+        // Apply layout
+        function applyLayout(layout) {
+          // Remove all possible layout classes
+          photoGrid.className = photoGrid.className
+            .replace(/grid-cols-\d+/g, "")
+            .replace(/sm:grid-cols-\d+/g, "")
+            .replace(/md:grid-cols-\d+/g, "")
+            .replace(/lg:grid-cols-\d+/g, "")
+            .replace(/xl:grid-cols-\d+/g, "")
+            .replace(/gap-\d+/g, "")
+            .trim();
+
+          // Add new layout classes
+          photoGrid.className = "grid " + layouts[layout].classes;
+
+          // Update button states
+          oneColBtn.classList.remove(
+            "bg-white",
+            "shadow",
+            "border",
+            "border-gray-300",
+            "text-gray-800",
+            "active",
+          );
+          twoColBtn.classList.remove(
+            "bg-white",
+            "shadow",
+            "border",
+            "border-gray-300",
+            "text-gray-800",
+            "active",
+          );
+
+          if (layout === "oneCol") {
+            oneColBtn.classList.add(
+              "bg-white",
+              "shadow",
+              "border",
+              "border-gray-300",
+              "text-gray-800",
+              "active",
+            );
+          } else {
+            twoColBtn.classList.add(
+              "bg-white",
+              "shadow",
+              "border",
+              "border-gray-300",
+              "text-gray-800",
+              "active",
+            );
+          }
+
+          // Save to cookie
+          document.cookie = "layout=" + layout + "; path=/;";
+        }
+
+        // Load saved layout from cookie
+        const savedLayout = (() => {
+          const match = document.cookie.match(
+            /(?:^|;\s*)layout=(oneCol|twoCol)/,
+          );
+          return match ? match[1] : "twoCol";
+        })();
+        applyLayout(savedLayout);
+
+        // Add click event listeners
+        oneColBtn.addEventListener("click", () => applyLayout("oneCol"));
+        twoColBtn.addEventListener("click", () => applyLayout("twoCol"));
       });
     </script>
     <div th:replace="~{fragments/footer :: footer}"></div>
