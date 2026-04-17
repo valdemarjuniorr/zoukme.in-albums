@@ -8,25 +8,24 @@ import in.zoukme.zouk_album.domains.SumPriceTotalTransaction;
 import in.zoukme.zouk_album.services.AlbumService;
 import in.zoukme.zouk_album.services.aws.EventService;
 import in.zoukme.zouk_album.services.payments.PaymentService;
-import in.zoukme.zouk_album.services.photos.PhotoService;
+import in.zoukme.zouk_album.services.users.UserService;
 
 @Service
 public class DashboardService {
 
   private final AlbumService albumService;
   private final EventService eventService;
-  private final PhotoService photoService;
   private final PaymentService paymentService;
+  private final UserService userService;
 
   public DashboardService(
       AlbumService albumService,
       EventService eventService,
-      PhotoService photoService,
-      PaymentService paymentService) {
+      PaymentService paymentService, UserService userService) {
     this.albumService = albumService;
     this.eventService = eventService;
-    this.photoService = photoService;
     this.paymentService = paymentService;
+    this.userService = userService;
   }
 
   public long getTotalEvents() {
@@ -37,8 +36,8 @@ public class DashboardService {
     return albumService.count();
   }
 
-  public long getTotalPhotos() {
-    return photoService.count();
+  public long getTotalUsers() {
+    return userService.count();
   }
 
   public SumPriceTotalTransaction getTotalExpired(Long eventId, LocalDateTime afterDateTime) {

@@ -34,6 +34,7 @@ import in.zoukme.zouk_album.services.PackageService;
 import in.zoukme.zouk_album.services.aws.BucketService;
 import in.zoukme.zouk_album.services.aws.EventService;
 import in.zoukme.zouk_album.services.payments.PaymentService;
+import in.zoukme.zouk_album.services.users.UserService;
 import in.zoukme.zouk_album.utils.DateUtils;
 
 @Controller
@@ -47,6 +48,7 @@ public class AdminController {
   private final DashboardService dashboardService;
   private final PaymentService paymentService;
   private final PackageService packageService;
+  private final UserService userService;
 
   public AdminController(
       AlbumService albumService,
@@ -54,12 +56,13 @@ public class AdminController {
       BucketService bucketService,
       DashboardService dashboardService,
       PaymentService paymentService,
-      PackageService packageService) {
+      PackageService packageService, UserService userService) {
     this.albumService = albumService;
     this.eventService = eventService;
     this.dashboardService = dashboardService;
     this.paymentService = paymentService;
     this.packageService = packageService;
+    this.userService = userService;
   }
 
   @GetMapping
@@ -211,9 +214,9 @@ public class AdminController {
     return "admin/dashboard/total_number";
   }
 
-  @GetMapping("/dashboard/total-photos")
-  String getTotalPhotos(Model model) {
-    model.addAttribute("total", dashboardService.getTotalPhotos());
+  @GetMapping("/dashboard/total-users")
+  String getTotalUsers(Model model) {
+    model.addAttribute("total", dashboardService.getTotalUsers());
 
     return "admin/dashboard/total_number";
   }
@@ -364,6 +367,22 @@ public class AdminController {
     this.albumService.deletePhotoBy(eventUrl, id);
 
     model.addAttribute("message", "Foto removida com sucesso");
+
+    return "/events/toast";
+  }
+
+  @GetMapping("/users")
+  String getUsers(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "6") Integer size,
+      Model model) {
+    var users = userService.findAllBy(new Page(page, size));
+    model.addAttribute("users", users);
+    return "admin/dashboard/users/list";
+  }
+
+  @DeleteMapping("/users/{id}")
+  String deleteUser(@PathVariable Long id, Model model) {
+    userService.deleteBy(id);
+    model.addAttribute("message", "Usuário removido com sucesso");
 
     return "/events/toast";
   }

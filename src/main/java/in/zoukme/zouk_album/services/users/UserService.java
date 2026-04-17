@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import in.zoukme.zouk_album.domains.Page;
 import in.zoukme.zouk_album.domains.users.EmailVerificationToken;
 import in.zoukme.zouk_album.domains.users.User;
 import in.zoukme.zouk_album.domains.users.UserProfile;
@@ -111,7 +112,7 @@ public class UserService {
 
     repository.findById(tokenFound.userId().getId()).ifPresent(user -> {
       repository.updateBy(user.email(), passwordEncoder.encode(password));
-      // tokenService.delete(tokenFound);
+      tokenService.delete(tokenFound);
       log.info("Password redefined for user with email: {}", user.email());
     });
   }
@@ -136,7 +137,7 @@ public class UserService {
   }
 
   public Long count() {
-    return repository.count();
+    return profileRepository.count();
   }
 
   public void update(UserProfile profile, String email) {
@@ -149,4 +150,14 @@ public class UserService {
     var encode = passwordEncoder.encode(user.password());
     repository.findByEmail(user.email()).ifPresent(u -> repository.updateBy(u.email(), encode));
   }
+
+  public org.springframework.data.domain.Page<UserProfile> findAllBy(Page page) {
+    return profileRepository.findAllBy(page.toPageRequest());
+  }
+
+  public void deleteBy(Long id) {
+    profileRepository.deleteById(id);
+    log.info("User deleted with id: {}", id);
+  }
+
 }
