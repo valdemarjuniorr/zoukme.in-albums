@@ -9,7 +9,7 @@ server:
     mime-types: text/html,text/xml,text/plain,text/css,text/javascript,application/javascript,application/json
   http2:
     enabled: true
-  port: 8443
+  port: 443
   ssl:
     key-store: classpath:ssl/keystore.p12
     key-store-password: ${KEY_STORE_PASSWORD}
