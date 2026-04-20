@@ -159,6 +159,13 @@ public class PaymentService {
         status, beforeDateTime, page.toPageRequest());
   }
 
+  public org.springframework.data.domain.Page<Payment> findAllBy(PaymentStatus status, Page page) {
+    if (Objects.isNull(status)) {
+      return repository.findAllByOrderByPaymentDateDesc(page.toPageRequest());
+    }
+    return repository.findAllByStatus(status, page.toPageRequest());
+  }
+
   public void inactivate(String transactionId) {
     paymentsRepository
         .findByTransactionId(transactionId)

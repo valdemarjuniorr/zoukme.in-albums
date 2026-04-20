@@ -229,8 +229,7 @@ public class AdminController {
   }
 
   @GetMapping("/payments/list")
-  String getPaymentsPanel(
-      Model model) {
+  String getPaymentsPanel(Model model) {
     model.addAttribute("events", this.eventService.findAllEvents());
 
     return "admin/dashboard/payments/list";
@@ -276,6 +275,15 @@ public class AdminController {
     model.addAttribute("message", message);
 
     return "/events/toast";
+  }
+
+  @GetMapping("/payments")
+  String getPayments(@RequestParam(required = false) String status, Model model) {
+    log.info("Getting payments with status: {}", status);
+    var payments = paymentService.findAllBy(PaymentStatus.valueOf(status), Page.defaultPage());
+    model.addAttribute("payments", payments);
+
+    return "admin/dashboard/payments/table-response";
   }
 
   @DeleteMapping("/payments/{transactionId}/inactivate")
@@ -337,6 +345,7 @@ public class AdminController {
     model.addAttribute("hasPaid", payments.stream().filter(Payment::isStatusPaid).findAny().isPresent());
 
     model.addAttribute("paymentsStatus", PaymentStatus.values());
+
     model.addAttribute("eventId", eventId);
     model.addAttribute("payments", payments);
 

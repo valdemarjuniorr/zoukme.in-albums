@@ -2,8 +2,6 @@ package in.zoukme.zouk_album.controllers.users;
 
 import java.util.Objects;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -21,7 +19,6 @@ import in.zoukme.zouk_album.services.users.UserService;
 @RequestMapping("/users")
 public class UserController {
 
-  private static final Logger log = LoggerFactory.getLogger(UserController.class);
   private final UserService service;
 
   public UserController(UserService service) {
