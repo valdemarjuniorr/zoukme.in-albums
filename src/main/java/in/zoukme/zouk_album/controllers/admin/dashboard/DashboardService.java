@@ -1,7 +1,5 @@
 package in.zoukme.zouk_album.controllers.admin.dashboard;
 
-import java.time.LocalDateTime;
-
 import org.springframework.stereotype.Service;
 
 import in.zoukme.zouk_album.domains.SumPriceTotalTransaction;
@@ -48,16 +46,16 @@ public class DashboardService {
     return photoService.count();
   }
 
-  public SumPriceTotalTransaction getTotalExpired(Long eventId, LocalDateTime afterDateTime) {
-    return getValueOrZero(paymentService.getTotalExpired(eventId, afterDateTime));
+  public SumPriceTotalTransaction getTotalExpired(Long eventId) {
+    return getValueOrZero(paymentService.getTotalExpired(eventId));
   }
 
-  public SumPriceTotalTransaction getTotalCompleted(Long eventId, LocalDateTime afterDateTime) {
-    return getValueOrZero(paymentService.getTotalCompleted(eventId, afterDateTime));
+  public SumPriceTotalTransaction getTotalCompleted(Long eventId) {
+    return getValueOrZero(paymentService.getTotalCompleted(eventId));
   }
 
-  public SumPriceTotalTransaction getTotalPending(Long eventId, LocalDateTime afterDateTime) {
-    return getValueOrZero(paymentService.getTotalPending(eventId, afterDateTime));
+  public SumPriceTotalTransaction getTotalPending(Long eventId) {
+    return getValueOrZero(paymentService.getTotalPending(eventId));
   }
 
   public Integer getDistinctCitiesCount() {

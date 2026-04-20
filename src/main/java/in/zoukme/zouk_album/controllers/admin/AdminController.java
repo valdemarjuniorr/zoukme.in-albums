@@ -2,7 +2,6 @@ package in.zoukme.zouk_album.controllers.admin;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,7 +35,6 @@ import in.zoukme.zouk_album.services.aws.BucketService;
 import in.zoukme.zouk_album.services.aws.EventService;
 import in.zoukme.zouk_album.services.payments.PaymentService;
 import in.zoukme.zouk_album.services.users.UserService;
-import in.zoukme.zouk_album.utils.DateUtils;
 
 @Controller
 @RequestMapping("/admin")
@@ -277,15 +276,6 @@ public class AdminController {
     return "/events/toast";
   }
 
-  @GetMapping("/payments")
-  String getPayments(@RequestParam(required = false) String status, Model model) {
-    log.info("Getting payments with status: {}", status);
-    var payments = paymentService.findAllBy(PaymentStatus.valueOf(status), Page.defaultPage());
-    model.addAttribute("payments", payments);
-
-    return "admin/dashboard/payments/table-response";
-  }
-
   @DeleteMapping("/payments/{transactionId}/inactivate")
   String inactivate(@PathVariable String transactionId, Model model) {
     paymentService.inactivate(transactionId);
@@ -332,16 +322,15 @@ public class AdminController {
   }
 
   @GetMapping("/events/payments/details")
-  String getPaymentsByEvent(@RequestParam Long eventId, @RequestParam(required = false) String status,
-      @RequestParam(required = false) Integer rangeDays,
-      Model model) {
-    var payments = this.paymentService.findAllByEventId(eventId);
-    var afterDateTime = Objects.nonNull(rangeDays)
-        ? DateUtils.endDateTime(LocalDate.now().minusDays(rangeDays))
+  String getPaymentsByEvent(@RequestParam Long eventId, @RequestParam(required = false) String status, Model model) {
+    var statusEnum = StringUtils.hasText(status)
+        ? PaymentStatus.valueOf(status)
         : null;
-    model.addAttribute("totalPending", dashboardService.getTotalPending(eventId, afterDateTime));
-    model.addAttribute("totalCompleted", dashboardService.getTotalCompleted(eventId, afterDateTime));
-    model.addAttribute("totalExpired", dashboardService.getTotalExpired(eventId, afterDateTime));
+    var payments = this.paymentService.findAllBy(eventId, statusEnum);
+    model.addAttribute("totalPending", dashboardService.getTotalPending(eventId));
+    model.addAttribute("totalCompleted", dashboardService.getTotalCompleted(eventId));
+    var totalExpired = dashboardService.getTotalExpired(eventId);
+    model.addAttribute("totalExpired", totalExpired);
     model.addAttribute("hasPaid", payments.stream().filter(Payment::isStatusPaid).findAny().isPresent());
 
     model.addAttribute("paymentsStatus", PaymentStatus.values());
@@ -350,6 +339,19 @@ public class AdminController {
     model.addAttribute("payments", payments);
 
     return "admin/dashboard/payments/table";
+  }
+
+  @GetMapping("/payments")
+  String getPayments(@RequestParam Long eventId, @RequestParam(required = false) String status, Model model) {
+    var statusEnum = StringUtils.hasText(status)
+        ? PaymentStatus.valueOf(status)
+        : null;
+    var payments = paymentService.findAllBy(eventId, statusEnum);
+
+    model.addAttribute("hasPaid", payments.stream().filter(Payment::isStatusPaid).findAny().isPresent());
+    model.addAttribute("payments", payments);
+
+    return "admin/dashboard/payments/table-response";
   }
 
   @GetMapping("/events/{id}/payments/report")

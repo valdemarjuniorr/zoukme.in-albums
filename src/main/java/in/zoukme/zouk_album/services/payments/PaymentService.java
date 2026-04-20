@@ -1,8 +1,6 @@
 package in.zoukme.zouk_album.services.payments;
 
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -29,7 +27,6 @@ import in.zoukme.zouk_album.repositories.events.EventRepository;
 import in.zoukme.zouk_album.repositories.payments.PaymentEmailDetails;
 import in.zoukme.zouk_album.repositories.payments.PaymentsRepository;
 import in.zoukme.zouk_album.services.aws.ses.EmailService;
-import in.zoukme.zouk_album.utils.DateUtils;
 
 @Service
 public class PaymentService {
@@ -127,43 +124,27 @@ public class PaymentService {
     return repository.findAll();
   }
 
-  public SumPriceTotalTransaction getTotalExpired(Long eventId, LocalDateTime afterDateTime) {
-    return repository.getTotalExpired(eventId, getDefaultDateTime(afterDateTime));
+  public SumPriceTotalTransaction getTotalExpired(Long eventId) {
+    return repository.getTotalExpired(eventId);
   }
 
-  public SumPriceTotalTransaction getTotalCompleted(Long eventId, LocalDateTime afterDateTime) {
-    return repository.getTotalCompleted(eventId, getDefaultDateTime(afterDateTime));
+  public SumPriceTotalTransaction getTotalCompleted(Long eventId) {
+    return repository.getTotalCompleted(eventId);
   }
 
-  public SumPriceTotalTransaction getTotalPending(Long eventId, LocalDateTime afterDateTime) {
-    return repository.getTotalPending(eventId, getDefaultDateTime(afterDateTime));
+  public SumPriceTotalTransaction getTotalPending(Long eventId) {
+    return repository.getTotalPending(eventId);
   }
 
-  /*
-   * * Returns the total number of payments made after a specific date.
-   * If no date is provided, it defaults to the beginning of the current year.
-   */
-  private LocalDateTime getDefaultDateTime(LocalDateTime afterDateTime) {
-    return Objects.nonNull(afterDateTime) ? afterDateTime : DateUtils.beginningOfTheCurrentYear();
-  }
-
-  public org.springframework.data.domain.Page<Payment> findAllBy(
-      PaymentStatus status, LocalDateTime beforeDateTime, Page page) {
-    if (Objects.isNull(status)) {
+  public org.springframework.data.domain.Page<Payment> findAllBy(Long eventId, PaymentStatus statusEnum, Page page) {
+    if (Objects.isNull(statusEnum)) {
       return repository.findAllByOrderByPaymentDateDesc(page.toPageRequest());
     }
-    if (Objects.isNull(beforeDateTime)) {
-      beforeDateTime = DateUtils.endDateTime(LocalDate.now().minusYears(1));
-    }
-    return repository.findAllByStatusAndPaymentDateIsAfterOrderByPaymentDateDesc(
-        status, beforeDateTime, page.toPageRequest());
+    return repository.findAllByStatusOrderByPaymentDateDesc(statusEnum, page.toPageRequest());
   }
 
-  public org.springframework.data.domain.Page<Payment> findAllBy(PaymentStatus status, Page page) {
-    if (Objects.isNull(status)) {
-      return repository.findAllByOrderByPaymentDateDesc(page.toPageRequest());
-    }
-    return repository.findAllByStatus(status, page.toPageRequest());
+  public List<Payment> findAllBy(Long eventId, PaymentStatus status) {
+    return Objects.isNull(status) ? repository.findAllBy(eventId) : repository.findAllBy(eventId, status);
   }
 
   public void inactivate(String transactionId) {
@@ -176,11 +157,11 @@ public class PaymentService {
   }
 
   public List<Payment> findAllByEventId(Long eventId) {
-    return repository.findAllByEventId(eventId);
+    return repository.findAllBy(eventId);
   }
 
   public byte[] generatePaymentsReportBy(Long eventId) {
-    var payments = paymentsRepository.findAllByEventIdAndStatus(eventId, PaymentStatus.PAID);
+    var payments = paymentsRepository.findAllBy(eventId, PaymentStatus.PAID);
     var lines = new StringBuilder();
     payments.forEach(payment -> {
       var line = String.format("%s;%s;%s;%s;%s", payment.fullName(), payment.email(), payment.document(),

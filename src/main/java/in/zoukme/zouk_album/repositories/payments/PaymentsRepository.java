@@ -39,36 +39,32 @@ public interface PaymentsRepository
   Optional<PaymentEmailDetails> findPaymentDetailsByReferenceId(UUID referenceId);
 
   @Query("""
-          SELECT SUM(pay.amount) as sum_price, COUNT(pay.id) as total FROM events ev
-           inner join packages pack on ev.id = pack.event_id
+          SELECT SUM(pay.amount) as sum_price, COUNT(pay.id) as total FROM packages pack
            inner join payments pay on pack.id = pay.package_id
-          WHERE ev.id = :eventId and payment_date > :afterDateTime and status = 'EXPIRED'
+          WHERE pack.event_id = :eventId  and status = 'EXPIRED'
       """)
-  SumPriceTotalTransaction getTotalExpired(Long eventId, LocalDateTime afterDateTime);
+  SumPriceTotalTransaction getTotalExpired(Long eventId);
 
   @Query("""
-          SELECT SUM(pay.amount) as sum_price, COUNT(pay.id) as total FROM events ev
-           inner join packages pack on ev.id = pack.event_id
+          SELECT SUM(pay.amount) as sum_price, COUNT(pay.id) as total FROM packages pack
            inner join payments pay on pack.id = pay.package_id
-          WHERE ev.id = :eventId and status = 'PAID' AND payment_date > :afterDateTime
+          WHERE pack.event_id = :eventId  and status = 'PAID'
       """)
-  SumPriceTotalTransaction getTotalCompleted(Long eventId, LocalDateTime afterDateTime);
+  SumPriceTotalTransaction getTotalCompleted(Long eventId);
 
   @Query("""
-          SELECT SUM(pay.amount) as sum_price, COUNT(pay.id) as total FROM events ev
-           inner join packages pack on ev.id = pack.event_id
+          SELECT SUM(pay.amount) as sum_price, COUNT(pay.id) as total FROM packages pack
            inner join payments pay on pack.id = pay.package_id
-          WHERE ev.id = :eventId  and status = 'WAITING' AND payment_date > :afterDateTime
+          WHERE pack.event_id = :eventId  and status = 'WAITING'
       """)
-  SumPriceTotalTransaction getTotalPending(Long eventId, LocalDateTime afterDateTime);
+  SumPriceTotalTransaction getTotalPending(Long eventId);
 
   Page<Payment> findAllByStatus(PaymentStatus status, PageRequest pageRequest);
 
   Page<Payment> findAllByStatusAndPaymentDateIsBefore(
       PaymentStatus status, LocalDateTime paymentDateBefore, Pageable pageable);
 
-  Page<Payment> findAllByStatusAndPaymentDateIsAfterOrderByPaymentDateDesc(
-      PaymentStatus status, LocalDateTime paymentDateAfter, Pageable pageable);
+  Page<Payment> findAllByStatusOrderByPaymentDateDesc(PaymentStatus status, Pageable pageable);
 
   Page<Payment> findAllByOrderByPaymentDateDesc(Pageable pageable);
 
@@ -84,13 +80,13 @@ public interface PaymentsRepository
                inner join packages pack on pay.package_id = pack.id
       where pack.event_id = :eventId
       """)
-  List<Payment> findAllByEventId(Long eventId);
+  List<Payment> findAllBy(Long eventId);
 
   @Query("""
         select * from packages pack
            inner join payments pay on pack.id = pay.package_id
         WHERE pack.event_id = :eventId and status = :status
       """)
-  List<Payment> findAllByEventIdAndStatus(Long eventId, PaymentStatus status);
+  List<Payment> findAllBy(Long eventId, PaymentStatus status);
 
 }

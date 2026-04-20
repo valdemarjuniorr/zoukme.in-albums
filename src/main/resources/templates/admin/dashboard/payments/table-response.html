@@ -1,125 +1,142 @@
-<table id="payments-table" class="min-w-full divide-y divide-gray-200">
-  <thead class="bg-[#fef2f3]">
-    <tr>
-      <th
-        scope="col"
-        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-      >
-        ID
-      </th>
-      <th
-        scope="col"
-        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-      >
-        Cliente
-      </th>
-      <th
-        scope="col"
-        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-      >
-        Valor(R$)
-      </th>
-      <th
-        scope="col"
-        class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
-      >
-        Status
-      </th>
-      <th
-        scope="col"
-        class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
-      >
-        Data
-      </th>
-      <th
-        scope="col"
-        class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
-      >
-        Ações
-      </th>
-    </tr>
-  </thead>
-  <tbody class="bg-white divide-y divide-gray-200">
-    <tr
-      th:if="${!#lists.isEmpty(payments)}"
-      th:each="payment : ${payments}"
-      class="hover:bg-gray-50"
-    >
-      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-        <a
-          th:href="@{https://sandbox.api.pagseguro.com/checkouts/{transactionId}(transactionId=${payment.transactionId})}"
-          target="_blank"
+<div>
+  <table id="payments-table" class="min-w-full divide-y divide-gray-200">
+    <thead class="bg-[#fef2f3]">
+      <tr>
+        <th
+          scope="col"
+          class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
         >
-          <span
-            th:text="${payment.shortTransactionId}"
-            th:title="${payment.transactionId}"
-          ></span>
-        </a>
-      </td>
-      <td class="px-6 py-4 whitespace-nowrap">
-        <div class="flex flex-col">
-          <div
-            th:text="${payment.fullName}"
-            class="text-sm capitalize font-medium text-gray-700"
-          ></div>
-          <div th:text="${payment.email}" class="text-sm text-gray-500"></div>
-        </div>
-      </td>
-      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-        R$
-        <span
-          th:text="${#numbers.formatDecimal(payment.amount, 1, 2, 'COMMA')}"
-        ></span>
-      </td>
-      <td class="px-6 py-4 whitespace-nowrap">
-        <span
-          th:id="${payment.status}"
-          th:text="${payment.status.status}"
-          class="px-2 flex text-xs leading-5 font-semibold rounded-full items-center justify-center"
-        ></span>
-      </td>
-      <td
-        th:text="${payment.descriptiveDate}"
-        class="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-500"
-      ></td>
-      <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-        <div class="flex justify-end space-x-2">
-          <button
-            th:hx-get="@{/admin/payments/{id}/details(id=${payment.id})}"
-            hx-target="#payment-details-modal"
-            hx-swap="afterbegin"
-            class="text-gray-500 hover:text-primary"
-          >
-            <div class="w-5 h-5 flex items-center justify-center">
-              <i class="ri-file-list-line"></i>
-            </div>
-          </button>
-          <button class="text-gray-500 hover:text-primary">
-            <div class="w-5 h-5 flex items-center justify-center">
-              <i class="ri-printer-line"></i>
-            </div>
-          </button>
-          <button
-            title="Inativar"
-            th:hx-delete="@{/admin/payments/{transactionId}/inactivate(transactionId=${payment.transactionId})}"
-            hx-confirm="Tem certeza que deseja inativar este pagamento?"
-            hx-trigger="click"
-            class="text-gray-500 hover:text-primary"
-          >
-            <div class="w-5 h-5 flex items-center justify-center">
-              <i class="ri-close-circle-line"></i>
-            </div>
-          </button>
-        </div>
-      </td>
-    </tr>
-    <tr th:if="${#lists.isEmpty(payments)}" class="hover:bg-gray-50">
-      <td
-        colspan="6"
-        class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center"
+          ID
+        </th>
+        <th
+          scope="col"
+          class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+        >
+          Cliente
+        </th>
+        <th
+          scope="col"
+          class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+        >
+          Valor(R$)
+        </th>
+        <th
+          scope="col"
+          class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
+        >
+          Status
+        </th>
+        <th
+          scope="col"
+          class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
+        >
+          Data
+        </th>
+        <th
+          scope="col"
+          class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
+        >
+          Ações
+        </th>
+      </tr>
+    </thead>
+    <tbody class="bg-white divide-y divide-gray-200">
+      <tr
+        th:if="${!#lists.isEmpty(payments)}"
+        th:each="payment : ${payments}"
+        class="hover:bg-gray-50"
       >
-        Nenhum pagamento encontrado.
-      </td>
-    </tr>
-  </tbody>
-</table>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+          <a
+            th:href="@{https://sandbox.api.pagseguro.com/checkouts/{transactionId}(transactionId=${payment.transactionId})}"
+            target="_blank"
+          >
+            <span
+              th:text="${payment.shortTransactionId}"
+              th:title="${payment.transactionId}"
+            ></span>
+          </a>
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap">
+          <div class="flex flex-col">
+            <div
+              th:text="${payment.fullName}"
+              class="text-sm capitalize font-medium text-gray-700"
+            ></div>
+            <div th:text="${payment.email}" class="text-sm text-gray-500"></div>
+          </div>
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+          R$
+          <span
+            th:text="${#numbers.formatDecimal(payment.amount, 1, 2, 'COMMA')}"
+          ></span>
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap">
+          <span
+            th:id="${payment.status}"
+            th:text="${payment.status.status}"
+            class="px-2 flex text-xs leading-5 font-semibold rounded-full items-center justify-center"
+          ></span>
+        </td>
+        <td
+          th:text="${payment.descriptiveDate}"
+          class="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-500"
+        ></td>
+        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+          <div class="flex justify-end space-x-2">
+            <button
+              th:hx-get="@{/admin/payments/{id}/details(id=${payment.id})}"
+              hx-target="#payment-details-modal"
+              hx-swap="afterbegin"
+              class="text-gray-500 hover:text-primary"
+            >
+              <div class="w-5 h-5 flex items-center justify-center">
+                <i class="ri-file-list-line"></i>
+              </div>
+            </button>
+            <button class="text-gray-500 hover:text-primary">
+              <div class="w-5 h-5 flex items-center justify-center">
+                <i class="ri-printer-line"></i>
+              </div>
+            </button>
+            <button
+              title="Inativar"
+              th:hx-delete="@{/admin/payments/{transactionId}/inactivate(transactionId=${payment.transactionId})}"
+              hx-confirm="Tem certeza que deseja inativar este pagamento?"
+              hx-trigger="click"
+              class="text-gray-500 hover:text-primary"
+            >
+              <div class="w-5 h-5 flex items-center justify-center">
+                <i class="ri-close-circle-line"></i>
+              </div>
+            </button>
+          </div>
+        </td>
+      </tr>
+      <tr th:if="${#lists.isEmpty(payments)}" class="hover:bg-gray-50">
+        <td
+          colspan="6"
+          class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center"
+        >
+          Nenhum pagamento encontrado.
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <!-- Download Report Button -->
+  <div class="m-2 flex justify-end">
+    <a
+      th:href="@{/admin/events/{id}/payments/report(id=${eventId})}"
+      th:attr="disabled=${!hasPaid}"
+      title="Baixar relatório de pagamentos em CSV"
+      th:classappend="${!hasPaid} ? 'opacity-50 cursor-not-allowed pointer-events-none' : ''"
+      class="inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-button hover:bg-green-700 whitespace-nowrap"
+    >
+      <div class="w-4 h-4 flex items-center justify-center mr-2">
+        <i class="ri-file-excel-2-line text-sm"></i>
+      </div>
+      Baixar Relatório
+    </a>
+  </div>
+</div>
