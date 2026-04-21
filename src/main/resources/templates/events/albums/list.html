@@ -96,6 +96,7 @@
           >
             <img
               th:src="${photo.imagePath}"
+              th:attr="data-photo-id=${photo.eventPhotoId}"
               class="w-full h-full object-cover rounded-sm transition-transform duration-300 group-hover:scale-105"
               th:onclick="@{openModal({photoId})(photoId=${photo.eventPhotoId})}"
             />
@@ -148,11 +149,11 @@
               </div>
             </div>
           </div>
-          <!-- modal content -->
-          <div th:id="${photo.eventPhotoId}" class="modal">
-            <img th:src="${photo.imagePath}" />
-          </div>
         </div>
+      </div>
+      <!-- Single shared modal -->
+      <div id="shared-modal" style="display: none" class="modal">
+        <img id="modal-img" src="" />
       </div>
       <!-- Pagination -->
       <div th:if="${photos.totalPages != 1}" class="flex justify-center mt-8">
@@ -252,10 +253,13 @@
       </div>
     </div>
     <script type="text/javascript">
-      function openModal(id) {
-        $("#" + id).modal({
-          fadeDuration: 250,
-        });
+      function openModal(photoId) {
+        const clickedImg = document.querySelector(
+          `img[data-photo-id="${photoId}"]`,
+        );
+        if (!clickedImg) return;
+        document.getElementById("modal-img").src = clickedImg.src;
+        $("#shared-modal").modal({ fadeDuration: 250 });
       }
     </script>
     <script type="text/javascript">
