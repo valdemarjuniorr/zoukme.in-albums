@@ -119,15 +119,11 @@ public class AdminController {
     return "admin/albums/update";
   }
 
-  @PutMapping("/albums/{id}/update")
-  String updateAlbum(Album album, Model model) {
-    albumService.update(album);
-    var albums = this.albumService.findAll();
+  @PostMapping("/albums/{id}")
+  String updateAlbum(AlbumUpdateRequest request, Model model) {
+    albumService.update(request.toDomain());
 
-    model.addAttribute("albums", albums);
-    model.addAttribute("message", "Album atualizado com sucesso");
-
-    return albumList(model);
+    return homeAdmin(model);
   }
 
   @GetMapping("/events/create")

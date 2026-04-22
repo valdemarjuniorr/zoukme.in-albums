@@ -30,4 +30,10 @@ public interface AlbumRepository
 
   @Query("SELECT COUNT(DISTINCT city) FROM albums WHERE city IS NOT NULL")
   Integer findDistinctCitiesCount();
+
+  @Modifying
+  @Query("""
+      UPDATE albums SET title = :#{#album.title}, city = :#{#album.city}, event_date = :#{#album.eventDate} WHERE id = :#{#album.id}
+      """)
+  Integer updateAlbumInfo(Album album);
 }

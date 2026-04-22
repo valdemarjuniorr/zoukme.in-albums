@@ -62,8 +62,10 @@ public class AlbumService {
   }
 
   public void update(Album album) {
-    var updated = this.repository.save(album);
-    log.info("Album with id {} has been updated", updated.id());
+    var updated = this.repository.updateAlbumInfo(album);
+    if (updated == 0) {
+      throw new AlbumNotFoundException(album.id());
+    }
   }
 
   public void deleteBy(Long eventId) {

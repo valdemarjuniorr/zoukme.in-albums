@@ -54,6 +54,7 @@ public class EventController {
     var event = service.findByEventUrl(title);
     model.addAttribute("eventId", event.getId());
     model.addAttribute("event", event);
+    model.addAttribute("seo", new MetaTags(event.title(), event.description(), event.coverUrl()));
 
     var interestsCount = interestService.getInterestCounts(event.getId());
     for (var interestCount : interestsCount) {
@@ -99,6 +100,10 @@ public class EventController {
     model.addAttribute("albumName", albumName);
     model.addAttribute("eventUrl", eventUrl);
     model.addAttribute("authentication", authentication);
+
+    var event = service.findByEventUrl(eventUrl);
+    model.addAttribute("seo", new MetaTags(event.title(), event.description(), event.coverUrl()));
+
     // set layout configuration in cookie
     var cookie = new Cookie("layout", layout);
     cookie.setPath("/");
