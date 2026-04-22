@@ -1,78 +1,9 @@
 <!doctype html>
-<html lang="en">
-  <head>
-    <!-- Google tag (gtag.js) -->
-    <script
-      async
-      src="https://www.googletagmanager.com/gtag/js?id=G-ZTLEWPD9HY"
-    ></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
+<html xmlns:th="https://www.thymeleaf.org" lang="pt-br">
+  <head th:insert="~{fragments/header}"></head>
 
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-
-      gtag("js", new Date());
-      gtag("config", "G-ZTLEWPD9HY");
-    </script>
-    <!-- Include the Quill library -->
-    <link
-      href="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.snow.css"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css?family=Pacifico|Montserrat|Poppins"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css"
-    />
-    <meta charset="UTF-8" />
-    <meta name="description" th:content="${event.description}" />
-    <meta
-      name="keywords"
-      th:content="'zouk,zouk brasileiro,samba,dança de salão,dançar,bailes,congressos de dança de salão,' + ${event.title}"
-    />
-    <meta name="author" content="Zouk Me In" />
-    <meta name="robots" content="index, follow" />
-    <meta name="language" content="pt-BR" />
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta property="og:type" content="website" />
-    <meta property="og:description" th:content="${event.description}" />
-    <meta property="og:image" th:content="${event.coverUrl}" />
-    <meta property="og:title" th:content="'Zoukme In - ' + ${event.title}" />
-    <meta property="og:url" content="https://zoukme.in/" />
-    <meta property="og:locale" content="pt_BR" />
-    <meta property="og:site_name" content="Zouk Me In" />
-
-    <script src="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script
-      src="https://kit.fontawesome.com/b431e00b38.js"
-      crossorigin="anonymous"
-    ></script>
-    <script src="https://unpkg.com/htmx.org@2.0.8/dist/htmx.min.js"></script>
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: { primary: "#e94057", secondary: "#8a2be2" },
-          },
-        },
-      };
-    </script>
+  <body class="bg-gray-50">
     <style>
-      :where([class^="ri-"])::before {
-        content: "\f3c2";
-      }
-
-      body {
-        font-family: "Montserrat", sans-serif;
-      }
-
       .countdown-item {
         position: relative;
       }
@@ -160,10 +91,6 @@
         }
       }
     </style>
-    <title th:text="${event.title} + ' - Zouk Me In'"></title>
-  </head>
-
-  <body class="bg-gray-50">
     <div th:insert="~{fragments/top :: top}"></div>
     <header class="container mx-auto px-4 py-14">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
