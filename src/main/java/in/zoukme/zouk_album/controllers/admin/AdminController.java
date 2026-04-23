@@ -66,6 +66,7 @@ public class AdminController {
   @GetMapping
   String home(Model model, Authentication authentication) {
     model.addAttribute("authentication", authentication);
+
     return "admin/home";
   }
 
@@ -73,8 +74,8 @@ public class AdminController {
   String homeAdmin(Model model) {
     var pageObj = Page.defaultPage();
     var albums = this.albumService.findAll(pageObj);
-    var events = this.eventService.findEventsWithoutAlbum();
     model.addAttribute("albums", albums);
+    var events = this.eventService.findEventsWithoutAlbum();
     model.addAttribute("events", events);
     model.addAttribute("pagination", pageObj.generatePagination(albums.getTotalPages()));
 
@@ -84,6 +85,7 @@ public class AdminController {
   @GetMapping("/albums/create")
   String createAlbum(Album album, Model model) {
     model.addAttribute("album", album);
+
     return "admin/albums/create";
   }
 
