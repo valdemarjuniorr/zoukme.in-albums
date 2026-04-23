@@ -586,7 +586,7 @@
                 <div class="bg-gray-50 rounded-lg p-4">
                   <div
                     th:each="event : ${events}"
-                    th:if="${!event.isComingUp}"
+                    th:if="${event.isComingUp}"
                     class="flex flex-col space-y-4"
                   >
                     <!-- Event info -->
@@ -649,6 +649,23 @@
                     <div
                       class="border-b border-gray-200 -mx-4 last:border-0 last:mb-0"
                     ></div>
+                  </div>
+                  <!-- Empty state -->
+                  <div
+                    th:if="${#lists.isEmpty(events)}"
+                    class="flex flex-col items-center justify-center py-8 px-4 text-center"
+                  >
+                    <div
+                      class="w-12 h-12 rounded-full bg-white flex items-center justify-center text-gray-400 mb-3"
+                    >
+                      <i class="ri-calendar-line text-xl"></i>
+                    </div>
+                    <p class="text-sm font-medium text-gray-500">
+                      Sem próximos eventos
+                    </p>
+                    <p class="text-xs text-gray-400 mt-1">
+                      Nenhum evento agendado para os próximos dias.
+                    </p>
                   </div>
                 </div>
               </div>

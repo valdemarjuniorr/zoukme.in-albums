@@ -39,7 +39,7 @@
               de álbuns
             </p>
           </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             <!-- Album 1 -->
             <div
               th:each="album : ${albums}"
@@ -48,7 +48,7 @@
             >
               <a th:href="${album.url}" th:title="${album.title}">
                 <div
-                  class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300"
+                  class="bg-white rounded-md overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300"
                 >
                   <div class="relative h-64 overflow-hidden">
                     <img

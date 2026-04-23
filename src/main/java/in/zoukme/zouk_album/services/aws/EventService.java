@@ -234,4 +234,8 @@ public class EventService {
   public Boolean hasVisiblePackage(Long eventId) {
     return this.packageService.hasVisiblePackage(eventId);
   }
+
+  public List<Event> findEventsWithoutAlbum() {
+    return this.repository.findEventsWithoutAlbum();
+  }
 }
