@@ -74,6 +74,7 @@ public interface EventRepository
         select *
         from events e
         where e.id not in (select event_id from albums)
+        and e.date >= CURRENT_DATE ORDER By date
       """)
   List<Event> findEventsWithoutAlbum();
 
