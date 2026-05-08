@@ -28,4 +28,10 @@ public class ExceptionHandlerConfig {
     return "error-toast";
   }
 
+  @ExceptionHandler(RuntimeException.class)
+  public String handleRuntimeException(RuntimeException e, Model model) {
+
+    return "error";
+  }
+
 }
