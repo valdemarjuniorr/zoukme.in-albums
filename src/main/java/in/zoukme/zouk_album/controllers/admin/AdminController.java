@@ -109,9 +109,12 @@ public class AdminController {
 
   @GetMapping("/albums")
   String albumList(Model model) {
-    model.addAttribute("albums", this.albumService.findAll());
+    var pageObj = Page.defaultPage();
+    var albums = this.albumService.findAll(pageObj);
+    model.addAttribute("albums", albums);
+    model.addAttribute("pagination", pageObj.generatePagination(albums.getTotalPages()));
 
-    return "admin/albums/list";
+    return "admin/dashboard/albums-table";
   }
 
   @GetMapping("/albums/{id}/update")

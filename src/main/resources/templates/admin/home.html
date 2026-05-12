@@ -156,6 +156,9 @@
         </a>
         <a
           href="#"
+          hx-target="#main-table-content"
+          hx-trigger="click"
+          hx-get="/admin/albums"
           class="sidebar-link flex items-center px-4 py-3 text-sm text-gray-700"
         >
           <div
@@ -167,6 +170,9 @@
         </a>
         <a
           href="#"
+          hx-target="#main-table-content"
+          hx-trigger="click"
+          hx-get="/admin/events"
           class="sidebar-link flex items-center px-4 py-3 text-sm text-gray-700"
         >
           <div
@@ -178,6 +184,9 @@
         </a>
         <a
           href="#"
+          hx-target="#main-table-content"
+          hx-trigger="click"
+          hx-get="/admin/events/packages/list"
           class="sidebar-link flex items-center px-4 py-3 text-sm text-gray-700"
         >
           <div
@@ -189,6 +198,9 @@
         </a>
         <a
           href="#"
+          hx-target="#main-table-content"
+          hx-trigger="click"
+          hx-get="/admin/payments/list"
           class="sidebar-link flex items-center px-4 py-3 text-sm text-gray-700"
         >
           <div
@@ -200,6 +212,9 @@
         </a>
         <a
           href="#"
+          hx-target="#main-table-content"
+          hx-trigger="click"
+          hx-get="/admin/users"
           class="sidebar-link flex items-center px-4 py-3 text-sm text-gray-700"
         >
           <div
@@ -352,6 +367,8 @@
                 </a>
                 <a
                   href="#"
+                  hx-get="/admin/albums"
+                  hx-target="#main-table-content"
                   class="sidebar-link flex items-center px-4 py-3 text-sm text-gray-700"
                 >
                   <div
@@ -363,6 +380,8 @@
                 </a>
                 <a
                   href="#"
+                  hx-get="/admin/events"
+                  hx-target="#main-table-content"
                   class="sidebar-link flex items-center px-4 py-3 text-sm text-gray-700"
                 >
                   <div
@@ -374,6 +393,8 @@
                 </a>
                 <a
                   href="#"
+                  hx-get="/admin/events/packages/list"
+                  hx-target="#main-table-content"
                   class="sidebar-link flex items-center px-4 py-3 text-sm text-gray-700"
                 >
                   <div
@@ -382,6 +403,32 @@
                     <i class="ri-gallery-line"></i>
                   </div>
                   <span>Pacotes</span>
+                </a>
+                <a
+                  href="#"
+                  hx-get="/admin/payments/list"
+                  hx-target="#main-table-content"
+                  class="sidebar-link flex items-center px-4 py-3 text-sm text-gray-700"
+                >
+                  <div
+                    class="w-6 h-6 flex items-center justify-center mr-3 text-primary"
+                  >
+                    <i class="ri-calendar-event-line"></i>
+                  </div>
+                  <span>Pagamentos</span>
+                </a>
+                <a
+                  href="#"
+                  hx-get="/admin/users"
+                  hx-target="#main-table-content"
+                  class="sidebar-link flex items-center px-4 py-3 text-sm text-gray-700"
+                >
+                  <div
+                    class="w-6 h-6 flex items-center justify-center mr-3 text-primary"
+                  >
+                    <i class="ri-calendar-event-line"></i>
+                  </div>
+                  <span>Usuários</span>
                 </a>
                 <div
                   class="px-4 mt-6 mb-3 text-xs font-semibold text-gray-400 uppercase"
