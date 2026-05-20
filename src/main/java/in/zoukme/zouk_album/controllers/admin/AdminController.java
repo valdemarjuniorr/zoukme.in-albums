@@ -387,7 +387,10 @@ public class AdminController {
   @GetMapping("/users")
   String getUsers(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "6") Integer size,
       Model model) {
-    var users = userService.findAllBy(new Page(page, size));
+    var pageObj = new Page(page, size);
+    var users = userService.findAllBy(pageObj);
+    model.addAttribute("pagination", pageObj.generatePagination(users.getTotalPages()));
+
     model.addAttribute("users", users);
     return "admin/dashboard/users/list";
   }
