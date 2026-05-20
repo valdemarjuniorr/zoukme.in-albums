@@ -13,6 +13,9 @@ class EventUtils {
   }
 
   static String getFormatEventName(String title) {
-    return title.toLowerCase().replace(" ", "-");
+    var normalized = java.text.Normalizer.normalize(title, java.text.Normalizer.Form.NFD)
+        .replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
+
+    return normalized.toLowerCase().replaceAll("[^a-z0-9]+", "-").replaceAll("^-|-$", "");
   }
 }
