@@ -2,25 +2,7 @@
   <h2 class="text-lg font-medium text-gray-900">Gerenciamento de Usuários</h2>
   <div
     class="mt-4 md:mt-0 flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3"
-  >
-    <div class="relative">
-      <select
-        class="appearance-none bg-gray-50 border border-gray-300 text-gray-700 py-2 pl-3 pr-8 rounded-button text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-      >
-        <option>Ordenar por: Mais Recentes</option>
-        <option>Ordenar por: Mais Antigos</option>
-        <option>Ordenar por: Nome A-Z</option>
-        <option>Ordenar por: Nome Z-A</option>
-      </select>
-      <div
-        class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700"
-      >
-        <div class="w-4 h-4 flex items-center justify-center">
-          <i class="ri-arrow-down-s-line"></i>
-        </div>
-      </div>
-    </div>
-  </div>
+  ></div>
 </div>
 <!-- Events table -->
 <div class="overflow-x-auto">
@@ -127,7 +109,7 @@
     >
       <a
         th:if="${!users.first}"
-        th:hx-get="@{/admin/events?page={page}(page=${users.number})}"
+        th:hx-get="@{/admin/users?page={page}(page=${users.number})}"
         hx-target="#main-table-content"
         class="cursor-pointer relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
       >
@@ -139,16 +121,16 @@
       <a
         th:each="page : ${pagination}"
         th:text="${page}"
-        th:hx-get="@{/admin/events?page={page}(page=${page})}"
+        th:hx-get="@{/admin/users?page={page}(page=${page})}"
         hx-target="#main-table-content"
         th:class="${page == users.number + 1 + ''
-							? 'z-10 bg-primary border-primary text-white relative inline-flex items-center px-4 py-2 border text-sm font-medium'
-							: 'cursor-pointer bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium'}"
+					? 'z-10 bg-primary border-primary text-white relative inline-flex items-center px-4 py-2 border text-sm font-medium'
+					: 'cursor-pointer bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium'}"
       >
       </a>
       <a
         th:if="${!users.last}"
-        th:hx-get="@{/admin/events?page={page}(page=${users.number + 2})}"
+        th:hx-get="@{/admin/users?page={page}(page=${users.number + 2})}"
         hx-target="#main-table-content"
         class="cursor-pointer relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
       >
