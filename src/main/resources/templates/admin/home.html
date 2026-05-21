@@ -220,7 +220,7 @@
           <div
             class="w-6 h-6 flex items-center justify-center mr-3 text-primary"
           >
-            <i class="ri-money-dollar-circle-line"></i>
+            <i class="ri-group-line"></i>
           </div>
           <span>Usuários</span>
         </a>
@@ -270,23 +270,41 @@
     <div
       class="fixed bottom-0 left-0 right-0 z-10 bg-white border-t border-gray-200 flex justify-around py-2 md:hidden"
     >
-      <a href="#" class="flex flex-col items-center p-2 text-primary">
-        <div class="w-6 h-6 flex items-center justify-center">
-          <i class="ri-dashboard-line"></i>
-        </div>
-        <span class="text-xs mt-1">Dashboard</span>
-      </a>
-      <a href="#" class="flex flex-col items-center p-2 text-gray-500">
+      <a
+        href="#"
+        hx-target="#main-table-content"
+        hx-trigger="click"
+        hx-get="/admin/albums"
+        class="flex flex-col items-center p-2 text-gray-500"
+      >
         <div class="w-6 h-6 flex items-center justify-center">
           <i class="ri-image-line"></i>
         </div>
         <span class="text-xs mt-1">Álbuns</span>
       </a>
-      <a href="#" class="flex flex-col items-center p-2 text-gray-500">
+      <a
+        href="#"
+        hx-target="#main-table-content"
+        hx-trigger="click"
+        hx-get="/admin/events"
+        class="flex flex-col items-center p-2 text-gray-500"
+      >
         <div class="w-6 h-6 flex items-center justify-center">
           <i class="ri-calendar-event-line"></i>
         </div>
         <span class="text-xs mt-1">Eventos</span>
+      </a>
+      <a
+        href="#"
+        hx-target="#main-table-content"
+        hx-trigger="click"
+        hx-get="/admin/users"
+        class="flex flex-col items-center p-2 text-gray-500"
+      >
+        <div class="w-6 h-6 flex items-center justify-center">
+          <i class="ri-group-line"></i>
+        </div>
+        <span class="text-xs mt-1">Usuários</span>
       </a>
       <a href="#" class="flex flex-col items-center p-2 text-gray-500">
         <div class="w-6 h-6 flex items-center justify-center">
@@ -426,7 +444,7 @@
                   <div
                     class="w-6 h-6 flex items-center justify-center mr-3 text-primary"
                   >
-                    <i class="ri-calendar-event-line"></i>
+                    <i class="ri-group-line"></i>
                   </div>
                   <span>Usuários</span>
                 </a>
@@ -547,7 +565,7 @@
                 <div
                   class="w-6 h-6 flex items-center justify-center text-orange-500"
                 >
-                  <i class="ri-user-line"></i>
+                  <i class="ri-group-line"></i>
                 </div>
               </div>
               <div class="ml-4">
