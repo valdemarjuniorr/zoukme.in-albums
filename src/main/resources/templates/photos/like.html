@@ -1,4 +1,23 @@
 <div th:fragment="like(photoId, liked, count)">
+  <style>
+    @keyframes likePopup {
+      0% {
+        transform: scale(1);
+      }
+      40% {
+        transform: scale(1.4);
+      }
+      70% {
+        transform: scale(0.9);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+    .like-pop {
+      animation: likePopup 0.35s ease forwards;
+    }
+  </style>
   <div
     sec:authorize="!isAuthenticated()"
     class="absolute bottom-1 left-1 flex items-center space-x-2 z-1"
@@ -37,6 +56,7 @@
       hx-trigger="click"
       hx-swap="outerHTML"
       class="absolute bottom-1 left-1 flex items-center space-x-2 z-1"
+      onclick="this.querySelector('i').classList.add('like-pop')"
     >
       <button
         class="like-btn flex items-center space-x-2 bg-white/95 hover:bg-white backdrop-blur-sm rounded-full px-2 py-1 transition-all duration-200 cursor-pointer group shadow-lg border border-gray-200"
@@ -55,6 +75,7 @@
       hx-trigger="click"
       hx-swap="outerHTML"
       class="absolute bottom-1 left-1 flex items-center space-x-2 z-1"
+      onclick="this.querySelector('i').classList.add('like-pop')"
     >
       <button
         class="like-btn flex items-center space-x-2 backdrop-blur-sm rounded-full px-2 py-1 transition-all duration-200 cursor-pointer group shadow-lg border bg-red-50 hover:bg-red-100 border-red-200"
