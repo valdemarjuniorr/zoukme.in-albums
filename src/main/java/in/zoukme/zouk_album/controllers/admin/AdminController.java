@@ -77,9 +77,9 @@ public class AdminController {
     var pageObj = Page.defaultPage();
     var albums = this.albumService.findAll(pageObj);
     model.addAttribute("albums", albums);
+    model.addAttribute("pagination", pageObj.generatePagination(albums.getTotalPages()));
     var events = this.eventService.findEventsWithoutAlbum();
     model.addAttribute("events", events);
-    model.addAttribute("pagination", pageObj.generatePagination(albums.getTotalPages()));
 
     return "admin/home";
   }

@@ -24,7 +24,7 @@ class AlbumController {
 
   @GetMapping
   String findAll(Model model, Authentication authentication) {
-    var albums = this.service.findAll(new Page(1, 20));
+    var albums = this.service.findAll(new Page(1, 25));
     model.addAttribute("albums", albums);
     model.addAttribute("authentication", authentication);
 
