@@ -73,8 +73,8 @@ public interface EventRepository
   @Query("""
         select *
         from events e
-        where e.id not in (select event_id from albums where event_id is not null)
-        and e.date >= CURRENT_DATE ORDER By date
+        where not exists (select 1 from albums a where a.event_id = e.id)
+        and e.date between CURRENT_DATE and (CURRENT_DATE + interval '7 days') ORDER BY date
       """)
   List<Event> findEventsWithoutAlbum();
 
