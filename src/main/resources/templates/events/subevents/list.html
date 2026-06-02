@@ -126,7 +126,7 @@
               Compartilhar Álbuns
             </h2>
             <div class="flex flex-col gap-3 md:gap-4">
-              <div class="grid grid-cols-2 gap-3 md:gap-4">
+              <div class="grid gap-3 md:gap-4">
                 <!-- WhatsApp Button -->
                 <button
                   onclick="shareWhatsApp()"
@@ -134,15 +134,6 @@
                 >
                   <i class="ri-whatsapp-line text-xl"></i>
                   <span>WhatsApp</span>
-                </button>
-
-                <!-- Instagram Button -->
-                <button
-                  onclick="shareInstagram()"
-                  class="flex items-center justify-center gap-2 bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 hover:from-purple-600 hover:via-pink-600 hover:to-red-600 text-white font-semibold py-3 px-6 rounded-md transition-all duration-200 hover:shadow-lg transform hover:-translate-y-0.5"
-                >
-                  <i class="ri-instagram-line text-xl"></i>
-                  <span>Instagram</span>
                 </button>
               </div>
 
@@ -168,17 +159,9 @@
 
         function shareWhatsApp() {
           const text = encodeURIComponent(
-            `Confira os álbuns de ${eventTitle}: ${pageUrl}`,
+            `Confira os álbuns do ${eventTitle}: ${pageUrl}`,
           );
           window.open(`https://wa.me/?text=${text}`, "_blank");
-        }
-
-        function shareInstagram() {
-          // Instagram doesn't support direct URL sharing, copy link and show instructions
-          copyToClipboard();
-          alert(
-            "Link copiado! Cole o link na sua história ou bio do Instagram.",
-          );
         }
 
         function copyLink() {
