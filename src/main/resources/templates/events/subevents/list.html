@@ -1,56 +1,116 @@
-<!DOCTYPE html>
+<!doctype html>
 <html xmlns:th="https://www.thymeleaf.org">
+  <head th:insert="~{fragments/header}"></head>
 
-<head th:insert="~{fragments/header}"></head>
+  <body class="bg-gray-100">
+    <!-- Header -->
+    <div th:insert="~{fragments/top :: top}"></div>
 
-<body class="bg-gray-100">
-  <!-- Header -->
-  <div th:insert="~{fragments/top :: top}"></div>
-
-  <!-- Content -->
-  <main th:fragment="main" class="main container mx-auto p-4 pt-10 pb-10">
-    <nav class="mb-6">
-      <ol class="flex text-sm text-gray-500">
-        <li class="flex items-center">
-          <a href="/events" class="font-['Poppins'] hover:text-primary">Eventos</a>
-          <div class="w-4 h-4 flex items-center justify-center mx-1">
-            <i class="ri-arrow-right-s-line"></i>
+    <!-- Content -->
+    <main th:fragment="main" class="main">
+      <section
+        id="event-header"
+        class="pt-16 pb-16 md:pt-20 md:pb-20 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white relative overflow-hidden"
+      >
+        <div class="absolute inset-0 opacity-20">
+          <img
+            th:src="${event.event.coverUrl != null
+              ? event.event.coverUrl
+              : '/album-image.jpg'}"
+            th:alt="${event.event.title}"
+            class="w-full h-full object-cover object-top"
+          />
+        </div>
+        <div
+          class="container mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 relative z-10"
+        >
+          <div class="mb-4 md:mb-6">
+            <a
+              href="/"
+              class="inline-flex items-center text-white/80 hover:text-white transition-colors group"
+            >
+              <i
+                class="ri-arrow-left-line mr-2 group-hover:-translate-x-1 transition-transform"
+              ></i>
+              <span>Voltar</span>
+            </a>
           </div>
-        </li>
-        <li class="flex items-center">
-          <a href="#" th:text="${event.event.title}" class="hover:text-primary"></a>
-          <div class="w-4 h-4 flex items-center justify-center mx-1">
-            <i class="ri-arrow-right-s-line"></i>
+          <div class="max-w-5xl">
+            <span
+              th:if="${event.event.featureEvent}"
+              class="inline-block px-3 py-1.5 md:px-4 md:py-2 bg-primary/20 backdrop-blur-sm text-primary rounded-full text-xs md:text-sm font-semibold mb-3 md:mb-4 border border-primary/30"
+              >Destaque
+            </span>
+            <h1
+              class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-3 md:mb-4 leading-tight"
+              th:text="${event.event.title}"
+            ></h1>
+            <div
+              class="flex flex-wrap items-center gap-4 md:gap-6 text-sm md:text-base lg:text-lg mb-4 md:mb-6"
+            >
+              <div class="flex items-center">
+                <div
+                  class="w-5 h-5 md:w-6 md:h-6 flex items-center justify-center text-primary mr-2"
+                >
+                  <i class="ri-calendar-line"></i>
+                </div>
+                <span th:text="${event.event.descriptiveDate}"></span>
+              </div>
+              <div class="flex items-center">
+                <div
+                  class="w-5 h-5 md:w-6 md:h-6 flex items-center justify-center text-primary mr-2"
+                >
+                  <i class="ri-map-pin-line"></i>
+                </div>
+                <span th:text="${event.event.location}"></span>
+              </div>
+            </div>
+            <p
+              th:text="${event.event.description}"
+              class="text-base md:text-lg lg:text-xl text-gray-300 leading-relaxed"
+            ></p>
           </div>
-        </li>
-        <li class="text-primary font-medium">Álbuns</li>
-      </ol>
-    </nav>
-    <div class="mb-8">
-      <div class="flex items-center justify-between">
-        <div>
-          <h1 th:text="${event.event.title}" class="text-3xl md:text-4xl font-bold text-gray-900 mb-2"></h1>
-          <p class="text-gray-600">Navegue entre os álbuns do evento <span th:text="${event.event.title}"
-              class="font-bold" /></p>
+        </div>
+      </section>
+
+      <!-- Separator Line -->
+      <div class="flex justify-center my-2">
+        <div
+          class="w-2/3 sm:w-1/2 h-px bg-gradient-to-r from-transparent via-primary to-transparent"
+        ></div>
+      </div>
+
+      <!-- Albums Grid -->
+      <div class="bg-gray-100">
+        <div
+          class="container mx-auto px-6 sm:px-6 lg:px-8 xl:px-12 py-4 md:py-12"
+        >
+          <div
+            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-6"
+          >
+            <a
+              th:each="subEvents : ${event.subEvents}"
+              th:href="@{/events/{eventUrl}/albums/{subEventName}(eventUrl=${event.event.eventUrl}, subEventName=${subEvents.name})}"
+              class="folder-card bg-white rounded-lg shadow-sm hover:shadow-md overflow-hidden transition-all duration-300 group"
+            >
+              <div class="relative aspect-video overflow-hidden">
+                <img
+                  th:src="${subEvents.coverUrl != null ? subEvents.coverUrl: '/album-image.jpg'}"
+                  class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-300"
+                />
+              </div>
+              <div class="p-4">
+                <h3
+                  th:text="${subEvents.name}"
+                  class="text-base md:text-lg font-semibold text-gray-900 line-clamp-2"
+                ></h3>
+              </div>
+            </a>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-      <a th:each="subEvents : ${event.subEvents}"
-        th:href="@{/events/{eventUrl}/albums/{subEventName}(eventUrl=${event.event.eventUrl}, subEventName=${subEvents.name})}"
-        class="folder-card bg-white rounded-md shadow-sm overflow-hidden transition-all duration-300">
-        <div class="relative aspect- overflow-hidden">
-          <img th:src="${subEvents.coverUrl != null ? subEvents.coverUrl: '/album-image.jpg'}"
-            class="w-full h-full object-cover object-top" />
-        </div>
-        <div class="p-4">
-          <h3 th:text="${subEvents.name}" class="text-lg font-semibold text-gray-900 mb-1"></h3>
-        </div>
-      </a>
-    </div>
-  </main>
-  <!-- footer -->
-  <div th:replace="~{fragments/footer :: footer}"></div>
-</body>
-
+    </main>
+    <!-- footer -->
+    <div th:replace="~{fragments/footer :: footer}"></div>
+  </body>
 </html>
