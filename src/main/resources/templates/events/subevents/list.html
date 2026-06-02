@@ -108,7 +108,110 @@
             </a>
           </div>
         </div>
+
+        <!-- Separator Line -->
+        <div class="flex justify-center my-2">
+          <div
+            class="w-2/3 sm:w-1/2 h-px bg-gradient-to-r from-transparent via-primary to-transparent"
+          ></div>
+        </div>
+        <!-- Share Section -->
+        <div
+          class="container mx-auto px-6 sm:px-6 lg:px-8 xl:px-12 pb-8 md:pb-12 py-2"
+        >
+          <div class="bg-white rounded-2xl shadow-lg p-6 md:p-8">
+            <h2
+              class="text-xl md:text-2xl font-bold text-gray-900 mb-4 text-center"
+            >
+              Compartilhar Álbuns
+            </h2>
+            <div class="flex flex-col gap-3 md:gap-4">
+              <div class="grid grid-cols-2 gap-3 md:gap-4">
+                <!-- WhatsApp Button -->
+                <button
+                  onclick="shareWhatsApp()"
+                  class="flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-6 rounded-md transition-all duration-200 hover:shadow-lg transform hover:-translate-y-0.5"
+                >
+                  <i class="ri-whatsapp-line text-xl"></i>
+                  <span>WhatsApp</span>
+                </button>
+
+                <!-- Instagram Button -->
+                <button
+                  onclick="shareInstagram()"
+                  class="flex items-center justify-center gap-2 bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 hover:from-purple-600 hover:via-pink-600 hover:to-red-600 text-white font-semibold py-3 px-6 rounded-md transition-all duration-200 hover:shadow-lg transform hover:-translate-y-0.5"
+                >
+                  <i class="ri-instagram-line text-xl"></i>
+                  <span>Instagram</span>
+                </button>
+              </div>
+
+              <!-- Copy Link Button -->
+              <button
+                onclick="copyLink()"
+                id="copyButton"
+                class="w-full flex items-center justify-center gap-2 bg-gray-700 hover:bg-gray-800 text-white font-semibold py-3 px-6 rounded-md transition-all duration-200 hover:shadow-lg transform hover:-translate-y-0.5"
+              >
+                <i class="ri-file-copy-line text-xl" id="copyIcon"></i>
+                <span id="copyText">Copiar Link</span>
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
+
+      <script th:inline="javascript">
+        const pageUrl = window.location.href;
+        /*[# th:inline="javascript"]*/
+        const eventTitle = /*[[${event.event.title}]]*/ "Event";
+        /*[/]*/
+
+        function shareWhatsApp() {
+          const text = encodeURIComponent(
+            `Confira os álbuns de ${eventTitle}: ${pageUrl}`,
+          );
+          window.open(`https://wa.me/?text=${text}`, "_blank");
+        }
+
+        function shareInstagram() {
+          // Instagram doesn't support direct URL sharing, copy link and show instructions
+          copyToClipboard();
+          alert(
+            "Link copiado! Cole o link na sua história ou bio do Instagram.",
+          );
+        }
+
+        function copyLink() {
+          copyToClipboard();
+          const button = document.getElementById("copyButton");
+          const icon = document.getElementById("copyIcon");
+          const text = document.getElementById("copyText");
+
+          icon.className = "ri-check-line text-xl";
+          text.textContent = "Copiado!";
+          button.classList.remove("bg-gray-700", "hover:bg-gray-800");
+          button.classList.add("bg-green-500", "hover:bg-green-600");
+
+          setTimeout(() => {
+            icon.className = "ri-file-copy-line text-xl";
+            text.textContent = "Copiar Link";
+            button.classList.remove("bg-green-500", "hover:bg-green-600");
+            button.classList.add("bg-gray-700", "hover:bg-gray-800");
+          }, 2000);
+        }
+
+        function copyToClipboard() {
+          navigator.clipboard.writeText(pageUrl).catch(() => {
+            // Fallback for older browsers
+            const tempInput = document.createElement("input");
+            tempInput.value = pageUrl;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+          });
+        }
+      </script>
     </main>
     <!-- footer -->
     <div th:replace="~{fragments/footer :: footer}"></div>
