@@ -88,27 +88,34 @@
           <div class="flex flex-col lg:flex-row gap-6">
             <!-- Albums Grid (Left on Desktop) -->
             <div class="flex-1">
-              <div
-                class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-6"
-              >
-                <a
-                  th:each="subEvents : ${event.subEvents}"
-                  th:href="@{/events/{eventUrl}/albums/{subEventName}(eventUrl=${event.event.eventUrl}, subEventName=${subEvents.name})}"
-                  class="folder-card bg-white rounded-md shadow-sm hover:shadow-md overflow-hidden transition-all duration-300 group"
+              <!-- Albums Container -->
+              <div class="bg-white rounded-md shadow-sm p-4 md:p-6">
+                <h2
+                  th:text="${event.subEvents.size > 1 ? 'Álbuns': 'Álbum'}"
+                  class="text-xl md:text-2xl font-bold text-gray-900 mb-4 md:mb-6"
+                ></h2>
+                <div
+                  class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6"
                 >
-                  <div class="relative aspect-video overflow-hidden">
-                    <img
-                      th:src="${subEvents.coverUrl != null ? subEvents.coverUrl: '/album-image.jpg'}"
-                      class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-300"
-                    />
-                  </div>
-                  <div class="p-4">
-                    <h3
-                      th:text="${subEvents.name}"
-                      class="text-base md:text-lg font-semibold text-gray-900 line-clamp-2"
-                    ></h3>
-                  </div>
-                </a>
+                  <a
+                    th:each="subEvents : ${event.subEvents}"
+                    th:href="@{/events/{eventUrl}/albums/{subEventName}(eventUrl=${event.event.eventUrl}, subEventName=${subEvents.name})}"
+                    class="folder-card bg-gray-50 rounded-md shadow-sm hover:shadow-md overflow-hidden transition-all duration-300 group"
+                  >
+                    <div class="relative aspect-video overflow-hidden">
+                      <img
+                        th:src="${subEvents.coverUrl != null ? subEvents.coverUrl: '/album-image.jpg'}"
+                        class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-300"
+                      />
+                    </div>
+                    <div class="p-4">
+                      <h3
+                        th:text="${subEvents.name}"
+                        class="text-base md:text-lg font-semibold text-gray-900 line-clamp-2"
+                      ></h3>
+                    </div>
+                  </a>
+                </div>
               </div>
             </div>
 
