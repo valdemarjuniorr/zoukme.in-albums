@@ -238,4 +238,12 @@ public class EventService {
   public List<Event> findEventsWithoutAlbum() {
     return this.repository.findEventsWithoutAlbum();
   }
+
+  public Integer getCountTotalPhotosBy(Long eventId) {
+    return this.repository.countTotalPhotosBy(eventId);
+  }
+
+  public Integer countLikesByEventId(Long eventId) {
+    return this.repository.countLikesBy(eventId);
+  }
 }

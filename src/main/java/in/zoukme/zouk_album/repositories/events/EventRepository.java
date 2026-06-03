@@ -78,4 +78,21 @@ public interface EventRepository
       """)
   List<Event> findEventsWithoutAlbum();
 
+  @Query("""
+        select count(ep.id) from event_photos ep
+        	inner join sub_events se ON se.id = ep.sub_event_id
+        	inner join events e on se.event_id = e.id
+        where e.id = :eventId
+      """)
+  Integer countTotalPhotosBy(Long eventId);
+
+  @Query("""
+        select count(pl.id) from photo_likes pl
+        	inner join event_photos ep ON pl.event_photo_id = ep.id
+        	inner join sub_events se on se.id = ep.sub_event_id
+        	inner join events e on se.event_id = e.id
+        where e.id = :eventId
+      """)
+  Integer countLikesBy(Long eventId);
+
 }

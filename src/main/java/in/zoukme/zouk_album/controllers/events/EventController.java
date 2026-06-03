@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import in.zoukme.zouk_album.controllers.meta.MetaTags;
+import in.zoukme.zouk_album.domains.Event;
 import in.zoukme.zouk_album.domains.Page;
 import in.zoukme.zouk_album.services.PackageService;
 import in.zoukme.zouk_album.services.UserEventInterestService;
@@ -77,11 +78,13 @@ public class EventController {
 
   @GetMapping("/{eventUrl}/albums")
   String getSubEvents(@PathVariable String eventUrl, Model model, Authentication authentication) {
-    var event = service.getEventAlbumsBy(eventUrl);
-    model.addAttribute("event", event);
+    var eventWithLikes = service.getEventAlbumsBy(eventUrl);
+    model.addAttribute("event", eventWithLikes);
     model.addAttribute("authentication", authentication);
-    model.addAttribute("seo",
-        new MetaTags(event.event().title(), event.event().description(), event.event().coverUrl()));
+    var event = eventWithLikes.event();
+    model.addAttribute("seo", new MetaTags(event.title(), event.description(), event.coverUrl()));
+    model.addAttribute("totalPhotos", service.getCountTotalPhotosBy(event.id()));
+    model.addAttribute("totalLikes", service.countLikesByEventId(event.id()));
 
     return "events/subevents/list";
   }
