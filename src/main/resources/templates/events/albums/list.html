@@ -35,6 +35,42 @@
         grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
       }
     }
+    /* Masonry layout */
+    .masonry {
+      column-count: 2;
+      column-gap: 4px;
+    }
+    @media (min-width: 640px) {
+      .masonry {
+        column-count: 3;
+      }
+    }
+    @media (min-width: 768px) {
+      .masonry {
+        column-count: 4;
+      }
+    }
+    @media (min-width: 1024px) {
+      .masonry {
+        column-count: 5;
+      }
+    }
+    @media (min-width: 1280px) {
+      .masonry {
+        column-count: 6;
+      }
+    }
+    .masonry-item {
+      break-inside: avoid;
+      margin-bottom: 4px;
+    }
+    .masonry .image-container {
+      aspect-ratio: auto;
+      height: auto;
+    }
+    .masonry .image-container img {
+      height: auto;
+    }
   </style>
 
   <body class="bg-gray-100">
@@ -61,38 +97,14 @@
                 ><span th:text="${photos.totalElements}" /> fotos</span
               >
             </div>
-            <div
-              class="flex items-center gap-1 bg-gray-100 rounded-full border border-gray-300 shrink-0"
-            >
-              <button
-                id="layout-one-col"
-                th:classappend="${#strings.equals(layout, 'oneCol') ? 'bg-white shadow border border-gray-300 text-gray-800 active' : ''}"
-                class="layout-btn inline-flex items-center px-2 py-1 rounded-full transition-all duration-200 cursor-pointer text-gray-600 hover:text-gray-800 text-sm font-medium"
-              >
-                <i class="ri-layout-row-line"></i>
-              </button>
-              <button
-                id="layout-two-col"
-                th:classappend="${#strings.equals(layout, 'twoCol') ? 'bg-white shadow border border-gray-300 text-gray-800 active' : ''}"
-                class="layout-btn inline-flex items-center px-2 py-1 rounded-full transition-all duration-200 cursor-pointer text-gray-600 hover:text-gray-800 text-sm font-medium"
-              >
-                <i class="ri-layout-grid-line"></i>
-              </button>
-            </div>
           </div>
         </div>
       </div>
       <hr class="my-2 mx-3 border-gray-300 sm:hidden" />
-      <div
-        id="photo-grid"
-        th:classappend="${#strings.equals(layout, 'oneCol')
-          ? 'grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-1'
-          : 'grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-6 gap-1'}"
-        class="grid"
-      >
-        <div th:each="photo, photoStat : ${photos.content}">
+      <div id="photo-grid" class="masonry">
+        <div th:each="photo, photoStat : ${photos.content}" class="masonry-item">
           <div
-            class="image-container relative rounded-md overflow-hidden shadow-lg group bg-gray-100 aspect-[4/3] flex items-center justify-center"
+            class="image-container relative rounded-md overflow-hidden shadow-lg group bg-gray-100 flex items-center justify-center"
           >
             <img
               th:src="${photo.imagePath}"
@@ -331,95 +343,7 @@
         });
       });
     </script>
-    <script id="layout-selection">
-      document.addEventListener("DOMContentLoaded", function () {
-        const photoGrid = document.getElementById("photo-grid");
-        const oneColBtn = document.getElementById("layout-one-col");
-        const twoColBtn = document.getElementById("layout-two-col");
 
-        // Layout configurations
-        const layouts = {
-          oneCol: {
-            classes:
-              "grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-1",
-          },
-          twoCol: {
-            classes:
-              "grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-6 gap-1",
-          },
-        };
-
-        // Apply layout
-        function applyLayout(layout) {
-          // Remove all possible layout classes
-          photoGrid.className = photoGrid.className
-            .replace(/grid-cols-\d+/g, "")
-            .replace(/sm:grid-cols-\d+/g, "")
-            .replace(/md:grid-cols-\d+/g, "")
-            .replace(/lg:grid-cols-\d+/g, "")
-            .replace(/xl:grid-cols-\d+/g, "")
-            .replace(/gap-\d+/g, "")
-            .trim();
-
-          // Add new layout classes
-          photoGrid.className = "grid " + layouts[layout].classes;
-
-          // Update button states
-          oneColBtn.classList.remove(
-            "bg-white",
-            "shadow",
-            "border",
-            "border-gray-300",
-            "text-gray-800",
-            "active",
-          );
-          twoColBtn.classList.remove(
-            "bg-white",
-            "shadow",
-            "border",
-            "border-gray-300",
-            "text-gray-800",
-            "active",
-          );
-
-          if (layout === "oneCol") {
-            oneColBtn.classList.add(
-              "bg-white",
-              "shadow",
-              "border",
-              "border-gray-300",
-              "text-gray-800",
-              "active",
-            );
-          } else {
-            twoColBtn.classList.add(
-              "bg-white",
-              "shadow",
-              "border",
-              "border-gray-300",
-              "text-gray-800",
-              "active",
-            );
-          }
-
-          // Save to cookie
-          document.cookie = "layout=" + layout + "; path=/;";
-        }
-
-        // Load saved layout from cookie
-        const savedLayout = (() => {
-          const match = document.cookie.match(
-            /(?:^|;\s*)layout=(oneCol|twoCol)/,
-          );
-          return match ? match[1] : "twoCol";
-        })();
-        applyLayout(savedLayout);
-
-        // Add click event listeners
-        oneColBtn.addEventListener("click", () => applyLayout("oneCol"));
-        twoColBtn.addEventListener("click", () => applyLayout("twoCol"));
-      });
-    </script>
     <div th:replace="~{fragments/footer :: footer}"></div>
   </body>
 </html>
