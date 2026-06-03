@@ -86,7 +86,7 @@
       <div
         id="photo-grid"
         th:classappend="${#strings.equals(layout, 'oneCol')
-          ? 'grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3'
+          ? 'grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-1'
           : 'grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-6 gap-1'}"
         class="grid"
       >
@@ -341,7 +341,7 @@
         const layouts = {
           oneCol: {
             classes:
-              "grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3",
+              "grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-1",
           },
           twoCol: {
             classes:
