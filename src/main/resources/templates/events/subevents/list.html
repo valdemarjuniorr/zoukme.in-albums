@@ -83,69 +83,74 @@
       <!-- Albums Grid -->
       <div class="bg-gray-100">
         <div
-          class="container mx-auto px-6 sm:px-6 lg:px-8 xl:px-12 py-4 md:py-12"
+          class="container mx-auto px-4 sm:px-4 lg:px-6 xl:px-8 py-4 md:py-12"
         >
-          <div
-            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-6"
-          >
-            <a
-              th:each="subEvents : ${event.subEvents}"
-              th:href="@{/events/{eventUrl}/albums/{subEventName}(eventUrl=${event.event.eventUrl}, subEventName=${subEvents.name})}"
-              class="folder-card bg-white rounded-lg shadow-sm hover:shadow-md overflow-hidden transition-all duration-300 group"
-            >
-              <div class="relative aspect-video overflow-hidden">
-                <img
-                  th:src="${subEvents.coverUrl != null ? subEvents.coverUrl: '/album-image.jpg'}"
-                  class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-300"
-                />
-              </div>
-              <div class="p-4">
-                <h3
-                  th:text="${subEvents.name}"
-                  class="text-base md:text-lg font-semibold text-gray-900 line-clamp-2"
-                ></h3>
-              </div>
-            </a>
-          </div>
-        </div>
-
-        <!-- Separator Line -->
-        <div class="flex justify-center my-2">
-          <div
-            class="w-2/3 sm:w-1/2 h-px bg-gradient-to-r from-transparent via-primary to-transparent"
-          ></div>
-        </div>
-        <!-- Share Section -->
-        <div
-          class="container mx-auto px-6 sm:px-6 lg:px-8 xl:px-12 pb-8 md:pb-12 py-2"
-        >
-          <div class="bg-white rounded-2xl shadow-lg p-6 md:p-8">
-            <h2
-              class="text-xl md:text-2xl font-bold text-gray-900 mb-4 text-center"
-            >
-              Compartilhar Álbuns
-            </h2>
-            <div class="flex flex-col gap-3 md:gap-4">
-              <div class="grid gap-3 md:gap-4">
-                <!-- WhatsApp Button -->
-                <button
-                  onclick="shareWhatsApp()"
-                  class="flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-6 rounded-md transition-all duration-200 hover:shadow-lg transform hover:-translate-y-0.5"
-                >
-                  <i class="ri-whatsapp-line text-xl"></i>
-                  <span>WhatsApp</span>
-                </button>
-              </div>
-
-              <!-- Copy Link Button -->
-              <button
-                onclick="copyLink()"
-                id="copyButton"
-                class="w-full flex items-center justify-center gap-2 bg-gray-700 hover:bg-gray-800 text-white font-semibold py-3 px-6 rounded-md transition-all duration-200 hover:shadow-lg transform hover:-translate-y-0.5"
+          <div class="flex flex-col lg:flex-row gap-6">
+            <!-- Albums Grid (Left on Desktop) -->
+            <div class="flex-1">
+              <div
+                class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-6"
               >
-                <i class="ri-file-copy-line text-xl" id="copyIcon"></i>
-                <span id="copyText">Copiar Link</span>
-              </button>
+                <a
+                  th:each="subEvents : ${event.subEvents}"
+                  th:href="@{/events/{eventUrl}/albums/{subEventName}(eventUrl=${event.event.eventUrl}, subEventName=${subEvents.name})}"
+                  class="folder-card bg-white rounded-md shadow-sm hover:shadow-md overflow-hidden transition-all duration-300 group"
+                >
+                  <div class="relative aspect-video overflow-hidden">
+                    <img
+                      th:src="${subEvents.coverUrl != null ? subEvents.coverUrl: '/album-image.jpg'}"
+                      class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
+                  <div class="p-4">
+                    <h3
+                      th:text="${subEvents.name}"
+                      class="text-base md:text-lg font-semibold text-gray-900 line-clamp-2"
+                    ></h3>
+                  </div>
+                </a>
+              </div>
+            </div>
+
+            <!-- Share Section (Right on Desktop) -->
+            <div class="w-full lg:w-80 xl:w-96">
+              <!-- Separator Line (Mobile Only) -->
+              <div class="flex justify-center my-2 lg:hidden">
+                <div
+                  class="w-2/3 sm:w-1/2 h-px bg-gradient-to-r from-transparent via-primary to-transparent"
+                ></div>
+              </div>
+              <div
+                class="bg-white rounded-md shadow-lg p-6 md:p-8 lg:sticky lg:top-4"
+              >
+                <h2
+                  class="text-xl md:text-2xl font-bold text-gray-900 mb-4 text-center"
+                >
+                  Compartilhar Álbuns
+                </h2>
+                <div class="flex flex-col gap-3 md:gap-4">
+                  <div class="grid gap-3 md:gap-4">
+                    <!-- WhatsApp Button -->
+                    <button
+                      onclick="shareWhatsApp()"
+                      class="flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-6 rounded-md transition-all duration-200 hover:shadow-lg transform hover:-translate-y-0.5"
+                    >
+                      <i class="ri-whatsapp-line text-xl"></i>
+                      <span>WhatsApp</span>
+                    </button>
+                  </div>
+
+                  <!-- Copy Link Button -->
+                  <button
+                    onclick="copyLink()"
+                    id="copyButton"
+                    class="w-full flex items-center justify-center gap-2 bg-gray-700 hover:bg-gray-800 text-white font-semibold py-3 px-6 rounded-md transition-all duration-200 hover:shadow-lg transform hover:-translate-y-0.5"
+                  >
+                    <i class="ri-link text-xl" id="copyIcon"></i>
+                    <span id="copyText">Copiar Link</span>
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
