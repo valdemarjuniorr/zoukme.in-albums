@@ -74,7 +74,7 @@ public interface EventRepository
         select *
         from events e
         where not exists (select 1 from albums a where a.event_id = e.id)
-        and e.date between CURRENT_DATE and (CURRENT_DATE + interval '7 days') ORDER BY date
+        ORDER BY date
       """)
   List<Event> findEventsWithoutAlbum();
 
