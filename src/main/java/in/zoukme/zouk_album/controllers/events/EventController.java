@@ -5,20 +5,17 @@ import java.util.Objects;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import in.zoukme.zouk_album.controllers.meta.MetaTags;
-import in.zoukme.zouk_album.domains.Event;
 import in.zoukme.zouk_album.domains.Page;
 import in.zoukme.zouk_album.services.PackageService;
 import in.zoukme.zouk_album.services.UserEventInterestService;
 import in.zoukme.zouk_album.services.aws.EventService;
 import in.zoukme.zouk_album.services.users.UserService;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
@@ -93,7 +90,6 @@ public class EventController {
   String getEventPhotosBy(@PathVariable String eventUrl, @PathVariable String albumName,
       @RequestParam(defaultValue = "1") Integer page,
       @RequestParam(defaultValue = "50") Integer size,
-      @CookieValue(value = "layout", defaultValue = "twoCol") String layout,
       Model model, Authentication authentication, HttpServletResponse response) {
     var pageObj = new Page(page, size);
 
@@ -106,12 +102,6 @@ public class EventController {
 
     var event = service.findByEventUrl(eventUrl);
     model.addAttribute("seo", new MetaTags(event.title(), event.description(), event.coverUrl()));
-
-    // set layout configuration in cookie
-    var cookie = new Cookie("layout", layout);
-    cookie.setPath("/");
-    response.addCookie(cookie);
-    model.addAttribute("layout", layout);
 
     return "events/albums/list";
   }
