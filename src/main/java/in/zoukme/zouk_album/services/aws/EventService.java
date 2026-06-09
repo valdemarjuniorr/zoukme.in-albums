@@ -159,39 +159,40 @@ public class EventService {
   }
 
   public void removeEventBy(String eventUrl) {
-    var subEventIds = this.subEventRepository.findSubEventsBy(eventUrl);
-    if (!CollectionUtils.isEmpty(subEventIds)) {
+    var subEvents = this.subEventRepository.findSubEventsBy(eventUrl);
+    if (!CollectionUtils.isEmpty(subEvents)) {
       this.eventPhotosRepository.deleteEventPhotosBy(
-          subEventIds.stream().map(SubEvent::id).toList());
+          subEvents.stream().map(SubEvent::id).toList());
       // its avoid subalbums to be deleted and cover albums to be set again
       // this.subEventRepository.deleteAll(subEventIds);
     }
   }
 
   public void processAlbumBy(String eventUrl) {
-    removeEventBy(eventUrl);
+    // removeEventBy(eventUrl);
+    // TODO: improve method to avoid delete and create again the same album, just
+    // update it if exists and add new photos if exists
     this.repository
         .findByEventUrl(eventUrl)
         .ifPresent(
             event -> {
+              var bucketUri = bucketService.getBucketUri();
               var prefix = "events/" + event.eventUrl();
               var foldersPath = this.bucketService.getFoldersNamesBy(prefix);
               foldersPath.forEach(
                   folder -> {
                     var subEventName = getFolderNameFrom(folder, prefix);
                     // if subevent already exists, then use it or create a new one
-                    var subEvent = this.subEventRepository.findByName(subEventName, eventUrl)
-                        .orElseGet(() -> {
-                          var subEventNew = new SubEvent(AggregateReference.to(event.id()), subEventName);
-                          return this.subEventRepository.save(subEventNew);
-                        });
-
-                    var fileNamesFromFolder = this.bucketService.getFilesNamesBy(folder);
-                    fileNamesFromFolder.forEach(
-                        fileName -> this.eventPhotosRepository.save(
-                            new EventPhotos(
-                                AggregateReference.to(subEvent.id()),
-                                bucketService.getBucketUri() + fileName)));
+                    var subEvent = this.subEventRepository.findByName(subEventName, eventUrl);
+                    if (subEvent.isEmpty()) {
+                      var subEventNew = this.subEventRepository
+                          .save(new SubEvent(AggregateReference.to(event.id()), subEventName));
+                      var fileNamesFromFolder = this.bucketService.getFilesNamesBy(folder);
+                      fileNamesFromFolder.forEach(fileName -> {
+                        this.eventPhotosRepository
+                            .save(new EventPhotos(AggregateReference.to(subEventNew.id()), bucketUri + fileName));
+                      });
+                    }
                   });
             });
   }
