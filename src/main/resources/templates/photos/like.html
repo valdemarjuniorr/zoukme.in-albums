@@ -18,78 +18,62 @@
       animation: likePopup 0.35s ease forwards;
     }
   </style>
-  <div
+  <!-- Unauthenticated state -->
+  <button
     sec:authorize="!isAuthenticated()"
-    class="absolute bottom-1 left-1 flex items-center space-x-2 z-1"
+    class="heart-unauth flex items-center justify-center gap-1 px-2 py-1.5 text-xs font-medium text-gray-600 bg-transparent border-none cursor-pointer transition-all duration-200 ease-in-out active:scale-95 hover:text-gray-700"
+    title="Login necessário"
+    onclick="showLoginRequired(this); return false;"
   >
-    <button
-      class="like-btn flex items-center space-x-2 bg-white/95 hover:bg-white backdrop-blur-sm rounded-full px-2 py-1 transition-all duration-200 cursor-pointer group shadow-lg border border-gray-200"
-      title="Login necessário"
-      onclick="
-        showLoginRequired(this);
-        return false;
-      "
-    >
-      <div class="w-3 h-3 flex items-center justify-center icon-container">
-        <i class="ri-heart-line text-gray-400 text-base"></i>
-      </div>
-      <span
-        th:text="${count}"
-        class="text-gray-400 text-xs font-medium text-container"
-      ></span>
-    </button>
-    <script>
-      function showLoginRequired(btn) {
-        btn
-          .querySelector(".icon-container i")
-          .classList.replace("text-gray-400", "text-red-400");
-        const label = btn.querySelector(".text-container");
-        label.textContent = "Login necessário";
-        label.classList.replace("text-gray-400", "text-red-400");
-      }
-    </script>
-  </div>
+    <i
+      class="ri-heart-line text-xs flex items-center justify-center transition-transform duration-200 ease-in-out hover:scale-110"
+    ></i>
+    <span th:text="${count}"></span>
+  </button>
+  <script>
+    function showLoginRequired(btn) {
+      btn.classList.remove(
+        "heart-unauth",
+        "text-gray-600",
+        "hover:text-gray-700",
+      );
+      btn.classList.add("heart-liked", "text-red-500", "hover:text-red-600");
+      btn
+        .querySelector("i")
+        .classList.replace("ri-heart-line", "ri-heart-fill");
+      const span = btn.querySelector("span");
+      span.textContent = "Login necessário";
+    }
+  </script>
+  <!-- Authenticated state -->
   <div sec:authorize="isAuthenticated()">
-    <div
+    <!-- Unliked -->
+    <button
       th:if="${!liked}"
+      class="heart-unliked flex items-center justify-center gap-1 px-2 py-1.5 text-xs font-medium text-gray-600 bg-transparent border-none cursor-pointer transition-all duration-200 ease-in-out active:scale-95 hover:text-gray-700"
       th:hx-post="@{/photos/{photoId}/like(photoId=${photoId})}"
       hx-trigger="click"
       hx-swap="outerHTML"
-      class="absolute bottom-1 left-1 flex items-center space-x-2 z-1"
-      onclick="this.querySelector('i').classList.add('like-pop')"
+      onclick="this.querySelector('.ri-heart-line')?.classList.add('like-pop')"
     >
-      <button
-        class="like-btn flex items-center space-x-2 bg-white/95 hover:bg-white backdrop-blur-sm rounded-full px-2 py-1 transition-all duration-200 cursor-pointer group shadow-lg border border-gray-200"
-      >
-        <div class="w-3 h-3 flex items-center justify-center">
-          <i
-            class="ri-heart-line text-gray-700 text-base transition-transform duration-200 group-hover:scale-110"
-          ></i>
-        </div>
-        <span th:text="${count}" class="text-xs font-medium"></span>
-      </button>
-    </div>
-    <div
+      <i
+        class="ri-heart-line text-xs flex items-center justify-center transition-transform duration-200 ease-in-out hover:scale-110"
+      ></i>
+      <span th:text="${count}"></span>
+    </button>
+    <!-- Liked -->
+    <button
       th:if="${liked}"
+      class="heart-liked flex items-center justify-center gap-1 px-2 py-1.5 text-xs font-medium text-red-500 bg-transparent border-none cursor-pointer transition-all duration-200 ease-in-out active:scale-95 hover:text-red-600"
       th:hx-post="@{/photos/{photoId}/dislike(photoId=${photoId})}"
       hx-trigger="click"
       hx-swap="outerHTML"
-      class="absolute bottom-1 left-1 flex items-center space-x-2 z-1"
-      onclick="this.querySelector('i').classList.add('like-pop')"
+      onclick="this.querySelector('.ri-heart-fill')?.classList.add('like-pop')"
     >
-      <button
-        class="like-btn flex items-center space-x-2 backdrop-blur-sm rounded-full px-2 py-1 transition-all duration-200 cursor-pointer group shadow-lg border bg-red-50 hover:bg-red-100 border-red-200"
-      >
-        <div class="w-3 h-3 flex items-center justify-center">
-          <i
-            class="text-base transition-transform duration-200 group-hover:scale-110 ri-heart-fill text-red-500"
-          ></i>
-        </div>
-        <span
-          th:text="${count}"
-          class="text-red-500 text-xs font-medium"
-        ></span>
-      </button>
-    </div>
+      <i
+        class="ri-heart-fill text-xs flex items-center justify-center transition-transform duration-200 ease-in-out hover:scale-110"
+      ></i>
+      <span th:text="${count}"></span>
+    </button>
   </div>
 </div>
