@@ -124,11 +124,9 @@
               <div
                 th:replace="~{photos/like :: like(photoId=${photo.eventPhotoId}, liked=${photo.liked}, count=${photo.count})}"
               />
-              <!--
               <div
-                th:replace="~{photos/bookmark :: bookmark(photoId=${photo.eventPhotoId}, bookmarked=${false})}"
+                th:replace="~{photos/bookmark :: bookmark(photoId=${photo.eventPhotoId}, bookmarked=${photo.bookmarked})}"
               />
-                -->
             </div>
 
             <div sec:authorize="hasRole('ADMIN')">

@@ -30,7 +30,7 @@ public class ExceptionHandlerConfig {
 
   @ExceptionHandler(RuntimeException.class)
   public String handleRuntimeException(RuntimeException e, Model model) {
-
+    log.error("RuntimeException occurred: {}", e);
     return "error";
   }
 

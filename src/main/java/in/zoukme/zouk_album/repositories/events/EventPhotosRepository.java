@@ -36,9 +36,15 @@ public interface EventPhotosRepository extends ListCrudRepository<EventPhotos, L
               FROM photo_likes pl
               WHERE pl.event_photo_id = ep.id
                 AND pl.user_id = :userId
-          ) AS liked
+          ) AS liked,
+
+          pb.id IS NOT NULL AS bookmarked
 
       FROM event_photos ep
+
+      LEFT JOIN photo_bookmarks pb
+          ON pb.event_photo_id = ep.id
+          AND pb.user_id = :userId
 
       WHERE ep.sub_event_id = :subEventId
 

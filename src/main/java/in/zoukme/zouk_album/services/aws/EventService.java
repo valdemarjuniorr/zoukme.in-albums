@@ -141,8 +141,7 @@ public class EventService {
     if (userLogged.isPresent()) {
       userId = userLogged.get().id();
     }
-    var subEvent = this.subEventRepository
-        .findByName(albumName, eventUrl)
+    var subEvent = this.subEventRepository.findByName(albumName, eventUrl)
         .orElseThrow(SubEventNotFoundException::new);
     var result = eventPhotosRepository.findBy(subEvent.id(), userId, page.size(), page.offset());
 
