@@ -1,9 +1,14 @@
 package in.zoukme.zouk_album.services.photos;
 
-import org.springframework.stereotype.Service;
-
+import in.zoukme.zouk_album.domains.Page;
+import in.zoukme.zouk_album.domains.users.User;
+import in.zoukme.zouk_album.repositories.photos.BookmarkPhotosByEvent;
+import in.zoukme.zouk_album.repositories.photos.EventWithBookmarkedPhotosAndCount;
 import in.zoukme.zouk_album.repositories.photos.PhotoBookmarkRepository;
 import in.zoukme.zouk_album.services.users.UserService;
+import java.util.List;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.stereotype.Service;
 
 @Service
 public class PhotoBookmarkService {
@@ -17,14 +22,33 @@ public class PhotoBookmarkService {
   }
 
   public void bookmark(String email, Long eventPhotoId) {
-    var user = userService.findByUsername(email)
-        .orElseThrow(() -> new RuntimeException("User not found or pending: " + email));
-    repository.bookmark(user.id(), eventPhotoId);
+    repository.bookmark(getUser(email).id(), eventPhotoId);
   }
 
   public void unbookmark(String email, Long eventPhotoId) {
-    var user = userService.findByUsername(email)
+    repository.unbookmark(getUser(email).id(), eventPhotoId);
+  }
+
+  public List<EventWithBookmarkedPhotosAndCount> findPhotosWithPhotosBookmarkedBy(String email) {
+    return repository.findEventsWithPhotosBookmarkedBy(getUser(email).id());
+  }
+
+  public org.springframework.data.domain.Page<BookmarkPhotosByEvent> findBookmarkedPhotosByEvent(
+      Long eventId, String username, Page page) {
+
+    var bookmarkedPhotos =
+        repository.findBookmarkedPhotosByEvent(
+            eventId, getUser(username).id(), page.size(), page.offset());
+
+    return new PageImpl<>(
+        bookmarkedPhotos,
+        page.toPageRequest(),
+        repository.countByEventIdAndUserId(eventId, getUser(username).id()));
+  }
+
+  private User getUser(String email) {
+    return userService
+        .findByUsername(email)
         .orElseThrow(() -> new RuntimeException("User not found or pending: " + email));
-    repository.unbookmark(user.id(), eventPhotoId);
   }
 }
