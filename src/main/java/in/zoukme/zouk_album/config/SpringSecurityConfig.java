@@ -18,15 +18,31 @@ public class SpringSecurityConfig {
   SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http.csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(
-            authorizeRequests -> authorizeRequests
-                .requestMatchers("/admin/**").hasRole("ADMIN")
-                .requestMatchers("/users/account/**").authenticated()
-                .anyRequest()
-                .permitAll())
-        .formLogin(formLogin -> formLogin.loginPage("/login").failureUrl("/login?error=true").defaultSuccessUrl("/")
-            .permitAll())
+            authorizeRequests ->
+                authorizeRequests
+                    .requestMatchers("/admin/**")
+                    .hasRole("ADMIN")
+                    .requestMatchers("/users/account/**")
+                    .authenticated()
+                    .requestMatchers("/users/events/**") // bookmarked events
+                    .authenticated()
+                    .anyRequest()
+                    .permitAll())
+        .formLogin(
+            formLogin ->
+                formLogin
+                    .loginPage("/login")
+                    .failureUrl("/login?error=true")
+                    .defaultSuccessUrl("/")
+                    .permitAll())
         .rememberMe(rememberMe -> rememberMe.tokenValiditySeconds(TOKEN_VALIDITY_SECONDS))
-        .logout(logout -> logout.logoutUrl("/logout").deleteCookies("remember-me").logoutSuccessUrl("/").permitAll());
+        .logout(
+            logout ->
+                logout
+                    .logoutUrl("/logout")
+                    .deleteCookies("remember-me")
+                    .logoutSuccessUrl("/")
+                    .permitAll());
     return http.build();
   }
 
