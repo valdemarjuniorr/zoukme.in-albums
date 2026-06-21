@@ -1,8 +1,21 @@
 package in.zoukme.zouk_album.controllers.admin;
 
+import in.zoukme.zouk_album.controllers.admin.dashboard.DashboardService;
+import in.zoukme.zouk_album.domains.Album;
+import in.zoukme.zouk_album.domains.Page;
+import in.zoukme.zouk_album.domains.payments.Payment;
+import in.zoukme.zouk_album.domains.payments.PaymentStatus;
+import in.zoukme.zouk_album.repositories.events.CreateEventRequest;
+import in.zoukme.zouk_album.repositories.events.PackageRequest;
+import in.zoukme.zouk_album.repositories.events.UpdateEventRequest;
+import in.zoukme.zouk_album.services.AlbumService;
+import in.zoukme.zouk_album.services.PackageService;
+import in.zoukme.zouk_album.services.aws.BucketService;
+import in.zoukme.zouk_album.services.aws.EventService;
+import in.zoukme.zouk_album.services.payments.PaymentService;
+import in.zoukme.zouk_album.services.users.UserService;
 import java.time.LocalDate;
 import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
@@ -19,21 +32,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-
-import in.zoukme.zouk_album.controllers.admin.dashboard.DashboardService;
-import in.zoukme.zouk_album.domains.Album;
-import in.zoukme.zouk_album.domains.Page;
-import in.zoukme.zouk_album.domains.payments.Payment;
-import in.zoukme.zouk_album.domains.payments.PaymentStatus;
-import in.zoukme.zouk_album.repositories.events.CreateEventRequest;
-import in.zoukme.zouk_album.repositories.events.PackageRequest;
-import in.zoukme.zouk_album.repositories.events.UpdateEventRequest;
-import in.zoukme.zouk_album.services.AlbumService;
-import in.zoukme.zouk_album.services.PackageService;
-import in.zoukme.zouk_album.services.aws.BucketService;
-import in.zoukme.zouk_album.services.aws.EventService;
-import in.zoukme.zouk_album.services.payments.PaymentService;
-import in.zoukme.zouk_album.services.users.UserService;
 
 @Controller
 @RequestMapping("/admin")
@@ -54,7 +52,8 @@ public class AdminController {
       BucketService bucketService,
       DashboardService dashboardService,
       PaymentService paymentService,
-      PackageService packageService, UserService userService) {
+      PackageService packageService,
+      UserService userService) {
     this.albumService = albumService;
     this.eventService = eventService;
     this.dashboardService = dashboardService;
@@ -324,16 +323,16 @@ public class AdminController {
   }
 
   @GetMapping("/events/payments/details")
-  String getPaymentsByEvent(@RequestParam Long eventId, @RequestParam(required = false) String status, Model model) {
-    var statusEnum = StringUtils.hasText(status)
-        ? PaymentStatus.valueOf(status)
-        : null;
+  String getPaymentsByEvent(
+      @RequestParam Long eventId, @RequestParam(required = false) String status, Model model) {
+    var statusEnum = StringUtils.hasText(status) ? PaymentStatus.valueOf(status) : null;
     var payments = this.paymentService.findAllBy(eventId, statusEnum);
     model.addAttribute("totalPending", dashboardService.getTotalPending(eventId));
     model.addAttribute("totalCompleted", dashboardService.getTotalCompleted(eventId));
     var totalExpired = dashboardService.getTotalExpired(eventId);
     model.addAttribute("totalExpired", totalExpired);
-    model.addAttribute("hasPaid", payments.stream().filter(Payment::isStatusPaid).findAny().isPresent());
+    model.addAttribute(
+        "hasPaid", payments.stream().filter(Payment::isStatusPaid).findAny().isPresent());
 
     model.addAttribute("paymentsStatus", PaymentStatus.values());
 
@@ -344,13 +343,13 @@ public class AdminController {
   }
 
   @GetMapping("/payments")
-  String getPayments(@RequestParam Long eventId, @RequestParam(required = false) String status, Model model) {
-    var statusEnum = StringUtils.hasText(status)
-        ? PaymentStatus.valueOf(status)
-        : null;
+  String getPayments(
+      @RequestParam Long eventId, @RequestParam(required = false) String status, Model model) {
+    var statusEnum = StringUtils.hasText(status) ? PaymentStatus.valueOf(status) : null;
     var payments = paymentService.findAllBy(eventId, statusEnum);
 
-    model.addAttribute("hasPaid", payments.stream().filter(Payment::isStatusPaid).findAny().isPresent());
+    model.addAttribute(
+        "hasPaid", payments.stream().filter(Payment::isStatusPaid).findAny().isPresent());
     model.addAttribute("payments", payments);
 
     return "admin/dashboard/payments/table-response";
@@ -359,11 +358,9 @@ public class AdminController {
   @GetMapping("/events/{id}/payments/report")
   ResponseEntity<Resource> getPaymentsReport(@PathVariable Long id) {
     var paymentsReportBy = this.paymentService.generatePaymentsReportBy(id);
-    return ResponseEntity
-        .ok()
+    return ResponseEntity.ok()
         .header(
-            "Content-Disposition",
-            "attachment; filename=relatorio_venda_pacotes_" + id + ".xlsx")
+            "Content-Disposition", "attachment; filename=relatorio_venda_pacotes_" + id + ".xlsx")
         .body(new org.springframework.core.io.ByteArrayResource(paymentsReportBy));
   }
 
@@ -371,8 +368,9 @@ public class AdminController {
   String prepareAlbum(@PathVariable Long id, Model model) {
     var event = this.eventService.findBy(id);
     return this.createAlbum(
-        new Album(AggregateReference.to(event.id()), event.title(), event.location(), event.date(), null), model);
-
+        new Album(
+            AggregateReference.to(event.id()), event.title(), event.location(), event.date(), null),
+        model);
   }
 
   @DeleteMapping("/events/{eventUrl}/subevents/photos/{id}")
@@ -385,7 +383,9 @@ public class AdminController {
   }
 
   @GetMapping("/users")
-  String getUsers(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "6") Integer size,
+  String getUsers(
+      @RequestParam(defaultValue = "1") Integer page,
+      @RequestParam(defaultValue = "6") Integer size,
       Model model) {
     var pageObj = new Page(page, size);
     var users = userService.findAllBy(pageObj);
