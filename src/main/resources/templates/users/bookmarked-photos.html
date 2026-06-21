@@ -1,0 +1,86 @@
+<!doctype html>
+<html xmlns:th="https://www.thymeleaf.org" lang="pt-br">
+  <body>
+    <div th:fragment="bookmarked-photos">
+      <h1 class="text-2xl font-bold text-gray-800 mb-2">Fotos Marcadas</h1>
+      <p class="text-gray-600 mb-8">
+        Acesse todas as fotos que você marcou nos eventos
+      </p>
+
+      <div th:if="${#lists.isEmpty(bookmarkedEvents)}">
+        <div class="flex flex-col items-center justify-center py-12">
+          <div
+            class="w-16 h-16 mb-4 bg-gray-100 rounded-full flex items-center justify-center"
+          >
+            <i class="ri-bookmark-2-line text-3xl text-gray-400"></i>
+          </div>
+          <h3 class="text-lg font-medium text-gray-600 mb-2">
+            Nenhuma foto marcada
+          </h3>
+          <p class="text-gray-500 text-center max-w-sm">
+            Quando você marcar fotos em eventos, elas aparecerão aqui para fácil
+            acesso
+          </p>
+        </div>
+      </div>
+
+      <div
+        th:if="${!#lists.isEmpty(bookmarkedEvents)}"
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+      >
+        <!-- Event Card -->
+        <div
+          th:each="event : ${bookmarkedEvents}"
+          class="event-card fade-in bg-white rounded-md overflow-hidden shadow-md"
+        >
+          <div class="relative h-48 overflow-hidden">
+            <img
+              th:src="${event.coverUrl}"
+              th:alt="${event.title}"
+              class="w-full h-full object-cover object-top transition-transform duration-300 hover:scale-105"
+            />
+          </div>
+          <div class="event-container p-5">
+            <div class="flex items-center text-gray-500 text-sm mb-2">
+              <div class="w-5 h-5 flex items-center justify-center mr-2">
+                <i class="ri-calendar-line"></i>
+              </div>
+              <span
+                th:text="${event.descriptiveDate}"
+                class="font-['Montserrat']"
+              ></span>
+            </div>
+            <h3
+              th:text="${event.title}"
+              class="font-['Montserrat'] text-xl font-semibold text-gray-900 mb-2"
+            ></h3>
+            <div class="flex items-center text-gray-500 text-sm mb-4">
+              <div class="w-5 h-5 flex items-center justify-center mr-2">
+                <i class="text-red-500 ri-map-pin-2-fill"></i>
+              </div>
+              <span th:text="${event.location}" class="font-['Poppins']"></span>
+            </div>
+            <div class="flex items-center justify-between gap-3 mt-4">
+              <div class="inline-flex items-center gap-2 min-w-0">
+                <div
+                  class="inline-flex items-center bg-gray-200 px-2 py-1 rounded-full text-sm shrink-0"
+                >
+                  <i class="ri-image-line mr-1 text-gray-600"></i>
+                  <span class="text-gray-600 font-medium whitespace-nowrap"
+                    ><span th:text="${event.count}" /> fotos</span
+                  >
+                </div>
+              </div>
+              <a
+                th:href="@{/users/events/{eventId}/bookmarked(eventId=${event.id})}"
+                class="flex-1 cursor-pointer px-4 py-2 bg-primary text-white hover:bg-primary/90 transition-all duration-200 transform hover:scale-105 rounded-md whitespace-nowrap text-center font-medium"
+              >
+                Ver Fotos
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
