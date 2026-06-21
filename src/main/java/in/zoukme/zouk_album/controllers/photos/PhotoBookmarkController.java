@@ -1,13 +1,12 @@
 package in.zoukme.zouk_album.controllers.photos;
 
+import in.zoukme.zouk_album.services.photos.PhotoBookmarkService;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import in.zoukme.zouk_album.services.photos.PhotoBookmarkService;
 
 @Controller
 @RequestMapping("/photos")
@@ -38,5 +37,4 @@ class PhotoBookmarkController {
 
     return "photos/bookmark";
   }
-
 }
