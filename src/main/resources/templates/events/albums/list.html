@@ -114,19 +114,19 @@
             >
               <img
                 th:src="${photo.imagePath}"
-                th:attr="data-photo-id=${photo.eventPhotoId},loading=${photoStat.index >= 20 ? 'lazy' : null},decoding=${photoStat.index >= 20 ? 'async' : null}"
+                th:attr="data-photo-id=${photo.eventPhotoId},loading=${photoStat.index >= 30 ? 'lazy' : null},decoding=${photoStat.index >= 30 ? 'async' : null}"
                 class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                 th:onclick="@{openModal({photoId})(photoId=${photo.eventPhotoId})}"
               />
             </div>
-            <!-- like button -->
+            <!-- like and bookmark buttons -->
             <div class="flex items-center justify-between gap-1 px-2 py-2">
               <div
                 th:replace="~{photos/like :: like(photoId=${photo.eventPhotoId}, liked=${photo.liked}, count=${photo.count})}"
               />
-              <div
-                th:replace="~{photos/bookmark :: bookmark(photoId=${photo.eventPhotoId}, bookmarked=${photo.bookmarked})}"
-              />
+              <!--
+              <div th:replace="~{photos/bookmark :: bookmark(photoId=${photo.eventPhotoId}, bookmarked=${photo.bookmarked})}" />
+              -->
             </div>
 
             <div sec:authorize="hasRole('ADMIN')">
