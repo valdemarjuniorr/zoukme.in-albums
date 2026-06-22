@@ -1,20 +1,33 @@
 <div th:fragment="bookmark(photoId, bookmarked)">
   <!-- Unauthenticated state -->
-  <div
-    sec:authorize="!isAuthenticated()"
-  >
+  <div sec:authorize="!isAuthenticated()">
     <button
-      class="bookmark-unauth flex items-center justify-center gap-1 px-2 py-1.5 text-xs font-medium text-gray-600 bg-transparent border-none cursor-pointer transition-all duration-200 ease-in-out active:scale-95 hover:text-gray-700"
+      class="bookmark-unauth flex items-center justify-center gap-1 px-2 py-1.5 text-sm font-medium text-gray-600 bg-transparent border-none cursor-pointer transition-all duration-200 ease-in-out active:scale-95 hover:text-gray-700"
       title="Login necessário"
-      onclick="showBookmarkLoginRequired(this); return false;"
+      onclick="
+        showBookmarkLoginRequired(this);
+        return false;
+      "
     >
-      <i class="ri-bookmark-line text-xs flex items-center justify-center transition-transform duration-200 ease-in-out hover:scale-110"></i>
+      <i
+        class="ri-bookmark-line text-sm flex items-center justify-center transition-transform duration-200 ease-in-out hover:scale-110"
+      ></i>
     </button>
     <script>
       function showBookmarkLoginRequired(btn) {
-        btn.classList.remove("bookmark-unauth", "text-gray-600", "hover:text-gray-700");
-        btn.classList.add("bookmark-liked", "text-blue-500", "hover:text-blue-600");
-        btn.querySelector("i").classList.replace("ri-bookmark-line", "ri-bookmark-fill");
+        btn.classList.remove(
+          "bookmark-unauth",
+          "text-gray-600",
+          "hover:text-gray-700",
+        );
+        btn.classList.add(
+          "bookmark-liked",
+          "text-blue-500",
+          "hover:text-blue-600",
+        );
+        btn
+          .querySelector("i")
+          .classList.replace("ri-bookmark-line", "ri-bookmark-fill");
       }
     </script>
   </div>
@@ -23,22 +36,26 @@
     <!-- Not bookmarked -->
     <button
       th:if="${!bookmarked}"
-      class="bookmark-unliked flex items-center justify-center gap-1 px-2 py-1.5 text-xs font-medium text-gray-600 bg-transparent border-none cursor-pointer transition-all duration-200 ease-in-out active:scale-95 hover:text-gray-700"
+      class="bookmark-unliked flex items-center justify-center gap-1 px-2 py-1.5 text-sm font-medium text-gray-600 bg-transparent border-none cursor-pointer transition-all duration-200 ease-in-out active:scale-95 hover:text-gray-700"
       th:hx-post="@{/photos/{photoId}/bookmark(photoId=${photoId})}"
       hx-trigger="click"
       hx-swap="outerHTML"
     >
-      <i class="ri-bookmark-line text-xs flex items-center justify-center transition-transform duration-200 ease-in-out hover:scale-110"></i>
+      <i
+        class="ri-bookmark-line text-sm flex items-center justify-center transition-transform duration-200 ease-in-out hover:scale-110"
+      ></i>
     </button>
     <!-- Bookmarked -->
     <button
       th:if="${bookmarked}"
-      class="bookmark-liked flex items-center justify-center gap-1 px-2 py-1.5 text-xs font-medium text-blue-500 bg-transparent border-none cursor-pointer transition-all duration-200 ease-in-out active:scale-95 hover:text-blue-600"
+      class="bookmark-liked flex items-center justify-center gap-1 px-2 py-1.5 text-sm font-medium text-blue-500 bg-transparent border-none cursor-pointer transition-all duration-200 ease-in-out active:scale-95 hover:text-blue-600"
       th:hx-post="@{/photos/{photoId}/unbookmark(photoId=${photoId})}"
       hx-trigger="click"
       hx-swap="outerHTML"
     >
-      <i class="ri-bookmark-fill text-xs flex items-center justify-center transition-transform duration-200 ease-in-out hover:scale-110"></i>
+      <i
+        class="ri-bookmark-fill text-sm flex items-center justify-center transition-transform duration-200 ease-in-out hover:scale-110"
+      ></i>
     </button>
   </div>
 </div>

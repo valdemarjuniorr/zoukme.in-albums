@@ -21,12 +21,15 @@
   <!-- Unauthenticated state -->
   <button
     sec:authorize="!isAuthenticated()"
-    class="heart-unauth flex items-center justify-center gap-1 px-2 py-1.5 text-xs font-medium text-gray-600 bg-transparent border-none cursor-pointer transition-all duration-200 ease-in-out active:scale-95 hover:text-gray-700"
+    class="heart-unauth flex items-center justify-center gap-1 px-2 py-1.5 text-sm font-medium text-gray-600 bg-transparent border-none cursor-pointer transition-all duration-200 ease-in-out active:scale-95 hover:text-gray-700"
     title="Login necessário"
-    onclick="showLoginRequired(this); return false;"
+    onclick="
+      showLoginRequired(this);
+      return false;
+    "
   >
     <i
-      class="ri-heart-line text-xs flex items-center justify-center transition-transform duration-200 ease-in-out hover:scale-110"
+      class="ri-heart-line text-sm flex items-center justify-center transition-transform duration-200 ease-in-out hover:scale-110"
     ></i>
     <span th:text="${count}"></span>
   </button>
@@ -50,28 +53,28 @@
     <!-- Unliked -->
     <button
       th:if="${!liked}"
-      class="heart-unliked flex items-center justify-center gap-1 px-2 py-1.5 text-xs font-medium text-gray-600 bg-transparent border-none cursor-pointer transition-all duration-200 ease-in-out active:scale-95 hover:text-gray-700"
+      class="heart-unliked flex items-center justify-center gap-1 px-2 py-1.5 text-sm font-medium text-gray-600 bg-transparent border-none cursor-pointer transition-all duration-200 ease-in-out active:scale-95 hover:text-gray-700"
       th:hx-post="@{/photos/{photoId}/like(photoId=${photoId})}"
       hx-trigger="click"
       hx-swap="outerHTML"
       onclick="this.querySelector('.ri-heart-line')?.classList.add('like-pop')"
     >
       <i
-        class="ri-heart-line text-xs flex items-center justify-center transition-transform duration-200 ease-in-out hover:scale-110"
+        class="ri-heart-line text-sm flex items-center justify-center transition-transform duration-200 ease-in-out hover:scale-110"
       ></i>
       <span th:text="${count}"></span>
     </button>
     <!-- Liked -->
     <button
       th:if="${liked}"
-      class="heart-liked flex items-center justify-center gap-1 px-2 py-1.5 text-xs font-medium text-red-500 bg-transparent border-none cursor-pointer transition-all duration-200 ease-in-out active:scale-95 hover:text-red-600"
+      class="heart-liked flex items-center justify-center gap-1 px-2 py-1.5 text-sm font-medium text-red-500 bg-transparent border-none cursor-pointer transition-all duration-200 ease-in-out active:scale-95 hover:text-red-600"
       th:hx-post="@{/photos/{photoId}/dislike(photoId=${photoId})}"
       hx-trigger="click"
       hx-swap="outerHTML"
       onclick="this.querySelector('.ri-heart-fill')?.classList.add('like-pop')"
     >
       <i
-        class="ri-heart-fill text-xs flex items-center justify-center transition-transform duration-200 ease-in-out hover:scale-110"
+        class="ri-heart-fill text-sm flex items-center justify-center transition-transform duration-200 ease-in-out hover:scale-110"
       ></i>
       <span th:text="${count}"></span>
     </button>
