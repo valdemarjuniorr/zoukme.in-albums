@@ -404,7 +404,7 @@
       <section
         id="eventos-anteriores"
         class="mb-20 p-4"
-        th:if="${#lists.isEmpty(event.imagePath())}"
+        th:if="${!#lists.isEmpty(event.imagePath())}"
       >
         <a href="#eventos-anteriores">
           <h2 class="text-3xl font-bold mb-8">Eventos anteriores</h2>
