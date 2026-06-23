@@ -2,6 +2,7 @@ package in.zoukme.zouk_album.repositories.photos;
 
 import in.zoukme.zouk_album.domains.PhotoBookmark;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.jdbc.repository.query.Modifying;
 import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.ListCrudRepository;
@@ -52,4 +53,6 @@ public interface PhotoBookmarkRepository extends ListCrudRepository<PhotoBookmar
         AND e.id = :eventId
       """)
   Long countByEventIdAndUserId(Long eventId, Long userId);
+
+  Optional<PhotoBookmark> findByUserIdAndEventPhotoId(Long userId, Long photoId);
 }
