@@ -36,6 +36,7 @@ spring:
     url: jdbc:postgresql://localhost:5432/zouk-albums
     username: zoukme.in
     password: s3cr3t
+    connection-fetch: lazy # lazy connection feature for spring boot 4.1
   docker:
     compose:
       lifecycle-management: none
