@@ -1,17 +1,5 @@
 package in.zoukme.zouk_album.services.aws;
 
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
-import java.util.function.Predicate;
-
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.jdbc.core.mapping.AggregateReference;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
-
 import in.zoukme.zouk_album.domains.Event;
 import in.zoukme.zouk_album.domains.EventPhotos;
 import in.zoukme.zouk_album.domains.Page;
@@ -32,6 +20,16 @@ import in.zoukme.zouk_album.repositories.events.SubEventRepository;
 import in.zoukme.zouk_album.repositories.events.UpdateEventRequest;
 import in.zoukme.zouk_album.services.PackageService;
 import in.zoukme.zouk_album.services.users.UserService;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Predicate;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.jdbc.core.mapping.AggregateReference;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 @Service
 public class EventService {
@@ -52,7 +50,8 @@ public class EventService {
       BucketService bucketService,
       SubEventRepository subEventRepository,
       EventPhotosRepository eventPhotosRepository,
-      PackageService packageService, UserService userService) {
+      PackageService packageService,
+      UserService userService) {
     this.repository = repository;
     this.socialMediaRepository = socialMediaRepository;
     this.photoRepository = photoRepository;
@@ -72,7 +71,8 @@ public class EventService {
   }
 
   public EventDetails findByEventUrl(String eventUrl) {
-    var event = repository.findEventDetailsByEventUrl(eventUrl).orElseThrow(EventNotFoundException::new);
+    var event =
+        repository.findEventDetailsByEventUrl(eventUrl).orElseThrow(EventNotFoundException::new);
     event.setImagePath(this.photoRepository.findPhotoByEventId(event.getId()));
     return event;
   }
@@ -83,17 +83,19 @@ public class EventService {
     var eventTitle = request.title();
     var uploadedCover = bucketService.upload(eventTitle, request.cover());
     var pastEventsUrls = bucketService.upload(eventTitle, request.pastEvents());
-    var eventUrl = eventTitle.toLowerCase().replace(" ", "-");
-    var event = new Event(
-        eventTitle,
-        request.description(),
-        request.location(),
-        request.date(),
-        uploadedCover.path(),
-        null,
-        eventUrl,
-        request.details());
-    AggregateReference<Event, Long> eventSaved = AggregateReference.to(this.repository.save(event).id());
+    var eventUrl = EventUtils.getEventFolderName(eventTitle);
+    var event =
+        new Event(
+            eventTitle,
+            request.description(),
+            request.location(),
+            request.date(),
+            uploadedCover.path(),
+            null,
+            eventUrl,
+            request.details());
+    AggregateReference<Event, Long> eventSaved =
+        AggregateReference.to(this.repository.save(event).id());
     this.socialMediaRepository.save(
         new SocialMedia(eventSaved, request.instagram(), request.whatsapp()));
     var photos = convertIntoPhotos(eventSaved, pastEventsUrls);
@@ -120,7 +122,8 @@ public class EventService {
   public org.springframework.data.domain.Page<Event> findAll(Page page) {
     return userService.hasRole("ROLE_ADMIN")
         ? this.repository.findAllByOrderByDateDesc(page.toPageRequest())
-        : this.repository.findAllByDateIsGreaterThanEqualOrderByDate(LocalDate.now(), page.toPageRequest());
+        : this.repository.findAllByDateIsGreaterThanEqualOrderByDate(
+            LocalDate.now(), page.toPageRequest());
   }
 
   public List<Event> findAllActiveEvents() {
@@ -141,18 +144,22 @@ public class EventService {
     if (userLogged.isPresent()) {
       userId = userLogged.get().id();
     }
-    var subEvent = this.subEventRepository.findByName(albumName, eventUrl)
-        .orElseThrow(SubEventNotFoundException::new);
+    var subEvent =
+        this.subEventRepository
+            .findByName(albumName, eventUrl)
+            .orElseThrow(SubEventNotFoundException::new);
     var result = eventPhotosRepository.findBy(subEvent.id(), userId, page.size(), page.offset());
 
-    return new PageImpl<>(result, page.toPageRequest(), eventPhotosRepository.countBySubEventId(subEvent.id()));
+    return new PageImpl<>(
+        result, page.toPageRequest(), eventPhotosRepository.countBySubEventId(subEvent.id()));
   }
 
   public org.springframework.data.domain.Page<EventPhotos> getPhotosBy(
       String eventUrl, String albumName, Page page) {
-    var subEvent = this.subEventRepository
-        .findByName(albumName, eventUrl)
-        .orElseThrow(SubEventNotFoundException::new);
+    var subEvent =
+        this.subEventRepository
+            .findByName(albumName, eventUrl)
+            .orElseThrow(SubEventNotFoundException::new);
     return this.eventPhotosRepository.findEventPhotosBySubEventId(
         subEvent.id(), page.toPageRequest());
   }
@@ -160,8 +167,7 @@ public class EventService {
   public void removeEventBy(String eventUrl) {
     var subEvents = this.subEventRepository.findSubEventsBy(eventUrl);
     if (!CollectionUtils.isEmpty(subEvents)) {
-      this.eventPhotosRepository.deleteEventPhotosBy(
-          subEvents.stream().map(SubEvent::id).toList());
+      this.eventPhotosRepository.deleteEventPhotosBy(subEvents.stream().map(SubEvent::id).toList());
       // its avoid subalbums to be deleted and cover albums to be set again
       // this.subEventRepository.deleteAll(subEventIds);
     }
@@ -184,13 +190,16 @@ public class EventService {
                     // if subevent already exists, then use it or create a new one
                     var subEvent = this.subEventRepository.findByName(subEventName, eventUrl);
                     if (subEvent.isEmpty()) {
-                      var subEventNew = this.subEventRepository
-                          .save(new SubEvent(AggregateReference.to(event.id()), subEventName));
+                      var subEventNew =
+                          this.subEventRepository.save(
+                              new SubEvent(AggregateReference.to(event.id()), subEventName));
                       var fileNamesFromFolder = this.bucketService.getFilesNamesBy(folder);
-                      fileNamesFromFolder.forEach(fileName -> {
-                        this.eventPhotosRepository
-                            .save(new EventPhotos(AggregateReference.to(subEventNew.id()), bucketUri + fileName));
-                      });
+                      fileNamesFromFolder.forEach(
+                          fileName -> {
+                            this.eventPhotosRepository.save(
+                                new EventPhotos(
+                                    AggregateReference.to(subEventNew.id()), bucketUri + fileName));
+                          });
                     }
                   });
             });
@@ -228,7 +237,8 @@ public class EventService {
   }
 
   public List<Event> getNotFeaturedAndIncomingEvents() {
-    return this.repository.findAllByFeatureEventIsFalseAndDateIsGreaterThanEqualOrderByDate(LocalDate.now());
+    return this.repository.findAllByFeatureEventIsFalseAndDateIsGreaterThanEqualOrderByDate(
+        LocalDate.now());
   }
 
   public Boolean hasVisiblePackage(Long eventId) {
