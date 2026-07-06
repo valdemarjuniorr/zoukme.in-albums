@@ -1,15 +1,5 @@
 package in.zoukme.zouk_album.controllers.events;
 
-import java.util.Objects;
-
-import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
 import in.zoukme.zouk_album.controllers.meta.MetaTags;
 import in.zoukme.zouk_album.domains.Page;
 import in.zoukme.zouk_album.services.PackageService;
@@ -17,6 +7,14 @@ import in.zoukme.zouk_album.services.UserEventInterestService;
 import in.zoukme.zouk_album.services.aws.EventService;
 import in.zoukme.zouk_album.services.users.UserService;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.Objects;
+import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/events")
@@ -26,8 +24,11 @@ public class EventController {
   private final PackageService packageService;
   private final UserEventInterestService interestService;
 
-  public EventController(EventService service, PackageService packageService,
-      UserEventInterestService interestService, UserService userService) {
+  public EventController(
+      EventService service,
+      PackageService packageService,
+      UserEventInterestService interestService,
+      UserService userService) {
     this.service = service;
     this.packageService = packageService;
     this.interestService = interestService;
@@ -86,11 +87,23 @@ public class EventController {
     return "events/subevents/list";
   }
 
+  @GetMapping("/{eventUrl}/subevents/featured-photos")
+  String getMostLikedPhotos(@PathVariable String eventUrl, Model model) {
+    var photos = service.getMostLikedPhotosBy(eventUrl);
+    model.addAttribute("featuredPhotos", photos);
+
+    return "events/subevents/featured-photos";
+  }
+
   @GetMapping("/{eventUrl}/albums/{albumName}")
-  String getEventPhotosBy(@PathVariable String eventUrl, @PathVariable String albumName,
+  String getEventPhotosBy(
+      @PathVariable String eventUrl,
+      @PathVariable String albumName,
       @RequestParam(defaultValue = "1") Integer page,
       @RequestParam(defaultValue = "50") Integer size,
-      Model model, Authentication authentication, HttpServletResponse response) {
+      Model model,
+      Authentication authentication,
+      HttpServletResponse response) {
     var pageObj = new Page(page, size);
 
     var photos = service.getPhotosWithLikesBy(eventUrl, albumName, pageObj);
@@ -109,12 +122,12 @@ public class EventController {
   @GetMapping("/featured")
   String getFeaturedEvent(Model model) {
     var event = service.getFeaturedEvent();
-    event.ifPresent(e -> {
-      model.addAttribute("event", e);
-      model.addAttribute("hasPackage", service.hasVisiblePackage(e.getId()));
-    });
+    event.ifPresent(
+        e -> {
+          model.addAttribute("event", e);
+          model.addAttribute("hasPackage", service.hasVisiblePackage(e.getId()));
+        });
 
     return "events/feature_event";
   }
-
 }

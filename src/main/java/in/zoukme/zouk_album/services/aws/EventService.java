@@ -13,6 +13,7 @@ import in.zoukme.zouk_album.repositories.PhotoRepository;
 import in.zoukme.zouk_album.repositories.SocialMediaRepository;
 import in.zoukme.zouk_album.repositories.events.CreateEventRequest;
 import in.zoukme.zouk_album.repositories.events.EventDetails;
+import in.zoukme.zouk_album.repositories.events.EventFeaturePhotoLike;
 import in.zoukme.zouk_album.repositories.events.EventPhotoWithLike;
 import in.zoukme.zouk_album.repositories.events.EventPhotosRepository;
 import in.zoukme.zouk_album.repositories.events.EventRepository;
@@ -255,5 +256,9 @@ public class EventService {
 
   public Integer countLikesByEventId(Long eventId) {
     return this.repository.countLikesBy(eventId);
+  }
+
+  public List<EventFeaturePhotoLike> getMostLikedPhotosBy(String eventUrl) {
+    return this.repository.getMostLikedPhotosBy(eventUrl);
   }
 }
