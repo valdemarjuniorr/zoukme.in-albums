@@ -118,21 +118,11 @@
                 class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                 th:onclick="@{openModal({photoId})(photoId=${photo.eventPhotoId})}"
               />
-            </div>
-            <!-- like and bookmark buttons -->
-            <div class="flex items-center justify-between gap-1 px-2 py-2">
               <div
-                th:replace="~{photos/like :: like(photoId=${photo.eventPhotoId}, liked=${photo.liked}, count=${photo.count})}"
-              />
-              <div
-                th:replace="~{photos/bookmark :: bookmark(photoId=${photo.eventPhotoId}, bookmarked=${photo.bookmarked})}"
-              />
-            </div>
-
-            <div sec:authorize="hasRole('ADMIN')">
-              <!-- change cover image section
-              <div class="overlay absolute inset-0"></div> -->
-              <div class="absolute top-2 right-2 z-2">
+                id="admin-section"
+                sec:authorize="hasRole('ADMIN')"
+                class="absolute top-2 right-2 z-10"
+              >
                 <div class="relative">
                   <input
                     type="checkbox"
@@ -171,6 +161,15 @@
                   </div>
                 </div>
               </div>
+            </div>
+            <!-- like and bookmark buttons -->
+            <div class="flex items-center justify-between gap-1 px-2 py-2">
+              <div
+                th:replace="~{photos/like :: like(photoId=${photo.eventPhotoId}, liked=${photo.liked}, count=${photo.count})}"
+              />
+              <div
+                th:replace="~{photos/bookmark :: bookmark(photoId=${photo.eventPhotoId}, bookmarked=${photo.bookmarked})}"
+              />
             </div>
           </div>
         </div>
