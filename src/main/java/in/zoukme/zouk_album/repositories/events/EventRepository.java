@@ -103,12 +103,13 @@ public interface EventRepository
 
   @Query(
       """
-        select se.name, ep.image_path, count(pl.event_photo_id) from photo_likes pl
+        select se.name, ep.image_path, count(pl.event_photo_id) as likes_count from photo_likes pl
          inner join event_photos ep on pl.event_photo_id = ep.id
          inner join sub_events se on ep.sub_event_id = se.id
          inner join events e on se.event_id = e.id
         where e.event_url = :eventUrl
         group by se.name, ep.image_path, pl.event_photo_id
+        order by likes_count desc
        limit 3;
       """)
   List<EventFeaturePhotoLike> getMostLikedPhotosBy(String eventUrl);
