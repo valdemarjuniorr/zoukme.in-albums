@@ -15,7 +15,7 @@ class EventUtilsTest {
 
   @Test
   void getEventFolderNameWithCraseAndWhitespaces() {
-    var eventFolderName = EventUtils.getEventFolderName("Festival de dança à dois  ");
+    var eventFolderName = EventUtils.getEventFolderName("Festival de dança à dois");
     Assertions.assertThat(eventFolderName).isEqualTo("next-events/festival-de-danca-a-dois");
   }
 

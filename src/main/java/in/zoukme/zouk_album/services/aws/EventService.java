@@ -84,7 +84,7 @@ public class EventService {
     var eventTitle = request.title();
     var uploadedCover = bucketService.upload(eventTitle, request.cover());
     var pastEventsUrls = bucketService.upload(eventTitle, request.pastEvents());
-    var eventUrl = EventUtils.getEventFolderName(eventTitle);
+    var eventUrl = EventUtils.getFormatEventName(eventTitle);
     var event =
         new Event(
             eventTitle,
