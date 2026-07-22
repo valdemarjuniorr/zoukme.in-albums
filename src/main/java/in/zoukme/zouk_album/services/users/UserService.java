@@ -1,8 +1,16 @@
 package in.zoukme.zouk_album.services.users;
 
+import in.zoukme.zouk_album.domains.Page;
+import in.zoukme.zouk_album.domains.users.EmailVerificationToken;
+import in.zoukme.zouk_album.domains.users.User;
+import in.zoukme.zouk_album.domains.users.UserProfile;
+import in.zoukme.zouk_album.exceptions.users.EmailAlreadyExistsException;
+import in.zoukme.zouk_album.repositories.users.UserProfileRepository;
+import in.zoukme.zouk_album.repositories.users.UserRepository;
+import in.zoukme.zouk_album.services.aws.ses.EmailService;
+import in.zoukme.zouk_album.services.token.EmailVerificationTokenService;
 import java.util.Objects;
 import java.util.Optional;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -10,15 +18,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import in.zoukme.zouk_album.domains.Page;
-import in.zoukme.zouk_album.domains.users.EmailVerificationToken;
-import in.zoukme.zouk_album.domains.users.User;
-import in.zoukme.zouk_album.domains.users.UserProfile;
-import in.zoukme.zouk_album.repositories.users.UserProfileRepository;
-import in.zoukme.zouk_album.repositories.users.UserRepository;
-import in.zoukme.zouk_album.services.aws.ses.EmailService;
-import in.zoukme.zouk_album.services.token.EmailVerificationTokenService;
 
 @Service
 public class UserService {
@@ -31,8 +30,12 @@ public class UserService {
   private final EmailVerificationTokenService tokenService;
   private final EmailService emailService;
 
-  public UserService(UserRepository repository, UserProfileRepository profileRepository,
-      PasswordEncoder passwordEncoder, EmailVerificationTokenService tokenService, EmailService emailService) {
+  public UserService(
+      UserRepository repository,
+      UserProfileRepository profileRepository,
+      PasswordEncoder passwordEncoder,
+      EmailVerificationTokenService tokenService,
+      EmailService emailService) {
     this.repository = repository;
     this.profileRepository = profileRepository;
     this.passwordEncoder = passwordEncoder;
@@ -41,8 +44,19 @@ public class UserService {
   }
 
   @Transactional
-  public void create(String fullName, String phone, String instagram, String email, String password,
+  public void create(
+      String fullName,
+      String phone,
+      String instagram,
+      String email,
+      String password,
       String confirmPassword) {
+    repository
+        .findByEmail(email.toLowerCase())
+        .ifPresent(
+            user -> {
+              throw new EmailAlreadyExistsException(email);
+            });
     var user = new User(email, passwordEncoder.encode(password));
     var newUser = repository.save(user);
     var profile = new UserProfile(fullName, phone, instagram, newUser);
@@ -50,8 +64,7 @@ public class UserService {
     var verificationToken = new EmailVerificationToken(newUser);
     tokenService.create(verificationToken);
 
-    emailService.send(
-        new UserPendingEmailTemplate(email, verificationToken.token()));
+    emailService.send(new UserPendingEmailTemplate(email, verificationToken.token()));
     log.info("User created with email: {}", email);
   }
 
@@ -74,11 +87,14 @@ public class UserService {
       return UserVerificationError.EXPIRED_TOKEN;
     }
 
-    repository.findById(verificationToken.userId().getId()).ifPresent(user -> {
-      repository.enableUser(user.email());
-      tokenService.delete(verificationToken);
-      log.info("Email verified for user with email: {}", user.email());
-    });
+    repository
+        .findById(verificationToken.userId().getId())
+        .ifPresent(
+            user -> {
+              repository.enableUser(user.email());
+              tokenService.delete(verificationToken);
+              log.info("Email verified for user with email: {}", user.email());
+            });
 
     return null;
   }
@@ -110,11 +126,14 @@ public class UserService {
       throw new IllegalArgumentException("Token expired");
     }
 
-    repository.findById(tokenFound.userId().getId()).ifPresent(user -> {
-      repository.updateBy(user.email(), passwordEncoder.encode(password));
-      tokenService.delete(tokenFound);
-      log.info("Password redefined for user with email: {}", user.email());
-    });
+    repository
+        .findById(tokenFound.userId().getId())
+        .ifPresent(
+            user -> {
+              repository.updateBy(user.email(), passwordEncoder.encode(password));
+              tokenService.delete(tokenFound);
+              log.info("Password redefined for user with email: {}", user.email());
+            });
   }
 
   public Optional<User> getUserLogged() {
@@ -132,8 +151,8 @@ public class UserService {
 
   public Boolean hasRole(String role) {
     var user = getCurrentUser();
-    return user.isPresent() && user.get().getAuthorities().stream()
-        .anyMatch(a -> a.getAuthority().equals(role));
+    return user.isPresent()
+        && user.get().getAuthorities().stream().anyMatch(a -> a.getAuthority().equals(role));
   }
 
   public Long count() {
@@ -141,9 +160,12 @@ public class UserService {
   }
 
   public void update(UserProfile profile, String email) {
-    repository.findByEmail(email).ifPresent(user -> {
-      profileRepository.save(profile);
-    });
+    repository
+        .findByEmail(email)
+        .ifPresent(
+            user -> {
+              profileRepository.save(profile);
+            });
   }
 
   public void updatePassword(User user) {
@@ -159,5 +181,4 @@ public class UserService {
     profileRepository.deleteById(id);
     log.info("User deleted with id: {}", id);
   }
-
 }
