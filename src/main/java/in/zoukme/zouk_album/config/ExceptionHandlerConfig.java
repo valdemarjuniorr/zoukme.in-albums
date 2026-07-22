@@ -1,12 +1,12 @@
 package in.zoukme.zouk_album.config;
 
+import in.zoukme.zouk_album.exceptions.AbstractUserException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-
-import in.zoukme.zouk_album.exceptions.AbstractUserException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 @ControllerAdvice
 public class ExceptionHandlerConfig {
@@ -31,7 +31,15 @@ public class ExceptionHandlerConfig {
   @ExceptionHandler(RuntimeException.class)
   public String handleRuntimeException(RuntimeException e, Model model) {
     log.error("RuntimeException occurred: {}", e);
+
     return "error";
   }
 
+  @ExceptionHandler(NoResourceFoundException.class)
+  public String handleResourceNotFound(NoResourceFoundException ex, Model model) {
+    // Optional: Pass the missing resource path to your Thymeleaf template
+    model.addAttribute("message", ex.getResourcePath());
+
+    return "404";
+  }
 }
