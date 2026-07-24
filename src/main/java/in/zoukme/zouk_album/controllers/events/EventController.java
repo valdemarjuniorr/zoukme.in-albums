@@ -37,7 +37,7 @@ public class EventController {
   @GetMapping
   String list(
       @RequestParam(defaultValue = "1") Integer page,
-      @RequestParam(defaultValue = "6") Integer size,
+      @RequestParam(defaultValue = "15") Integer size,
       Model model,
       Authentication authentication) {
     var events = service.findAll(new Page(page, size));
