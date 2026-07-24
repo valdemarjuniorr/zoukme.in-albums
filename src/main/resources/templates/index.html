@@ -39,60 +39,117 @@
               de álbuns
             </p>
           </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-            <!-- Album 1 -->
+
+          <!-- Timeline by Year -->
+          <div class="relative" th:if="${albums.size() > 0}">
+            <!-- Timeline track - Mobile centered, Desktop at center -->
             <div
-              th:each="album : ${albums}"
-              class="album-card group"
-              data-category="festival"
-            >
-              <a th:href="${album.url}" th:title="${album.title}">
-                <div
-                  class="bg-white rounded-md overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300"
-                >
-                  <div class="relative h-64 overflow-hidden">
-                    <img
-                      th:src="${album.thumbUrl}"
-                      th:alt="${album.title}"
-                      class="w-full h-full object-cover object-top transform group-hover:scale-105 transition-transform duration-500"
-                    />
-                    <div
-                      class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"
-                    ></div>
-                    <div
-                      th:if="${album.isNew}"
-                      class="absolute top-4 right-4 bg-gradient-to-r from-primary to-secondary text-white text-xs font-bold py-1 px-3 rounded-lg shadow-md flex items-center gap-1 rotate-12"
-                    >
-                      <i class="ri-flashlight-line"></i>
-                      <span>Novo</span>
-                    </div>
-                    <span
-                      th:text="${album.descriptiveDate}"
-                      class="font-['Montserrat'] absolute top-4 left-4 bg-black/50 text-white px-3 py-1 rounded-full text-sm"
-                    ></span>
-                  </div>
-                  <div class="p-6">
-                    <h3
-                      th:text="${album.title}"
-                      class="font-['Montserrat'] text-xl font-bold mb-2"
-                    ></h3>
-                    <p class="text-gray-600 mb-4">
-                      Veja as fotos acessando o álbum do evento
-                    </p>
-                    <div class="flex items-center justify-between">
-                      <div class="flex items-center text-gray-500">
-                        <i
-                          class="text-red-500 text-xl ri-map-pin-2-fill mr-2"
-                        ></i>
-                        <span
-                          th:text="${album.city}"
-                          class="font-['Poppins'] text-sm"
-                        ></span>
-                      </div>
-                    </div>
+              class="absolute w-1 h-full bg-gradient-to-b from-primary via-secondary to-primary z-0 left-1/2 -translate-x-1/2 md:left-1/2 md:-translate-x-1/2"
+            ></div>
+
+            <!-- Years Groups -->
+            <th:block th:each="yearGroup : ${albums.entrySet()}">
+              <div class="mb-16 relative z-10">
+                <!-- Year Label -->
+                <div class="flex items-center justify-center mb-8 md:mb-12">
+                  <div
+                    class="bg-gradient-to-r from-primary to-secondary text-white px-6 py-3 rounded-full font-bold text-lg md:text-xl shadow-lg relative z-10"
+                  >
+                    <span th:text="${yearGroup.key}"></span>
                   </div>
                 </div>
-              </a>
+
+                <!-- Albums for this year -->
+                <div
+                  class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 md:px-0"
+                >
+                  <th:block th:each="album,iterStat : ${yearGroup.value}">
+                    <!-- Alternate left/right on desktop -->
+                    <div
+                      th:classappend="${iterStat.even} ? 'md:col-start-2' : 'md:col-start-1'"
+                      class="w-full relative"
+                    >
+                      <!-- Album Card -->
+                      <a
+                        th:href="${album.url}"
+                        th:title="${album.title}"
+                        class="album-card group block h-full"
+                      >
+                        <div
+                          class="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 h-full flex flex-col"
+                        >
+                          <!-- Image Container with Overlay -->
+                          <div class="relative h-64 md:h-72 overflow-hidden flex-shrink-0">
+                            <img
+                              th:src="${album.thumbUrl}"
+                              th:alt="${album.title}"
+                              class="w-full h-full object-cover object-top transform group-hover:scale-105 transition-transform duration-500"
+                            />
+                            
+                            <!-- Gradient Overlay (bottom to top) -->
+                            <div
+                              class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                            ></div>
+
+                            <!-- New Badge -->
+                            <div
+                              th:if="${album.isNew}"
+                              class="absolute top-3 right-3 bg-gradient-to-r from-primary to-secondary text-white text-xs font-bold py-1 px-3 rounded-lg shadow-md flex items-center gap-1 animate-pulse"
+                            >
+                              <i class="ri-flashlight-line"></i>
+                              <span>Novo</span>
+                            </div>
+
+                            <!-- Date Badge (bottom left, always visible) -->
+                            <div class="absolute bottom-0 left-0 right-0 p-4">
+                              <span
+                                th:text="${album.descriptiveDate}"
+                                class="font-['Montserrat'] inline-block bg-black/60 backdrop-blur-sm text-white px-3 py-1 rounded-full text-xs md:text-sm font-semibold"
+                              ></span>
+                            </div>
+                          </div>
+
+                          <!-- Content Section -->
+                          <div class="p-4 md:p-5 flex-1 flex flex-col justify-between">
+                            <div>
+                              <h3
+                                th:text="${album.title}"
+                                class="font-['Montserrat'] text-base md:text-lg font-bold mb-2 line-clamp-2 text-gray-900 group-hover:text-primary transition-colors"
+                              ></h3>
+                              <p class="text-gray-600 text-sm hidden sm:block line-clamp-1">
+                                Veja as fotos do evento
+                              </p>
+                            </div>
+
+                            <!-- Location (Bottom) -->
+                            <div
+                              class="flex items-center text-gray-500 group-hover:text-red-500 transition-colors mt-3 pt-3 border-t border-gray-200"
+                            >
+                              <i
+                                class="text-red-500 text-sm ri-map-pin-2-fill mr-2 flex-shrink-0"
+                              ></i>
+                              <span
+                                th:text="${album.city}"
+                                class="font-['Poppins'] text-sm font-medium truncate"
+                              ></span>
+                            </div>
+                          </div>
+                        </div>
+                      </a>
+                    </div>
+                  </th:block>
+                </div>
+              </div>
+            </th:block>
+          </div>
+
+          <!-- Empty State -->
+          <div th:if="${albums.isEmpty()}" class="text-center py-16">
+            <div class="inline-block">
+              <i class="ri-image-2-line text-6xl text-gray-300 mb-4"></i>
+              <p class="text-gray-500 text-lg font-['Montserrat']">
+                Nenhum álbum disponível no momento
+              </p>
             </div>
           </div>
         </div>

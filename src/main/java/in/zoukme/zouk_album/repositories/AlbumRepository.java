@@ -36,4 +36,7 @@ public interface AlbumRepository
       UPDATE albums SET title = :#{#album.title}, city = :#{#album.city}, event_date = :#{#album.eventDate} WHERE id = :#{#album.id}
       """)
   Integer updateAlbumInfo(Album album);
+
+  @Query("SELECT * FROM albums ORDER BY event_date DESC LIMIT :limit OFFSET :offset")
+  List<Album> findAllOrderByEventDateDescGroupedByYear(int limit, int offset);
 }

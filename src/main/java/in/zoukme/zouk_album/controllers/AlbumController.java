@@ -1,8 +1,13 @@
 package in.zoukme.zouk_album.controllers;
 
+import in.zoukme.zouk_album.domains.Album;
 import in.zoukme.zouk_album.domains.Page;
 import in.zoukme.zouk_album.services.AlbumService;
 import in.zoukme.zouk_album.services.aws.EventService;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,7 +30,24 @@ class AlbumController {
   @GetMapping
   String findAll(Model model, Authentication authentication) {
     var albums = this.service.findAll(new Page(1, 30));
-    model.addAttribute("albums", albums);
+    
+    // Group albums by year and sort by year descending
+    var albumsByYear = albums.stream()
+        .collect(Collectors.groupingBy(
+            album -> album.eventDate().getYear(),
+            Collectors.toList()
+        ))
+        .entrySet()
+        .stream()
+        .sorted(Map.Entry.<Integer, List<Album>>comparingByKey().reversed())
+        .collect(Collectors.toMap(
+            Map.Entry::getKey,
+            Map.Entry::getValue,
+            (e1, e2) -> e1,
+            LinkedHashMap::new
+        ));
+    
+    model.addAttribute("albums", albumsByYear);
     model.addAttribute("authentication", authentication);
 
     var events = eventService.getNotFeaturedAndIncomingEvents();
