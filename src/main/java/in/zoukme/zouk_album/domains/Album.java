@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.jdbc.core.mapping.AggregateReference;
 import org.springframework.data.relational.core.mapping.Table;
+import org.springframework.util.Assert;
 
 @Table("albums")
 public record Album(
@@ -16,7 +17,12 @@ public record Album(
     String thumbUrl,
     String url) {
 
-  public Album(AggregateReference<Event, Long> eventId, String title, String city, LocalDate eventDate, String cover) {
+  public Album(
+      AggregateReference<Event, Long> eventId,
+      String title,
+      String city,
+      LocalDate eventDate,
+      String cover) {
     this(
         null,
         eventId,
@@ -24,15 +30,11 @@ public record Album(
         city,
         eventDate,
         cover,
-        "/events/%s/albums".formatted(title.toLowerCase().replace(" ", "-")));
+        "/events/%s/albums".formatted(getUrlFormattedName(title)));
   }
 
   public Album(String title, String city, LocalDate eventDate, String cover) {
-    this(
-        null,
-        title,
-        city,
-        eventDate, cover);
+    this(null, title, city, eventDate, cover);
   }
 
   public String getDescriptiveDate() {
@@ -43,5 +45,15 @@ public record Album(
   public Boolean isNew() {
     var oneWeek = LocalDate.now().minusWeeks(1);
     return eventDate.equals(oneWeek) || eventDate.isAfter(oneWeek);
+  }
+
+  static String getUrlFormattedName(String title) {
+    Assert.hasText(title, "title file must not be empty");
+
+    var normalized =
+        java.text.Normalizer.normalize(title, java.text.Normalizer.Form.NFD)
+            .replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
+
+    return normalized.toLowerCase().replaceAll("[^a-z0-9]+", "-").replaceAll("^-|-$", "");
   }
 }
