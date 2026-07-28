@@ -174,7 +174,7 @@ public class UserService {
   }
 
   public org.springframework.data.domain.Page<UserProfile> findAllBy(Page page) {
-    return profileRepository.findAllBy(page.toPageRequest());
+    return profileRepository.findAllByOrderByIdDesc(page.toPageRequest());
   }
 
   public void deleteBy(Long id) {
