@@ -130,4 +130,12 @@ public class EventController {
 
     return "events/feature_event";
   }
+
+  @GetMapping("/{eventId}/event-count")
+  String getEventCount(@PathVariable Long eventId, Model model) {
+    var count = service.getEventCount(eventId);
+    model.addAttribute("count", count);
+
+    return "events/event_count";
+  }
 }

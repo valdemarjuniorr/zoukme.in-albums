@@ -93,7 +93,7 @@
     </style>
     <div th:insert="~{fragments/top :: top}"></div>
     <header class="container mx-auto px-4 py-14">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+      <div class="grid grid-cols-1 md:grid-cols-2 items-center">
         <div class="text-center md:text-left">
           <h1
             th:text="${event.title}"
@@ -148,12 +148,19 @@
             </div>
           </div>
         </div>
-        <div class="w-full rounded-lg overflow-hidden shadow-lg">
-          <img
-            th:src="${event.coverUrl}"
-            th:alt="${event.title}"
-            class="w-full h-full object-cover"
-          />
+        <div>
+          <div
+            th:hx-get="@{/events/{eventId}/event-count(eventId=${event.id})}"
+            hx-trigger="load"
+            hx-swap="outerHTML"
+          ></div>
+          <div class="rounded-lg overflow-hidden shadow-lg">
+            <img
+              th:src="${event.coverUrl}"
+              th:alt="${event.title}"
+              class="w-full h-full object-cover"
+            />
+          </div>
         </div>
       </div>
     </header>

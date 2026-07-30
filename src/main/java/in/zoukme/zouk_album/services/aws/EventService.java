@@ -1,6 +1,7 @@
 package in.zoukme.zouk_album.services.aws;
 
 import in.zoukme.zouk_album.domains.Event;
+import in.zoukme.zouk_album.domains.EventCount;
 import in.zoukme.zouk_album.domains.EventPhotos;
 import in.zoukme.zouk_album.domains.Page;
 import in.zoukme.zouk_album.domains.Photo;
@@ -12,6 +13,7 @@ import in.zoukme.zouk_album.exceptions.SubEventNotFoundException;
 import in.zoukme.zouk_album.repositories.PhotoRepository;
 import in.zoukme.zouk_album.repositories.SocialMediaRepository;
 import in.zoukme.zouk_album.repositories.events.CreateEventRequest;
+import in.zoukme.zouk_album.repositories.events.EventCountRepository;
 import in.zoukme.zouk_album.repositories.events.EventDetails;
 import in.zoukme.zouk_album.repositories.events.EventFeaturePhotoLike;
 import in.zoukme.zouk_album.repositories.events.EventPhotoWithLike;
@@ -43,6 +45,7 @@ public class EventService {
   private final EventPhotosRepository eventPhotosRepository;
   private final PackageService packageService;
   private final UserService userService;
+  private final EventCountRepository eventCountRepository;
 
   public EventService(
       EventRepository repository,
@@ -52,7 +55,8 @@ public class EventService {
       SubEventRepository subEventRepository,
       EventPhotosRepository eventPhotosRepository,
       PackageService packageService,
-      UserService userService) {
+      UserService userService,
+      EventCountRepository eventCountRepository) {
     this.repository = repository;
     this.socialMediaRepository = socialMediaRepository;
     this.photoRepository = photoRepository;
@@ -61,6 +65,7 @@ public class EventService {
     this.eventPhotosRepository = eventPhotosRepository;
     this.packageService = packageService;
     this.userService = userService;
+    this.eventCountRepository = eventCountRepository;
   }
 
   public Event findBy(Long id) {
@@ -75,6 +80,7 @@ public class EventService {
     var event =
         repository.findEventDetailsByEventUrl(eventUrl).orElseThrow(EventNotFoundException::new);
     event.setImagePath(this.photoRepository.findPhotoByEventId(event.getId()));
+
     return event;
   }
 
@@ -260,5 +266,17 @@ public class EventService {
 
   public List<EventFeaturePhotoLike> getMostLikedPhotosBy(String eventUrl) {
     return this.repository.getMostLikedPhotosBy(eventUrl);
+  }
+
+  public Integer getEventCount(Long eventId) {
+    var eventCount =
+        eventCountRepository
+            .findByEventId(eventId)
+            .orElseGet(
+                () -> {
+                  return eventCountRepository.save(new EventCount(eventId));
+                });
+    eventCountRepository.incrementCountByEventId(eventId);
+    return eventCount.count() + 1;
   }
 }
