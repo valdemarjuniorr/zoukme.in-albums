@@ -1,5 +1,9 @@
 <div class="flex items-center mb-3 text-gray-600">
   <i class="ri-eye-line mr-2"></i>
   <span class="text-sm mr-1">Visualizações:</span>
-  <span th:text="${count}" class="font-semibold" id="viewCount" />
+  <span
+    th:text="${#numbers.formatInteger(count, 1, 'COMMA')}"
+    class="text-sm font-semibold"
+    id="viewCount"
+  />
 </div>
