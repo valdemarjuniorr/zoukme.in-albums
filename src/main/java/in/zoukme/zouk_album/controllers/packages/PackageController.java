@@ -3,7 +3,7 @@ package in.zoukme.zouk_album.controllers.packages;
 import java.util.Objects;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,7 +27,7 @@ public class PackageController {
   }
 
   @GetMapping
-  String step1PersonalDetails(@RequestParam Long packId, @AuthenticationPrincipal User user, Model model) {
+  String step1PersonalDetails(@RequestParam Long packId, @AuthenticationPrincipal UserDetails user, Model model) {
     var pack = service.findById(packId);
     model.addAttribute("package", pack);
     if (Objects.nonNull(user)) {
@@ -49,3 +49,4 @@ public class PackageController {
     return "redirect:" + pendingPayment.getRedirectUrl();
   }
 }
+

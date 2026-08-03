@@ -68,6 +68,23 @@ public class UserService {
     log.info("User created with email: {}", email);
   }
 
+  public void createOAuthUser(
+      String fullname,
+      String email,
+      String oauth,
+      String oauthId,
+      String pictureUrl,
+      Boolean verified) {
+    var userOp = repository.findByEmail(email);
+    if (userOp.isEmpty()) {
+      var newUser =
+          repository.save(
+              User.createOAuthUser(email, passwordEncoder.encode(oauthId), oauth, oauthId));
+      var profile = new UserProfile(fullname, newUser);
+      profileRepository.save(profile);
+    }
+  }
+
   public Optional<User> findByUsername(String username) {
     return repository.findByEmail(username);
   }

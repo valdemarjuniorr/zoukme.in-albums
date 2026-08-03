@@ -1,0 +1,2 @@
+ALTER TABLE "users" ADD COLUMN "oauth" VARCHAR(255);
+ALTER TABLE "users" ADD COLUMN "oauth_id" VARCHAR(255);

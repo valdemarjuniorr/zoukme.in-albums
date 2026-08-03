@@ -28,6 +28,8 @@ public class SpringSecurityConfig {
                     .authenticated()
                     .anyRequest()
                     .permitAll())
+        .oauth2Login(
+            oauth2Login -> oauth2Login.loginPage("/login").defaultSuccessUrl("/").permitAll())
         .formLogin(
             formLogin ->
                 formLogin
@@ -51,3 +53,5 @@ public class SpringSecurityConfig {
     return new BCryptPasswordEncoder();
   }
 }
+
+

@@ -124,7 +124,7 @@
                     id="username"
                     name="username"
                     required
-                    class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-sm"
+                    class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-transparent text-sm"
                     placeholder="Digite seu email"
                   />
                 </div>
@@ -151,7 +151,7 @@
                     id="password"
                     name="password"
                     required
-                    class="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-sm"
+                    class="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-transparent text-sm"
                     placeholder="Digite sua senha"
                   />
                   <button
@@ -192,62 +192,63 @@
                 Logar
               </button>
             </form>
-            <!-- Divider
-          <div class="mt-8 mb-6">
-            <div class="relative">
-              <div class="absolute inset-0 flex items-center">
-                <div class="w-full border-t border-gray-300"></div>
-              </div>
-              <div class="relative flex justify-center text-sm">
-                <span class="px-4 bg-white text-gray-500"
-                  >Or continue with</span
-                >
+            <!-- Divider-->
+            <div class="mt-8 mb-6">
+              <div class="relative">
+                <div class="absolute inset-0 flex items-center">
+                  <div class="w-full border-t border-gray-300"></div>
+                </div>
+                <div class="relative flex justify-center text-sm">
+                  <span class="px-4 bg-white text-gray-500"
+                    >Ou continue com</span
+                  >
+                </div>
               </div>
             </div>
-          </div>
-          <!-- Social Login Options
-          <div class="space-y-3">
-            <button
-              type="button"
-              class="social-btn w-full flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-all"
-            >
-              <div
-                class="w-5 h-5 flex items-center justify-center text-blue-600 mr-3"
+            <!-- Social Login Options -->
+            <div
+              id="g_id_onload"
+              data-client_id="151080040439-aein1hrqeddbp5l845s85qumn47ln63a.apps.googleusercontent.com"
+              data-callback="handleCredentialResponse"
+              data-auto_prompt="false"
+            ></div>
+            <div
+              class="g_id_signin"
+              data-type="standard"
+              data-size="large"
+              data-theme="outline"
+              data-text="sign_in_with"
+              data-shape="rectangular"
+              data-logo_alignment="left"
+            ></div>
+            <div class="flex gap-3">
+              <a
+                href="/oauth2/authorization/google"
+                type="button"
+                class="social-btn flex-1 flex items-center justify-center px-4 py-3 border border-gray-300 rounded-md hover:bg-gray-50 transition-all"
               >
-                <i class="ri-facebook-fill"></i>
-              </div>
-              <span class="text-gray-700 font-medium"
-                >Continue with Facebook</span
+                <div
+                  class="w-5 h-5 flex items-center justify-center text-red-500 mr-3"
+                >
+                  <i class="ri-google-fill"></i>
+                </div>
+                <span class="text-gray-700 font-medium">Google</span>
+              </a>
+              <!-- facebook login button
+              <button
+                type="button"
+                class="social-btn flex-1 flex items-center justify-center px-4 py-3 border border-gray-300 rounded-md hover:bg-gray-50 transition-all"
               >
-            </button>
-            <button
-              type="button"
-              class="social-btn w-full flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-all"
-            >
-              <div
-                class="w-5 h-5 flex items-center justify-center text-red-500 mr-3"
-              >
-                <i class="ri-google-fill"></i>
-              </div>
-              <span class="text-gray-700 font-medium"
-                >Continue with Google</span
-              >
-            </button>
-            <button
-              type="button"
-              class="social-btn w-full flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-all"
-            >
-              <div
-                class="w-5 h-5 flex items-center justify-center text-pink-600 mr-3"
-              >
-                <i class="ri-instagram-fill"></i>
-              </div>
-              <span class="text-gray-700 font-medium"
-                >Continue with Instagram</span
-              >
-            </button>
-          </div>
-          <!-- Registration Link -->
+                <div
+                  class="w-5 h-5 flex items-center justify-center text-blue-600 mr-3"
+                >
+                  <i class="ri-facebook-fill"></i>
+                </div>
+                <span class="text-gray-700 font-medium">Facebook</span>
+              </button>
+              -->
+            </div>
+            <!-- Registration Link -->
             <div class="mt-8 text-center">
               <p class="text-gray-600">
                 Ainda não tem uma conta?
