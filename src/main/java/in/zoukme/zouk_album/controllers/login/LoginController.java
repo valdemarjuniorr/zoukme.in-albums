@@ -2,11 +2,7 @@ package in.zoukme.zouk_album.controllers.login;
 
 import in.zoukme.zouk_album.services.users.UserService;
 import java.util.Objects;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/login")
 public class LoginController {
 
-  private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
   private final UserService service;
 
   public LoginController(UserService service) {
@@ -65,17 +60,5 @@ public class LoginController {
     service.redefinePasswordValidate(token, password, confirmPassword);
 
     return "users/password-updated-success";
-  }
-
-  @GetMapping("/oauth2/code/google")
-  String redirectToHome(@AuthenticationPrincipal OAuth2User user, Model model) {
-    logger.info("OAuth2 user: {}", user.getName());
-    user.getAttributes()
-        .forEach(
-            (k, v) -> {
-              model.addAttribute(k, v);
-              logger.info("OAuth2 attribute: {} = {}", k, v);
-            });
-    return "redirect:/";
   }
 }

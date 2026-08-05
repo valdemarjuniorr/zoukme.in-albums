@@ -59,7 +59,7 @@ public class UserService {
             });
     var user = new User(email, passwordEncoder.encode(password));
     var newUser = repository.save(user);
-    var profile = new UserProfile(fullName, phone, instagram, newUser);
+    var profile = new UserProfile(fullName, phone, instagram, newUser, null);
     profileRepository.save(profile);
     var verificationToken = new EmailVerificationToken(newUser);
     tokenService.create(verificationToken);
@@ -69,18 +69,13 @@ public class UserService {
   }
 
   public void createOAuthUser(
-      String fullname,
-      String email,
-      String oauth,
-      String oauthId,
-      String pictureUrl,
-      Boolean verified) {
+      String fullname, String email, String oauth, String oauthId, String profilePicture) {
     var userOp = repository.findByEmail(email);
     if (userOp.isEmpty()) {
       var newUser =
           repository.save(
               User.createOAuthUser(email, passwordEncoder.encode(oauthId), oauth, oauthId));
-      var profile = new UserProfile(fullname, newUser);
+      var profile = new UserProfile(fullname, newUser, profilePicture);
       profileRepository.save(profile);
     }
   }
