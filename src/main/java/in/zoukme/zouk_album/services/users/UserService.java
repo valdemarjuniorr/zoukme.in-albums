@@ -7,6 +7,7 @@ import in.zoukme.zouk_album.domains.users.UserProfile;
 import in.zoukme.zouk_album.exceptions.users.EmailAlreadyExistsException;
 import in.zoukme.zouk_album.repositories.users.UserProfileRepository;
 import in.zoukme.zouk_album.repositories.users.UserRepository;
+import in.zoukme.zouk_album.security.OAuthUser;
 import in.zoukme.zouk_album.services.aws.ses.EmailService;
 import in.zoukme.zouk_album.services.token.EmailVerificationTokenService;
 import java.util.Objects;
@@ -68,14 +69,17 @@ public class UserService {
     log.info("User created with email: {}", email);
   }
 
-  public void createOAuthUser(
-      String fullname, String email, String oauth, String oauthId, String profilePicture) {
-    var userOp = repository.findByEmail(email);
+  public void createOAuthUser(OAuthUser oAuthUser) {
+    var userOp = repository.findByEmail(oAuthUser.getEmail());
     if (userOp.isEmpty()) {
       var newUser =
           repository.save(
-              User.createOAuthUser(email, passwordEncoder.encode(oauthId), oauth, oauthId));
-      var profile = new UserProfile(fullname, newUser, profilePicture);
+              User.createOAuthUser(
+                  oAuthUser.getEmail(),
+                  passwordEncoder.encode(oAuthUser.getProviderId()),
+                  oAuthUser.getProvider(),
+                  oAuthUser.getProviderId()));
+      var profile = new UserProfile(oAuthUser.getName(), newUser, oAuthUser.getPicture());
       profileRepository.save(profile);
     }
   }
@@ -149,7 +153,11 @@ public class UserService {
   }
 
   public Optional<User> getUserLogged() {
-    var authentication = SecurityContextHolder.getContext().getAuthentication();
+    var authentication =
+        SecurityContextHolder.getContext().getAuthentication(); // authenticatedUser
+    if (authentication.getPrincipal() instanceof OAuthUser oau) {
+      return findByUsername(oau.getEmail());
+    }
     return findByUsername(authentication.getName());
   }
 

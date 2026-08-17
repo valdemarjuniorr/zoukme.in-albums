@@ -1,6 +1,9 @@
 package in.zoukme.zouk_album.controllers.events;
 
-import org.springframework.security.core.Authentication;
+import in.zoukme.zouk_album.domains.TextValueCount;
+import in.zoukme.zouk_album.domains.UserEventInterest.Interest;
+import in.zoukme.zouk_album.services.UserEventInterestService;
+import in.zoukme.zouk_album.services.aws.EventService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,11 +12,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import in.zoukme.zouk_album.domains.TextValueCount;
-import in.zoukme.zouk_album.domains.UserEventInterest.Interest;
-import in.zoukme.zouk_album.services.UserEventInterestService;
-import in.zoukme.zouk_album.services.aws.EventService;
 
 @Controller
 @RequestMapping("/events")
@@ -28,12 +26,10 @@ public class UserEventInterestController {
   }
 
   @PostMapping("/{eventId}/interests/toggle")
-  public String toggleInterest(@PathVariable Long eventId, @RequestParam String type, Authentication authentication,
-      Model model) {
+  public String toggleInterest(@PathVariable Long eventId, @RequestParam String type, Model model) {
 
     var interestType = Interest.valueOf(type.toUpperCase());
-    var userName = authentication.getName();
-    service.toggleInterest(userName, eventId, interestType);
+    service.toggleInterest(eventId, interestType);
 
     var userInterest = service.getUserInterest(eventId);
 
@@ -52,7 +48,8 @@ public class UserEventInterestController {
   }
 
   @GetMapping("/{eventId}/interests/attendees")
-  String getAttendees(@PathVariable Long eventId,
+  String getAttendees(
+      @PathVariable Long eventId,
       @RequestParam(required = false, defaultValue = "ALL") String filter,
       @RequestHeader(value = "HX-Request", required = false) String hxRequest,
       Model model) {
@@ -83,5 +80,4 @@ public class UserEventInterestController {
 
     return "events/attendees";
   }
-
 }

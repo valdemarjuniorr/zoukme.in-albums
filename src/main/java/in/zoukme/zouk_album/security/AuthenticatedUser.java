@@ -1,12 +1,12 @@
 package in.zoukme.zouk_album.security;
 
+import java.util.Collection;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import java.util.Collection;
 
 /**
- * Unified UserDetails implementation that works for both form-based and OAuth2 authentication.
- * This allows controllers to use @AuthenticationPrincipal AuthenticatedUser consistently.
+ * Unified UserDetails implementation that works for both form-based and OAuth2 authentication. This
+ * allows controllers to use @AuthenticationPrincipal AuthenticatedUser consistently.
  */
 public class AuthenticatedUser implements UserDetails {
 
@@ -14,16 +14,19 @@ public class AuthenticatedUser implements UserDetails {
   private final String password;
   private final Collection<? extends GrantedAuthority> authorities;
   private final boolean enabled;
+  private final String picture;
 
   public AuthenticatedUser(
       String email,
       String password,
       Collection<? extends GrantedAuthority> authorities,
-      boolean enabled) {
+      boolean enabled,
+      String picture) {
     this.email = email;
     this.password = password;
     this.authorities = authorities;
     this.enabled = enabled;
+    this.picture = picture;
   }
 
   @Override
@@ -59,5 +62,9 @@ public class AuthenticatedUser implements UserDetails {
   @Override
   public boolean isEnabled() {
     return enabled;
+  }
+
+  public String getPicture() {
+    return picture;
   }
 }

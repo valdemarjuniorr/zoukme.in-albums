@@ -1,9 +1,9 @@
 package in.zoukme.zouk_album.services.photos;
 
 import in.zoukme.zouk_album.domains.PhotoLike;
+import in.zoukme.zouk_album.domains.users.User;
 import in.zoukme.zouk_album.repositories.photos.PhotoLikeRepository;
 import in.zoukme.zouk_album.services.users.UserService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,28 +17,25 @@ public class PhotoLikeService {
     this.userService = userService;
   }
 
-  public Long like(String email, Long eventPhotoId) {
-    var user =
-        userService
-            .findByUsername(email)
-            .orElseThrow(
-                () -> new UsernameNotFoundException("User not found or pending: " + email));
+  public Long like(Long eventPhotoId) {
+    var user = getUserLogged();
 
     repository.save(new PhotoLike(eventPhotoId, user.id()));
     var count = repository.countByEventPhotoId(eventPhotoId);
     return count > 0 ? count : 0;
   }
 
-  public Long dislike(String email, Long eventPhotoId) {
-    var user =
-        userService
-            .findByUsername(email)
-            .orElseThrow(
-                () -> new UsernameNotFoundException("User not found or pending: " + email));
-
+  public Long dislike(Long eventPhotoId) {
+    var user = getUserLogged();
     repository.delete(user.id(), eventPhotoId);
 
     var count = repository.countByEventPhotoId(eventPhotoId);
     return count > 0 ? count : 0;
+  }
+
+  private User getUserLogged() {
+    return userService
+        .getUserLogged()
+        .orElseThrow(() -> new RuntimeException("User not logged in"));
   }
 }

@@ -58,15 +58,8 @@
     </div>
 
     <!-- Desktop Menu -->
-    <nav class="hidden md:block">
+    <nav class="hidden md:flex md:items-center md:space-x-6">
       <ul class="flex space-x-4">
-        <li sec:authorize="hasRole('USER')">
-          <a
-            href="/users/account"
-            class="text-white hover:text-gray-400 transition-colors"
-            >Conta</a
-          >
-        </li>
         <li sec:authorize="hasRole('ADMIN')">
           <a
             href="/admin/home"
@@ -79,13 +72,6 @@
             th:href="@{/events}"
             class="text-white hover:text-gray-400 transition-colors"
             >Eventos</a
-          >
-        </li>
-        <li sec:authorize="!isAuthenticated()">
-          <a
-            th:href="@{/login}"
-            class="text-white hover:text-gray-400 transition-colors"
-            >Login</a
           >
         </li>
         <li>
@@ -110,26 +96,73 @@
           >
         </li>
       </ul>
+
+      <!-- Avatar -->
+      <div class="flex-shrink-0">
+        <!-- Authenticated User Avatar -->
+        <a sec:authorize="hasRole('USER')" href="/users/account">
+          <img
+            sec:authorize="isAuthenticated()"
+            id="user-avatar"
+            referrerpolicy="no-referrer"
+            th:src="${#authentication.principal.picture}"
+            class="w-10 h-10 rounded-full border-2 border-red-500 object-cover cursor-pointer hover:opacity-80 transition-opacity"
+          />
+        </a>
+        <!-- Unauthenticated Generic Avatar Icon -->
+        <a
+          sec:authorize="!isAuthenticated()"
+          th:href="@{/login}"
+          class="inline-flex items-center justify-center w-10 h-10 rounded-full border-2 border-white cursor-pointer hover:opacity-80 transition-opacity"
+        >
+          <i class="ri-user-line text-white text-lg"></i>
+        </a>
+      </div>
     </nav>
+
     <!-- Mobile Menu Button -->
-    <button
-      class="md:hidden text-white focus:outline-none"
-      id="mobile-menu-button"
-    >
-      <svg
-        class="w-6 h-6"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
+    <div class="md:hidden flex items-center space-x-4">
+      <!-- Mobile Avatar -->
+      <div>
+        <!-- Authenticated User Avatar -->
+        <a sec:authorize="hasRole('USER')" href="/users/account">
+          <img
+            sec:authorize="isAuthenticated()"
+            referrerpolicy="no-referrer"
+            th:src="${#authentication.principal?.picture}"
+            class="w-9 h-9 rounded-full border-2 border-red-500 object-cover cursor-pointer hover:opacity-80 transition-opacity"
+          />
+        </a>
+
+        <!-- Unauthenticated Generic Avatar Icon -->
+        <a
+          sec:authorize="!isAuthenticated()"
+          th:href="@{/login}"
+          class="inline-flex items-center justify-center w-9 h-9 rounded-full border-2 border-white cursor-pointer hover:opacity-80 transition-opacity"
+        >
+          <i class="ri-user-line text-white"></i>
+        </a>
+      </div>
+
+      <button
+        class="text-white focus:outline-none"
+        id="mobile-menu-button"
       >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M4 6h16M4 12h16M4 18h16"
-        ></path>
-      </svg>
-    </button>
+        <svg
+          class="w-6 h-6"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 6h16M4 12h16M4 18h16"
+          ></path>
+        </svg>
+      </button>
+    </div>
 
     <!-- Mobile Menu -->
     <div
@@ -138,13 +171,6 @@
     >
       <nav class="container mx-auto py-4">
         <ul class="flex flex-col space-y-4">
-          <li sec:authorize="hasRole('USER')">
-            <a
-              href="/users/account"
-              class="block text-white hover:text-gray-400 transition-colors text-center px-4"
-              >Conta</a
-            >
-          </li>
           <li sec:authorize="hasRole('ADMIN')">
             <a
               href="/admin/home"
@@ -157,13 +183,6 @@
               th:href="@{/events}"
               class="block text-white hover:text-gray-400 transition-colors text-center px-4"
               >Eventos</a
-            >
-          </li>
-          <li sec:authorize="!isAuthenticated()">
-            <a
-              th:href="@{/login}"
-              class="block text-white hover:text-gray-400 transition-colors text-center px-4"
-              >Login</a
             >
           </li>
           <li>
@@ -196,6 +215,8 @@
       const header = document.getElementById("main-header");
       const mobileMenuButton = document.getElementById("mobile-menu-button");
       const mobileMenu = document.getElementById("mobile-menu");
+      const userAvatarImg = document.getElementById("user-avatar");
+      const mobileUserAvatarImg = document.getElementById("mobile-user-avatar");
 
       window.addEventListener("scroll", function () {
         if (window.scrollY > 100) {

@@ -20,7 +20,7 @@ class PhotoBookmarkController {
 
   @PostMapping("/{eventPhotoId}/bookmark")
   String bookmark(@PathVariable Long eventPhotoId, Authentication authentication, Model model) {
-    service.bookmark(authentication.getName(), eventPhotoId);
+    service.bookmark(eventPhotoId);
 
     model.addAttribute("photoId", eventPhotoId);
     model.addAttribute("bookmarked", Boolean.TRUE);
@@ -30,7 +30,7 @@ class PhotoBookmarkController {
 
   @PostMapping("/{eventPhotoId}/unbookmark")
   String unbookmark(@PathVariable Long eventPhotoId, Authentication authentication, Model model) {
-    service.unbookmark(authentication.getName(), eventPhotoId);
+    service.unbookmark(eventPhotoId);
 
     model.addAttribute("photoId", eventPhotoId);
     model.addAttribute("bookmarked", Boolean.FALSE);

@@ -128,4 +128,12 @@ public class UserController {
 
     return "/users/bookmarked-event-photo-list";
   }
+
+  @GetMapping("/account/profile-picture")
+  String getProfilePicturePage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+    var email = userDetails.getUsername();
+    service.findProfileByEmail(email).ifPresent(u -> model.addAttribute("user", u));
+
+    return "users/account-profile-picture";
+  }
 }

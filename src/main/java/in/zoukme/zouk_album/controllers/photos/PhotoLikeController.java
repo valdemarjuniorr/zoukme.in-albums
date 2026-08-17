@@ -1,13 +1,11 @@
 package in.zoukme.zouk_album.controllers.photos;
 
-import org.springframework.security.core.Authentication;
+import in.zoukme.zouk_album.services.photos.PhotoLikeService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import in.zoukme.zouk_album.services.photos.PhotoLikeService;
 
 @Controller
 @RequestMapping("/photos")
@@ -20,8 +18,8 @@ public class PhotoLikeController {
   }
 
   @PostMapping("/{eventPhotoId}/like")
-  String like(@PathVariable Long eventPhotoId, Authentication authentication, Model model) {
-    var likesCount = service.like(authentication.getName(), eventPhotoId);
+  String like(@PathVariable Long eventPhotoId, Model model) {
+    var likesCount = service.like(eventPhotoId);
 
     model.addAttribute("photoId", eventPhotoId);
     model.addAttribute("count", likesCount);
@@ -31,8 +29,8 @@ public class PhotoLikeController {
   }
 
   @PostMapping("/{eventPhotoId}/dislike")
-  String disLike(@PathVariable Long eventPhotoId, Authentication authentication, Model model) {
-    var likesCount = service.dislike(authentication.getName(), eventPhotoId);
+  String disLike(@PathVariable Long eventPhotoId, Model model) {
+    var likesCount = service.dislike(eventPhotoId);
 
     model.addAttribute("photoId", eventPhotoId);
     model.addAttribute("count", likesCount);
