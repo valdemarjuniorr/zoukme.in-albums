@@ -39,6 +39,6 @@ public class CustomUserDetailsService implements UserDetailsService {
   }
 
   private String getProfilePicture(String email) {
-    return service.findProfileByEmail(email).map(UserProfile::profilePicture).orElse(null);
+    return service.findProfileByEmail(email).map(UserProfile::picture).orElse(null);
   }
 }

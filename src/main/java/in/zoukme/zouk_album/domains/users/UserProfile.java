@@ -11,21 +11,20 @@ public record UserProfile(
     String phone,
     String instagram,
     AggregateReference<User, Long> userId,
-    String profilePicture) {
+    String picture) {
 
-  public UserProfile(
-      String fullName, String phone, String instagram, User user, String profilePicture) {
+  public UserProfile(String fullName, String phone, String instagram, User user, String picture) {
     this(
         null,
         fullName,
         phone.isBlank() ? null : phone.replaceAll("[^0-9]", ""),
         instagram,
         AggregateReference.to(user.id()),
-        profilePicture);
+        picture);
   }
 
-  public UserProfile(String fullName, User user, String profilePicture) {
-    this(null, fullName, null, null, AggregateReference.to(user.id()), profilePicture);
+  public UserProfile(String fullName, User user, String picture) {
+    this(null, fullName, null, null, AggregateReference.to(user.id()), picture);
   }
 
   public String firstName() {
