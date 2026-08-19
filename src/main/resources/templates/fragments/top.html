@@ -100,9 +100,8 @@
       <!-- Avatar -->
       <div class="flex-shrink-0">
         <!-- Authenticated User Avatar -->
-        <a sec:authorize="hasRole('USER')" href="/users/account">
+        <a sec:authorize="isAuthenticated()" href="/users/account">
           <img
-            sec:authorize="isAuthenticated()"
             id="user-avatar"
             referrerpolicy="no-referrer"
             th:src="${#authentication.principal.picture}"
@@ -125,7 +124,7 @@
       <!-- Mobile Avatar -->
       <div>
         <!-- Authenticated User Avatar -->
-        <a sec:authorize="hasRole('USER')" href="/users/account">
+        <a sec:authorize="isAuthenticated()" href="/users/account">
           <img
             sec:authorize="isAuthenticated()"
             referrerpolicy="no-referrer"
