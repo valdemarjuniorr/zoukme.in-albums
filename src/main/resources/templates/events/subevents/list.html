@@ -66,27 +66,29 @@
               </div>
               <div class="flex items-center">
                 <div
-                  class="w-6 h-6 flex items-center justify-center text-primary mr-2"
+                  class="w-5 h-5 md:w-6 md:h-6 flex items-center justify-center text-primary mr-2"
                 >
-                  <i class="ri-multi-image-fill"></i>
+                  <i class="ri-multi-image-fill" aria-hidden="true"></i>
                 </div>
-                <span th:text="${event.subEvents.size} + ' Álbuns'"> </span>
+                <span
+                  th:text="${#lists.size(event.subEvents) == 1 ? #lists.size(event.subEvents) + ' Álbum' : #lists.size(event.subEvents) + ' Álbuns'}"
+                ></span>
               </div>
               <div class="flex items-center">
                 <div
-                  class="w-6 h-6 flex items-center justify-center text-primary mr-2"
+                  class="w-5 h-5 md:w-6 md:h-6 flex items-center justify-center text-primary mr-2"
                 >
                   <i class="ri-image-line"></i>
                 </div>
-                <span th:text="${totalPhotos} + ' Fotos'"> </span>
+                <span th:text="${totalPhotos} + ' Fotos'"></span>
               </div>
               <div class="flex items-center">
                 <div
-                  class="w-6 h-6 flex items-center justify-center text-primary mr-2"
+                  class="w-5 h-5 md:w-6 md:h-6 flex items-center justify-center text-primary mr-2"
                 >
                   <i class="ri-poker-hearts-fill"></i>
                 </div>
-                <span th:text="${totalLikes} + ' Curtidas'"> </span>
+                <span th:text="${totalLikes} + ' Curtidas'"></span>
               </div>
             </div>
             <p
