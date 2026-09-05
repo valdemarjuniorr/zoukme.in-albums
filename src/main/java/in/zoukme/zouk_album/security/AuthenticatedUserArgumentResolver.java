@@ -43,8 +43,6 @@ public class AuthenticatedUserArgumentResolver implements HandlerMethodArgumentR
     }
 
     var principal = auth.getPrincipal();
-
-    log.info("Resolving principal of type: {}", principal.getClass().getName());
     // If it's already a UserDetails, return as-is
     if (principal instanceof UserDetails) {
       log.info("Principal is already a UserDetails: {}", principal);

@@ -113,4 +113,19 @@ public interface EventRepository
        limit 3;
       """)
   List<EventFeaturePhotoLike> getMostLikedPhotosBy(String eventUrl);
+
+  @Modifying
+  @Query(
+      """
+      update events
+      SET title = :title, date = :date, location = :location, description = :description, details = :details
+      where id = :eventId
+      """)
+  void update(
+      Long eventId,
+      String title,
+      LocalDate date,
+      String location,
+      String description,
+      String details);
 }

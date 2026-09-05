@@ -6,7 +6,11 @@ import in.zoukme.zouk_album.domains.payments.Package;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Objects;
 import org.springframework.data.jdbc.core.mapping.AggregateReference;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 public record UpdateEventRequest(
     Long id,
@@ -22,6 +26,7 @@ public record UpdateEventRequest(
     List<PackageRequest> packages,
     String details,
     String cover,
+    @RequestParam("pastEvents") List<MultipartFile> newPastEvents,
     List<String> pastEvents) {
 
   public UpdateEventRequest(Event event) {
@@ -32,17 +37,40 @@ public record UpdateEventRequest(
         event.date(),
         LocalTime.of(21, 0),
         event.location(),
-        event.socialMedia() != null ? event.socialMedia().instagram() : null,
-        event.socialMedia() != null ? event.socialMedia().phoneNumber() : null,
+        Objects.nonNull(event.socialMedia()) ? event.socialMedia().instagram() : null,
+        Objects.nonNull(event.socialMedia()) ? event.socialMedia().phoneNumber() : null,
         EventType.CONGRESS,
         EventStatus.CONFIRMED,
         PackageRequest.from(event.packages()),
         event.details(),
         event.coverUrl(),
+        null,
         event.photos().stream().map(Photo::imagePath).toList());
   }
 
   public List<Package> toPackages(AggregateReference<Event, Long> eventSaved) {
+    if (Objects.isNull(packages)) {
+      return List.of();
+    }
     return packages.stream().map(pack -> pack.toDomain(eventSaved)).toList();
+  }
+
+  public String whatsapp() {
+    if (Objects.nonNull(this.whatsapp)) {
+      return this.whatsapp.replaceAll("[^0-9]", "");
+    }
+
+    return "";
+  }
+
+  /** to remove bug when a file is not uploaded in the interface * */
+  @Override
+  public List<MultipartFile> newPastEvents() {
+    if (Objects.nonNull(newPastEvents)) {
+      return newPastEvents.stream()
+          .filter(f -> !f.isEmpty() && StringUtils.hasText(f.getOriginalFilename()))
+          .toList();
+    }
+    return null;
   }
 }

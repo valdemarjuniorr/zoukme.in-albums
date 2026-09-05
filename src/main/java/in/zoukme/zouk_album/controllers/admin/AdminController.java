@@ -140,6 +140,18 @@ public class AdminController {
     return "admin/events/create";
   }
 
+  @PostMapping("/events/create")
+  String createEvent(CreateEventRequest request, Model model, Authentication authentication) {
+    this.eventService.save(request);
+    log.info("Event created: {}", request);
+
+    model.addAttribute("events", this.eventService.findAll(Page.defaultPage()));
+    model.addAttribute("authentication", authentication);
+    model.addAttribute("message", "Evento criado com sucesso");
+
+    return "/events/toast";
+  }
+
   @GetMapping("/events/packages")
   String addPackage() {
     return "admin/events/add_package";
@@ -179,24 +191,6 @@ public class AdminController {
     model.addAttribute("message", "Pacote atualizado com sucesso");
 
     return "/events/toast";
-  }
-
-  @PostMapping("/events/create")
-  String createEvent(CreateEventRequest request, Model model, Authentication authentication) {
-    this.eventService.save(request);
-    log.info("Event created: {}", request);
-
-    model.addAttribute("events", this.eventService.findAll(Page.defaultPage()));
-    model.addAttribute("authentication", authentication);
-    model.addAttribute("message", "Evento criado com sucesso");
-
-    return "/events/toast";
-  }
-
-  @PostMapping("/events/{eventId}/update")
-  String updateEvent(@PathVariable Long eventId, UpdateEventRequest request, Model model) {
-    this.eventService.update(eventId, request);
-    return "";
   }
 
   @PostMapping("/events/{eventUrl}/process")
@@ -258,6 +252,16 @@ public class AdminController {
     model.addAttribute("authentication", authentication);
 
     return "admin/events/update";
+  }
+
+  @PostMapping("/events/{eventId}/update")
+  String updateEvent(
+      @PathVariable Long eventId,
+      UpdateEventRequest request,
+      Model model,
+      Authentication authentication) {
+    this.eventService.update(eventId, request);
+    return getEventDetails(eventId, model, authentication);
   }
 
   @PostMapping("/subevents/{photoId}/cover")

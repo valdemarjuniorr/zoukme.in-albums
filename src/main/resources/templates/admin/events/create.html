@@ -247,6 +247,10 @@
         const newEventForm = document.getElementById("newEventForm");
         newEventForm.addEventListener("submit", function (e) {
           e.preventDefault();
+          // Save Quill content to hidden input before submission
+          var quillContent = quill.getContents();
+          document.getElementById("details").value =
+            JSON.stringify(quillContent);
           const packages = [];
           document.querySelectorAll("#packageTableBody tr").forEach((item) => {
             // get the title, description and price from the td row
@@ -283,7 +287,7 @@
         });
       });
     </script>
-    <script>
+    <script type="text/javascript">
       document.querySelector("form").addEventListener("submit", function () {
         const btn = document.getElementById("submit-btn");
         btn.disabled = true;

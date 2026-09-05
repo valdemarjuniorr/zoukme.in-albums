@@ -27,6 +27,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
+import org.slf4j.Logger;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.jdbc.core.mapping.AggregateReference;
@@ -37,6 +38,7 @@ import org.springframework.util.CollectionUtils;
 @Service
 public class EventService {
 
+  private static final Logger log = org.slf4j.LoggerFactory.getLogger(EventService.class);
   private final EventRepository repository;
   private final SocialMediaRepository socialMediaRepository;
   private final PhotoRepository photoRepository;
@@ -222,12 +224,27 @@ public class EventService {
 
   public void update(Long eventId, UpdateEventRequest request) {
     var event = this.repository.findById(eventId).orElseThrow(EventNotFoundException::new);
+    this.repository.update(
+        eventId,
+        request.title(),
+        request.date(),
+        request.location(),
+        request.description(),
+        request.details());
+    this.socialMediaRepository.update(eventId, request.instagram(), request.whatsapp());
     var packRequest = request.toPackages(AggregateReference.to(event.id()));
     var packages = event.packages();
     var newPackages = packages.stream().filter(Predicate.not(packRequest::contains)).toList();
     if (!newPackages.isEmpty()) {
       this.packageService.save(newPackages);
     }
+    // upload photos to s3 and save them in the database
+    log.info(
+        "Uploading {} new photos for event with id {}", request.newPastEvents().size(), eventId);
+    var pastEventsUrls = bucketService.upload(event.title(), request.newPastEvents());
+    log.info("Uploaded {} new photos for event with id {}", pastEventsUrls.size(), eventId);
+    var photos = convertIntoPhotos(AggregateReference.to(event.id()), pastEventsUrls);
+    this.photoRepository.saveAll(photos);
   }
 
   public void setFeaturedEvent(Long eventId) {
