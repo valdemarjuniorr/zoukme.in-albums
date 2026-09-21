@@ -102,7 +102,7 @@
         >
           <input
             type="file"
-            th:name="${event.id != null ? 'newPastEvents': 'pastEvents'}"
+            th:name="${event.title != null ? 'newPastEvents': 'pastEvents'}"
             id="uploadEventImage"
             multiple
             accept="image/*"
