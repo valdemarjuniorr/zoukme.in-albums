@@ -111,13 +111,26 @@
           >
             <div
               class="image-container relative group bg-gray-100 flex items-center justify-center"
+              th:classappend="${photo.isVideo()} ? 'video-container' : ''"
             >
               <img
+                th:if="${!photo.video}"
                 th:src="${photo.imagePath}"
                 th:attr="data-photo-id=${photo.eventPhotoId}"
                 class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                 th:onclick="@{openModal({photoId})(photoId=${photo.eventPhotoId})}"
               />
+              <video
+                th:if="${photo.video}"
+                th:attr="data-photo-id=${photo.eventPhotoId}"
+                class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                controls
+                controlsList="nodownload"
+                th:onclick="@{openModal({photoId})(photoId=${photo.eventPhotoId})}"
+              >
+                <source th:src="${photo.imagePath}" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
               <div
                 id="admin-section"
                 sec:authorize="hasRole('ADMIN')"
@@ -176,7 +189,24 @@
       </div>
       <!-- Single shared modal -->
       <div id="shared-modal" style="display: none" class="modal">
-        <img id="modal-img" src="" />
+        <div class="w-full h-full flex items-center justify-center bg-black">
+          <img
+            id="modal-img"
+            src=""
+            class="max-w-full max-h-full"
+            style="display: none"
+          />
+          <video
+            id="modal-video"
+            class="max-w-full max-h-full"
+            style="display: none"
+            controls
+            controlsList="nodownload"
+          >
+            <source id="modal-video-source" src="" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        </div>
       </div>
       <!-- Pagination -->
       <div th:if="${photos.totalPages != 1}" class="flex justify-center mt-8">
@@ -280,8 +310,29 @@
         const clickedImg = document.querySelector(
           `img[data-photo-id="${photoId}"]`,
         );
-        if (!clickedImg) return;
-        document.getElementById("modal-img").src = clickedImg.src;
+        const clickedVideo = document.querySelector(
+          `video[data-photo-id="${photoId}"]`,
+        );
+        if (!clickedImg && !clickedVideo) return;
+
+        const modalImg = document.getElementById("modal-img");
+        const modalVideo = document.getElementById("modal-video");
+        const modalVideoSource = document.getElementById("modal-video-source");
+
+        if (clickedImg) {
+          modalImg.src = clickedImg.src;
+          modalImg.style.display = "block";
+          modalVideo.style.display = "none";
+        } else if (clickedVideo) {
+          const videoSrc = clickedVideo.querySelector("source").src;
+          const videoType = clickedVideo.querySelector("source").type;
+          modalVideoSource.src = videoSrc;
+          modalVideoSource.type = videoType;
+          modalVideo.load();
+          modalImg.style.display = "none";
+          modalVideo.style.display = "block";
+        }
+
         $("#shared-modal").modal({ fadeDuration: 250 });
       }
     </script>
