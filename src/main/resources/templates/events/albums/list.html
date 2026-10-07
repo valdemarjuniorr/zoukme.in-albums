@@ -71,6 +71,166 @@
     .masonry .image-container img {
       height: auto;
     }
+    /* Custom Video Player Styles */
+    .video-wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 100%;
+      background-color: #000;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .video-wrapper video {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    .video-controls {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
+      padding: 20px 12px 12px 12px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 10;
+    }
+    .video-wrapper:hover .video-controls,
+    .video-wrapper.show-controls .video-controls {
+      opacity: 1;
+    }
+    .progress-bar-container {
+      width: 100%;
+      height: 4px;
+      background-color: rgba(255, 255, 255, 0.3);
+      border-radius: 2px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      position: relative;
+    }
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #e94057, #8a2be2);
+      border-radius: 2px;
+      width: 0%;
+      transition: width 0.1s linear;
+    }
+    .progress-bar-container:hover .progress-bar::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: -4px;
+      width: 12px;
+      height: 12px;
+      background-color: white;
+      border-radius: 50%;
+      transform: translateX(50%);
+      box-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
+    }
+    .video-controls-bottom {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .video-btn {
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+      padding: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      transition: all 0.2s ease;
+      font-size: 18px;
+    }
+    .video-btn:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+      transform: scale(1.1);
+    }
+    .video-btn:active {
+      background-color: rgba(255, 255, 255, 0.3);
+      transform: scale(0.95);
+    }
+    .video-time {
+      color: white;
+      font-size: 12px;
+      font-weight: 500;
+      margin-left: auto;
+      margin-right: 8px;
+      font-family: 'Courier New', monospace;
+      min-width: 50px;
+    }
+    .volume-control {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      max-width: 80px;
+    }
+    .volume-slider {
+      width: 50px;
+      height: 3px;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+    .video-btn.volume-btn:hover .volume-slider {
+      opacity: 1;
+    }
+    .video-wrapper:hover .volume-slider {
+      opacity: 1;
+    }
+    .fullscreen-video {
+      width: 100vw !important;
+      height: 100vh !important;
+    }
+    .video-overlay-play {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 60px;
+      height: 60px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0.8;
+      transition: all 0.3s ease;
+      z-index: 5;
+    }
+    .video-overlay-play:hover {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1.1);
+      background: rgba(255, 255, 255, 0.95);
+    }
+    .video-overlay-play i {
+      color: #e94057;
+      font-size: 24px;
+      margin-left: 4px;
+    }
+    #video-player-container .video-controls {
+      opacity: 1 !important;
+      transition: opacity 0.3s ease;
+    }
+    #video-player-container.show-controls .video-controls {
+      opacity: 1;
+    }
+    #video-player-container:not(.show-controls) .video-controls {
+      opacity: 0;
+      pointer-events: none;
+    }
+    #video-player-container:not(.fullscreen) .video-controls {
+      opacity: 1;
+      pointer-events: auto;
+    }
   </style>
 
   <body class="bg-gray-100">
@@ -114,23 +274,27 @@
               th:classappend="${photo.isVideo()} ? 'video-container' : ''"
             >
               <img
-                th:if="${!photo.video}"
+                th:if="${!photo.isVideo()}"
                 th:src="${photo.imagePath}"
                 th:attr="data-photo-id=${photo.eventPhotoId}"
                 class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                 th:onclick="@{openModal({photoId})(photoId=${photo.eventPhotoId})}"
               />
               <video
-                th:if="${photo.video}"
+                th:if="${photo.isVideo()}"
                 th:attr="data-photo-id=${photo.eventPhotoId}"
                 class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                controls
-                controlsList="nodownload"
-                th:onclick="@{openModal({photoId})(photoId=${photo.eventPhotoId})}"
               >
                 <source th:src="${photo.imagePath}" type="video/mp4" />
                 Your browser does not support the video tag.
               </video>
+              <div
+                th:if="${photo.isVideo()}"
+                class="video-overlay-play absolute cursor-pointer"
+                onclick="openFullscreenVideo(this)"
+              >
+                <i class="ri-play-fill"></i>
+              </div>
               <div
                 id="admin-section"
                 sec:authorize="hasRole('ADMIN')"
@@ -187,25 +351,54 @@
           </div>
         </div>
       </div>
-      <!-- Single shared modal -->
+      <!-- Image Modal -->
       <div id="shared-modal" style="display: none" class="modal">
-        <div class="w-full h-full flex items-center justify-center bg-black">
+        <div class="w-full h-full flex items-center justify-center bg-black min-h-screen">
           <img
             id="modal-img"
             src=""
             class="max-w-full max-h-full"
             style="display: none"
           />
+        </div>
+      </div>
+      
+      <!-- Video Player Container -->
+      <div id="video-player-container" class="hidden fixed inset-0 z-[9999] bg-black/80 flex items-center justify-center p-4">
+        <div class="video-wrapper w-full max-w-4xl max-h-screen" style="display: flex; flex-direction: column;">
           <video
-            id="modal-video"
-            class="max-w-full max-h-full"
-            style="display: none"
-            controls
-            controlsList="nodownload"
+            id="player-video"
+            class="w-full"
+            autoplay
           >
-            <source id="modal-video-source" src="" type="video/mp4" />
+            <source id="player-video-source" src="" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
+          <div class="video-controls absolute bottom-0 left-0 right-0">
+            <div class="progress-bar-container">
+              <div class="progress-bar" id="player-progress-bar"></div>
+            </div>
+            <div class="video-controls-bottom">
+              <button class="video-btn" id="player-play-pause-btn" title="Play">
+                <i class="ri-play-fill"></i>
+              </button>
+              <div class="volume-control">
+                <button class="video-btn volume-btn" id="player-volume-btn" title="Mute">
+                  <i class="ri-volume-high-fill"></i>
+                  <input type="range" class="volume-slider" id="player-volume-slider" min="0" max="100" value="100" />
+                </button>
+              </div>
+              <div class="video-time">
+                <span id="player-current-time">0:00</span> / <span id="player-duration">0:00</span>
+              </div>
+              <button class="video-btn" id="player-fullscreen-btn" title="Fullscreen">
+                <i class="ri-fullscreen-line"></i>
+              </button>
+              <button class="video-btn" id="player-close-btn" title="Close">
+                <i class="ri-close-line"></i>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
       <!-- Pagination -->
@@ -310,30 +503,227 @@
         const clickedImg = document.querySelector(
           `img[data-photo-id="${photoId}"]`,
         );
-        const clickedVideo = document.querySelector(
-          `video[data-photo-id="${photoId}"]`,
-        );
-        if (!clickedImg && !clickedVideo) return;
-
+        if (!clickedImg) return;
+        
         const modalImg = document.getElementById("modal-img");
-        const modalVideo = document.getElementById("modal-video");
-        const modalVideoSource = document.getElementById("modal-video-source");
+        modalImg.src = clickedImg.src;
+        modalImg.style.display = "block";
+        
+        $("#shared-modal").modal({ fadeDuration: 250 });
+      }
 
-        if (clickedImg) {
-          modalImg.src = clickedImg.src;
-          modalImg.style.display = "block";
-          modalVideo.style.display = "none";
-        } else if (clickedVideo) {
-          const videoSrc = clickedVideo.querySelector("source").src;
-          const videoType = clickedVideo.querySelector("source").type;
-          modalVideoSource.src = videoSrc;
-          modalVideoSource.type = videoType;
-          modalVideo.load();
-          modalImg.style.display = "none";
-          modalVideo.style.display = "block";
+      function openFullscreenVideo(element) {
+        const videoElement = element.previousElementSibling;
+        if (!videoElement || videoElement.tagName !== 'VIDEO') return;
+        
+        const videoSrc = videoElement.querySelector("source").src;
+        const videoType = videoElement.querySelector("source").type;
+        
+        const container = document.getElementById("video-player-container");
+        const video = document.getElementById("player-video");
+        const videoSource = document.getElementById("player-video-source");
+        
+        videoSource.src = videoSrc;
+        videoSource.type = videoType;
+        video.load();
+        
+        container.classList.remove("hidden");
+        container.classList.add("block");
+        
+        setTimeout(() => {
+          initVideoPlayer();
+          video.play();
+        }, 100);
+      }
+
+      function closeVideoPlayer() {
+        const container = document.getElementById("video-player-container");
+        const video = document.getElementById("player-video");
+        
+        video.pause();
+        container.classList.add("hidden");
+        container.classList.remove("block");
+      }
+
+      function enterFullscreen() {
+        const container = document.getElementById("video-player-container");
+        const fullscreenBtn = document.getElementById("player-fullscreen-btn");
+        
+        if (container.requestFullscreen) {
+          container.requestFullscreen();
+        } else if (container.webkitRequestFullscreen) {
+          container.webkitRequestFullscreen();
+        } else if (container.msRequestFullscreen) {
+          container.msRequestFullscreen();
+        }
+        
+        fullscreenBtn.innerHTML = '<i class="ri-fullscreen-exit-line"></i>';
+        fullscreenBtn.title = "Exit Fullscreen";
+        fullscreenBtn.onclick = exitFullscreen;
+      }
+
+      function exitFullscreen() {
+        const fullscreenBtn = document.getElementById("player-fullscreen-btn");
+        
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
+          document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) {
+          document.msExitFullscreen();
+        }
+        
+        fullscreenBtn.innerHTML = '<i class="ri-fullscreen-line"></i>';
+        fullscreenBtn.title = "Fullscreen";
+        fullscreenBtn.onclick = () => enterFullscreen();
+      }
+
+      function initVideoPlayer() {
+        const video = document.getElementById("player-video");
+        const playPauseBtn = document.getElementById("player-play-pause-btn");
+        const progressBar = document.getElementById("player-progress-bar");
+        const progressBarContainer = document.querySelector("#video-player-container .progress-bar-container");
+        const currentTimeEl = document.getElementById("player-current-time");
+        const durationEl = document.getElementById("player-duration");
+        const volumeBtn = document.getElementById("player-volume-btn");
+        const volumeSlider = document.getElementById("player-volume-slider");
+        const fullscreenBtn = document.getElementById("player-fullscreen-btn");
+        const closeBtn = document.getElementById("player-close-btn");
+        const container = document.getElementById("video-player-container");
+        let isPlaying = false;
+        let previousVolume = 1;
+
+        function formatTime(seconds) {
+          if (isNaN(seconds)) return "0:00";
+          const mins = Math.floor(seconds / 60);
+          const secs = Math.floor(seconds % 60);
+          return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
         }
 
-        $("#shared-modal").modal({ fadeDuration: 250 });
+        playPauseBtn.addEventListener("click", () => {
+          if (video.paused) {
+            video.play();
+            isPlaying = true;
+            playPauseBtn.innerHTML = '<i class="ri-pause-fill"></i>';
+            playPauseBtn.title = "Pause";
+          } else {
+            video.pause();
+            isPlaying = false;
+            playPauseBtn.innerHTML = '<i class="ri-play-fill"></i>';
+            playPauseBtn.title = "Play";
+          }
+        });
+
+        video.addEventListener("play", () => {
+          isPlaying = true;
+          playPauseBtn.innerHTML = '<i class="ri-pause-fill"></i>';
+          playPauseBtn.title = "Pause";
+        });
+
+        video.addEventListener("pause", () => {
+          isPlaying = false;
+          playPauseBtn.innerHTML = '<i class="ri-play-fill"></i>';
+          playPauseBtn.title = "Play";
+        });
+
+        video.addEventListener("timeupdate", () => {
+          const percent = (video.currentTime / video.duration) * 100;
+          progressBar.style.width = percent + "%";
+          currentTimeEl.textContent = formatTime(video.currentTime);
+        });
+
+        video.addEventListener("loadedmetadata", () => {
+          durationEl.textContent = formatTime(video.duration);
+        });
+
+        progressBarContainer.addEventListener("click", (e) => {
+          const rect = progressBarContainer.getBoundingClientRect();
+          const percent = (e.clientX - rect.left) / rect.width;
+          video.currentTime = percent * video.duration;
+        });
+
+        volumeSlider.addEventListener("input", (e) => {
+          video.volume = e.target.value / 100;
+          updateVolumeIcon();
+        });
+
+        volumeBtn.addEventListener("click", () => {
+          if (video.volume > 0) {
+            previousVolume = video.volume;
+            video.volume = 0;
+            volumeSlider.value = 0;
+            volumeBtn.innerHTML = '<i class="ri-volume-mute-fill"></i>';
+            volumeBtn.title = "Unmute";
+          } else {
+            video.volume = previousVolume || 1;
+            volumeSlider.value = video.volume * 100;
+            updateVolumeIcon();
+          }
+        });
+
+        function updateVolumeIcon() {
+          if (video.volume === 0) {
+            volumeBtn.innerHTML = '<i class="ri-volume-mute-fill"></i>';
+            volumeBtn.title = "Unmute";
+          } else if (video.volume < 0.5) {
+            volumeBtn.innerHTML = '<i class="ri-volume-low-fill"></i>';
+            volumeBtn.title = "Mute";
+          } else {
+            volumeBtn.innerHTML = '<i class="ri-volume-high-fill"></i>';
+            volumeBtn.title = "Mute";
+          }
+        }
+
+        fullscreenBtn.addEventListener("click", () => {
+          enterFullscreen();
+        });
+
+        closeBtn.addEventListener("click", () => {
+          closeVideoPlayer();
+        });
+
+        container.addEventListener("click", (e) => {
+          if (e.target === container) {
+            closeVideoPlayer();
+          }
+        });
+
+        document.addEventListener("keydown", (e) => {
+          if (container.classList.contains("hidden")) return;
+          
+          if (e.code === "Space") {
+            e.preventDefault();
+            playPauseBtn.click();
+          } else if (e.code === "ArrowRight") {
+            video.currentTime = Math.min(video.currentTime + 5, video.duration);
+          } else if (e.code === "ArrowLeft") {
+            video.currentTime = Math.max(video.currentTime - 5, 0);
+          } else if (e.code === "Escape") {
+            closeVideoPlayer();
+          } else if (e.code === "KeyM") {
+            volumeBtn.click();
+          } else if (e.code === "KeyF") {
+            fullscreenBtn.click();
+          }
+        });
+
+        container.addEventListener("mousemove", () => {
+          container.classList.add("show-controls");
+          clearTimeout(container.controlsTimeout);
+          container.controlsTimeout = setTimeout(() => {
+            if (isPlaying) {
+              container.classList.remove("show-controls");
+            }
+          }, 3000);
+        });
+
+        container.addEventListener("mouseleave", () => {
+          if (isPlaying) {
+            container.classList.remove("show-controls");
+          }
+        });
+
+        updateVolumeIcon();
       }
     </script>
     <script type="text/javascript">
