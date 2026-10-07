@@ -391,9 +391,6 @@
               <div class="video-time">
                 <span id="player-current-time">0:00</span> / <span id="player-duration">0:00</span>
               </div>
-              <button class="video-btn" id="player-fullscreen-btn" title="Fullscreen">
-                <i class="ri-fullscreen-line"></i>
-              </button>
               <button class="video-btn" id="player-close-btn" title="Close">
                 <i class="ri-close-line"></i>
               </button>
@@ -541,53 +538,8 @@
         const video = document.getElementById("player-video");
         
         video.pause();
-        
-        // Exit fullscreen if currently in fullscreen mode
-        if (document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement) {
-          if (document.exitFullscreen) {
-            document.exitFullscreen();
-          } else if (document.webkitExitFullscreen) {
-            document.webkitExitFullscreen();
-          } else if (document.msExitFullscreen) {
-            document.msExitFullscreen();
-          }
-        }
-        
         container.classList.add("hidden");
         container.classList.remove("block");
-      }
-
-      function enterFullscreen() {
-        const container = document.getElementById("video-player-container");
-        const fullscreenBtn = document.getElementById("player-fullscreen-btn");
-        
-        if (container.requestFullscreen) {
-          container.requestFullscreen();
-        } else if (container.webkitRequestFullscreen) {
-          container.webkitRequestFullscreen();
-        } else if (container.msRequestFullscreen) {
-          container.msRequestFullscreen();
-        }
-        
-        fullscreenBtn.innerHTML = '<i class="ri-fullscreen-exit-line"></i>';
-        fullscreenBtn.title = "Exit Fullscreen";
-        fullscreenBtn.onclick = exitFullscreen;
-      }
-
-      function exitFullscreen() {
-        const fullscreenBtn = document.getElementById("player-fullscreen-btn");
-        
-        if (document.exitFullscreen) {
-          document.exitFullscreen();
-        } else if (document.webkitExitFullscreen) {
-          document.webkitExitFullscreen();
-        } else if (document.msExitFullscreen) {
-          document.msExitFullscreen();
-        }
-        
-        fullscreenBtn.innerHTML = '<i class="ri-fullscreen-line"></i>';
-        fullscreenBtn.title = "Fullscreen";
-        fullscreenBtn.onclick = () => enterFullscreen();
       }
 
       function initVideoPlayer() {
@@ -599,7 +551,6 @@
         const durationEl = document.getElementById("player-duration");
         const volumeBtn = document.getElementById("player-volume-btn");
         const volumeSlider = document.getElementById("player-volume-slider");
-        const fullscreenBtn = document.getElementById("player-fullscreen-btn");
         const closeBtn = document.getElementById("player-close-btn");
         const container = document.getElementById("video-player-container");
         let isPlaying = false;
@@ -686,10 +637,6 @@
           }
         }
 
-        fullscreenBtn.addEventListener("click", () => {
-          enterFullscreen();
-        });
-
         closeBtn.addEventListener("click", () => {
           closeVideoPlayer();
         });
@@ -714,8 +661,6 @@
             closeVideoPlayer();
           } else if (e.code === "KeyM") {
             volumeBtn.click();
-          } else if (e.code === "KeyF") {
-            fullscreenBtn.click();
           }
         });
 
