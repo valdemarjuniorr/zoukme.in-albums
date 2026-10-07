@@ -541,6 +541,18 @@
         const video = document.getElementById("player-video");
         
         video.pause();
+        
+        // Exit fullscreen if currently in fullscreen mode
+        if (document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement) {
+          if (document.exitFullscreen) {
+            document.exitFullscreen();
+          } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+          } else if (document.msExitFullscreen) {
+            document.msExitFullscreen();
+          }
+        }
+        
         container.classList.add("hidden");
         container.classList.remove("block");
       }
