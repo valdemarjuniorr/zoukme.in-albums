@@ -70,18 +70,32 @@ public class UserService {
   }
 
   public void createOAuthUser(OAuthUser oAuthUser) {
-    var userOp = repository.findByEmail(oAuthUser.getEmail());
-    if (userOp.isEmpty()) {
-      var newUser =
-          repository.save(
-              User.createOAuthUser(
-                  oAuthUser.getEmail(),
-                  passwordEncoder.encode(oAuthUser.getProviderId()),
-                  oAuthUser.getProvider(),
-                  oAuthUser.getProviderId()));
-      var profile = new UserProfile(oAuthUser.getName(), newUser, oAuthUser.getPicture());
-      profileRepository.save(profile);
-    }
+    var email = oAuthUser.getEmail();
+    repository
+        .findByEmail(email)
+        .ifPresentOrElse(
+            user -> {
+              if (Objects.isNull(user.oauth())) {
+                log.info("Updating existing user with OAuth details: {}", user.id());
+                repository.updateOAuthBy(
+                    email,
+                    passwordEncoder.encode(oAuthUser.getProviderId()),
+                    oAuthUser.getProviderId());
+                profileRepository.updatePictureBy(user.id(), oAuthUser.getPicture());
+                log.info("Updated existing user with OAuth details: {}", email);
+              }
+            },
+            () -> {
+              var newUser =
+                  repository.save(
+                      User.createOAuthUser(
+                          email,
+                          passwordEncoder.encode(oAuthUser.getProviderId()),
+                          oAuthUser.getProvider(),
+                          oAuthUser.getProviderId()));
+              profileRepository.save(
+                  new UserProfile(oAuthUser.getName(), newUser, oAuthUser.getPicture()));
+            });
   }
 
   public Optional<User> findByUsername(String username) {

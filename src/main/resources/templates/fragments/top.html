@@ -102,11 +102,18 @@
         <!-- Authenticated User Avatar -->
         <a sec:authorize="isAuthenticated()" href="/users/account">
           <img
+            th:if="${#authentication.principal.picture}"
             id="user-avatar"
             referrerpolicy="no-referrer"
             th:src="${#authentication.principal.picture}"
             class="w-10 h-10 rounded-full border-2 border-red-500 object-cover cursor-pointer hover:opacity-80 transition-opacity"
           />
+          <span
+            th:unless="${#authentication.principal.picture}"
+            class="inline-flex items-center justify-center w-10 h-10 rounded-full border-2 border-red-500 cursor-pointer hover:opacity-80 transition-opacity"
+          >
+            <i class="ri-user-fill text-white text-lg"></i>
+          </span>
         </a>
         <!-- Unauthenticated Generic Avatar Icon -->
         <a
@@ -126,11 +133,17 @@
         <!-- Authenticated User Avatar -->
         <a sec:authorize="isAuthenticated()" href="/users/account">
           <img
-            sec:authorize="isAuthenticated()"
+            th:if="${#authentication.principal?.picture != null and !#strings.isEmpty(#authentication.principal?.picture)}"
             referrerpolicy="no-referrer"
             th:src="${#authentication.principal?.picture}"
             class="w-9 h-9 rounded-full border-2 border-red-500 object-cover cursor-pointer hover:opacity-80 transition-opacity"
           />
+          <span
+            th:unless="${#authentication.principal?.picture != null and !#strings.isEmpty(#authentication.principal?.picture)}"
+            class="inline-flex items-center justify-center w-9 h-9 rounded-full border-2 border-red-500 cursor-pointer hover:opacity-80 transition-opacity"
+          >
+            <i class="ri-user-fill text-white"></i>
+          </span>
         </a>
 
         <!-- Unauthenticated Generic Avatar Icon -->
