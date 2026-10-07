@@ -25,7 +25,8 @@ public interface PhotoBookmarkRepository extends ListCrudRepository<PhotoBookmar
         INNER JOIN sub_events se ON se.id = ep.sub_event_id
         INNER JOIN events e ON e.id = se.event_id
       WHERE pb.user_id = :userId
-        GROUP BY e.id;
+        GROUP BY e.id
+        ORDER BY e.date DESC;
       """)
   List<EventWithBookmarkedPhotosAndCount> findEventsWithPhotosBookmarkedBy(Long userId);
 
