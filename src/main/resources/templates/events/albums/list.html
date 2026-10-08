@@ -23,11 +23,65 @@
     .image-container:hover .action-icons {
       opacity: 1;
     }
-    /* Custom CSS to change the modal size */
-    .modal {
-      width: 100%;
-      max-width: 900px;
-      padding: 0px;
+    /* Image lightbox */
+    #image-lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 9998;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      background: rgba(0, 0, 0, 0.45);
+      -webkit-backdrop-filter: blur(8px);
+      backdrop-filter: blur(8px);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.25s ease, visibility 0.25s;
+    }
+    #image-lightbox.open {
+      opacity: 1;
+      visibility: visible;
+    }
+    #modal-img {
+      max-width: min(100%, 1200px);
+      max-height: 90vh;
+      object-fit: contain;
+      border-radius: 1rem;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      transform: scale(0.95);
+      transition: transform 0.25s ease;
+    }
+    #image-lightbox.open #modal-img {
+      transform: scale(1);
+    }
+    #image-lightbox-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 9999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 1.5rem;
+      background: rgba(255, 255, 255, 0.2);
+      -webkit-backdrop-filter: blur(6px);
+      backdrop-filter: blur(6px);
+      transition: background 0.2s;
+    }
+    #image-lightbox-close:hover {
+      background: rgba(255, 255, 255, 0.35);
+    }
+    @media (max-width: 640px) {
+      #image-lightbox {
+        padding: 0.5rem;
+      }
+      #modal-img {
+        border-radius: 0.75rem;
+      }
     }
     /* Responsive grid tweaks */
     @media (max-width: 640px) {
@@ -352,23 +406,22 @@
         </div>
       </div>
       <!-- Image Modal -->
-      <div id="shared-modal" style="display: none" class="modal">
-        <div
-          class="w-full h-full flex items-center justify-center bg-black min-h-screen"
+      <div id="image-lightbox" onclick="closeImageModal(event)">
+        <button
+          id="image-lightbox-close"
+          type="button"
+          aria-label="Close"
+          onclick="closeImageModal(event)"
         >
-          <img
-            id="modal-img"
-            src=""
-            class="max-w-full max-h-full"
-            style="display: none"
-          />
-        </div>
+          <i class="ri-close-line"></i>
+        </button>
+        <img id="modal-img" src="" alt="" />
       </div>
 
       <!-- Video Player Container -->
       <div
         id="video-player-container"
-        class="hidden fixed inset-0 z-[9999] bg-black/80 flex items-center justify-center p-4"
+        class="hidden fixed inset-0 z-[9999] bg-black/40 backdrop-blur-md flex items-center justify-center p-4"
       >
         <div
           class="video-wrapper w-full max-w-4xl max-h-screen"
@@ -501,10 +554,31 @@
 
         const modalImg = document.getElementById("modal-img");
         modalImg.src = clickedImg.src;
-        modalImg.style.display = "block";
 
-        $("#shared-modal").modal({ fadeDuration: 250 });
+        document.getElementById("image-lightbox").classList.add("open");
+        document.body.style.overflow = "hidden";
       }
+
+      function closeImageModal(event) {
+        // Only close when clicking the backdrop or the close button, not the image
+        if (event && event.target.id === "modal-img") return;
+        document.getElementById("image-lightbox").classList.remove("open");
+        document.body.style.overflow = "";
+      }
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key !== "Escape") return;
+        closeImageModal();
+        const vc = document.getElementById("video-player-container");
+        if (!vc.classList.contains("hidden")) closeVideoPlayer();
+      });
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const vc = document.getElementById("video-player-container");
+        vc.addEventListener("click", (e) => {
+          if (!e.target.closest("video, .video-controls")) closeVideoPlayer();
+        });
+      });
 
       function openFullscreenVideo(element) {
         const videoElement = element.previousElementSibling;
