@@ -23,66 +23,6 @@
     .image-container:hover .action-icons {
       opacity: 1;
     }
-    /* Image lightbox */
-    #image-lightbox {
-      position: fixed;
-      inset: 0;
-      z-index: 9998;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 1rem;
-      background: rgba(0, 0, 0, 0.45);
-      -webkit-backdrop-filter: blur(8px);
-      backdrop-filter: blur(8px);
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity 0.25s ease, visibility 0.25s;
-    }
-    #image-lightbox.open {
-      opacity: 1;
-      visibility: visible;
-    }
-    #modal-img {
-      max-width: min(100%, 1200px);
-      max-height: 90vh;
-      object-fit: contain;
-      border-radius: 1rem;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-      transform: scale(0.95);
-      transition: transform 0.25s ease;
-    }
-    #image-lightbox.open #modal-img {
-      transform: scale(1);
-    }
-    #image-lightbox-close {
-      position: absolute;
-      top: 1rem;
-      right: 1rem;
-      width: 2.5rem;
-      height: 2.5rem;
-      border-radius: 9999px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #fff;
-      font-size: 1.5rem;
-      background: rgba(255, 255, 255, 0.2);
-      -webkit-backdrop-filter: blur(6px);
-      backdrop-filter: blur(6px);
-      transition: background 0.2s;
-    }
-    #image-lightbox-close:hover {
-      background: rgba(255, 255, 255, 0.35);
-    }
-    @media (max-width: 640px) {
-      #image-lightbox {
-        padding: 0.5rem;
-      }
-      #modal-img {
-        border-radius: 0.75rem;
-      }
-    }
     /* Responsive grid tweaks */
     @media (max-width: 640px) {
       .grid-cols-2 {
@@ -92,7 +32,7 @@
     /* Masonry layout */
     .masonry {
       column-count: 2;
-      column-gap: 4px;
+      column-gap: 2px;
     }
     @media (min-width: 640px) {
       .masonry {
@@ -406,16 +346,26 @@
         </div>
       </div>
       <!-- Image Modal -->
-      <div id="image-lightbox" onclick="closeImageModal(event)">
+      <div
+        id="image-lightbox"
+        onclick="closeImageModal(event)"
+        class="group fixed inset-0 z-[9998] flex items-center justify-center p-2 sm:p-4 bg-black/45 backdrop-blur-sm invisible opacity-0 transition-all duration-300 data-[open=true]:visible data-[open=true]:opacity-100"
+      >
         <button
           id="image-lightbox-close"
           type="button"
           aria-label="Close"
           onclick="closeImageModal(event)"
+          class="absolute top-4 right-4 w-10 h-10 flex items-center justify-center rounded-full text-2xl text-white bg-white/20 hover:bg-white/35 backdrop-blur-md transition-colors"
         >
           <i class="ri-close-line"></i>
         </button>
-        <img id="modal-img" src="" alt="" />
+        <img
+          id="modal-img"
+          src=""
+          alt=""
+          class="max-w-full max-h-[90vh] object-contain rounded-md sm:rounded-md shadow-2xl scale-95 transition-transform duration-300 group-data-[open=true]:scale-100"
+        />
       </div>
 
       <!-- Video Player Container -->
@@ -555,14 +505,14 @@
         const modalImg = document.getElementById("modal-img");
         modalImg.src = clickedImg.src;
 
-        document.getElementById("image-lightbox").classList.add("open");
+        document.getElementById("image-lightbox").dataset.open = "true";
         document.body.style.overflow = "hidden";
       }
 
       function closeImageModal(event) {
         // Only close when clicking the backdrop or the close button, not the image
         if (event && event.target.id === "modal-img") return;
-        document.getElementById("image-lightbox").classList.remove("open");
+        document.getElementById("image-lightbox").dataset.open = "false";
         document.body.style.overflow = "";
       }
 
