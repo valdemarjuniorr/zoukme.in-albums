@@ -120,7 +120,7 @@
       transition: width 0.1s linear;
     }
     .progress-bar-container:hover .progress-bar::after {
-      content: '';
+      content: "";
       position: absolute;
       right: 0;
       top: -4px;
@@ -163,7 +163,7 @@
       font-weight: 500;
       margin-left: auto;
       margin-right: 8px;
-      font-family: 'Courier New', monospace;
+      font-family: "Courier New", monospace;
       min-width: 50px;
     }
     .volume-control {
@@ -353,7 +353,9 @@
       </div>
       <!-- Image Modal -->
       <div id="shared-modal" style="display: none" class="modal">
-        <div class="w-full h-full flex items-center justify-center bg-black min-h-screen">
+        <div
+          class="w-full h-full flex items-center justify-center bg-black min-h-screen"
+        >
           <img
             id="modal-img"
             src=""
@@ -362,15 +364,17 @@
           />
         </div>
       </div>
-      
+
       <!-- Video Player Container -->
-      <div id="video-player-container" class="hidden fixed inset-0 z-[9999] bg-black/80 flex items-center justify-center p-4">
-        <div class="video-wrapper w-full max-w-4xl max-h-screen" style="display: flex; flex-direction: column;">
-          <video
-            id="player-video"
-            class="w-full"
-            autoplay
-          >
+      <div
+        id="video-player-container"
+        class="hidden fixed inset-0 z-[9999] bg-black/80 flex items-center justify-center p-4"
+      >
+        <div
+          class="video-wrapper w-full max-w-4xl max-h-screen"
+          style="display: flex; flex-direction: column"
+        >
+          <video id="player-video" class="w-full" autoplay>
             <source id="player-video-source" src="" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
@@ -383,13 +387,25 @@
                 <i class="ri-play-fill"></i>
               </button>
               <div class="volume-control">
-                <button class="video-btn volume-btn" id="player-volume-btn" title="Mute">
+                <button
+                  class="video-btn volume-btn"
+                  id="player-volume-btn"
+                  title="Mute"
+                >
                   <i class="ri-volume-high-fill"></i>
-                  <input type="range" class="volume-slider" id="player-volume-slider" min="0" max="100" value="100" />
+                  <input
+                    type="range"
+                    class="volume-slider"
+                    id="player-volume-slider"
+                    min="0"
+                    max="100"
+                    value="100"
+                  />
                 </button>
               </div>
               <div class="video-time">
-                <span id="player-current-time">0:00</span> / <span id="player-duration">0:00</span>
+                <span id="player-current-time">0:00</span> /
+                <span id="player-duration">0:00</span>
               </div>
               <button class="video-btn" id="player-close-btn" title="Close">
                 <i class="ri-close-line"></i>
@@ -461,38 +477,19 @@
       id="fixed-footer"
       class="fixed bottom-0 left-0 right-0 bg-gradient-to-t from-black/40 via-black/20 to-transparent backdrop-blur-[2px] z-50 transition-all duration-300 ease-in-out"
     >
-      <div class="container mx-auto px-4 py-3 flex justify-center items-center">
-        <div
-          class="w-full max-w-[728px] h-[90px] bg-gradient-to-r from-purple-600/90 to-purple-800/90 rounded-lg flex items-center justify-between px-6 py-4 backdrop-blur-sm border border-white/10 relative overflow-hidden opacity-70"
+      <div class="container mx-auto px-2 py-3 flex justify-center items-center">
+        <a
+          href="https://instagram.com/zoukme.in"
+          target="_blank"
+          class="inline-block w-full md:w-auto mx-auto"
         >
-          <div class="flex items-center space-x-4 relative z-10">
-            <div
-              class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center"
-            >
-              <i class="ri-calendar-event-line text-white text-lg"></i>
-            </div>
-            <div>
-              <h3 class="text-white font-semibold text-base sm:text-lg">
-                Divulgue aqui!
-              </h3>
-              <p class="text-white/80 text-xs sm:text-sm">
-                Alcance centenas de dançarinos
-              </p>
-            </div>
-          </div>
-          <a
-            href="/learnmore"
-            class="bg-white/20 hover:bg-white/30 text-white px-3 py-1 rounded-full text-xs font-medium transition-all duration-200 whitespace-nowrap relative z-10 inline-flex items-center justify-center"
-          >
-            Saiba mais
-          </a>
-        </div>
-        <button
-          onclick="this.parentElement.parentElement.remove()"
-          class="absolute -top-3 right-3 w-6 h-6 bg-white/5 hover:bg-white/10 rounded-full flex items-center justify-center transition-colors"
-        >
-          <i class="ri-close-line text-white/40"></i>
-        </button>
+          <img
+            class="block mx-auto h-auto max-h-none md:max-h-20"
+            th:src="@{/banner.png}"
+            alt="Siga o Zoukme In no Instagram"
+            loading="lazy"
+          />
+        </a>
       </div>
     </div>
     <script type="text/javascript">
@@ -501,32 +498,32 @@
           `img[data-photo-id="${photoId}"]`,
         );
         if (!clickedImg) return;
-        
+
         const modalImg = document.getElementById("modal-img");
         modalImg.src = clickedImg.src;
         modalImg.style.display = "block";
-        
+
         $("#shared-modal").modal({ fadeDuration: 250 });
       }
 
       function openFullscreenVideo(element) {
         const videoElement = element.previousElementSibling;
-        if (!videoElement || videoElement.tagName !== 'VIDEO') return;
-        
+        if (!videoElement || videoElement.tagName !== "VIDEO") return;
+
         const videoSrc = videoElement.querySelector("source").src;
         const videoType = videoElement.querySelector("source").type;
-        
+
         const container = document.getElementById("video-player-container");
         const video = document.getElementById("player-video");
         const videoSource = document.getElementById("player-video-source");
-        
+
         videoSource.src = videoSrc;
         videoSource.type = videoType;
         video.load();
-        
+
         container.classList.remove("hidden");
         container.classList.add("block");
-        
+
         setTimeout(() => {
           initVideoPlayer();
           video.play();
@@ -536,7 +533,7 @@
       function closeVideoPlayer() {
         const container = document.getElementById("video-player-container");
         const video = document.getElementById("player-video");
-        
+
         video.pause();
         container.classList.add("hidden");
         container.classList.remove("block");
@@ -546,7 +543,9 @@
         const video = document.getElementById("player-video");
         const playPauseBtn = document.getElementById("player-play-pause-btn");
         const progressBar = document.getElementById("player-progress-bar");
-        const progressBarContainer = document.querySelector("#video-player-container .progress-bar-container");
+        const progressBarContainer = document.querySelector(
+          "#video-player-container .progress-bar-container",
+        );
         const currentTimeEl = document.getElementById("player-current-time");
         const durationEl = document.getElementById("player-duration");
         const volumeBtn = document.getElementById("player-volume-btn");
@@ -649,7 +648,7 @@
 
         document.addEventListener("keydown", (e) => {
           if (container.classList.contains("hidden")) return;
-          
+
           if (e.code === "Space") {
             e.preventDefault();
             playPauseBtn.click();
