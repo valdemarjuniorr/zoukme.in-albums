@@ -1,7 +1,7 @@
 package in.zoukme.zouk_album.repositories.events;
 
+import in.zoukme.zouk_album.domains.EventPhotos;
 import java.util.List;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jdbc.repository.query.Modifying;
@@ -9,10 +9,9 @@ import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.data.repository.ListPagingAndSortingRepository;
 
-import in.zoukme.zouk_album.domains.EventPhotos;
-
-public interface EventPhotosRepository extends ListCrudRepository<EventPhotos, Long>,
-    ListPagingAndSortingRepository<EventPhotos, Long> {
+public interface EventPhotosRepository
+    extends ListCrudRepository<EventPhotos, Long>,
+        ListPagingAndSortingRepository<EventPhotos, Long> {
 
   Page<EventPhotos> findEventPhotosBySubEventId(Long subEventId, Pageable pageable);
 
@@ -22,7 +21,8 @@ public interface EventPhotosRepository extends ListCrudRepository<EventPhotos, L
 
   long count();
 
-  @Query("""
+  @Query(
+      """
       SELECT
           ep.id as event_photo_id,
           ep.image_path,
@@ -50,7 +50,7 @@ public interface EventPhotosRepository extends ListCrudRepository<EventPhotos, L
 
       LIMIT :limit
       OFFSET :offset;
-            """)
+      """)
   List<EventPhotoWithLike> findBy(Long subEventId, Long userId, Integer limit, Integer offset);
 
   Long countBySubEventId(Long subEventId);
