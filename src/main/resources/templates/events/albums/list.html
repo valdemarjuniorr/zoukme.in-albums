@@ -272,7 +272,17 @@
                 th:src="${photo.imagePath}"
                 th:attr="data-photo-id=${photo.eventPhotoId}"
                 class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                alt="Foto do álbum"
+                role="button"
+                tabindex="0"
+                aria-label="Ampliar foto"
                 th:onclick="@{openModal({photoId})(photoId=${photo.eventPhotoId})}"
+                onkeydown="
+                  if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    this.click();
+                  }
+                "
               />
               <video
                 th:if="${photo.isVideo()}"
@@ -333,14 +343,34 @@
                 </div>
               </div>
             </div>
-            <!-- like and bookmark buttons -->
+            <!-- Photo actions -->
             <div class="flex items-center justify-between gap-1 px-2 py-2">
-              <div
-                th:replace="~{photos/like :: like(photoId=${photo.eventPhotoId}, liked=${photo.liked}, count=${photo.count})}"
-              />
-              <div
-                th:replace="~{photos/bookmark :: bookmark(photoId=${photo.eventPhotoId}, bookmarked=${photo.bookmarked})}"
-              />
+              <div data-photo-action-slot="like">
+                <div
+                  th:replace="~{photos/like :: like(photoId=${photo.eventPhotoId}, liked=${photo.liked}, count=${photo.count})}"
+                />
+              </div>
+              <div class="flex items-center gap-1 sm:gap-2">
+                <!--
+                <a
+                  th:if="${photo.isVideo()}"
+                  th:href="@{/photosvideo(photoVideoId=${photo.eventPhotoId})}"
+                  type="button"
+                  aria-label="Adquirir vídeo"
+                  title="Adquirir vídeo"
+                  class="flex items-center justify-center gap-1 px-2 py-1.5 text-sm font-medium text-gray-600 bg-transparent border-none cursor-pointer transition-all duration-200 ease-in-out active:scale-95 hover:text-gray-700 text-red-500"
+                >
+                  <i
+                    class="ri-shopping-bag-fill text-sm flex items-center justify-center transition-transform duration-200 ease-in-out hover:scale-110 text-red-500"
+                  ></i>
+                </a>
+-->
+                <div data-photo-action-slot="bookmark">
+                  <div
+                    th:replace="~{photos/bookmark :: bookmark(photoId=${photo.eventPhotoId}, bookmarked=${photo.bookmarked})}"
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -349,23 +379,38 @@
       <div
         id="image-lightbox"
         onclick="closeImageModal(event)"
-        class="group fixed inset-0 z-[9998] flex items-center justify-center p-2 sm:p-4 bg-black/45 backdrop-blur-sm invisible opacity-0 transition-all duration-300 data-[open=true]:visible data-[open=true]:opacity-100"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Foto ampliada"
+        aria-hidden="true"
+        class="group fixed inset-0 z-[9998] flex items-center justify-center p-4 pt-16 sm:p-8 sm:pt-16 bg-black/80 backdrop-blur-sm invisible opacity-0 transition-all duration-300 data-[open=true]:visible data-[open=true]:opacity-100"
       >
         <button
           id="image-lightbox-close"
           type="button"
-          aria-label="Close"
+          aria-label="Fechar foto"
           onclick="closeImageModal(event)"
-          class="absolute top-4 right-4 w-10 h-10 flex items-center justify-center rounded-full text-2xl text-white bg-white/20 hover:bg-white/35 backdrop-blur-md transition-colors"
+          class="absolute top-4 right-4 w-11 h-11 flex items-center justify-center rounded-full text-2xl text-white bg-white/15 hover:bg-white/25 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white transition-colors"
         >
           <i class="ri-close-line"></i>
         </button>
-        <img
-          id="modal-img"
-          src=""
-          alt=""
-          class="max-w-full max-h-[90vh] object-contain rounded-md sm:rounded-md shadow-2xl scale-95 transition-transform duration-300 group-data-[open=true]:scale-100"
-        />
+        <div
+          class="flex min-h-0 min-w-[7rem] max-h-full max-w-full flex-col items-center overflow-hidden rounded-lg bg-white shadow-2xl scale-95 transition-transform duration-300 group-data-[open=true]:scale-100"
+        >
+          <img
+            id="modal-img"
+            src=""
+            alt="Foto do álbum ampliada"
+            class="min-h-0 max-w-full max-h-[calc(100dvh-10rem)] object-contain"
+          />
+          <div
+            id="modal-photo-actions"
+            class="flex w-full shrink-0 items-center justify-between gap-2 bg-white px-2 py-1 [&_button]:min-h-11 [&_button]:min-w-11 [&_button]:rounded-full [&_button]:text-base [&_button:focus-visible]:outline [&_button:focus-visible]:outline-2 [&_button:focus-visible]:outline-primary [&_i]:text-xl"
+          >
+            <div data-modal-action="like"></div>
+            <div data-modal-action="bookmark"></div>
+          </div>
+        </div>
       </div>
 
       <!-- Video Player Container -->
@@ -496,6 +541,46 @@
       </div>
     </div>
     <script type="text/javascript">
+      let lightboxPhoto = null;
+
+      function updateModalActionLabels() {
+        const actions = document.getElementById("modal-photo-actions");
+        const like = actions.querySelector('[data-modal-action="like"] button');
+        const bookmark = actions.querySelector(
+          '[data-modal-action="bookmark"] button',
+        );
+
+        if (like) {
+          const liked = like.classList.contains("heart-liked");
+          const unauthenticated = like.title === "Login necessário";
+          like.setAttribute(
+            "aria-label",
+            unauthenticated
+              ? "Faça login para curtir"
+              : liked
+                ? "Descurtir foto"
+                : "Curtir foto",
+          );
+          if (!unauthenticated)
+            like.setAttribute("aria-pressed", String(liked));
+        }
+        if (bookmark) {
+          const bookmarked = bookmark.classList.contains("bookmark-liked");
+          const unauthenticated =
+            bookmark.classList.contains("bookmark-unauth");
+          bookmark.setAttribute(
+            "aria-label",
+            unauthenticated
+              ? "Faça login para salvar"
+              : bookmarked
+                ? "Remover foto dos salvos"
+                : "Salvar foto",
+          );
+          if (!unauthenticated)
+            bookmark.setAttribute("aria-pressed", String(bookmarked));
+        }
+      }
+
       function openModal(photoId) {
         const clickedImg = document.querySelector(
           `img[data-photo-id="${photoId}"]`,
@@ -505,18 +590,66 @@
         const modalImg = document.getElementById("modal-img");
         modalImg.src = clickedImg.src;
 
-        document.getElementById("image-lightbox").dataset.open = "true";
+        lightboxPhoto = clickedImg;
+        const card = clickedImg.closest(".masonry-item");
+        for (const action of ["like", "bookmark"]) {
+          const slot = card.querySelector(
+            `[data-photo-action-slot="${action}"]`,
+          );
+          document
+            .querySelector(`[data-modal-action="${action}"]`)
+            .appendChild(slot.firstElementChild);
+        }
+        updateModalActionLabels();
+
+        const lightbox = document.getElementById("image-lightbox");
+        lightbox.dataset.open = "true";
+        lightbox.setAttribute("aria-hidden", "false");
         document.body.style.overflow = "hidden";
+        document.getElementById("image-lightbox-close").focus();
       }
 
       function closeImageModal(event) {
-        // Only close when clicking the backdrop or the close button, not the image
-        if (event && event.target.id === "modal-img") return;
-        document.getElementById("image-lightbox").dataset.open = "false";
+        const lightbox = document.getElementById("image-lightbox");
+        if (
+          event &&
+          event.target !== lightbox &&
+          !event.target.closest("#image-lightbox-close")
+        )
+          return;
+        if (!lightboxPhoto) return;
+
+        const card = lightboxPhoto.closest(".masonry-item");
+        for (const action of ["like", "bookmark"]) {
+          const modalSlot = document.querySelector(
+            `[data-modal-action="${action}"]`,
+          );
+          card
+            .querySelector(`[data-photo-action-slot="${action}"]`)
+            .appendChild(modalSlot.firstElementChild);
+        }
+        lightbox.dataset.open = "false";
         document.body.style.overflow = "";
+        lightboxPhoto.focus();
+        lightbox.setAttribute("aria-hidden", "true");
+        lightboxPhoto = null;
       }
 
+      document.body.addEventListener("htmx:afterSwap", updateModalActionLabels);
+
       document.addEventListener("keydown", (e) => {
+        if (e.key === "Tab" && lightboxPhoto) {
+          const buttons = document.querySelectorAll("#image-lightbox button");
+          const first = buttons[0];
+          const last = buttons[buttons.length - 1];
+          if (e.shiftKey && document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+          } else if (!e.shiftKey && document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+          }
+        }
         if (e.key !== "Escape") return;
         closeImageModal();
         const vc = document.getElementById("video-player-container");
