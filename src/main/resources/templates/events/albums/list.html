@@ -104,6 +104,7 @@
     .masonry .image-container img {
       height: auto;
     }
+
     /* Custom Video Player Styles */
     .video-wrapper {
       position: relative;
@@ -505,47 +506,48 @@
       </div>
       <hr class="my-2 mx-3 border-gray-300 sm:hidden" />
       <!-- Pagination -->
-      <div th:if="${photos.totalPages != 1}" class="flex justify-center mt-8">
-        <nav aria-label="Page navigation">
-          <ul class="inline-flex items-center -space-x-px">
+      <div th:if="${photos.totalPages != 1}" class="flex justify-center px-3 mt-8">
+        <nav aria-label="Navegação entre páginas">
+          <ul class="flex max-w-full flex-wrap items-center justify-center gap-0.5">
             <li th:if="${!photos.first}">
               <a
                 th:href="@{/events/{eventUrl}/albums/{albumName}?page={page}&size={size}(albumName=${albumName}, eventUrl=${eventUrl}, page=${photos.number}, size=${photos.size})}"
-                class="px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700"
+                class="inline-flex min-h-9 items-center justify-center gap-1 rounded-md border border-gray-200 bg-white px-3 py-1.5 text-sm font-semibold text-gray-600 shadow-sm transition hover:-translate-y-0.5 hover:border-red-200 hover:bg-red-50 hover:text-red-500 sm:min-h-10 sm:gap-1.5 sm:px-4 sm:py-2"
+                aria-label="Página anterior"
               >
-                <i class="fa-solid fa-caret-left"></i>
+                <i class="fa-solid fa-arrow-left text-xs" aria-hidden="true"></i>
+                <span class="hidden sm:inline">Anterior</span>
               </a>
             </li>
             <li th:each="page : ${pagination}">
               <span
                 th:if="${page == '...'}"
                 th:text="${page}"
-                class="px-3 py-2 leading-tight text-gray-500 bg-gray-100 border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
+                class="inline-flex min-h-9 min-w-9 items-center justify-center rounded-md px-1.5 text-sm font-semibold text-gray-400 sm:min-h-10 sm:min-w-10 sm:px-2"
+                aria-hidden="true"
               />
               <span
                 th:if="${(photos.number + 1 + '') == page}"
                 th:text="${page}"
-                class="px-3 py-2 leading-tight text-gray-500 bg-red-100 border border-gray-300 hover:bg-red-100 hover:text-gray-700"
+                class="inline-flex min-h-9 min-w-9 items-center justify-center rounded-md bg-gradient-to-r from-red-500 to-pink-600 px-2.5 text-sm font-bold text-white shadow-md shadow-red-200 sm:min-h-10 sm:min-w-10 sm:px-3"
+                aria-current="page"
               />
               <a
                 th:if="${(photos.number + 1 + '') != page && page != '...'}"
                 th:href="@{/events/{eventUrl}/albums/{albumName}?page={page}&size={size}(albumName=${albumName}, eventUrl=${eventUrl}, page=${page}, size=${photos.size})}"
                 th:text="${page}"
-                class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
+                class="inline-flex min-h-9 min-w-9 items-center justify-center rounded-md border border-gray-200 bg-white px-2.5 text-sm font-semibold text-gray-600 shadow-sm transition hover:-translate-y-0.5 hover:border-red-200 hover:bg-red-50 hover:text-red-500 sm:min-h-10 sm:min-w-10 sm:px-3"
+                th:attr="aria-label=|Ir para a página ${page}|"
               />
             </li>
-            <script
-              type="text/javascript"
-              src="https://cdn.jsdelivr.net/npm/toastify-js"
-            ></script>
-            <div id="toast"></div>
-            <!-- Footer -->
             <li th:if="${!photos.last}">
               <a
                 th:href="@{/events/{eventUrl}/albums/{albumName}?page={page}&size={size}(albumName=${albumName}, eventUrl=${eventUrl}, page=${photos.number + 2}, size=${photos.size})}"
-                class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700"
+                class="inline-flex min-h-9 items-center justify-center gap-1 rounded-md border border-gray-200 bg-white px-3 py-1.5 text-sm font-semibold text-gray-600 shadow-sm transition hover:-translate-y-0.5 hover:border-red-200 hover:bg-red-50 hover:text-red-500 sm:min-h-10 sm:gap-1.5 sm:px-4 sm:py-2"
+                aria-label="Próxima página"
               >
-                <i class="fa-solid fa-caret-right"></i>
+                <span class="hidden sm:inline">Próxima</span>
+                <i class="fa-solid fa-arrow-right text-xs" aria-hidden="true"></i>
               </a>
             </li>
           </ul>
