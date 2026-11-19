@@ -294,7 +294,11 @@
           </div>
         </div>
       </div>
-      <hr class="my-2 mx-3 border-gray-300 sm:hidden" />
+      <div
+        class="my-3 mx-3 h-px bg-gradient-to-r from-transparent via-red-500 to-transparent sm:hidden"
+        role="separator"
+        aria-hidden="true"
+      ></div>
       <div id="photo-grid" class="masonry">
         <div
           th:each="photo, photoStat : ${photos.content}"
@@ -504,18 +508,27 @@
           </div>
         </div>
       </div>
-      <hr class="my-2 mx-3 border-gray-300 sm:hidden" />
+      <div
+        class="my-4 mx-3 h-px bg-gradient-to-r from-transparent via-red-500 to-transparent sm:hidden"
+        role="separator"
+        aria-hidden="true"
+      ></div>
       <!-- Pagination -->
-      <div th:if="${photos.totalPages != 1}" class="flex justify-center px-3 mt-8">
+      <div th:if="${photos.totalPages != 1}" class="flex justify-center px-3">
         <nav aria-label="Navegação entre páginas">
-          <ul class="flex max-w-full flex-wrap items-center justify-center gap-0.5">
+          <ul
+            class="flex max-w-full flex-wrap items-center justify-center gap-0.5"
+          >
             <li th:if="${!photos.first}">
               <a
                 th:href="@{/events/{eventUrl}/albums/{albumName}?page={page}&size={size}(albumName=${albumName}, eventUrl=${eventUrl}, page=${photos.number}, size=${photos.size})}"
                 class="inline-flex min-h-9 items-center justify-center gap-1 rounded-md border border-gray-200 bg-white px-3 py-1.5 text-sm font-semibold text-gray-600 shadow-sm transition hover:-translate-y-0.5 hover:border-red-200 hover:bg-red-50 hover:text-red-500 sm:min-h-10 sm:gap-1.5 sm:px-4 sm:py-2"
                 aria-label="Página anterior"
               >
-                <i class="fa-solid fa-arrow-left text-xs" aria-hidden="true"></i>
+                <i
+                  class="fa-solid fa-arrow-left text-xs"
+                  aria-hidden="true"
+                ></i>
                 <span class="hidden sm:inline">Anterior</span>
               </a>
             </li>
@@ -547,7 +560,10 @@
                 aria-label="Próxima página"
               >
                 <span class="hidden sm:inline">Próxima</span>
-                <i class="fa-solid fa-arrow-right text-xs" aria-hidden="true"></i>
+                <i
+                  class="fa-solid fa-arrow-right text-xs"
+                  aria-hidden="true"
+                ></i>
               </a>
             </li>
           </ul>
