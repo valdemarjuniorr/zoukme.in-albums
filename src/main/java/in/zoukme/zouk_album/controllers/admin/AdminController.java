@@ -15,7 +15,10 @@ import in.zoukme.zouk_album.services.aws.EventService;
 import in.zoukme.zouk_album.services.payments.PaymentService;
 import in.zoukme.zouk_album.services.users.UserService;
 import java.time.LocalDate;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
@@ -101,7 +104,21 @@ public class AdminController {
       Model model) {
     this.albumService.save(eventId, title, description, city, eventDate, cover);
     var albums = this.albumService.findAll(Page.defaultPage());
-    model.addAttribute("albums", albums);
+    // Group albums by year and sort by year descending
+    var albumsByYear =
+        albums.stream()
+            .collect(
+                Collectors.groupingBy(album -> album.eventDate().getYear(), Collectors.toList()))
+            .entrySet()
+            .stream()
+            .sorted(Map.Entry.<Integer, List<Album>>comparingByKey().reversed())
+            .collect(
+                Collectors.toMap(
+                    Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+    model.addAttribute("albums", albumsByYear);
+
+    var events = eventService.getNotFeaturedAndIncomingEvents();
+    model.addAttribute("events", events);
 
     return "index";
   }
