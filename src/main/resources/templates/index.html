@@ -11,7 +11,7 @@
     <div th:insert="~{fragments/top :: top}"></div>
 
     <!-- Content -->
-    <main th:fragment="main" class="main container mx-auto p-2 py-16">
+    <main th:fragment="main" class="main container mx-auto p-2 pt-10">
       <h1 class="text-3xl font-bold text-center">Eventos e Bailes</h1>
       <p
         class="font-['Montserrat'] text-gray-600 max-w-2xl mx-auto text-center px-4"
@@ -21,7 +21,7 @@
 
       <div th:insert="~{events/caroussel}"></div>
 
-      <section th:fragment="albums" class="bg-white">
+      <section th:fragment="albums" class="bg-white pb-1">
         <div class="container mx-auto px-4">
           <!-- feature event section -->
           <div
@@ -31,7 +31,9 @@
           ></div>
 
           <div class="text-center mb-12">
-            <h2 class="text-3xl md:text-4xl font-bold mb-4">Nossos Álbuns</h2>
+            <h2 class="text-3xl md:text-4xl font-bold mb-4 pt-8">
+              Nossos Álbuns
+            </h2>
             <p class="font-['Montserrat'] text-gray-600 max-w-2xl mx-auto">
               Relembre os melhores momentos dos eventos através das nossas fotos
             </p>
